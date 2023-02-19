@@ -6,14 +6,7 @@ const config = {
   ],
 
   theme: {
-    extend: {
-      colors: {
-        primary: '#40826D'
-      },
-      screens: {
-        ...defaultTheme.screens,
-      }
-    }
+    extend: {}
   },
 
   plugins: [

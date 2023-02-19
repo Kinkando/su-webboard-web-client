@@ -22,14 +22,14 @@
 {/if}
 
 <div class="w-screen h-screen flex overflow-y-auto {isLoading ? 'brightness-50': ''}">
-    <!-- <div class="w-full bg-primary px-6 sm:max-md:hidden"> -->
-    <div class="w-full bg-primary px-6 max-[900px]:hidden">
+    <!-- <div class="w-full bg-[#40826D] px-6 sm:max-md:hidden"> -->
+    <div class="w-full bg-[#40826D] px-6 max-[900px]:hidden">
         <div class="relative top-1/2 -translate-y-1/2 overflow-y-auto">
-            <img class="w-2xl m-auto" src="images/SU-WEBBOARD-ICON.png" alt="">
-            <img class="w-2xl m-auto" src="images/SU-WEBBOARD-TEXT.png" alt="">
+            <img class="w-2xl m-auto" src="/images/SU-WEBBOARD-ICON.png" alt="">
+            <img class="w-2xl m-auto" src="/images/SU-WEBBOARD-TEXT.png" alt="">
         </div>
     </div>
-    <div class="w-full max-[900px]:bg-primary min-[901px]:bg-gray-200 p-4">
+    <div class="w-full max-[900px]:bg-[#40826D] min-[901px]:bg-gray-200 p-4">
         <Card class="relative m-auto top-1/2 -translate-y-1/2 overflow-y-auto">
             <h1 class="text-center text-2xl mb-4 uppercase">Login</h1>
             <Label class="space-y-2">
