@@ -66,7 +66,7 @@
             </div>
         {/each}
         <div class="bottom-nav">
-            <div class="px-2 pb-2">
+            <div class="p-2">
                 <!-- svelte-ignore a11y-click-events-have-key-events -->
                 <div class="transition-all duration-200 flex items-center p-2 rounded-md hover:text-[#40826D] hover:shadow-md hover:bg-white text-white cursor-pointer" on:click={signout}>
                     <span>
@@ -100,10 +100,13 @@
         <span class="ml-2">{ sidebarItems.find(item => currentRoute === item.href)?.label }</span>
     </div>
     {#key currentRoute}
-        <div class="p-4" in:fly={{y: -20, duration: 250, delay: 100}}>
+        <div class="p-4 min-h-[calc(100vh-64px*2)]" in:fly={{y: -20, duration: 250, delay: 100}}>
             <slot />
         </div>
     {/key}
+    <div class="h-16 flex items-center px-4 bg-gray-100">
+        <span>&copy;&nbsp;</span>su-webboard
+    </div>
 </div>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
