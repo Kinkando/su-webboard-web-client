@@ -19,4 +19,5 @@
 
 <svelte:head>
     <title>{ title }</title>
+    <link rel="icon" href="/favicon.png">
 </svelte:head>
