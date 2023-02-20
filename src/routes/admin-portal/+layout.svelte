@@ -44,28 +44,29 @@
 
 <svelte:window on:resize={() => isSidebarExpand = false}/>
 
+<!-- Sidebar -->
 {#key isSidebarExpand}
-    <div class="sidebar no-select w-[225px] h-screen bg-[#40826D] z-50 fixed overflow-x-hidden overflow-y-auto max-[1000.1px]:hidden [&.active]:block {isSidebarExpand ? 'active' : ''}" transition:fly|local={{x: -225, duration: 250, opacity: 1}}>
+    <aside class="sidebar no-select w-[225px] h-screen bg-[#40826D] z-50 fixed overflow-x-hidden overflow-y-auto max-[1000.1px]:hidden [&.active]:block {isSidebarExpand ? 'active' : ''}" transition:fly|local={{x: -225, duration: 250, opacity: 1}}>
         <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <div class="flex h-16 items-center px-4 py-2 cursor-pointer" on:click={() => navigator(rootPath)}>
-            <div class="mr-2">
+        <section class="flex h-16 items-center px-4 py-2 cursor-pointer" on:click={() => navigator(rootPath)}>
+            <figure class="mr-2">
                 <img class="w-48 object-cover" src="/images/SU-WEBBOARD-ICON.png" alt="">
-            </div>
-            <div>
+            </figure>
+            <figure>
                 <img class="w-full object-cover" src="/images/SU-WEBBOARD-TEXT.png" alt="">
-            </div>
-        </div>
+            </figure>
+        </section>
         <hr>
         {#each sidebarItems as item}
-            <div class="px-2 pt-2">
+            <nav class="px-2 pt-2">
                 <!-- svelte-ignore a11y-click-events-have-key-events -->
                 <div class="transition-all duration-200 flex items-center p-2 rounded-md hover:text-[#40826D] hover:shadow-md hover:bg-gray-200 {currentRoute === item.href ? '!text-[#40826D] shadow-md !bg-white' : 'text-white '}" on:click={() => navigator(item.href)}>
                     <span>{@html item.prefixIcon}</span>
                     <span class="ml-2">{item.label}</span>
                 </div>
-            </div>
+            </nav>
         {/each}
-        <div class="bottom-nav">
+        <nav class="bottom-nav">
             <div class="p-2">
                 <!-- svelte-ignore a11y-click-events-have-key-events -->
                 <div class="transition-all duration-200 flex items-center p-2 rounded-md hover:text-[#40826D] hover:shadow-md hover:bg-white text-white cursor-pointer" on:click={signout}>
@@ -77,20 +78,21 @@
                     <span class="ml-2">Logout</span>
                 </div>
             </div>
-        </div>
-    </div>
+        </nav>
+    </aside>
 {/key}
 
-<div class="relative min-[1000.1px]:ml-[225px] max-[1000.1px]:top-16 h-full overflow-hidden">
-    <div class="h-16 flex items-center px-4 max-[1000.1px]:hidden">
+<!-- Page Container -->
+<main class="relative min-[1000.1px]:ml-[225px] max-[1000.1px]:top-16 h-full overflow-hidden">
+    <nav class="h-16 flex items-center px-4 max-[1000.1px]:hidden">
         <Breadcrumb aria-label="Default breadcrumb example">
             <BreadcrumbItem href="{rootPath}" home>Home</BreadcrumbItem>
             {#if currentRoute.toString().lastIndexOf("/") > 0}
                 <BreadcrumbItem>{ sidebarItems.find(item => currentRoute === item.href)?.label }</BreadcrumbItem>
             {/if}
         </Breadcrumb>
-    </div>
-    <div class="fixed w-full top-0 min-[1000.1px]:hidden h-16 flex items-center px-4 text-2xl bg-gray-200 shadow-md">
+    </nav>
+    <header class="fixed w-full top-0 min-[1000.1px]:hidden h-16 flex items-center px-4 text-2xl bg-gray-200 shadow-md">
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <span class="float-left flex items-center sticky top-0 z-40 cursor-pointer" on:click={() => isSidebarExpand = !isSidebarExpand}>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -98,19 +100,19 @@
             </svg>
         </span>
         <span class="ml-2">{ sidebarItems.find(item => currentRoute === item.href)?.label }</span>
-    </div>
+    </header>
     {#key currentRoute}
-        <div class="p-4 min-h-[calc(100vh-64px*2)]" in:fly={{y: -20, duration: 250, delay: 100}}>
+        <section class="p-4 min-h-[calc(100vh-64px*2)]" in:fly={{y: -20, duration: 250, delay: 100}}>
             <slot />
-        </div>
+        </section>
     {/key}
-    <div class="h-16 flex items-center px-4 bg-gray-100">
+    <footer class="h-16 flex items-center px-4 bg-gray-100">
         <span>&copy;&nbsp;</span>su-webboard
-    </div>
-</div>
+    </footer>
+</main>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<div class="top-0 bg-black w-screen h-screen brightness-50 z-40 fixed opacity-50 {isSidebarExpand ? '' : 'hidden'}" on:click={() => isSidebarExpand = false}></div>
+<article class="top-0 bg-black w-screen h-screen brightness-50 z-40 fixed opacity-50 {isSidebarExpand ? '' : 'hidden'}" on:click={() => isSidebarExpand = false}></article>
 
 <style lang="scss">
     .sidebar {
