@@ -4,6 +4,7 @@
 	import type { Alert as AlertModel } from '@models/alert';
 	import { signinFirebase } from '@services/firebase';
 	import LoadingSpinner from '@components/spinner/LoadingSpinner.svelte';
+	import { goto } from '$app/navigation';
 
     let alert: AlertModel;
 
@@ -19,6 +20,10 @@
         alert = {
             color: resp ? 'green' : 'red',
             message: resp ? 'Login successfully!' : 'Your username or password is invalid, please try again!',
+        }
+        if (resp) {
+            // mock
+            goto("/admin-portal")
         }
         isLoading = false;
     }
@@ -45,6 +50,7 @@
                         class="placeholder-gray-300"
                         type="email"
                         placeholder="Enter your username"
+                        bind:disabled={isLoading}
                         bind:value={username}
                         on:keydown={event => {
                             if (event.key === 'Enter') {
@@ -60,6 +66,7 @@
                         type={showPassword ? 'text' : 'password'}
                         placeholder="Enter your password"
                         size="md"
+                        bind:disabled={isLoading}
                         bind:value={password}
                         on:keydown={event => {
                             if (event.key === 'Enter') {
@@ -76,7 +83,15 @@
                         </button>
                     </Input>
                 </Label>
-                <Button type="submit" class="mt-6 uppercase" color="green" on:click={signin} disabled={!username.length || !password.length}>Confirm</Button>
+                <Button
+                    type="submit"
+                    class="mt-6 uppercase"
+                    color="green"
+                    on:click={signin}
+                    disabled={!username.length || !password.length || isLoading}
+                >
+                    Confirm
+                </Button>
             </Card>
         </div>
     </div>

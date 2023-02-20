@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
     import { page } from '$app/stores';
 	import { Breadcrumb, BreadcrumbItem } from "flowbite-svelte";
 	import { fly } from 'svelte/transition';
@@ -28,6 +29,10 @@
     ]
 
     $: currentRoute = $page.route.id!;
+
+    const signout = () => {
+        goto("/login")
+    }
 </script>
 
 <div class="sidebar no-select w-[225px] h-screen bg-[#40826D] z-50 fixed overflow-x-hidden overflow-y-auto">
@@ -42,12 +47,25 @@
     <hr>
     {#each sidebarItems as item}
         <div class="px-2 pt-2">
-            <a class="transition-all duration-200 flex items-center p-2 rounded-md hover:text-[#40826D] hover:shadow-md hover:bg-white {currentRoute === item.href ? 'text-[#40826D] shadow-md bg-white' : 'text-white '}" href={item.href}>
+            <a class="transition-all duration-200 flex items-center p-2 rounded-md hover:text-[#40826D] hover:shadow-md hover:bg-gray-200 {currentRoute === item.href ? '!text-[#40826D] shadow-md !bg-white' : 'text-white '}" href={item.href}>
                 <span>{@html item.prefixIcon}</span>
                 <span class="ml-2">{item.label}</span>
             </a>
         </div>
     {/each}
+    <div class="bottom-nav">
+        <div class="px-2 pb-2">
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <div class="transition-all duration-200 flex items-center p-2 rounded-md hover:text-[#40826D] hover:shadow-md hover:bg-white text-white cursor-pointer" on:click={signout}>
+                <span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+                    </svg>
+                </span>
+                <span class="ml-2">Logout</span>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="relative ml-[225px] h-full overflow-hidden transition-[margin-left]">
@@ -72,6 +90,12 @@
         scrollbar-width: none;  /* Firefox */
         &::-webkit-scrollbar {
             display: none;  /* Safari and Chrome */
+        }
+    }
+
+    @media screen and (min-height: 315px) {
+        .bottom-nav {
+            @apply bottom-0 absolute w-full;
         }
     }
 </style>
