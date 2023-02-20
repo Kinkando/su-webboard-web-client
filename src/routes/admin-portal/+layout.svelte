@@ -30,46 +30,59 @@
 
     $: currentRoute = $page.route.id!;
 
+    let isSidebarExpand = false;
+
     const signout = () => {
         goto("/login")
     }
+
+    const navigator = (path: string) => {
+        isSidebarExpand = false
+        goto(path)
+    }
 </script>
 
-<div class="sidebar no-select w-[225px] h-screen bg-[#40826D] z-50 fixed overflow-x-hidden overflow-y-auto">
-    <a class="flex h-16 items-center px-4 py-2 cursor-pointer" href="{rootPath}">
-        <div class="mr-2">
-            <img class="w-48 object-cover" src="/images/SU-WEBBOARD-ICON.png" alt="">
+<svelte:window on:resize={() => isSidebarExpand = false}/>
+
+{#key isSidebarExpand}
+    <div class="sidebar no-select w-[225px] h-screen bg-[#40826D] z-50 fixed overflow-x-hidden overflow-y-auto max-[1000.1px]:hidden [&.active]:block {isSidebarExpand ? 'active' : ''}" transition:fly|local={{x: -225, duration: 250, opacity: 1}}>
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <div class="flex h-16 items-center px-4 py-2 cursor-pointer" on:click={() => navigator(rootPath)}>
+            <div class="mr-2">
+                <img class="w-48 object-cover" src="/images/SU-WEBBOARD-ICON.png" alt="">
+            </div>
+            <div>
+                <img class="w-full object-cover" src="/images/SU-WEBBOARD-TEXT.png" alt="">
+            </div>
         </div>
-        <div>
-            <img class="w-full object-cover" src="/images/SU-WEBBOARD-TEXT.png" alt="">
-        </div>
-    </a>
-    <hr>
-    {#each sidebarItems as item}
-        <div class="px-2 pt-2">
-            <a class="transition-all duration-200 flex items-center p-2 rounded-md hover:text-[#40826D] hover:shadow-md hover:bg-gray-200 {currentRoute === item.href ? '!text-[#40826D] shadow-md !bg-white' : 'text-white '}" href={item.href}>
-                <span>{@html item.prefixIcon}</span>
-                <span class="ml-2">{item.label}</span>
-            </a>
-        </div>
-    {/each}
-    <div class="bottom-nav">
-        <div class="px-2 pb-2">
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <div class="transition-all duration-200 flex items-center p-2 rounded-md hover:text-[#40826D] hover:shadow-md hover:bg-white text-white cursor-pointer" on:click={signout}>
-                <span>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
-                    </svg>
-                </span>
-                <span class="ml-2">Logout</span>
+        <hr>
+        {#each sidebarItems as item}
+            <div class="px-2 pt-2">
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <div class="transition-all duration-200 flex items-center p-2 rounded-md hover:text-[#40826D] hover:shadow-md hover:bg-gray-200 {currentRoute === item.href ? '!text-[#40826D] shadow-md !bg-white' : 'text-white '}" on:click={() => navigator(item.href)}>
+                    <span>{@html item.prefixIcon}</span>
+                    <span class="ml-2">{item.label}</span>
+                </div>
+            </div>
+        {/each}
+        <div class="bottom-nav">
+            <div class="px-2 pb-2">
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <div class="transition-all duration-200 flex items-center p-2 rounded-md hover:text-[#40826D] hover:shadow-md hover:bg-white text-white cursor-pointer" on:click={signout}>
+                    <span>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+                        </svg>
+                    </span>
+                    <span class="ml-2">Logout</span>
+                </div>
             </div>
         </div>
     </div>
-</div>
+{/key}
 
-<div class="relative ml-[225px] h-full overflow-hidden transition-[margin-left]">
-    <div class="h-16 flex items-center px-4 text-2xl">
+<div class="relative min-[1000.1px]:ml-[225px] max-[1000.1px]:top-16 h-full overflow-hidden">
+    <div class="h-16 flex items-center px-4 max-[1000.1px]:hidden">
         <Breadcrumb aria-label="Default breadcrumb example">
             <BreadcrumbItem href="{rootPath}" home>Home</BreadcrumbItem>
             {#if currentRoute.toString().lastIndexOf("/") > 0}
@@ -77,12 +90,24 @@
             {/if}
         </Breadcrumb>
     </div>
+    <div class="fixed w-full top-0 min-[1000.1px]:hidden h-16 flex items-center px-4 text-2xl bg-gray-200 shadow-md">
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <span class="float-left flex items-center sticky top-0 z-40 cursor-pointer" on:click={() => isSidebarExpand = !isSidebarExpand}>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+        </span>
+        <span class="ml-2">{ sidebarItems.find(item => currentRoute === item.href)?.label }</span>
+    </div>
     {#key currentRoute}
         <div class="p-4" in:fly={{y: -20, duration: 250, delay: 100}}>
             <slot />
         </div>
     {/key}
 </div>
+
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<div class="top-0 bg-black w-screen h-screen brightness-50 z-40 fixed opacity-50 {isSidebarExpand ? '' : 'hidden'}" on:click={() => isSidebarExpand = false}></div>
 
 <style lang="scss">
     .sidebar {
