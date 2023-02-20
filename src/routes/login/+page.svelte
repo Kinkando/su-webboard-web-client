@@ -1,25 +1,31 @@
-<script>
+<script lang="ts">
     import { Button, Card, Label, Input, Spinner } from 'flowbite-svelte';
+	import Alert from '@components/alert/Alert.svelte';
+	import type { Alert as AlertModel } from '@models/alert';
 	import { signinFirebase } from '@services/firebase';
-    let showPassword = false;
-    let isLoading = false;
+	import LoadingSpinner from '@components/spinner/LoadingSpinner.svelte';
+
+    let alert: AlertModel;
 
     let username = "";
     let password = "";
+    let showPassword = false;
+    let isLoading = false;
 
     const signin = async() => {
         if (!username.length || !password.length) { return }
         isLoading = true;
         const resp = await signinFirebase(username, password);
+        alert = {
+            color: resp ? 'green' : 'red',
+            message: resp ? 'Login successfully!' : 'Your username or password is invalid, please try again!',
+        }
         isLoading = false;
     }
 </script>
 
-{#if isLoading}
-    <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
-        <Spinner color="green" size="8" />
-    </div>
-{/if}
+<Alert bind:alert />
+<LoadingSpinner bind:isLoading />
 
 <div id="login-screen" class="w-screen h-screen flex overflow-y-auto {isLoading ? 'brightness-50': ''}">
     <!-- <div class="w-full bg-[#40826D] px-6 sm:max-md:hidden"> -->

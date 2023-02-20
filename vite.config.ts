@@ -8,7 +8,15 @@ export default defineConfig({
 			{
 				find: '@services',
 				replacement: '/src/services'
-			}
+			},
+			{
+				find: '@components',
+				replacement: '/src/components'
+			},
+			{
+				find: '@models',
+				replacement: '/src/models'
+			},
 		]
 	}
 });
