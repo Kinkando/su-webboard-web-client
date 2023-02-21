@@ -1,10 +1,12 @@
 <script lang="ts">
+	import { goto } from "$app/navigation";
 	import type { Announcement } from "@models/announcement";
 
     export let announcement: Announcement;
 </script>
 
-<div class="bg-[#aad4c7] dark:bg-gray-800 text-black dark:text-gray-400 rounded-lg border border-gray-200 dark:border-gray-700 shadow-md flex max-w-sm flex-col w-full h-56 cursor-pointer overflow-hidden hover:brightness-75">
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<div class="bg-[#aad4c7] dark:bg-gray-800 text-black dark:text-gray-400 rounded-lg border border-gray-200 dark:border-gray-700 shadow-md flex flex-col w-full h-56 cursor-pointer overflow-hidden hover:brightness-75" on:click={() => goto(`/announcement/${announcement?.forumUUID}`)}>
     <div class="hover:scale-105 ease-in duration-200 w-full h-full p-4 sm:p-6">
         <header class="flex items-center gap-x-3">
             <img src="{announcement?.authorImageURL}" alt="" class="w-12">

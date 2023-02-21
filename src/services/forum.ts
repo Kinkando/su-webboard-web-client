@@ -5,7 +5,7 @@ export async function getHomeData(): Promise<Home> {
     const home: Home = {
         announcements: [
             {
-                forumUUID: "",
+                forumUUID: "xxx-xxx-xxx-xxx",
                 authorUUID: "",
                 authorName: "Silpakorn University",
                 authorImageURL,
@@ -14,7 +14,7 @@ export async function getHomeData(): Promise<Home> {
                 description: "Description...",
             },
             {
-                forumUUID: "",
+                forumUUID: "yyy-yyy-yyy-yyy",
                 authorUUID: "",
                 authorName: "Silpakorn University",
                 authorImageURL,
@@ -23,7 +23,7 @@ export async function getHomeData(): Promise<Home> {
                 description: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ipsum dolorem illum laudantium voluptatem hic accusantium placeat minus cum eius eveniet dicta pariatur quos aspernatur aliquam asperiores voluptas iste aut maxime quo neque ipsa dolorum, expedita deserunt. Voluptates magni qui repudiandae odio aperiam voluptatibus nisi itaque dolores aliquam? Qui, rem nam!",
             },
             {
-                forumUUID: "",
+                forumUUID: "zzz-zzz-zzz-zzz",
                 authorUUID: "",
                 authorName: "Silpakorn University",
                 authorImageURL,

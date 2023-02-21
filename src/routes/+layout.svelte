@@ -29,6 +29,9 @@
             case "/category/:category": return "SU Webboard | Category List"
             case "/announcement": return "SU Webboard | Announcement List"
             case "/popular": return "SU Webboard | Popular List"
+
+            // Forum page
+            case "/announcement/:forumUUID": return "SU Webboard | Announcement Forum"
         }
     })()
     $: isUserSite = $page.route.id?.indexOf("/admin-portal") == -1 && $page.route.id! != "/login";
