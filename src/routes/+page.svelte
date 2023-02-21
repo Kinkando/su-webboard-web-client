@@ -6,6 +6,7 @@
 	import CategoryCard from '@components/partials/CategoryCard.svelte';
     import type { Home } from '@models/home';
 	import { getHomeData } from '@services/forum';
+	import SkeletonAnnouncementCard from '@components/partials/SkeletonAnnouncementCard.svelte';
 
     const sectionHeaders = [
         {
@@ -28,21 +29,24 @@
     ];
 
     let home: Home;
-    onMount(async() => {
-        home = await getHomeData()
-    })
+    onMount(async() => home = await getHomeData())
 </script>
 
-<!-- SKELETON LOAD CARD -->
 <!-- RESPONSIVE DESIGN -->
 
 <!-- Announcement -->
 <HomeSectionHeader {...sectionHeaders[0]} />
-{#if home}
-    {#each home?.announcements as announcement}
-        <AnnouncementCard {announcement} />
-    {/each}
-{/if}
+<div class="flex w-full gap-x-2 mb-10">
+    {#if home}
+        {#each home?.announcements as announcement}
+            <AnnouncementCard {announcement} />
+        {/each}
+    {:else}
+        <SkeletonAnnouncementCard />
+        <SkeletonAnnouncementCard />
+        <SkeletonAnnouncementCard />
+    {/if}
+</div>
 
 <!-- Popular Topics -->
 <HomeSectionHeader {...sectionHeaders[1]} />

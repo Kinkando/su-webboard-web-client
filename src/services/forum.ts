@@ -19,8 +19,8 @@ export async function getHomeData(): Promise<Home> {
                 authorName: "Silpakorn University",
                 authorImageURL,
                 createdAt: new Date(),
-                title: "Class 1 move to room 2",
-                description: "Description...",
+                title: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Rerum amet assumenda quaerat in corrupti ea ipsum nostrum quod explicabo non.",
+                description: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ipsum dolorem illum laudantium voluptatem hic accusantium placeat minus cum eius eveniet dicta pariatur quos aspernatur aliquam asperiores voluptas iste aut maxime quo neque ipsa dolorum, expedita deserunt. Voluptates magni qui repudiandae odio aperiam voluptatibus nisi itaque dolores aliquam? Qui, rem nam!",
             },
             {
                 forumUUID: "",
@@ -145,5 +145,6 @@ export async function getHomeData(): Promise<Home> {
             },
         ],
     }
+    await new Promise(resolve => setTimeout(() => resolve(""), 500))
     return home
 }
