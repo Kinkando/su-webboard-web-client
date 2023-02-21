@@ -33,7 +33,6 @@
 <LoadingSpinner bind:isLoading />
 
 <div id="login-screen" class="w-screen h-screen flex overflow-y-auto {isLoading ? 'brightness-50': ''}">
-    <!-- <div class="w-full bg-[#40826D] px-6 sm:max-md:hidden"> -->
     <div class="w-full bg-[#40826D] px-6 max-[900px]:hidden" id="login-logo">
         <div class="relative top-1/2 -translate-y-1/2 overflow-y-auto">
             <img class="w-72 m-auto" src="/images/SU-WEBBOARD-ICON.png" alt="">
