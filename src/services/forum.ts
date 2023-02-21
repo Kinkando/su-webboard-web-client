@@ -212,7 +212,7 @@ export async function getHomeData(): Promise<Home> {
             {
                 categorySeq: 6,
                 categoryUUID: "",
-                categoryName: "Coding",
+                categoryName: "Gaming",
                 categoryHexColor: "#123456",
                 forumCount: 357,
                 latestUpdatedDate: new Date(),
@@ -220,7 +220,7 @@ export async function getHomeData(): Promise<Home> {
             {
                 categorySeq: 7,
                 categoryUUID: "",
-                categoryName: "Coding",
+                categoryName: "Working",
                 categoryHexColor: "#123456",
                 forumCount: 357,
                 latestUpdatedDate: new Date(),
@@ -228,7 +228,7 @@ export async function getHomeData(): Promise<Home> {
             {
                 categorySeq: 8,
                 categoryUUID: "",
-                categoryName: "Coding",
+                categoryName: "Travelling",
                 categoryHexColor: "#123456",
                 forumCount: 357,
                 latestUpdatedDate: new Date(),
@@ -236,7 +236,7 @@ export async function getHomeData(): Promise<Home> {
             {
                 categorySeq: 9,
                 categoryUUID: "",
-                categoryName: "Coding",
+                categoryName: "Cooking",
                 categoryHexColor: "#123456",
                 forumCount: 357,
                 latestUpdatedDate: new Date(),
@@ -244,7 +244,7 @@ export async function getHomeData(): Promise<Home> {
             {
                 categorySeq: 10,
                 categoryUUID: "",
-                categoryName: "Coding",
+                categoryName: "Reading",
                 categoryHexColor: "#123456",
                 forumCount: 357,
                 latestUpdatedDate: new Date(),

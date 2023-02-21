@@ -32,12 +32,22 @@
     let home: Home;
     onMount(async() => home = await getHomeData())
 
+    let carouselIndex = 0;
+    const setCarouselIndex = (index: number) => {
+        if (index > (home?.categories?.length - carouselAmount) || index < 0) {
+            return;
+        }
+        carouselDirection = index > carouselIndex ? "right" : "left";
+        carouselIndex = index;
+    }
+    let carouselDirection = "right";
+
     let innerWidth = 0;
     let minimumCardWidth = 325;
     let minimumCategoryCardWidth = 200;
 
     $: colAmount = Math.round(innerWidth/minimumCardWidth);
-    $: categoriesAmount = Math.round(innerWidth/minimumCategoryCardWidth);
+    $: carouselAmount = Math.round(innerWidth/minimumCategoryCardWidth);
 </script>
 
 <svelte:window bind:innerWidth />
@@ -72,10 +82,24 @@
 
 <!-- Categories -->
 <HomeSectionHeader {...sectionHeaders[2]} />
-<div class="flex w-full gap-x-2 mb-10">
+<div class="flex w-full gap-x-2 mb-10 items-center overflow-x-hidden">
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <div class="rounded-full p-1 bg-gray-200 shadow-md cursor-pointer" on:click={() => setCarouselIndex(carouselIndex - 1)}>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+        </svg>
+    </div>
+
     {#if home}
-        {#each home?.categories?.slice(0, Math.min(home?.categories.length, categoriesAmount)) as category}
-            <CategoryCard {category} />
+        {#each home?.categories?.slice(carouselIndex, carouselIndex+carouselAmount) as category}
+            <CategoryCard bind:direction={carouselDirection} {category} />
         {/each}
     {/if}
+
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <div class="rounded-full p-1 bg-gray-200 shadow-md cursor-pointer" on:click={() => setCarouselIndex(carouselIndex + 1)}>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+        </svg>
+    </div>
 </div>
