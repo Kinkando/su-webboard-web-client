@@ -9,7 +9,7 @@ export async function getNotiList(): Promise<Notification> {
         notiList: [
             {
                 notiUUID: "xxx-xxx-xxx-xxx",
-                postUUID: "yyy-yyy-yyy-yyy",
+                forumUUID: "xxx-xxx-xxx-xxx",
                 content: "comment on your topic",
                 isRead: false,
                 createAt: new Date(),
@@ -17,8 +17,8 @@ export async function getNotiList(): Promise<Notification> {
                 username,
             },
             {
-                notiUUID: "xxx-xxx-xxx-xxx",
-                postUUID: "yyy-yyy-yyy-yyy",
+                notiUUID: "yyy-yyy-yyy-yyy",
+                forumUUID: "yyy-yyy-yyy-yyy",
                 content: "like your comment",
                 isRead: false,
                 createAt: new Date(),
@@ -26,8 +26,8 @@ export async function getNotiList(): Promise<Notification> {
                 username,
             },
             {
-                notiUUID: "xxx-xxx-xxx-xxx",
-                postUUID: "yyy-yyy-yyy-yyy",
+                notiUUID: "zzz-zzz-zzz-zzz",
+                forumUUID: "zzz-zzz-zzz-zzz",
                 content: "reply on your comment",
                 isRead: true,
                 createAt: new Date(),

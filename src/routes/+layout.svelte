@@ -93,9 +93,11 @@
             {/if}
         </header>
         <section>
-            {#each notification?.notiList as noti, index}
+            {#each notification?.notiList as noti}
                 <hr class="border-gray-300">
-                <div class="flex items-center gap-x-3 py-2 overflow-x-hidden px-3 cursor-pointer hover:bg-gray-300 relative {!noti?.isRead ? 'bg-gray-200' : ''}">
+
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <div class="flex items-center gap-x-3 py-2 overflow-x-hidden px-3 cursor-pointer hover:bg-gray-300 relative {!noti?.isRead ? 'bg-gray-200' : ''}" on:click={() => goto('/forum/'+noti?.forumUUID)}>
                     <img src={noti.userImageProfile} alt="" class="w-10 rounded-50">
                     {#if !noti?.isRead}
                         <Indicator color="red" size="md" border class="absolute left-11 top-3"></Indicator>
@@ -193,7 +195,7 @@
     </header>
 
     <main class="relative top-16 p-4 min-h-[calc(100vh-64px*2)]">
-        {#key $page.route.id}
+        {#key $page.url.pathname}
             <div in:fly={{y: -20, duration: 250, delay: 100}}>
                 <slot />
             </div>
