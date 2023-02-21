@@ -1,5 +1,7 @@
 <script lang="ts">
     import { page } from "$app/stores";
+
+    $: searchText = $page.url.searchParams.get('keyword')
 </script>
 
-Search by keyword: { $page.url.searchParams.get('keyword') }
+Search by keyword: { searchText }
