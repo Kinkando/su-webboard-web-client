@@ -5,6 +5,7 @@
 	import PopularCard from '@components/partials/PopularCard.svelte';
 	import CategoryCard from '@components/partials/CategoryCard.svelte';
 	import SkeletonAnnouncementCard from '@components/skeleton-load/SkeletonAnnouncementCard.svelte';
+	import SkeletonCategoryCard from '@components/skeleton-load/SkeletonCategoryCard.svelte';
 	import SkeletonPopularCard from '@components/skeleton-load/SkeletonPopularCard.svelte';
     import type { Home } from '@models/home';
 	import { getHomeData } from '@services/forum';
@@ -40,7 +41,7 @@
         carouselDirection = index > carouselIndex ? "right" : "left";
         carouselIndex = index;
     }
-    let carouselDirection = "right";
+    let carouselDirection = "";
 
     let innerWidth = 0;
     let minimumCardWidth = 325;
@@ -92,7 +93,13 @@
 
     {#if home}
         {#each home?.categories?.slice(carouselIndex, carouselIndex+carouselAmount) as category}
-            <CategoryCard bind:direction={carouselDirection} {category} />
+            {#key category}
+                <CategoryCard bind:direction={carouselDirection} {category} />
+            {/key}
+        {/each}
+    {:else}
+        {#each Array(carouselAmount) as _}
+            <SkeletonCategoryCard />
         {/each}
     {/if}
 
