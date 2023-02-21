@@ -5,7 +5,7 @@ export interface Notification {
 
 export interface NotificationItem {
     notiUUID: string
-    postUUID: string
+    forumUUID: string
     userImageProfile?: string
     username?: string
     content?: string
