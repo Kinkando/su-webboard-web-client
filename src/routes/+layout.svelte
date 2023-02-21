@@ -32,6 +32,7 @@
 
             // Forum page
             case "/announcement/:forumUUID": return "SU Webboard | Announcement Forum"
+            case "/forum/:forumUUID": return "SU Webboard | Forum Detail"
         }
     })()
     $: isUserSite = $page.route.id?.indexOf("/admin-portal") == -1 && $page.route.id! != "/login";

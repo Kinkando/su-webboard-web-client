@@ -1,1 +1,2 @@
-ADMIN | Manage Forum<br>
+ADMIN | Manage Category<br>
+Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ab qui dolore aut hic eaque at doloremque a iste, natus exercitationem, porro dolorem numquam minima quae quibusdam quasi beatae, nostrum consectetur!

@@ -6,7 +6,8 @@
 	import CategoryCard from '@components/partials/CategoryCard.svelte';
     import type { Home } from '@models/home';
 	import { getHomeData } from '@services/forum';
-	import SkeletonAnnouncementCard from '@components/partials/SkeletonAnnouncementCard.svelte';
+	import SkeletonAnnouncementCard from '@components/skeleton-load/SkeletonAnnouncementCard.svelte';
+	import SkeletonPopularCard from '@components/skeleton-load/SkeletonPopularCard.svelte';
 
     const sectionHeaders = [
         {
@@ -50,11 +51,17 @@
 
 <!-- Popular Topics -->
 <HomeSectionHeader {...sectionHeaders[1]} />
-{#if home}
-    {#each home?.popularTopics as popularTopic}
-        <PopularCard {popularTopic} />
-    {/each}
-{/if}
+<div class="flex w-full gap-x-2 mb-10">
+    {#if home}
+        {#each home?.popularTopics as popularTopic}
+            <PopularCard {popularTopic} />
+        {/each}
+    {:else}
+        <SkeletonPopularCard />
+        <SkeletonPopularCard />
+        <SkeletonPopularCard />
+    {/if}
+</div>
 
 <!-- Categories -->
 <HomeSectionHeader {...sectionHeaders[2]} />
