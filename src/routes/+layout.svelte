@@ -12,15 +12,23 @@
 
     $: title = (() => {
         switch ($page.route.id!) {
+            case "/login": return "SU Webboard | Sign in"
+
+            // Admin portal page
             case "/admin-portal": return "ADMIN PORTAL | Home"
             case "/admin-portal/user": return "ADMIN PORTAL | Manage User"
             case "/admin-portal/category": return "ADMIN PORTAL | Manage Category"
             case "/admin-portal/forum": return "ADMIN PORTAL | Manage Forum"
 
+            // General user page
             case "/": return "SU Webboard | Home"
-            case "/login": return "SU Webboard | Sign in"
             case "/profile": return "SU Webboard | Profile"
             case "/new-forum": return "SU Webboard | New Forum"
+
+            // List page
+            case "/category/:category": return "SU Webboard | Category List"
+            case "/announcement": return "SU Webboard | Announcement List"
+            case "/popular": return "SU Webboard | Popular List"
         }
     })()
     $: isUserSite = $page.route.id?.indexOf("/admin-portal") == -1 && $page.route.id! != "/login";
@@ -160,13 +168,17 @@
         </nav>
     </header>
 
-    <main class="relative top-16 p-4">
+    <main class="relative top-16 p-4 min-h-[calc(100vh-64px*2)]">
         {#key $page.route.id}
             <div in:fly={{y: -20, duration: 250, delay: 100}}>
                 <slot />
             </div>
         {/key}
     </main>
+
+    <footer class="relative top-16 h-16 flex items-center px-4 bg-[#40826D] text-white">
+        <span>&copy;&nbsp;</span>su-webboard
+    </footer>
 {:else}
     <slot />
 {/if}
