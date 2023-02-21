@@ -12,8 +12,6 @@
 
     $: title = (() => {
         switch ($page.route.id!) {
-            case "/login": return "SU Webboard | Sign in"
-
             // Admin portal page
             case "/admin-portal": return "ADMIN PORTAL | Home"
             case "/admin-portal/user": return "ADMIN PORTAL | Manage User"
@@ -22,6 +20,7 @@
 
             // General user page
             case "/": return "SU Webboard | Home"
+            case "/login": return "SU Webboard | Sign in"
             case "/profile": return "SU Webboard | Profile"
             case "/new-forum": return "SU Webboard | New Forum"
 
@@ -29,6 +28,7 @@
             case "/category/[categoryUUID]": return "SU Webboard | Category List"
             case "/announcement": return "SU Webboard | Announcement List"
             case "/popular": return "SU Webboard | Popular List"
+            case "/search": return "SU Webboard | Search"
 
             // Forum page
             case "/announcement/[forumUUID]": return "SU Webboard | Announcement Forum"
@@ -194,7 +194,7 @@
         </nav>
     </header>
 
-    <main class="relative top-16 p-4 min-h-[calc(100vh-64px*2)]">
+    <main class="relative top-16 p-4 min-h-[calc(100vh-64px*2)] overflow-x-hidden">
         {#key $page.url.pathname}
             <div in:fly={{y: -20, duration: 250, delay: 100}}>
                 <slot />
