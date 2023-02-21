@@ -10,9 +10,9 @@
     <div class="hover:scale-105 ease-in duration-200 w-full h-full p-4 sm:p-6">
         <header class="flex items-center gap-x-3">
             <img src="{announcement?.authorImageURL}" alt="" class="w-12">
-            <div class="flex flex-col">
-                <span class="text-md">{announcement?.authorName}</span>
-                <span class="text-xs">2 hours ago</span>
+            <div class="flex flex-col overflow-hidden">
+                <span class="text-md overflow-hidden text-ellipsis whitespace-nowrap">{announcement?.authorName}</span>
+                <span class="text-xs overflow-hidden text-ellipsis whitespace-nowrap">2 hours ago</span>
             </div>
         </header>
         <section class="mt-2">

@@ -12,7 +12,7 @@
         {@html icon}
     </figure>
     <span class="uppercase">{title}</span>
-    <span class="text-xs text-gray-400">{description}</span>
+    <span class="text-xs text-gray-400 hidden md:block">{description}</span>
     {#if url}
         <Button class="ml-auto uppercase" color="green" gradient href={url}>see more</Button>
     {/if}

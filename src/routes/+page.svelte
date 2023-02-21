@@ -4,10 +4,10 @@
 	import AnnouncementCard from '@components/partials/AnnouncementCard.svelte';
 	import PopularCard from '@components/partials/PopularCard.svelte';
 	import CategoryCard from '@components/partials/CategoryCard.svelte';
-    import type { Home } from '@models/home';
-	import { getHomeData } from '@services/forum';
 	import SkeletonAnnouncementCard from '@components/skeleton-load/SkeletonAnnouncementCard.svelte';
 	import SkeletonPopularCard from '@components/skeleton-load/SkeletonPopularCard.svelte';
+    import type { Home } from '@models/home';
+	import { getHomeData } from '@services/forum';
 
     const sectionHeaders = [
         {
@@ -31,21 +31,28 @@
 
     let home: Home;
     onMount(async() => home = await getHomeData())
+
+    let innerWidth = 0;
+    let minimumCardWidth = 325;
+    let minimumCategoryCardWidth = 200;
+
+    $: colAmount = Math.round(innerWidth/minimumCardWidth);
+    $: categoriesAmount = Math.round(innerWidth/minimumCategoryCardWidth);
 </script>
 
-<!-- RESPONSIVE DESIGN -->
+<svelte:window bind:innerWidth />
 
 <!-- Announcement -->
 <HomeSectionHeader {...sectionHeaders[0]} />
 <div class="flex w-full gap-x-2 mb-10">
     {#if home}
-        {#each home?.announcements as announcement}
+        {#each home?.announcements?.slice(0, Math.min(home?.announcements.length, colAmount)) as announcement}
             <AnnouncementCard {announcement} />
         {/each}
     {:else}
-        <SkeletonAnnouncementCard />
-        <SkeletonAnnouncementCard />
-        <SkeletonAnnouncementCard />
+        {#each Array(colAmount) as _}
+            <SkeletonAnnouncementCard />
+        {/each}
     {/if}
 </div>
 
@@ -53,20 +60,22 @@
 <HomeSectionHeader {...sectionHeaders[1]} />
 <div class="flex w-full gap-x-2 mb-10">
     {#if home}
-        {#each home?.popularTopics as popularTopic}
+        {#each home?.popularTopics?.slice(0, Math.min(home?.announcements.length, colAmount)) as popularTopic}
             <PopularCard {popularTopic} />
         {/each}
     {:else}
-        <SkeletonPopularCard />
-        <SkeletonPopularCard />
-        <SkeletonPopularCard />
+        {#each Array(colAmount) as _}
+            <SkeletonPopularCard />
+        {/each}
     {/if}
 </div>
 
 <!-- Categories -->
 <HomeSectionHeader {...sectionHeaders[2]} />
-{#if home}
-    {#each home?.categories as category}
-        <CategoryCard {category} />
-    {/each}
-{/if}
+<div class="flex w-full gap-x-2 mb-10">
+    {#if home}
+        {#each home?.categories?.slice(0, Math.min(home?.categories.length, categoriesAmount)) as category}
+            <CategoryCard {category} />
+        {/each}
+    {/if}
+</div>
