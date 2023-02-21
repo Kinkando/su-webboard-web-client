@@ -26,13 +26,13 @@
             case "/new-forum": return "SU Webboard | New Forum"
 
             // List page
-            case "/category/:category": return "SU Webboard | Category List"
+            case "/category/[categoryUUID]": return "SU Webboard | Category List"
             case "/announcement": return "SU Webboard | Announcement List"
             case "/popular": return "SU Webboard | Popular List"
 
             // Forum page
-            case "/announcement/:forumUUID": return "SU Webboard | Announcement Forum"
-            case "/forum/:forumUUID": return "SU Webboard | Forum Detail"
+            case "/announcement/[forumUUID]": return "SU Webboard | Announcement Forum"
+            case "/forum/[forumUUID]": return "SU Webboard | Forum Detail"
         }
     })()
     $: isUserSite = $page.route.id?.indexOf("/admin-portal") == -1 && $page.route.id! != "/login";
@@ -53,6 +53,12 @@
             notification = await getNotiList()
         }
     })
+
+    const search = (event: KeyboardEvent) => {
+        if (event.key === 'Enter' && searchText) {
+            goto('/search?keyword='+searchText)
+        }
+    }
 </script>
 
 <svelte:head>
@@ -62,7 +68,14 @@
 
 {#if isUserSite}
     <Popover placement="bottom" class="z-20 w-64 text-sm font-light min-[720.1px]:hidden" triggeredBy="#search" trigger="click">
-        <Input id="search" class="w-full" placeholder="Search topics ..." size="md" bind:value={searchText}>
+        <Input
+            id="search"
+            class="w-full"
+            placeholder="Search topics ..."
+            size="md"
+            bind:value={searchText}
+            on:keydown={search}
+        >
             <svg slot="left" aria-hidden="true" class="w-6 h-6 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
 
             <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -131,7 +144,14 @@
             </figure>
 
             <div class="max-[720.1px]:hidden min-w-[300px]">
-                <Input id="search" class="w-full" placeholder="Search topics ..." size="md" bind:value={searchText}>
+                <Input
+                    id="search"
+                    class="w-full"
+                    placeholder="Search topics ..."
+                    size="md"
+                    bind:value={searchText}
+                    on:keydown={search}
+                >
                     <svg slot="left" aria-hidden="true" class="w-6 h-6 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
 
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
