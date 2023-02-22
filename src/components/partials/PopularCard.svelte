@@ -5,7 +5,6 @@
     export let popularTopic: Forum;
 </script>
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
 <a class="bg-[#aad4c7] dark:bg-gray-800 text-black dark:text-gray-400 rounded-lg border border-gray-200 dark:border-gray-700 shadow-md flex flex-col w-full h-56 cursor-pointer overflow-hidden hover:brightness-75 bg-no-repeat bg-cover brightness-20" href="/forum/{popularTopic?.forumUUID}" style="linear-gradient(rgba(255,255,255,0.65), rgba(255,255,255,0.65)), url('{popularTopic?.forumImageURL}'">
     <div class="hover:scale-105 ease-in duration-200 w-full h-full p-4 sm:p-6 flex flex-col">
         <header class="flex items-center gap-x-1">
@@ -13,9 +12,11 @@
                 <CategoryBadge name={category?.categoryName} hexColor={category?.categoryHexColor} />
             {/each}
         </header>
+
         <section class="my-2 h-full flex items-end">
             <div class="text-xl overflow-hidden text-ellipsis line-clamp-2">{popularTopic?.title}</div>
         </section>
+
         <footer class="flex items-center gap-x-3">
             <img src="{popularTopic?.authorImageURL}" alt="" class="w-12">
             <div class="flex flex-col overflow-hidden w-full">
@@ -26,6 +27,7 @@
                     </svg>
                     <span class="ml-1 text-xs mr-auto">{popularTopic?.likeCount}</span>
                 </div>
+
                 <div class="flex items-center justify-between">
                     <div class="w-full mr-2 text-xs overflow-hidden text-ellipsis whitespace-nowrap">2 hours ago</div>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">

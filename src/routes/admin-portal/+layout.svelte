@@ -42,7 +42,6 @@
 <!-- Sidebar -->
 {#key isSidebarExpand}
     <aside class="sidebar no-select w-[225px] h-screen bg-[#40826D] z-50 fixed overflow-x-hidden overflow-y-auto max-[1000.1px]:hidden [&.active]:block {isSidebarExpand ? 'active' : ''}" transition:fly|local={{x: -225, duration: 250, opacity: 1}}>
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
         <a class="flex h-16 items-center px-4 py-2 cursor-pointer" on:click={hideSidebar} href={rootPath}>
             <figure class="mr-2">
                 <img class="w-48 object-cover" src="/images/SU-WEBBOARD-ICON.png" alt="">
@@ -52,6 +51,7 @@
             </figure>
         </a>
         <hr>
+
         {#each sidebarItems as item}
             <nav class="px-2 pt-2">
                 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -61,9 +61,9 @@
                 </a>
             </nav>
         {/each}
+
         <nav class="bottom-nav">
             <div class="p-2">
-                <!-- svelte-ignore a11y-click-events-have-key-events -->
                 <a class="transition-all duration-200 flex items-center p-2 rounded-md hover:text-[#40826D] hover:shadow-md hover:bg-white text-white cursor-pointer" on:click={signout} href="/login">
                     <span>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -87,6 +87,7 @@
             {/if}
         </Breadcrumb>
     </nav>
+
     <header class="fixed w-full top-0 min-[1000.1px]:hidden h-16 flex items-center px-4 text-2xl bg-gray-200 shadow-md">
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <span class="float-left flex items-center sticky top-0 z-40 cursor-pointer" on:click={() => isSidebarExpand = !isSidebarExpand}>
@@ -96,11 +97,13 @@
         </span>
         <span class="ml-2">{ sidebarItems.find(item => currentRoute === item.href)?.label }</span>
     </header>
+
     {#key currentRoute}
         <section class="p-4 min-h-[calc(100vh-64px*2)]" in:fly={{y: -20, duration: 250, delay: 100}}>
             <slot />
         </section>
     {/key}
+
     <footer class="h-16 flex items-center px-4 bg-gray-100">
         <span>&copy;&nbsp;</span>su-webboard
     </footer>
