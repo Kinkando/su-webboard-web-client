@@ -36,10 +36,7 @@
         goto("/login")
     }
 
-    const navigator = (path: string) => {
-        isSidebarExpand = false
-        goto(path)
-    }
+    const hideSidebar = () => isSidebarExpand = false
 </script>
 
 <svelte:window on:resize={() => isSidebarExpand = false}/>
@@ -48,22 +45,22 @@
 {#key isSidebarExpand}
     <aside class="sidebar no-select w-[225px] h-screen bg-[#40826D] z-50 fixed overflow-x-hidden overflow-y-auto max-[1000.1px]:hidden [&.active]:block {isSidebarExpand ? 'active' : ''}" transition:fly|local={{x: -225, duration: 250, opacity: 1}}>
         <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <section class="flex h-16 items-center px-4 py-2 cursor-pointer" on:click={() => navigator(rootPath)}>
+        <a class="flex h-16 items-center px-4 py-2 cursor-pointer" on:click={hideSidebar} href={rootPath}>
             <figure class="mr-2">
                 <img class="w-48 object-cover" src="/images/SU-WEBBOARD-ICON.png" alt="">
             </figure>
             <figure>
                 <img class="w-full object-cover" src="/images/SU-WEBBOARD-TEXT.png" alt="">
             </figure>
-        </section>
+        </a>
         <hr>
         {#each sidebarItems as item}
             <nav class="px-2 pt-2">
                 <!-- svelte-ignore a11y-click-events-have-key-events -->
-                <div class="transition-all duration-200 flex items-center p-2 rounded-md hover:text-[#40826D] hover:shadow-md hover:bg-gray-200 {currentRoute === item.href ? '!text-[#40826D] shadow-md !bg-white' : 'text-white '}" on:click={() => navigator(item.href)}>
+                <a class="transition-all duration-200 flex items-center p-2 rounded-md hover:text-[#40826D] hover:shadow-md hover:bg-gray-200 {currentRoute === item.href ? '!text-[#40826D] shadow-md !bg-white' : 'text-white '}" on:click={hideSidebar} href={item.href}>
                     <span>{@html item.prefixIcon}</span>
                     <span class="ml-2">{item.label}</span>
-                </div>
+                </a>
             </nav>
         {/each}
         <nav class="bottom-nav">
