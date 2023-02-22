@@ -52,9 +52,11 @@
         if (isExpandCarousel) {
             return home?.categories
         }
-        const categories = home?.categories?.slice(carouselIndex, carouselIndex+carouselAmount)
-        if (categories.length !== carouselAmount) {
-            categories.push(...home?.categories?.slice(0, carouselAmount-categories.length))
+        const categories = [];
+        let index = carouselIndex;
+        while(categories.length != carouselAmount) {
+            categories.push(home?.categories[index])
+            index = (index+1) % home?.categories?.length
         }
         return categories
     }
