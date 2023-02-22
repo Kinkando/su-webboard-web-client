@@ -9,7 +9,7 @@
 
     let categoryNameElement: HTMLDivElement;
     let backgroundElement: HTMLDivElement;
-    const x = direction ? (direction === "left" ? -1 : 1)*100 : 0
+    const x = direction ? (direction === "left" ? -1 : 1)*150 : 0
 
     onMount(() => {
         categoryNameElement.style.backgroundColor = category?.categoryHexColor
