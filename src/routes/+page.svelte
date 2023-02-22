@@ -54,7 +54,7 @@
         }
         const categories = [];
         let index = carouselIndex;
-        while(categories.length != carouselAmount) {
+        while(categories.length != Math.min(home?.categories?.length, carouselAmount)) {
             categories.push(home?.categories[index])
             index = (index+1) % home?.categories?.length
         }
