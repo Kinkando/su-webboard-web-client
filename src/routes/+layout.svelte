@@ -211,7 +211,7 @@
         </nav>
     </header>
 
-    <main class="relative top-16 p-4 min-h-[calc(100vh-64px*2)] overflow-x-hidden">
+    <main class="relative top-16 p-4 min-h-[calc(100vh-64px*2)] overflow-x-hidden bg-gray-200">
         {#key $page.url.pathname}
             <div in:fly={{y: -20, duration: 250, delay: 100}}>
                 <slot />
