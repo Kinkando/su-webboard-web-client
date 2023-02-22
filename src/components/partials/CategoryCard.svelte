@@ -11,7 +11,7 @@
 
 {#key category}
     <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <div class="no-select dark:bg-gray-800 text-black dark:text-gray-400 rounded-lg border border-gray-200 dark:border-gray-700 shadow-md flex flex-col w-full h-36 cursor-pointer overflow-hidden relative hover:brightness-75" in:fly={{x, duration: 200, opacity: 1}} on:click={() => goto('/category/'+category?.categoryUUID)}>
+    <a class="no-select dark:bg-gray-800 text-black dark:text-gray-400 rounded-lg border border-gray-200 dark:border-gray-700 shadow-md flex flex-col w-full h-36 cursor-pointer overflow-hidden relative hover:brightness-75" in:fly={{x, duration: 200, opacity: 1}} href="/category/{category?.categoryUUID}">
         <div class="absolute w-full h-full opacity-75 z-0" style="background-color: {category?.categoryHexColor}"></div>
         <div class="hover:scale-105 ease-in duration-200 w-full h-full p-4 sm:p-6 z-10">
             <div class="px-2 py-1 text-xl w-fit rounded-md" style="background-color: {category?.categoryHexColor}">
@@ -32,5 +32,5 @@
                 <div class="text-sm ml-1 w-full overflow-hidden text-ellipsis whitespace-nowrap">2 hours ago</div>
             </div>
         </div>
-    </div>
+    </a>
 {/key}
