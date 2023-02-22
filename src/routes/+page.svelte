@@ -103,7 +103,7 @@
 <HomeSectionHeader {...sectionHeaders[2]} bind:buttonName={carouselButtonName} />
 <div class="{isExpandCarousel ? 'grid' : 'flex items-center'} gap-2 w-full mb-10 overflow-x-hidden" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr))">
     <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <div class="rounded-full p-1 bg-gray-300 shadow-lg cursor-pointer z-10 opacity-50 {isExpandCarousel ? 'hidden': ''}" on:click={() => setCarouselIndex(-1)}>
+    <div class="hover:bg-gray-400 transition-bg ease-in duration-200 rounded-full p-1 bg-gray-300 shadow-lg cursor-pointer z-10 opacity-50 {isExpandCarousel ? 'hidden': ''}" on:click={() => setCarouselIndex(-1)}>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
         </svg>
@@ -122,7 +122,7 @@
     {/if}
 
     <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <div class="rounded-full p-1 bg-gray-300 shadow-lg cursor-pointer z-10 opacity-50 {isExpandCarousel ? 'hidden': ''}" on:click={() => setCarouselIndex(1)}>
+    <div class="hover:bg-gray-400 transition-bg ease-in duration-200 rounded-full p-1 bg-gray-300 shadow-lg cursor-pointer z-10 opacity-50 {isExpandCarousel ? 'hidden': ''}" on:click={() => setCarouselIndex(1)}>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
         </svg>
