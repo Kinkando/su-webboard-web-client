@@ -67,7 +67,7 @@
 </svelte:head>
 
 {#if isUserSite}
-    <Popover placement="bottom" class="z-20 w-64 text-sm font-light min-[720.1px]:hidden" triggeredBy="#search" trigger="click">
+    <Popover placement="bottom" class="z-30 w-64 text-sm font-light min-[720.1px]:hidden" triggeredBy="#search" trigger="click">
         <Input
             id="search"
             class="w-full"
@@ -83,7 +83,7 @@
         </Input>
     </Popover>
 
-    <Popover defaultClass="overflow-hidden w-fit" placement="bottom" class="z-20 w-fit text-sm font-light" triggeredBy="#notification" trigger="click">
+    <Popover defaultClass="overflow-hidden w-fit" placement="bottom" class="z-30 w-fit text-sm font-light" triggeredBy="#notification" trigger="click">
         <header class="relative text-center text-lg flex items-center justify-center gap-x-1 rounded-t-md py-1">
             <span class="">Notification</span>
             {#if notification?.unreadNotiCount}
@@ -114,7 +114,7 @@
         </section>
     </Popover>
 
-    <Popover defaultClass="overflow-hidden py-2" placement="bottom" class="z-20 w-fit text-sm font-light -px-3" triggeredBy="#profile" trigger="click">
+    <Popover defaultClass="overflow-hidden py-2" placement="bottom" class="z-30 w-fit text-sm font-light -px-3" triggeredBy="#profile" trigger="click">
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <nav class="flex items-center gap-x-3 cursor-pointer hover:bg-gray-200 px-3 py-2" on:click={() => goto("/profile")}>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -132,7 +132,7 @@
         </nav>
     </Popover>
 
-    <header class="h-16 w-full overflow-hidden flex items-center bg-[#40826D] px-4 no-select fixed z-10">
+    <header class="h-16 w-full overflow-hidden flex items-center bg-[#40826D] px-4 no-select fixed z-20">
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <figure class="flex items-center cursor-pointer h-full gap-x-3" on:click={() => goto("/")}>
             <img class="w-10 object-cover" src="/images/SU-WEBBOARD-ICON.png" alt="">

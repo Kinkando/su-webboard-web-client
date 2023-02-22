@@ -1,28 +1,20 @@
 <script lang="ts">
 	import { fly } from 'svelte/transition';
 	import type { CategoryDetail } from "@models/category";
-	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 
     export let category: CategoryDetail;
     export let direction: string;
 
-    let categoryNameElement: HTMLDivElement;
-    let backgroundElement: HTMLDivElement;
-    const x = direction ? (direction === "left" ? -1 : 1)*150 : 0
-
-    onMount(() => {
-        categoryNameElement.style.backgroundColor = category?.categoryHexColor
-        backgroundElement.style.backgroundColor = category?.categoryHexColor
-    })
+    const x = (direction === "left" ? -1 : direction === "right" ? 1 : 0) *150
 </script>
 
 {#key category}
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <div class="no-select dark:bg-gray-800 text-black dark:text-gray-400 rounded-lg border border-gray-200 dark:border-gray-700 shadow-md flex flex-col w-full h-36 cursor-pointer overflow-hidden relative hover:brightness-75" in:fly={{x, duration: 200, opacity: 1}} on:click={() => goto('/category/'+category?.categoryUUID)}>
-        <div bind:this={backgroundElement} class="absolute w-full h-full opacity-75 z-0"></div>
+        <div class="absolute w-full h-full opacity-75 z-0" style="background-color: {category?.categoryHexColor}"></div>
         <div class="hover:scale-105 ease-in duration-200 w-full h-full p-4 sm:p-6 z-10">
-            <div bind:this={categoryNameElement} class="px-2 py-1 text-xl w-fit rounded-md">
+            <div class="px-2 py-1 text-xl w-fit rounded-md" style="background-color: {category?.categoryHexColor}">
                 {category?.categoryName}
             </div>
 

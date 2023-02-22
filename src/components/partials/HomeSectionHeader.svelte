@@ -4,7 +4,8 @@
     export let icon: string;
     export let title: string;
     export let description: string;
-    export let url: string = "";
+    export let action: () => {};
+    export let buttonName = "see more";
 </script>
 
 <div class="flex items-center gap-x-2">
@@ -13,8 +14,6 @@
     </figure>
     <span class="uppercase">{title}</span>
     <span class="text-xs text-gray-400 hidden md:block">{description}</span>
-    {#if url}
-        <Button class="ml-auto uppercase" color="green" gradient href={url}>see more</Button>
-    {/if}
+    <Button class="ml-auto uppercase" color="green" gradient on:click={action}>{buttonName}</Button>
 </div>
 <hr class="my-2 border-gray-400">
