@@ -101,7 +101,7 @@
                 <hr class="border-gray-300">
 
                 <!-- svelte-ignore a11y-click-events-have-key-events -->
-                <div class="flex items-center gap-x-3 py-2 overflow-x-hidden px-3 cursor-pointer hover:bg-gray-300 relative {!noti?.isRead ? 'bg-gray-200' : ''}" on:click={() => goto('/forum/'+noti?.forumUUID)}>
+                <a class="flex items-center gap-x-3 py-2 overflow-x-hidden px-3 cursor-pointer hover:bg-gray-300 relative {!noti?.isRead ? 'bg-gray-200' : ''}" href="/forum/{noti?.forumUUID}">
                     <img src={noti.userImageProfile} alt="" class="w-10 rounded-50">
                     {#if !noti?.isRead}
                         <Indicator color="red" size="md" border class="absolute left-11 top-3"></Indicator>
@@ -113,19 +113,19 @@
                         </div>
                         <div class="font-light text-gray-400">2 days ago</div>
                     </div>
-                </div>
+                </a>
             {/each}
         </section>
     </Popover>
 
     <Popover defaultClass="overflow-hidden py-2" placement="bottom" class="z-30 w-fit text-sm font-light -px-3" triggeredBy="#profile" trigger="click">
         <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <nav class="flex items-center gap-x-3 cursor-pointer hover:bg-gray-200 px-3 py-2" on:click={() => goto("/profile")}>
+        <a class="flex items-center gap-x-3 cursor-pointer hover:bg-gray-200 px-3 py-2" href="/profile">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
             </svg>
             <span>Profile</span>
-        </nav>
+        </a>
 
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <nav class="flex items-center gap-x-3 cursor-pointer hover:bg-gray-200 px-3 py-2" on:click={signout}>
@@ -138,10 +138,10 @@
 
     <header class="h-16 w-full overflow-hidden flex items-center bg-[#40826D] px-4 no-select fixed z-20">
         <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <figure class="flex items-center cursor-pointer h-full gap-x-3" on:click={() => goto("/")}>
+        <a class="flex items-center cursor-pointer h-full gap-x-3" href="/">
             <img class="w-10 object-cover" src="/images/SU-WEBBOARD-ICON.png" alt="">
             <img class="h-6 object-cover max-[550px]:hidden" src="/images/SU-WEBBOARD-TEXT.png" alt="">
-        </figure>
+        </a>
 
         <nav class="flex items-center gap-x-2 ml-auto">
             <!-- INPUT SEARCH -->
@@ -170,7 +170,7 @@
             {#if isTeacher}
                 <!-- NEW ANNOUNCEMENT PAGE -->
                 <!-- svelte-ignore a11y-click-events-have-key-events -->
-                <figure class="rounded-full hover:bg-white text-white hover:text-[#40826D] p-1 w-10 h-10 relative cursor-pointer" on:click={() => goto("/new-announcement")}>
+                <a class="rounded-full hover:bg-white text-white hover:text-[#40826D] p-1 w-10 h-10 relative cursor-pointer" href="/new-announcement">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-full h-full">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 110-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38c-.551.318-1.26.117-1.527-.461a20.845 20.845 0 01-1.44-4.282m3.102.069a18.03 18.03 0 01-.59-4.59c0-1.586.205-3.124.59-4.59m0 9.18a23.848 23.848 0 018.835 2.535M10.34 6.66a23.847 23.847 0 008.835-2.535m0 0A23.74 23.74 0 0018.795 3m.38 1.125a23.91 23.91 0 011.014 5.395m-1.014 8.855c-.118.38-.245.754-.38 1.125m.38-1.125a23.91 23.91 0 001.014-5.395m0-3.46c.495.413.811 1.035.811 1.73 0 .695-.316 1.317-.811 1.73m0-3.46a24.347 24.347 0 010 3.46" />
                     </svg>
@@ -178,12 +178,12 @@
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-3 h-3 absolute left-1/2 top-1/2 -translate-x-[2px] -translate-y-[7px]">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                     </svg>
-                </figure>
+                </a>
             {/if}
 
             <!-- NEW FORUM PAGE -->
             <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <figure class="rounded-full hover:bg-white text-white hover:text-[#40826D] p-1 w-10 h-10 relative cursor-pointer" on:click={() => goto("/forum")}>
+            <a class="rounded-full hover:bg-white text-white hover:text-[#40826D] p-1 w-10 h-10 relative cursor-pointer" href="/forum">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-full h-full">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z" />
                 </svg>
@@ -191,7 +191,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                 </svg>
-            </figure>
+            </a>
 
             <!-- NOTIFICATION LIST -->
             <figure id="notification" class="rounded-full hover:bg-white text-white hover:text-[#40826D] p-1 w-10 h-10 cursor-pointer -ml-1 relative">

@@ -6,7 +6,7 @@
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<div class="bg-[#aad4c7] dark:bg-gray-800 text-black dark:text-gray-400 rounded-lg border border-gray-200 dark:border-gray-700 shadow-md flex flex-col w-full h-56 cursor-pointer overflow-hidden hover:brightness-75" on:click={() => goto(`/announcement/${announcement?.forumUUID}`)}>
+<a class="bg-[#aad4c7] dark:bg-gray-800 text-black dark:text-gray-400 rounded-lg border border-gray-200 dark:border-gray-700 shadow-md flex flex-col w-full h-56 cursor-pointer overflow-hidden hover:brightness-75" href="/announcement/{announcement?.forumUUID}">
     <div class="hover:scale-105 ease-in duration-200 w-full h-full p-4 sm:p-6">
         <header class="flex items-center gap-x-3">
             <img src="{announcement?.authorImageURL}" alt="" class="w-12">
@@ -20,4 +20,4 @@
             <div class="text-sm overflow-hidden text-ellipsis line-clamp-5 text-gray-600">{announcement?.description}</div>
         </section>
     </div>
-</div>
+</a>

@@ -1,22 +1,12 @@
 <script lang="ts">
-	import { goto } from "$app/navigation";
 	import CategoryBadge from "@components/shared/CategoryBadge.svelte";
 	import type { Forum } from "@models/forum";
-	import { onMount } from "svelte";
 
     export let popularTopic: Forum;
-
-    let element: HTMLDivElement;
-
-    onMount(() => {
-        if (popularTopic?.forumImageURL) {
-            element.style.backgroundImage = `linear-gradient(rgba(255,255,255,0.65), rgba(255,255,255,0.65)), url("${popularTopic?.forumImageURL}")`
-        }
-    })
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<div bind:this={element} class="bg-[#aad4c7] dark:bg-gray-800 text-black dark:text-gray-400 rounded-lg border border-gray-200 dark:border-gray-700 shadow-md flex flex-col w-full h-56 cursor-pointer overflow-hidden hover:brightness-75 bg-no-repeat bg-cover brightness-20" on:click={() => goto(`/forum/${popularTopic?.forumUUID}`)}>
+<a class="bg-[#aad4c7] dark:bg-gray-800 text-black dark:text-gray-400 rounded-lg border border-gray-200 dark:border-gray-700 shadow-md flex flex-col w-full h-56 cursor-pointer overflow-hidden hover:brightness-75 bg-no-repeat bg-cover brightness-20" href="/forum/{popularTopic?.forumUUID}" style="linear-gradient(rgba(255,255,255,0.65), rgba(255,255,255,0.65)), url('{popularTopic?.forumImageURL}'">
     <div class="hover:scale-105 ease-in duration-200 w-full h-full p-4 sm:p-6 flex flex-col">
         <header class="flex items-center gap-x-1">
             {#each popularTopic?.categories as category}
@@ -46,4 +36,4 @@
             </div>
         </footer>
     </div>
-</div>
+</a>
