@@ -140,10 +140,10 @@
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <figure class="flex items-center cursor-pointer h-full gap-x-3" on:click={() => goto("/")}>
             <img class="w-10 object-cover" src="/images/SU-WEBBOARD-ICON.png" alt="">
-            <img class="h-6 object-cover max-[450px]:hidden" src="/images/SU-WEBBOARD-TEXT.png" alt="">
+            <img class="h-6 object-cover max-[550px]:hidden" src="/images/SU-WEBBOARD-TEXT.png" alt="">
         </figure>
 
-        <nav class="flex items-center gap-x-3 ml-auto">
+        <nav class="flex items-center gap-x-2 ml-auto">
             <!-- INPUT SEARCH -->
             <div class="max-[800.1px]:hidden min-w-[300px]">
                 <Input
@@ -167,7 +167,7 @@
                 <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
             </figure>
 
-            {#if true}
+            {#if isTeacher}
                 <!-- NEW ANNOUNCEMENT PAGE -->
                 <!-- svelte-ignore a11y-click-events-have-key-events -->
                 <figure class="rounded-full hover:bg-white text-white hover:text-[#40826D] p-1 w-10 h-10 relative cursor-pointer" on:click={() => goto("/new-announcement")}>
