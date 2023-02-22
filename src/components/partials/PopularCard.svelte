@@ -5,7 +5,7 @@
     export let popularTopic: Forum;
 </script>
 
-<a class="bg-[#aad4c7] dark:bg-gray-800 text-black dark:text-gray-400 rounded-lg border border-gray-200 dark:border-gray-700 shadow-md flex flex-col w-full h-56 cursor-pointer overflow-hidden hover:brightness-75 bg-no-repeat bg-cover brightness-20" href="/forum/{popularTopic?.forumUUID}" style="linear-gradient(rgba(255,255,255,0.65), rgba(255,255,255,0.65)), url('{popularTopic?.forumImageURL}'">
+<a class="bg-[#aad4c7] dark:bg-gray-800 text-black dark:text-gray-400 rounded-lg border border-gray-200 dark:border-gray-700 shadow-md flex flex-col w-full h-56 cursor-pointer overflow-hidden hover:brightness-75 bg-no-repeat bg-cover brightness-20" href="/forum/{popularTopic?.forumUUID}" style="background-image: linear-gradient(rgba(255,255,255,0.65), rgba(255,255,255,0.65)), url('{popularTopic?.forumImageURL}'">
     <div class="hover:scale-105 ease-in duration-200 w-full h-full p-4 sm:p-6 flex flex-col">
         <header class="flex items-center gap-x-1">
             {#each popularTopic?.categories as category}
