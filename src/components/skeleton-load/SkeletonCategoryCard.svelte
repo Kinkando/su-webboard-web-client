@@ -3,10 +3,12 @@
         <div class="text-xl w-fit rounded-md">
             <div class="h-9 bg-gray-300 rounded-md dark:bg-gray-700 w-20 mb-2.5"></div>
         </div>
+
         <div class="flex overflow-hidden mt-6">
             <div class="w-6 h-3 bg-gray-300 rounded-full dark:bg-gray-700"></div>
             <div class="ml-1 w-10 h-3 bg-gray-300 rounded-full dark:bg-gray-700"></div>
         </div>
+
         <div class="flex overflow-hidden mt-2">
             <div class="w-6 h-3 bg-gray-300 rounded-full dark:bg-gray-700"></div>
             <div class="ml-1 w-20 h-3 bg-gray-300 rounded-full dark:bg-gray-700"></div>
