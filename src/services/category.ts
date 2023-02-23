@@ -56,13 +56,14 @@ export async function getCategoryByName(categoryName: string): Promise<Category|
             categoryUUID: "",
             categoryName: "Food",
             categoryHexColor: "#857800",
-        }
+        },
+        {
+            categorySeq: 999,
+            categoryUUID: "",
+            categoryName: "Work Life",
+            categoryHexColor: "#4569",
+        },
     ]
 
-    switch (categoryName) {
-        case "123": return categories[0]
-        case "456": return categories[1]
-        case "789": return categories[2]
-        default: return undefined
-    }
+    return categories.find(category => category.categoryName.toLowerCase() === categoryName)
 }
