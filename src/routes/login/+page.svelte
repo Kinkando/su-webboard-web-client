@@ -20,15 +20,13 @@
             color: idToken ? 'green' : 'red',
             message: idToken ? 'Login successfully!' : 'Your username or password is invalid, please try again!',
         }
-        if (idToken) {
-            await fetch("/api/token/verify", {
-                    method: "POST",
-                    body: JSON.stringify({ idToken }),
-                }
-            )
-            window.location.href = "/"
-        }
-        isLoading = false;
+        await fetch("/api/token/verify", {
+                method: "POST",
+                body: JSON.stringify({ idToken }),
+            }
+        ).
+        then(res => window.location.href = "/").
+        finally(() => isLoading = false)
     }
 </script>
 
