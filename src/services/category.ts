@@ -36,3 +36,34 @@ export async function getAllCategories() {
     await new Promise(resolve => setTimeout(() => resolve(""), 500))
     return categories
 }
+
+export async function getCategoryByName(categoryName: string): Promise<Category|undefined> {
+    const categories: Category[] = [
+        {
+            categorySeq: 1,
+            categoryUUID: "",
+            categoryName: "Lifestyle",
+            categoryHexColor: "#86D97F",
+        },
+        {
+            categorySeq: 2,
+            categoryUUID: "",
+            categoryName: "Sport",
+            categoryHexColor: "#4C52E0",
+        },
+        {
+            categorySeq: 3,
+            categoryUUID: "",
+            categoryName: "Food",
+            categoryHexColor: "#857800",
+        },
+        {
+            categorySeq: 999,
+            categoryUUID: "",
+            categoryName: "Work Life",
+            categoryHexColor: "#4569",
+        },
+    ]
+
+    return categories.find(category => category.categoryName.toLowerCase() === categoryName)
+}

@@ -29,7 +29,7 @@
             case "/forum": return generalUserPrefix + "New Forum"
 
             // List page
-            case "/category/[categoryUUID]": return generalUserPrefix + "Category List"
+            case "/category/[categoryName]": return generalUserPrefix + "Category List"
             case "/announcement": return generalUserPrefix + "Announcement List"
             case "/popular": return generalUserPrefix + "Popular List"
             case "/search": return generalUserPrefix + "Search"
@@ -69,7 +69,7 @@
     <link rel="icon" href="/favicon.png">
 </svelte:head>
 
-{#if isUserSite}
+{#if $page.status === 200 && isUserSite}
     <Popover placement="bottom" class="z-30 w-64 text-sm font-light min-[800.1px]:hidden" triggeredBy="#search" trigger="click">
         <Input
             id="search"
