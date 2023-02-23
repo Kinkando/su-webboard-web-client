@@ -32,7 +32,7 @@
 
     let isSidebarExpand = false;
 
-    const signout = () => localStorage.clear();
+    const signout = async () => await fetch("/api/token/revoke", { method: "POST" });
 
     const hideSidebar = () => isSidebarExpand = false
 </script>

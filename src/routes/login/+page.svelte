@@ -16,14 +16,18 @@
     const signin = async() => {
         if (!username.length || !password.length) { return }
         isLoading = true;
-        const resp = await signinFirebase(username, password);
+        const idToken = await signinFirebase(username, password);
         alert = {
-            color: resp ? 'green' : 'red',
-            message: resp ? 'Login successfully!' : 'Your username or password is invalid, please try again!',
+            color: idToken ? 'green' : 'red',
+            message: idToken ? 'Login successfully!' : 'Your username or password is invalid, please try again!',
         }
-        if (resp) {
-            // mock
-            goto("/admin-portal")
+        if (idToken) {
+            await fetch("/api/token/verify", {
+                    method: "POST",
+                    body: JSON.stringify({ idToken }),
+                }
+            )
+            goto("/")
         }
         isLoading = false;
     }

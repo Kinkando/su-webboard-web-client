@@ -6,8 +6,8 @@ export default defineConfig({
 	resolve: {
 		alias: [
 			{
-				find: '@services',
-				replacement: '/src/services'
+				find: '@commons',
+				replacement: '/src/commons'
 			},
 			{
 				find: '@components',
@@ -16,6 +16,14 @@ export default defineConfig({
 			{
 				find: '@models',
 				replacement: '/src/models'
+			},
+			{
+				find: '@services',
+				replacement: '/src/services'
+			},
+			{
+				find: '@util',
+				replacement: '/src/util'
 			},
 		]
 	}
