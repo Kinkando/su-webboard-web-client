@@ -54,7 +54,7 @@
         }
         const categories = [];
         let index = carouselIndex;
-        while(categories.length != carouselAmount) {
+        while(categories.length != carouselAmount && categories.length < home?.categories?.length) {
             categories.push(home?.categories[index])
             index = (index+1) % home?.categories?.length
         }
@@ -103,7 +103,7 @@
 
 <!-- Categories -->
 <HomeSectionHeader {...sectionHeaders[2]} bind:buttonName={carouselButtonName} />
-<div class="{isExpandCarousel ? 'grid' : 'flex items-center'} gap-2 w-full mb-10 overflow-x-hidden" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr))">
+<div class="{isExpandCarousel ? 'grid' : 'flex items-center'} gap-2 w-full mb-10 overflow-x-hidden" style="grid-template-columns: repeat(auto-fill, minmax({minimumCategoryCardWidth}px, 1fr))">
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <div class="hover:bg-gray-400 transition-bg ease-in duration-200 rounded-full p-1 bg-gray-300 shadow-lg cursor-pointer z-10 opacity-50 {isExpandCarousel ? 'hidden': ''}" on:click={() => setCarouselIndex(-1)}>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
