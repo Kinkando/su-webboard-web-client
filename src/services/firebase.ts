@@ -27,7 +27,7 @@ const firebase = initializeApp(firebaseConfig);
 const auth = getAuth(firebase)
 auth.useDeviceLanguage()
 
-export async function signinFirebase(username: string, password: string) {
+export async function signinFirebase(username: string, password: string): Promise<string> {
     try {
         const userCredential = await signInWithEmailAndPassword(auth, username, password)
         const idToken = (userCredential as any)._tokenResponse.idToken
@@ -35,6 +35,6 @@ export async function signinFirebase(username: string, password: string) {
 
         return idToken
     } catch(err) {
-        return undefined
+        return ""
     }
 }
