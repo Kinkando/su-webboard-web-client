@@ -206,7 +206,7 @@
                 <img
                     alt=""
                     class="rounded-50 w-10"
-                    src="{user?.userImageURL ? user.userImageURL : defaultImageURL}"
+                    src="{user?.userImageURL || defaultImageURL}"
                 />
             </figure>
         </nav>

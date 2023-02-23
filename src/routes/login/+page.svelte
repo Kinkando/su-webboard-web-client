@@ -15,20 +15,32 @@
     const signin = async() => {
         if (!username.length || !password.length) { return }
         isLoading = true;
+
+        //////////////////// MOCK FOR LOGIN AS ADMIN ////////////////////
+        if (username === "admin" && password === "admin") {
+            await fetch("/api/token/verify", {
+                    method: "POST",
+                    body: JSON.stringify({ idToken: "admin" }),
+                }
+            )
+            window.location.href = "/"
+            isLoading = false;
+            return
+        }
+        /////////////////////////////////////////////////////////////////
+
         const idToken = await signinFirebase(username, password);
         alert = {
             color: idToken ? 'green' : 'red',
             message: idToken ? 'Login successfully!' : 'Your username or password is invalid, please try again!',
         }
-        if (idToken) {
-            await fetch("/api/token/verify", {
-                    method: "POST",
-                    body: JSON.stringify({ idToken }),
-                }
-            )
-            window.location.href = "/"
-        }
-        isLoading = false;
+        await fetch("/api/token/verify", {
+                method: "POST",
+                body: JSON.stringify({ idToken }),
+            }
+        ).
+        then(res => window.location.href = "/").
+        finally(() => isLoading = false)
     }
 </script>
 
