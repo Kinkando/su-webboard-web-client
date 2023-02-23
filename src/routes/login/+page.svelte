@@ -1,10 +1,9 @@
 <script lang="ts">
-    import { Button, Card, Label, Input, Spinner } from 'flowbite-svelte';
+    import { Button, Card, Label, Input } from 'flowbite-svelte';
 	import Alert from '@components/alert/Alert.svelte';
 	import type { Alert as AlertModel } from '@models/alert';
 	import { signinFirebase } from '@services/firebase';
 	import LoadingSpinner from '@components/spinner/LoadingSpinner.svelte';
-	import { goto } from '$app/navigation';
 
     let alert: AlertModel;
 
@@ -27,7 +26,7 @@
                     body: JSON.stringify({ idToken }),
                 }
             )
-            goto("/")
+            window.location.href = "/"
         }
         isLoading = false;
     }

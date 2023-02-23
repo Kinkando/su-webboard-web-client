@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import HomeSectionHeader from '@components/partials/HomeSectionHeader.svelte';
 	import AnnouncementCard from '@components/partials/AnnouncementCard.svelte';
