@@ -199,7 +199,7 @@
                 </svg>
 
                 {#if notification?.unreadNotiCount}
-                    <Indicator color="red" size="md" placement="top-right" class="right-1 top-0.5 p-2">
+                    <Indicator color="red" size="md" placement="top-right" class="right-1.5 top-1.5 p-2">
                         <span class="text-white text-xs">{notification?.unreadNotiCount}</span>
                     </Indicator>
                 {/if}
