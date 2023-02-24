@@ -42,21 +42,21 @@
     }
 </script>
 
-<div class="bg-white w-full rounded-md shadow-lg p-4 sm:p-6">
-    <Label for="title" class="space-y-2">
+<div class="ease-in duration-200 bg-white dark:bg-gray-900 w-full rounded-md shadow-lg p-4 sm:p-6">
+    <Label for="title" class="space-y-2 text-black dark:text-white">
         <span>{title.label}</span>
-        <Input type="text" id="title" class="placeholder-gray-300" placeholder={title.placeholder} required bind:value={title.value} />
+        <Input type="text" id="title" class="ease-in duration-200 placeholder-gray-300" placeholder={title.placeholder} required bind:value={title.value} />
     </Label>
 
-    <Label for="description" class="space-y-2 mt-4">
+    <Label for="description" class="space-y-2 mt-4 text-black dark:text-white">
         <span>{description.label}</span>
-        <Textarea id="description" class="placeholder-gray-300 min-h-[150px]" placeholder={description.placeholder} required bind:value={description.value} />
+        <Textarea id="description" class="ease-in duration-200 placeholder-gray-300 min-h-[150px]" placeholder={description.placeholder} required bind:value={description.value} />
     </Label>
 
     {#if categoryUUIDs}
         <Label for="category" class="space-y-2 mt-4">
             <span>Categories</span>
-            <div id="category" class="w-full p-2.5 border text-sm rounded-lg bg-gray-50 text-gray-900 overflow-x-hidden flex flex-wrap">
+            <div id="category" class="ease-in duration-200 w-full p-2.5 border dark:border-gray-500 text-sm rounded-lg bg-gray-50 dark:bg-gray-700 overflow-x-hidden flex flex-wrap">
                 {#if categories.length}
                     {#each categories as category, index}
                         <CategoryBadgeToggle {category} bind:isActive={categoryToggles[index].isActive} />
@@ -65,7 +65,7 @@
                     {#each Array(5) as _}
                         <!-- Skeleton Load CategoryBadgeToggle -->
                         <div class="animate-pulse ease-in duration-480">
-                            <div class="w-20 h-8 bg-gray-300 rounded-md dark:bg-gray-700 m-1"></div>
+                            <div class="w-20 h-8 rounded-md bg-gray-300 dark:bg-gray-800 m-1"></div>
                         </div>
                     {/each}
                 {/if}
@@ -77,7 +77,7 @@
         <div>Attachments</div>
         <input bind:this={fileInput} type="file" accept="image/*" multiple hidden bind:files>
         <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <div class="ml-2 rounded-full bg-[#40826D] text-white p-1 cursor-pointer hover:scale-110 ease-in duration-200" on:click={() => fileInput.click()}>
+        <div class="ml-2 rounded-full bg-[var(--primary-color)] text-white p-1 cursor-pointer hover:scale-110 ease-in duration-200" on:click={() => fileInput.click()}>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
             </svg>
@@ -110,6 +110,6 @@
 
     <div class="flex items-center justify-end gap-x-2 mt-4">
         <Button color="dark" size="sm" type="button" href="/">Cancel</Button>
-        <Button color="green" size="sm" type="submit" on:click={submit}>Submit</Button>
+        <Button color="green" size="sm" type="submit" disabled={!title?.value || !description?.value} on:click={submit}>Submit</Button>
     </div>
 </div>

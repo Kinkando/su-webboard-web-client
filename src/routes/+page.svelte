@@ -60,6 +60,11 @@
         return categories
     }
     $: carouselButtonName = "see more"
+    setInterval(() => {
+        if (!isExpandCarousel) {
+            setCarouselIndex(1)
+        }
+    }, 3000)
 
     let isExpandCarousel = false;
     let innerWidth = 0;
