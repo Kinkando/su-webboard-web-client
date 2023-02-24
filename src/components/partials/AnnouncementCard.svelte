@@ -5,7 +5,7 @@
 </script>
 
 <a class="rounded-lg shadow-md flex flex-col w-full h-56 cursor-pointer overflow-hidden hover:brightness-75" href="/announcement/{announcement?.forumUUID}">
-    <div class="bg-[var(--primary-color-75)] text-black dark:bg-gray-700 dark:text-white ease-in duration-200 hover:scale-105 w-full h-full p-4 sm:p-6">
+    <div class="bg-[var(--primary-color-75)] text-black dark:bg-[var(--primary-color-125)] dark:text-white ease-in duration-200 hover:scale-105 w-full h-full p-4 sm:p-6">
         <header class="flex items-center gap-x-3">
             <img src="{announcement?.authorImageURL}" alt="" class="w-12">
             <div class="flex flex-col overflow-hidden">

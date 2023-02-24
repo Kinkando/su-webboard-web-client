@@ -30,7 +30,12 @@
             action: async () => {
                 isExpandCarousel = !isExpandCarousel;
                 carouselButtonName = isExpandCarousel ? 'see less' : 'see more'
-                carouselDirection = "left"
+                carouselDirection = "left";
+                if (!isExpandCarousel) {
+                    autoSlide = setInterval(auto, 3000);
+                } else {
+                    clearInterval(autoSlide);
+                }
             },
         },
     ];
@@ -46,6 +51,8 @@
             carouselIndex = home?.categories?.length-1
         }
         carouselDirection = increment > 0 ? "right" : "left";
+        clearInterval(autoSlide);
+        autoSlide = setInterval(auto, 3000);
     }
     $: carouselItems = () => {
         if (isExpandCarousel) {
@@ -60,11 +67,12 @@
         return categories
     }
     $: carouselButtonName = "see more"
-    setInterval(() => {
+    const auto = () => {
         if (!isExpandCarousel) {
             setCarouselIndex(1)
         }
-    }, 3000)
+    }
+    let autoSlide = setInterval(auto, 3000)
 
     let isExpandCarousel = false;
     let innerWidth = 0;
@@ -109,7 +117,7 @@
 <HomeSectionHeader {...sectionHeaders[2]} bind:buttonName={carouselButtonName} />
 <div class="{isExpandCarousel ? 'grid' : 'flex items-center'} gap-2 w-full mb-10 overflow-x-hidden" style="grid-template-columns: repeat(auto-fill, minmax({minimumCategoryCardWidth}px, 1fr))">
     <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <div class="hover:bg-gray-400 transition-bg ease-in duration-200 rounded-full p-1 bg-gray-300 shadow-lg cursor-pointer z-10 opacity-50 {isExpandCarousel ? 'hidden': ''}" on:click={() => setCarouselIndex(-1)}>
+    <div class="bg-gray-400 hover:bg-gray-500 transition-bg ease-in duration-200 rounded-full p-1 shadow-lg cursor-pointer z-10 opacity-50 {isExpandCarousel ? 'hidden': ''}" on:click={() => setCarouselIndex(-1)}>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
         </svg>
@@ -128,7 +136,7 @@
     {/if}
 
     <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <div class="hover:bg-gray-400 transition-bg ease-in duration-200 rounded-full p-1 bg-gray-300 shadow-lg cursor-pointer z-10 opacity-50 {isExpandCarousel ? 'hidden': ''}" on:click={() => setCarouselIndex(1)}>
+    <div class="bg-gray-400 hover:bg-gray-500 transition-bg ease-in duration-200 rounded-full p-1 shadow-lg cursor-pointer z-10 opacity-50 {isExpandCarousel ? 'hidden': ''}" on:click={() => setCarouselIndex(1)}>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
         </svg>
