@@ -9,8 +9,8 @@
     export let buttonName = "see more";
 </script>
 
-<div class="flex items-center gap-x-2">
-    <figure class="border-2 rounded-full p-1 border-black">
+<div class="ease-in duration-200 flex items-center gap-x-2 text-black dark:text-white">
+    <figure class="outline outline-[2px] rounded-full p-1">
         {@html icon}
     </figure>
     <span class="uppercase">{title}</span>

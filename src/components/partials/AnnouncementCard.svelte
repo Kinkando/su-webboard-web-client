@@ -4,8 +4,8 @@
     export let announcement: Announcement;
 </script>
 
-<a class="bg-[var(--primary-color-75)] dark:bg-gray-800 text-black dark:text-gray-400 rounded-lg border border-gray-200 dark:border-gray-700 shadow-md flex flex-col w-full h-56 cursor-pointer overflow-hidden hover:brightness-75" href="/announcement/{announcement?.forumUUID}">
-    <div class="hover:scale-105 ease-in duration-200 w-full h-full p-4 sm:p-6">
+<a class="rounded-lg shadow-md flex flex-col w-full h-56 cursor-pointer overflow-hidden hover:brightness-75" href="/announcement/{announcement?.forumUUID}">
+    <div class="bg-[var(--primary-color-75)] text-black dark:bg-gray-700 dark:text-white ease-in duration-200 hover:scale-105 w-full h-full p-4 sm:p-6">
         <header class="flex items-center gap-x-3">
             <img src="{announcement?.authorImageURL}" alt="" class="w-12">
             <div class="flex flex-col overflow-hidden">
@@ -15,7 +15,7 @@
         </header>
         <section class="mt-2">
             <div class="text-xl overflow-hidden text-ellipsis whitespace-nowrap">{announcement?.title}</div>
-            <div class="text-sm overflow-hidden text-ellipsis line-clamp-5 text-gray-600">{announcement?.description}</div>
+            <div class="text-sm overflow-hidden text-ellipsis line-clamp-5 text-gray-700 dark:text-gray-200 ease-in duration-200">{announcement?.description}</div>
         </section>
     </div>
 </a>

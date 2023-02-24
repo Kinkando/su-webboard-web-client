@@ -72,9 +72,9 @@
             <img class="w-72 m-auto" src="/images/SU-WEBBOARD-TEXT.png" alt="">
         </div>
     </div>
-    <div class="w-full max-[900px]:bg-[var(--primary-color)] min-[901px]:bg-gray-200 p-4" id="login-panel">
+    <div class="w-full max-[900px]:bg-[var(--primary-color)] dark:max-[900px]:bg-gray-900 min-[901px]:bg-gray-200 dark:min-[901px]:bg-gray-900 p-4" id="login-panel">
         <div id="login-card" class="relative top-1/2 -translate-y-1/2 overflow-y-auto">
-            <Card class="m-auto">
+            <Card class="m-auto border-none">
                 <h1 class="text-center text-2xl mb-4 uppercase">Login</h1>
                 <Label class="space-y-2">
                     <span>Username</span>

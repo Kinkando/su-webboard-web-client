@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
     import { page } from '$app/stores';
 	import { Breadcrumb, BreadcrumbItem } from "flowbite-svelte";
 	import { fly } from 'svelte/transition';
@@ -55,7 +54,7 @@
         {#each sidebarItems as item}
             <nav class="px-2 pt-2">
                 <!-- svelte-ignore a11y-click-events-have-key-events -->
-                <a class="transition-all duration-200 flex items-center p-2 rounded-md hover:text-[var(--primary-color)] hover:shadow-md hover:bg-gray-200 {currentRoute === item.href ? '!text-[var(--primary-color)] shadow-md !bg-[var(--secondary-color)]' : 'text-[var(--secondary-color)] '}" on:click={hideSidebar} href={item.href}>
+                <a class="transition-all duration-200 flex items-center p-2 rounded-md hover:text-[var(--primary-color)] hover:shadow-md hover:bg-gray-200 {currentRoute === item.href ? '!text-[var(--primary-color)] shadow-md !bg-white' : 'text-white '}" on:click={hideSidebar} href={item.href}>
                     <span>{@html item.prefixIcon}</span>
                     <span class="ml-2">{item.label}</span>
                 </a>
@@ -64,7 +63,7 @@
 
         <nav class="bottom-nav">
             <div class="p-2">
-                <a class="transition-all duration-200 flex items-center p-2 rounded-md hover:text-[var(--primary-color)] hover:shadow-md hover:bg-[var(--secondary-color)] text-[var(--secondary-color)] cursor-pointer" on:click={signout} href="/login">
+                <a class="transition-all duration-200 flex items-center p-2 rounded-md hover:text-[var(--primary-color)] hover:shadow-md hover:bg-white text-white cursor-pointer" on:click={signout} href="/login">
                     <span>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
