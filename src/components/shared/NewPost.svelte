@@ -110,6 +110,6 @@
 
     <div class="flex items-center justify-end gap-x-2 mt-4">
         <Button color="dark" size="sm" type="button" href="/">Cancel</Button>
-        <Button color="green" size="sm" type="submit" on:click={submit}>Submit</Button>
+        <Button color="green" size="sm" type="submit" disabled={!title?.value || !description?.value} on:click={submit}>Submit</Button>
     </div>
 </div>

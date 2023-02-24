@@ -23,24 +23,42 @@
                     body: JSON.stringify({ idToken: "admin" }),
                 }
             )
+            alert = {
+                color: 'green',
+                message: 'Login successfully!',
+            }
             window.location.href = "/"
-            isLoading = false;
             return
         }
         /////////////////////////////////////////////////////////////////
 
         const idToken = await signinFirebase(username, password);
-        alert = {
-            color: idToken ? 'green' : 'red',
-            message: idToken ? 'Login successfully!' : 'Your username or password is invalid, please try again!',
-        }
-        await fetch("/api/token/verify", {
-                method: "POST",
-                body: JSON.stringify({ idToken }),
+        if (idToken) {
+            await fetch("/api/token/verify", {
+                    method: "POST",
+                    body: JSON.stringify({ idToken }),
+                }
+            ).
+            then(res => {
+                window.location.href = "/";
+                alert = {
+                    color: 'green',
+                    message: 'Login successfully!',
+                }
+            }).
+            catch(err => {
+                alert = {
+                    color: 'red',
+                    message: 'Your username or password is invalid, please try again!',
+                }
+            })
+        } else {
+            alert = {
+                color: 'red',
+                message: 'Your username or password is invalid, please try again!',
             }
-        ).
-        then(res => window.location.href = "/").
-        finally(() => isLoading = false)
+            isLoading = false
+        }
     }
 </script>
 
