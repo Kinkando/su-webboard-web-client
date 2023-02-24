@@ -140,7 +140,6 @@
             <!-- INPUT SEARCH -->
             <div class="max-[820.1px]:hidden min-w-[300px]">
                 <Input
-                    id="search"
                     class="w-full ease-in duration-200"
                     placeholder="Search topics ..."
                     size="md"
