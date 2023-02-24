@@ -3,7 +3,7 @@
 	import { fly } from 'svelte/transition';
     import { page } from '$app/stores';
 	import { goto } from "$app/navigation";
-	import { DarkMode, Indicator, Input, Popover } from "flowbite-svelte";
+	import { DarkMode, Indicator, Input, Popover, ButtonGroup, Button } from "flowbite-svelte";
     import type { Notification } from "@models/notification";
 	import type { User } from "@models/user";
 	import { UserType } from "@models/auth";
@@ -44,8 +44,8 @@
     let searchText = "";
 
     const signout = async () => await fetch("/api/token/revoke", { method: "POST" }).then(res => goto("/login"));
-    const search = (event: KeyboardEvent) => {
-        if (event.key === 'Enter' && searchText) {
+    const search = (event: KeyboardEvent | MouseEvent) => {
+        if ((event instanceof MouseEvent || event.key === 'Enter') && searchText) {
             goto('/search?keyword='+searchText)
         }
     }
@@ -62,19 +62,22 @@
 
 {#if $page.status === HTTP.StatusOK && isUserSite}
     <Popover placement="bottom" class="z-30 w-64 text-sm font-light min-[820.1px]:hidden" triggeredBy="#search" trigger="click">
-        <Input
-            id="search"
-            class="w-full"
-            placeholder="Search topics ..."
-            size="md"
-            bind:value={searchText}
-            on:keydown={search}
-        >
-            <svg slot="left" aria-hidden="true" class="w-6 h-6 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+        <ButtonGroup>
+            <Input
+                id="search"
+                class="w-full rounded-l-lg"
+                placeholder="Search topics ..."
+                size="md"
+                bind:value={searchText}
+                on:keydown={search}
+            >
+                <svg slot="left" aria-hidden="true" class="w-6 h-6 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
 
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <svg slot="right" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-gray-500 dark:text-gray-400 cursor-pointer" on:click={() => searchText = ""}><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
-        </Input>
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <svg slot="right" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-gray-500 dark:text-gray-400 cursor-pointer" on:click={() => searchText = ""}><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+            </Input>
+            <Button class="focus:!outline-none" color="lime" gradient on:click={search}>Search</Button>
+        </ButtonGroup>
     </Popover>
 
     <Popover defaultClass="overflow-hidden w-fit" placement="bottom" class="z-30 w-fit text-sm text-black text-black dark:text-white font-light" triggeredBy="#notification" trigger="click">
@@ -139,19 +142,21 @@
 
             <!-- INPUT SEARCH -->
             <div class="max-[820.1px]:hidden min-w-[300px]">
-                <Input
-                    id="search"
-                    class="w-full ease-in duration-200"
-                    placeholder="Search topics ..."
-                    size="md"
-                    bind:value={searchText}
-                    on:keydown={search}
-                >
-                    <svg slot="left" aria-hidden="true" class="w-6 h-6 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                <ButtonGroup>
+                    <Input
+                        class="w-full ease-in duration-200 rounded-l-lg"
+                        placeholder="Search topics ..."
+                        size="md"
+                        bind:value={searchText}
+                        on:keydown={search}
+                    >
+                        <svg slot="left" aria-hidden="true" class="w-6 h-6 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
 
-                    <!-- svelte-ignore a11y-click-events-have-key-events -->
-                    <svg slot="right" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-gray-500 dark:text-gray-400 cursor-pointer" on:click={() => searchText = ""}><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
-                </Input>
+                        <!-- svelte-ignore a11y-click-events-have-key-events -->
+                        <svg slot="right" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-gray-500 dark:text-gray-400 cursor-pointer" on:click={() => searchText = ""}><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                    </Input>
+                    <Button class="focus:!outline-none" color="lime" gradient on:click={search}>Search</Button>
+                </ButtonGroup>
             </div>
 
             <!-- SEARCH ICON -->
