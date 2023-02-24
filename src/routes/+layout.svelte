@@ -28,7 +28,7 @@
             case "/forum": return generalUserPrefix + "New Forum"
 
             // List page
-            case "/category/[categoryName]": return generalUserPrefix + "Category List"
+            case "/category/[categoryID]": return generalUserPrefix + "Category List"
             case "/announcement": return generalUserPrefix + "Announcement List"
             case "/popular": return generalUserPrefix + "Popular List"
             case "/search": return generalUserPrefix + "Search"
@@ -65,7 +65,7 @@
         <Input
             id="search"
             class="w-full"
-            placeholder="Search topics ..."
+            placeholder="ค้นหากระทู้ได้ที่นี่..."
             size="md"
             bind:value={searchText}
             on:keydown={search}
@@ -79,7 +79,7 @@
 
     <Popover defaultClass="overflow-hidden w-fit" placement="bottom" class="z-30 w-fit text-sm text-black text-black dark:text-white font-light" triggeredBy="#notification" trigger="click">
         <header class="relative text-center text-lg flex items-center justify-center gap-x-1 rounded-t-md py-1">
-            <span class="">Notification</span>
+            <span class="">การแจ้งเตือน</span>
             {#if notification?.unreadNotiCount}
                 <Indicator color="red" size="lg">
                     <span class="text-white text-xs">{notification?.unreadNotiCount}</span>
@@ -102,7 +102,7 @@
                             <span class="text-lg">{noti.username}</span>&nbsp;
                             <span class="text-gray-400">{noti.content}</span>
                         </div>
-                        <div class="font-light text-gray-400">2 days ago</div>
+                        <div class="font-light text-gray-400">2 วัน</div>
                     </div>
                 </a>
             {/each}
@@ -114,7 +114,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
             </svg>
-            <span>Profile</span>
+            <span>ข้อมูลส่วนตัว</span>
         </a>
 
         <hr class="border-gray-200 dark:border-gray-600">
@@ -124,7 +124,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
             </svg>
-            <span>Logout</span>
+            <span>ออกจากระบบ</span>
         </div>
     </Popover>
 
@@ -141,7 +141,7 @@
             <div class="max-[820.1px]:hidden min-w-[300px]">
                 <Input
                     class="w-full ease-in duration-200"
-                    placeholder="Search topics ..."
+                    placeholder="ค้นหากระทู้ได้ที่นี่..."
                     size="md"
                     bind:value={searchText}
                     on:keydown={search}

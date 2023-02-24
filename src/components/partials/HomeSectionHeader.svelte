@@ -6,7 +6,7 @@
     export let description: string;
     export let action = () => {};
     export let href = "";
-    export let buttonName = "see more";
+    export let buttonName = "ดูเพิ่มเติม";
 </script>
 
 <div class="ease-in duration-200 flex items-center gap-x-2 text-black dark:text-white">

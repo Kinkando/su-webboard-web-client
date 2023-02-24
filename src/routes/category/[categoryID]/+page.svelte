@@ -5,4 +5,4 @@
     const category = data
 </script>
 
-Category / {category?.categoryName}
+หมวดหมู่ / {category?.categoryName}

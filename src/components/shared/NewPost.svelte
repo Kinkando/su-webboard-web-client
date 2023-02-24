@@ -10,6 +10,7 @@
     export let description: FormSchema;
     export let categoryUUIDs: string[] | undefined = undefined;
     export let attachments: Attachment[];
+    export let submitName: string;
     export let submit: () => Promise<void>;
 
     $: if (categoryUUIDs && categoryToggles) {
@@ -55,7 +56,7 @@
 
     {#if categoryUUIDs}
         <Label for="category" class="space-y-2 mt-4">
-            <span>Categories</span>
+            <span>หมวดหมู่</span>
             <div id="category" class="ease-in duration-200 w-full p-2.5 border dark:border-gray-500 text-sm rounded-lg bg-gray-50 dark:bg-gray-700 overflow-x-hidden flex flex-wrap">
                 {#if categories.length}
                     {#each categories as category, index}
@@ -74,7 +75,7 @@
     {/if}
 
     <Label for="attachment" class="mt-4 flex items-center">
-        <div>Attachments</div>
+        <div>รูปภาพ</div>
         <input bind:this={fileInput} type="file" accept="image/*" multiple hidden bind:files>
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div class="ml-2 rounded-full bg-[var(--primary-color)] text-white p-1 cursor-pointer hover:scale-110 ease-in duration-200" on:click={() => fileInput.click()}>
@@ -109,7 +110,7 @@
     </div>
 
     <div class="flex items-center justify-end gap-x-2 mt-4">
-        <Button color="dark" size="sm" type="button" href="/">Cancel</Button>
-        <Button color="green" size="sm" type="submit" disabled={!title?.value || !description?.value} on:click={submit}>Submit</Button>
+        <Button color="dark" size="sm" type="button" href="/">ยกเลิก</Button>
+        <Button color="green" size="sm" type="submit" disabled={!title?.value || !description?.value} on:click={submit}>{submitName}</Button>
     </div>
 </div>
