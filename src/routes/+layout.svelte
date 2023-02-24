@@ -135,7 +135,7 @@
         </div>
     </Popover>
 
-    <header class="h-16 w-full overflow-hidden flex items-center bg-[#40826D] px-4 no-select fixed z-20">
+    <header class="h-16 w-full overflow-hidden flex items-center bg-[var(--primary-color)] px-4 no-select fixed z-20">
         <a class="flex items-center cursor-pointer h-full gap-x-3" href="/">
             <img class="w-10 object-cover" src="/images/SU-WEBBOARD-ICON.png" alt="">
             <img class="h-6 object-cover max-[550px]:hidden" src="/images/SU-WEBBOARD-TEXT.png" alt="">
@@ -160,13 +160,13 @@
             </div>
 
             <!-- SEARCH ICON -->
-            <figure id="search" class="rounded-full hover:bg-white text-white hover:text-[#40826D] p-1 w-10 h-10 relative cursor-pointer min-[800.1px]:hidden">
+            <figure id="search" class="rounded-full text-[var(--secondary-color)] hover:bg-[var(--secondary-color)] hover:text-[var(--primary-color)] p-1 w-10 h-10 relative cursor-pointer min-[800.1px]:hidden">
                 <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
             </figure>
 
             <!-- NEW ANNOUNCEMENT ICON -->
             {#if isTeacher}
-                <a class="rounded-full hover:bg-white text-white hover:text-[#40826D] p-1 w-10 h-10 relative cursor-pointer" href="/new-announcement">
+                <a class="rounded-full text-[var(--secondary-color)] hover:bg-[var(--secondary-color)] hover:text-[var(--primary-color)] p-1 w-10 h-10 relative cursor-pointer" href="/new-announcement">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-full h-full">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 110-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38c-.551.318-1.26.117-1.527-.461a20.845 20.845 0 01-1.44-4.282m3.102.069a18.03 18.03 0 01-.59-4.59c0-1.586.205-3.124.59-4.59m0 9.18a23.848 23.848 0 018.835 2.535M10.34 6.66a23.847 23.847 0 008.835-2.535m0 0A23.74 23.74 0 0018.795 3m.38 1.125a23.91 23.91 0 011.014 5.395m-1.014 8.855c-.118.38-.245.754-.38 1.125m.38-1.125a23.91 23.91 0 001.014-5.395m0-3.46c.495.413.811 1.035.811 1.73 0 .695-.316 1.317-.811 1.73m0-3.46a24.347 24.347 0 010 3.46" />
                     </svg>
@@ -178,7 +178,7 @@
             {/if}
 
             <!-- NEW FORUM ICON -->
-            <a class="rounded-full hover:bg-white text-white hover:text-[#40826D] p-1 w-10 h-10 relative cursor-pointer" href="/forum">
+            <a class="rounded-full text-[var(--secondary-color)] hover:bg-[var(--secondary-color)] hover:text-[var(--primary-color)] p-1 w-10 h-10 relative cursor-pointer" href="/forum">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-full h-full">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z" />
                 </svg>
@@ -189,7 +189,7 @@
             </a>
 
             <!-- NOTIFICATION ICON -->
-            <figure id="notification" class="rounded-full hover:bg-white text-white hover:text-[#40826D] p-1 w-10 h-10 cursor-pointer -ml-1 relative">
+            <figure id="notification" class="rounded-full text-[var(--secondary-color)] hover:bg-[var(--secondary-color)] hover:text-[var(--primary-color)] p-1 w-10 h-10 cursor-pointer -ml-1 relative">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.4" stroke="currentColor" class="w-full h-full">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
                 </svg>
@@ -220,7 +220,7 @@
         {/key}
     </main>
 
-    <footer class="relative top-16 h-16 flex items-center px-4 bg-[#40826D] text-white">
+    <footer class="relative top-16 h-16 flex items-center px-4 bg-[var(--primary-color)] text-[var(--secondary-color)]">
         <span>&copy;&nbsp;</span>su-webboard
     </footer>
 {:else}

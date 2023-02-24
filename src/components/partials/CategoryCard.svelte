@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { fly } from 'svelte/transition';
 	import type { CategoryDetail } from "@models/category";
-	import { goto } from '$app/navigation';
 
     export let category: CategoryDetail;
     export let direction: string;

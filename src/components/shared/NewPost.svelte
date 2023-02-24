@@ -77,7 +77,7 @@
         <div>Attachments</div>
         <input bind:this={fileInput} type="file" accept="image/*" multiple hidden bind:files>
         <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <div class="ml-2 rounded-full bg-[#40826D] text-white p-1 cursor-pointer hover:scale-110 ease-in duration-200" on:click={() => fileInput.click()}>
+        <div class="ml-2 rounded-full bg-[var(--primary-color)] text-[var(--secondary-color)] p-1 cursor-pointer hover:scale-110 ease-in duration-200" on:click={() => fileInput.click()}>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
             </svg>
