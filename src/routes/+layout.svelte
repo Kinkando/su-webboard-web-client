@@ -98,7 +98,7 @@
 
         <section>
             {#each notification?.notiList as noti}
-                <hr class="border-gray-300 dark:border-gray-500">
+                <hr class="border-gray-300 dark:border-gray-600">
 
                 <a class="flex items-center gap-x-3 py-2 overflow-x-hidden px-3 cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-500 relative {!noti?.isRead ? 'bg-gray-200 dark:bg-gray-700' : ''}" href="/forum/{noti?.forumUUID}">
                     <img src={noti.userImageProfile} alt="" class="w-10 rounded-50">
