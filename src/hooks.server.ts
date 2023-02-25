@@ -1,7 +1,6 @@
-import { UserType } from "@models/auth";
 import type { Handle } from "@sveltejs/kit";
 import { getUserType } from "@util/token";
-import { authGuard } from "./middleware/auth-guard";
+import { authGuard } from "@middleware/auth-guard";
 import { createLogger, format, transports } from "winston";
 
 const logger = createLogger({

@@ -1,9 +1,8 @@
 <script lang="ts">
-    import { Button, Card, Label, Input } from 'flowbite-svelte';
+    import { Button, Card, Label, Input, Spinner } from 'flowbite-svelte';
 	import Alert from '@components/alert/Alert.svelte';
 	import type { Alert as AlertModel } from '@models/alert';
 	import { signinFirebase } from '@services/firebase';
-	import LoadingSpinner from '@components/spinner/LoadingSpinner.svelte';
 
     let alert: AlertModel;
 
@@ -27,6 +26,7 @@
                 color: 'green',
                 message: 'เข้าสู่ระบบสำเร็จ!',
             }
+            isLoading = false;
             window.location.href = "/"
             return
         }
@@ -57,13 +57,18 @@
                 color: 'red',
                 message: 'ชื่อผู้ใช้หรือรหัสผ่านผิดพลาด โปรดลองใหม่อีกครั้ง!',
             }
-            isLoading = false
         }
+        isLoading = false
     }
 </script>
 
 <Alert bind:alert />
-<LoadingSpinner bind:isLoading />
+
+{#if isLoading}
+    <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
+        <Spinner color="green" size="10" />
+    </div>
+{/if}
 
 <div id="login-screen" class="w-screen h-screen flex overflow-y-auto {isLoading ? 'brightness-50': ''}">
     <div class="w-full bg-[var(--primary-color)] px-6 max-[900px]:hidden" id="login-logo">

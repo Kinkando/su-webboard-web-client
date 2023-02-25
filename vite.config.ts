@@ -14,6 +14,10 @@ export default defineConfig({
 				replacement: '/src/components'
 			},
 			{
+				find: '@middleware',
+				replacement: '/src/middleware'
+			},
+			{
 				find: '@models',
 				replacement: '/src/models'
 			},
