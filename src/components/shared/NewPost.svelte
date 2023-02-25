@@ -8,13 +8,13 @@
 
     export let title: FormSchema;
     export let description: FormSchema;
-    export let categoryUUIDs: string[] | undefined = undefined;
+    export let categoryIDs: number[] | undefined = undefined;
     export let attachments: Attachment[];
     export let submitName: string;
     export let submit: () => Promise<void>;
 
-    $: if (categoryUUIDs && categoryToggles) {
-        categoryUUIDs = categoryToggles.filter(category => category.isActive).map(category => category.categoryUUID)
+    $: if (categoryIDs && categoryToggles) {
+        categoryIDs = categoryToggles.filter(category => category.isActive).map(category => category.categoryID)
     }
 
     let fileInput: HTMLInputElement;
@@ -35,10 +35,10 @@
 
     let categoryToggles: CategoryToggle[] = [];
     let categories: Category[] = [];
-    if (categoryUUIDs) {
+    if (categoryIDs) {
         onMount(async () => {
             categories = await getAllCategories()
-            categories.forEach(category => categoryToggles.push({categoryUUID: category.categoryUUID, isActive: false}))
+            categories.forEach(category => categoryToggles.push({categoryID: category.categoryID, isActive: false}))
         })
     }
 </script>
@@ -54,7 +54,7 @@
         <Textarea id="description" class="ease-in duration-200 placeholder-gray-300 min-h-[150px]" placeholder={description.placeholder} required bind:value={description.value} />
     </Label>
 
-    {#if categoryUUIDs}
+    {#if categoryIDs}
         <Label for="category" class="space-y-2 mt-4">
             <span>หมวดหมู่</span>
             <div id="category" class="ease-in duration-200 w-full p-2.5 border dark:border-gray-500 text-sm rounded-lg bg-gray-50 dark:bg-gray-700 overflow-x-hidden flex flex-wrap">

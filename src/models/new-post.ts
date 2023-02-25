@@ -5,7 +5,7 @@ export interface FormSchema {
 }
 
 export interface CategoryToggle {
-    categoryUUID: string
+    categoryID: number
     isActive: boolean
 }
 
