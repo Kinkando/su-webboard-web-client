@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
-	import { redirect } from "@sveltejs/kit";
 	import { onMount, onDestroy } from "svelte";
 	import { authGuard } from "./auth-guard";
 
@@ -14,6 +13,7 @@
         const redirectURL = authGuard(routeID, userType, isValidToken)
         if (redirectURL) {
             await goto(redirectURL, { replaceState: true, state: [] })
+            history.replaceState(history.state, '', redirectURL)
         }
         status = true
     })

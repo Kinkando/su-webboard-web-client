@@ -1,14 +1,21 @@
 <script lang="ts">
-	import AuthGuard from './../middleware/AuthGuard.svelte';
     import "../app.postcss";
+	import { onMount } from 'svelte';
 	import { fly, slide } from 'svelte/transition';
-    import { page } from '$app/stores';
-	import { goto } from "$app/navigation";
 	import { DarkMode, Indicator, Input, Popover, Tooltip } from "flowbite-svelte";
+    import { page } from '$app/stores';
+	import { afterNavigate, beforeNavigate, goto } from "$app/navigation";
+	import HTTP from "@commons/http";
+	import LoadingSpinner from '@components/spinner/LoadingSpinner.svelte';
+	import AuthGuard from '@middleware/AuthGuard.svelte';
     import type { Notification } from "@models/notification";
 	import type { User } from "@models/user";
 	import { UserType } from "@models/auth";
-	import HTTP from "@commons/http";
+
+    let isLoading = true;
+    onMount(() => isLoading = false)
+    beforeNavigate(() => isLoading = true)
+    afterNavigate(() => isLoading = false)
 
     $: title = (() => {
         const adminPortalPrefix = "ADMIN PORTAL | "
@@ -87,6 +94,8 @@
     <title>{ title }</title>
     <link rel="icon" href="/favicon.png">
 </svelte:head>
+
+<LoadingSpinner bind:isLoading />
 
 <AuthGuard routeID={data.routeID} userType={data.userType} isValidToken={data.isValid}>
     {#if $page.status === HTTP.StatusOK && isUserSite}
