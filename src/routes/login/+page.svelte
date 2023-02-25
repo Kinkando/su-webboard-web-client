@@ -25,7 +25,7 @@
             )
             alert = {
                 color: 'green',
-                message: 'Login successfully!',
+                message: 'เข้าสู่ระบบสำเร็จ!',
             }
             window.location.href = "/"
             return
@@ -43,19 +43,19 @@
                 window.location.href = "/";
                 alert = {
                     color: 'green',
-                    message: 'Login successfully!',
+                    message: 'เข้าสู่ระบบสำเร็จ!',
                 }
             }).
             catch(err => {
                 alert = {
                     color: 'red',
-                    message: 'Your username or password is invalid, please try again!',
+                    message: 'ชื่อผู้ใช้หรือรหัสผ่านผิดพลาด โปรดลองใหม่อีกครั้ง!',
                 }
             })
         } else {
             alert = {
                 color: 'red',
-                message: 'Your username or password is invalid, please try again!',
+                message: 'ชื่อผู้ใช้หรือรหัสผ่านผิดพลาด โปรดลองใหม่อีกครั้ง!',
             }
             isLoading = false
         }
@@ -75,9 +75,9 @@
     <div class="w-full max-[900px]:bg-[var(--primary-color)] dark:max-[900px]:bg-gray-900 min-[901px]:bg-gray-200 dark:min-[901px]:bg-gray-900 p-4" id="login-panel">
         <div id="login-card" class="relative top-1/2 -translate-y-1/2 overflow-y-auto">
             <Card class="m-auto border-none">
-                <h1 class="text-center text-2xl mb-4 uppercase">Login</h1>
+                <h1 class="text-center text-2xl mb-4 uppercase">SU Webboard</h1>
                 <Label class="space-y-2">
-                    <span>Username</span>
+                    <span>ชื่อผู้ใช้</span>
                     <Input
                         class="placeholder-gray-300"
                         type="email"
@@ -92,7 +92,7 @@
                     ></Input>
                 </Label>
                 <Label class="space-y-2 mt-4">
-                    <span>Password</span>
+                    <span>รหัสผ่าน</span>
                     <Input
                         class="placeholder-gray-300"
                         type={showPassword ? 'text' : 'password'}
@@ -122,7 +122,7 @@
                     on:click={signin}
                     disabled={!username.length || !password.length || isLoading}
                 >
-                    Confirm
+                    เข้าสู่ระบบ
                 </Button>
             </Card>
         </div>

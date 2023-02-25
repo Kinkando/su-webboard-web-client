@@ -10,7 +10,7 @@
             <img src="{announcement?.authorImageURL}" alt="" class="w-12">
             <div class="flex flex-col overflow-hidden">
                 <span class="text-md overflow-hidden text-ellipsis whitespace-nowrap">{announcement?.authorName}</span>
-                <span class="text-xs overflow-hidden text-ellipsis whitespace-nowrap">2 hours ago</span>
+                <span class="text-xs overflow-hidden text-ellipsis whitespace-nowrap">2 ชั่วโมง</span>
             </div>
         </header>
         <section class="mt-2">

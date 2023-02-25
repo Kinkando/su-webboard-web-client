@@ -1,13 +1,13 @@
 export interface Category {
-    categorySeq: number
-    categoryUUID: string
+    categoryID: number
+    categorySeq?: number
     categoryName: string
     categoryHexColor: string
 }
 
 export interface CategoryDetail {
-    categorySeq: number
-    categoryUUID: string
+    categoryID: number
+    categorySeq?: number
     categoryName: string
     categoryHexColor: string
     latestUpdatedDate: Date

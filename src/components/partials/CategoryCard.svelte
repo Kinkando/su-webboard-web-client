@@ -9,7 +9,7 @@
 </script>
 
 {#key category}
-    <a class="no-select text-black dark:text-white rounded-lg shadow-md flex flex-col w-full h-36 cursor-pointer overflow-hidden relative hover:brightness-75" in:fly={{x, duration: 200, opacity: 1}} href="/category/{category?.categoryName?.toLowerCase().replaceAll(" ", "-")}">
+    <a class="no-select text-black dark:text-white rounded-lg shadow-md flex flex-col w-full h-36 cursor-pointer overflow-hidden relative hover:brightness-75" in:fly={{x, duration: 200, opacity: 1}} href="/category/{category?.categoryID}">
         <div class="absolute w-full h-full opacity-75 z-0" style="background-color: {category?.categoryHexColor}"></div>
         <div class="hover:scale-105 ease-in duration-200 w-full h-full p-4 sm:p-6 z-10">
             <div class="px-2 py-1 text-xl w-fit rounded-md" style="background-color: {category?.categoryHexColor}">
@@ -27,7 +27,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <div class="text-sm ml-1 w-full overflow-hidden text-ellipsis whitespace-nowrap">2 hours ago</div>
+                <div class="text-sm ml-1 w-full overflow-hidden text-ellipsis whitespace-nowrap">2 ชั่วโมง</div>
             </div>
         </div>
     </a>

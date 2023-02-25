@@ -3,33 +3,28 @@ import type { Category } from "@models/category";
 export async function getAllCategories() {
     const categories: Category[] = [
         {
-            categorySeq: 1,
-            categoryUUID: "",
-            categoryName: "Lifestyle",
+            categoryID: 1,
+            categoryName: "ชีวิตประจำวัน",
             categoryHexColor: "#86D97F",
         },
         {
-            categorySeq: 2,
-            categoryUUID: "",
-            categoryName: "Sport",
+            categoryID: 2,
+            categoryName: "กีฬา",
             categoryHexColor: "#4C52E0",
         },
         {
-            categorySeq: 3,
-            categoryUUID: "",
-            categoryName: "Food",
+            categoryID: 3,
+            categoryName: "อาหาร",
             categoryHexColor: "#857800",
         },
         {
-            categorySeq: 4,
-            categoryUUID: "",
-            categoryName: "Education",
+            categoryID: 4,
+            categoryName: "การศึกษา",
             categoryHexColor: "#E04C6F",
         },
         {
-            categorySeq: 5,
-            categoryUUID: "",
-            categoryName: "Coding",
+            categoryID: 5,
+            categoryName: "โปรแกรมมิ่ง",
             categoryHexColor: "#48D7E0",
         },
     ]
@@ -37,33 +32,29 @@ export async function getAllCategories() {
     return categories
 }
 
-export async function getCategoryByName(categoryName: string): Promise<Category|undefined> {
+export async function getCategoryByID(categoryID: number): Promise<Category|undefined> {
     const categories: Category[] = [
         {
-            categorySeq: 1,
-            categoryUUID: "",
-            categoryName: "Lifestyle",
+            categoryID: 1,
+            categoryName: "ชีวิตประจำวัน",
             categoryHexColor: "#86D97F",
         },
         {
-            categorySeq: 2,
-            categoryUUID: "",
-            categoryName: "Sport",
+            categoryID: 2,
+            categoryName: "กีฬา",
             categoryHexColor: "#4C52E0",
         },
         {
-            categorySeq: 3,
-            categoryUUID: "",
-            categoryName: "Food",
+            categoryID: 3,
+            categoryName: "อาหาร",
             categoryHexColor: "#857800",
         },
         {
-            categorySeq: 999,
-            categoryUUID: "",
-            categoryName: "Work Life",
+            categoryID: 999,
+            categoryName: "การทำงาน",
             categoryHexColor: "#4569",
         },
     ]
 
-    return categories.find(category => category.categoryName.toLowerCase() === categoryName)
+    return categories.find(category => category.categoryID === categoryID)
 }

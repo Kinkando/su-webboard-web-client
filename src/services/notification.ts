@@ -10,7 +10,7 @@ export async function getNotiList(): Promise<Notification> {
             {
                 notiUUID: "xxx-xxx-xxx-xxx",
                 forumUUID: "xxx-xxx-xxx-xxx",
-                content: "comment on your topic",
+                content: "คอมเมนต์บนกระทู้ของคุณ",
                 isRead: false,
                 createAt: new Date(),
                 userImageProfile,
@@ -19,7 +19,7 @@ export async function getNotiList(): Promise<Notification> {
             {
                 notiUUID: "yyy-yyy-yyy-yyy",
                 forumUUID: "yyy-yyy-yyy-yyy",
-                content: "like your comment",
+                content: "ถูกใจคอมเมนต์ของคุณ",
                 isRead: false,
                 createAt: new Date(),
                 userImageProfile,
@@ -28,7 +28,7 @@ export async function getNotiList(): Promise<Notification> {
             {
                 notiUUID: "zzz-zzz-zzz-zzz",
                 forumUUID: "zzz-zzz-zzz-zzz",
-                content: "reply on your comment",
+                content: "ตอบกลับคอมเมนต์ของคุณ",
                 isRead: true,
                 createAt: new Date(),
                 userImageProfile,

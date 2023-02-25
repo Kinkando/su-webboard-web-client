@@ -1,1 +1,1 @@
-Announcement List Page
+รายการประกาศจากทางมหาวิทยาลัย
