@@ -14,7 +14,7 @@
         {@html icon}
     </figure>
     <span class="uppercase">{title}</span>
-    <span class="text-xs text-gray-400 hidden md:block">{description}</span>
+    <span class="text-xs text-gray-400 sm:block hidden overflow-hidden whitespace-nowrap text-ellipsis">{description}</span>
     <Button class="ml-auto uppercase {href ? 'max-[400.1px]:hidden' : ''}" size="xs" color="green" gradient on:click={action} href={href}>{buttonName}</Button>
     {#if href}
         <a class="ml-auto rounded-full bg-[var(--primary-color-75)] dark:bg-gray-700 p-1 min-[400.1px]:hidden" {href}>
