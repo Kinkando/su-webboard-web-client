@@ -27,7 +27,7 @@ export const handle: Handle = async ({ event, resolve }) => {
         return new Response('Redirect', {status: 303, headers: { Location: '/' }})
     }
 
-    if (userType !== UserType.TEACHER && event.route.id === "/announcement/new") {
+    if (userType !== UserType.TEACHER && event.route.id === "/announcement") {
         return new Response('Redirect', {status: 303, headers: { Location: '/' }})
     }
 
