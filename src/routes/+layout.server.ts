@@ -1,14 +1,27 @@
+import { UserType } from "@models/auth";
+import type { Notification } from "@models/notification";
+import type { User } from "@models/user";
 import { getNotiList } from "@services/notification";
 import { getUserProfile } from "@services/user";
-import { getUserType } from "@util/token";
+import { getToken, getUserType } from "@util/token";
 import type { LayoutServerLoad } from "./$types";
 
-export const load: LayoutServerLoad = async ({ cookies }) => {
-    const { userType } = getUserType(cookies)
-    const user = await getUserProfile()
-    const notification = await getNotiList()
-    user.userType = userType
-    return { user, notification }
+interface Layout {
+    user?: User
+    notification?: Notification
+    routeID: string
+    userType: string
+    isValid: boolean
+}
+
+export const load: LayoutServerLoad = async ({ cookies, route }) => {
+    const { userType, isValid } = getUserType(cookies)
+    const res: Layout = { routeID: route?.id!, userType, isValid }
+    if ([UserType.STUDENT, UserType.TEACHER].includes(userType as UserType) && isValid) {
+        res.user = await getUserProfile()
+        res.notification = await getNotiList()
+    }
+    return res
 }
 
 // /** @type {import('./$types').LayoutServerLoad} */
