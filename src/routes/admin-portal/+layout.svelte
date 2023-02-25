@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
     import { page } from '$app/stores';
 	import { Breadcrumb, BreadcrumbItem } from "flowbite-svelte";
 	import { fly } from 'svelte/transition';
@@ -31,7 +32,7 @@
 
     let isSidebarExpand = false;
 
-    const signout = async () => await fetch("/api/token/revoke", { method: "POST" });
+    const signout = async () => await fetch("/api/token/revoke", { method: "POST" }).then(res => goto("/login"));
 
     const hideSidebar = () => isSidebarExpand = false
 </script>
@@ -63,14 +64,15 @@
 
         <nav class="bottom-nav">
             <div class="p-2">
-                <a class="transition-all duration-200 flex items-center p-2 rounded-md hover:text-[var(--primary-color)] hover:shadow-md hover:bg-white text-white cursor-pointer" on:click={signout} href="/login">
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <div class="transition-all duration-200 flex items-center p-2 rounded-md hover:text-[var(--primary-color)] hover:shadow-md hover:bg-white text-white cursor-pointer" on:click={signout}>
                     <span>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
                         </svg>
                     </span>
                     <span class="ml-2">ออกจากระบบ</span>
-                </a>
+                </div>
             </div>
         </nav>
     </aside>
