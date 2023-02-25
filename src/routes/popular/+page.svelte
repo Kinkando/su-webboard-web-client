@@ -1,1 +1,1 @@
-รายการกระทู้ยอดนิยม
+<span class="text-black dark:text-white">รายการกระทู้ยอดนิยม</span>

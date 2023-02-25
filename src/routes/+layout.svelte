@@ -130,7 +130,7 @@
         <Popover defaultClass="overflow-hidden w-fit" placement="bottom" class="z-30 w-fit text-sm text-black text-black dark:text-white font-light" shadow triggeredBy="#{tooltips[4].id}" trigger="click">
             <div in:slide>
                 <header class="relative text-center text-lg flex items-center justify-center gap-x-1 rounded-t-md py-1">
-                    <span class="">การแจ้งเตือน</span>
+                    <span>การแจ้งเตือน</span>
                     {#if notification?.unreadNotiCount}
                         <Indicator color="red" size="lg">
                             <span class="text-white text-xs">{notification?.unreadNotiCount}</span>

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Button, Input, Label, Spinner, Textarea } from 'flowbite-svelte';
 	import type { Category } from '@models/category';
-	import CategoryBadgeToggle from '@components/shared/CategoryBadgeToggle.svelte';
+	import ToggleBadge from '@components/badge/ToggleBadge.svelte';
 	import type { Attachment, CategoryToggle, FormSchema } from '@models/new-post';
 
     export let title: FormSchema;
@@ -55,7 +55,9 @@
             <div id="category" class="ease-in duration-200 w-full p-2.5 border dark:border-gray-500 text-sm rounded-lg bg-gray-50 dark:bg-gray-700 overflow-x-hidden flex flex-wrap">
                 {#if categories?.length}
                     {#each categories as category, index}
-                        <CategoryBadgeToggle {category} bind:isActive={categoryToggles[index].isActive} />
+                        <div class="m-1.5">
+                            <ToggleBadge toggle hexColor={category.categoryHexColor} name={category.categoryName} bind:isActive={categoryToggles[index].isActive} />
+                        </div>
                     {/each}
                 {:else}
                     {#each Array(5) as _}
@@ -105,7 +107,7 @@
     </div>
 
     <div class="flex items-center justify-end gap-x-2 mt-4">
-        <Button color="dark" size="sm" type="button" href="/">ยกเลิก</Button>
+        <Button color="dark" size="sm" type="reset" href="/">ยกเลิก</Button>
         <Button color="green" size="sm" type="submit" disabled={!title?.value || !description?.value} on:click={submit}>{submitName}</Button>
     </div>
 </div>

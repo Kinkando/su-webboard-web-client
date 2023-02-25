@@ -4,4 +4,4 @@
     $: searchText = $page.url.searchParams.get('keyword')
 </script>
 
-ค้นหากระทู้: { searchText }
+<span class="text-black dark:text-white">ค้นหากระทู้: { searchText }</span>

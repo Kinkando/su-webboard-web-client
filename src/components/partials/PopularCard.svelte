@@ -1,5 +1,5 @@
 <script lang="ts">
-	import CategoryBadge from "@components/shared/CategoryBadge.svelte";
+	import CategoryBadge from "@components/badge/CategoryBadge.svelte";
 	import type { Forum } from "@models/forum";
 
     export let popularTopic: Forum;
@@ -7,14 +7,20 @@
 
 <a class="rounded-lg shadow-md flex flex-col w-full h-56 cursor-pointer overflow-hidden hover:brightness-75 bg-no-repeat bg-cover brightness-20" href="/forum/{popularTopic?.forumUUID}" style={popularTopic?.forumImageURL ? `background-image: linear-gradient(rgba(255,255,255,0.65), rgba(255,255,255,0.65)), url('${popularTopic?.forumImageURL}'` : ''}>
     <div class="{!popularTopic?.forumImageURL ? 'bg-[var(--primary-color-75)] text-black dark:bg-[var(--primary-color-125)] dark:text-white' : ''} hover:scale-105 ease-in duration-200 w-full h-full p-4 sm:p-6 flex flex-col">
-        <header class="flex items-center gap-x-1">
+        <header class="flex items-start flex-wrap gap-1 sm:h-44 h-36 overflow-y-hidden">
             {#each popularTopic?.categories as category}
                 <CategoryBadge {...category} />
             {/each}
+            <!-- {#each popularTopic?.categories?.slice(0, Math.min(3, popularTopic?.categories?.length)) as category} -->
+            <!--
+            {#if popularTopic?.categories?.length > 3}
+                <CategoryBadge categoryID={0} categoryName={"..."} categoryHexColor={"#799"} />
+            {/if}
+            -->
         </header>
 
         <section class="my-2 h-full flex items-end">
-            <div class="text-xl overflow-hidden text-ellipsis line-clamp-2">{popularTopic?.title}</div>
+            <div class="text-xl font-bold overflow-hidden text-ellipsis line-clamp-2">{popularTopic?.title}</div>
         </section>
 
         <footer class="flex items-center gap-x-3">
