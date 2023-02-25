@@ -1,0 +1,7 @@
+import { getAllCategories } from "@services/category";
+import type { PageServerLoad } from "./$types";
+
+export const load: PageServerLoad = async () => {
+    const categories = await getAllCategories()
+    return { categories }
+}
