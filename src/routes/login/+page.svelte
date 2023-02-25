@@ -66,7 +66,7 @@
 
 {#if isLoading}
     <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
-        <Spinner color="green" size="10" />
+        <Spinner color="green" size="16" />
     </div>
 {/if}
 
@@ -142,7 +142,7 @@
                 display: none;
             }
             #login-panel {
-                background-color: #40826D;
+                background-color: var(--primary-color); // Must be implement for dark theme
                 #login-card {
                     display: block;
                 }
