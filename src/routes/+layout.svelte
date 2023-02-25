@@ -3,7 +3,7 @@
 	import { fly, slide } from 'svelte/transition';
     import { page } from '$app/stores';
 	import { goto } from "$app/navigation";
-	import { DarkMode, Indicator, Input, Popover, ButtonGroup, Button, Tooltip } from "flowbite-svelte";
+	import { DarkMode, Indicator, Input, Popover, Tooltip } from "flowbite-svelte";
     import type { Notification } from "@models/notification";
 	import type { User } from "@models/user";
 	import { UserType } from "@models/auth";
@@ -90,76 +90,84 @@
 {#if $page.status === HTTP.StatusOK && isUserSite}
     {#each tooltips as tooltip}
         {#if tooltip.id !== 'announcement' || user.userType === UserType.TEACHER}
-            <Tooltip triggeredBy="#{tooltip?.id}" shadow trigger="hover" placement="bottom" class="z-30 transition-colors ease-in duration-200 !bg-white !text-[var(--primary-color)] dark:!text-white dark:!bg-gray-700" transition={slide} params={{duration: 200}}>
-                {tooltip?.text}
+            <Tooltip triggeredBy="#{tooltip?.id}" shadow trigger="hover" placement="bottom" class="z-30 transition-colors ease-in duration-200 !bg-white !text-[var(--primary-color)] dark:!text-white dark:!bg-gray-700">
+                <div in:slide={{duration: 200}}>
+                    {tooltip?.text}
+                </div>
             </Tooltip>
         {/if}
     {/each}
 
-    <Popover placement="bottom" class="z-30 w-64 text-sm font-light min-[820.1px]:hidden" shadow triggeredBy="#{tooltips[1].id}" trigger="click" transition={slide} params={{duration: 200}}>
-        <Input
-            id={tooltips[1].id}
-            class="w-full"
-            placeholder="ค้นหากระทู้ได้ที่นี่..."
-            size="md"
-            bind:value={searchText}
-            on:keydown={search}
-        >
-            <svg slot="left" aria-hidden="true" class="w-6 h-6 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+    <Popover placement="bottom" class="z-30 w-64 text-sm font-light min-[820.1px]:hidden" shadow triggeredBy="#{tooltips[1].id}" trigger="click">
+        <div in:slide>
+            <Input
+                id={tooltips[1].id}
+                class="w-full"
+                placeholder="ค้นหากระทู้ได้ที่นี่..."
+                size="md"
+                bind:value={searchText}
+                on:keydown={search}
+            >
+                <svg slot="left" aria-hidden="true" class="w-6 h-6 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <svg slot="right" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-gray-500 dark:text-gray-400 cursor-pointer" on:click={() => searchText = ""}><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+            </Input>
+        </div>
+    </Popover>
+
+    <Popover defaultClass="overflow-hidden w-fit" placement="bottom" class="z-30 w-fit text-sm text-black text-black dark:text-white font-light" shadow triggeredBy="#{tooltips[4].id}" trigger="click">
+        <div in:slide>
+            <header class="relative text-center text-lg flex items-center justify-center gap-x-1 rounded-t-md py-1">
+                <span class="">การแจ้งเตือน</span>
+                {#if notification?.unreadNotiCount}
+                    <Indicator color="red" size="lg">
+                        <span class="text-white text-xs">{notification?.unreadNotiCount}</span>
+                    </Indicator>
+                {/if}
+            </header>
+
+            <section>
+                {#each notification?.notiList as noti}
+                    <hr class="border-gray-300 dark:border-gray-600">
+
+                    <a class="flex items-center gap-x-3 py-2 overflow-x-hidden px-3 cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-500 relative {!noti?.isRead ? 'bg-gray-200 dark:bg-gray-700' : ''}" href="/forum/{noti?.forumUUID}">
+                        <img src={noti.userImageProfile} alt="" class="w-10 rounded-50">
+                        {#if !noti?.isRead}
+                            <Indicator color="red" size="md" border class="absolute left-11 top-3"></Indicator>
+                        {/if}
+
+                        <div class="flex flex-col">
+                            <div class="text-ellipsis overflow-hidden whitespace-nowrap">
+                                <span class="text-lg">{noti.username}</span>&nbsp;
+                                <span class="text-gray-400">{noti.content}</span>
+                            </div>
+                            <div class="font-light text-gray-400">2 วัน</div>
+                        </div>
+                    </a>
+                {/each}
+            </section>
+        </div>
+    </Popover>
+
+    <Popover defaultClass="overflow-hidden py-2" placement="bottom" class="z-30 w-fit border text-sm text-black dark:text-white font-light -px-3" shadow triggeredBy="#{tooltips[5].id}" trigger="click">
+        <div in:slide>
+            <a class="flex items-center gap-x-3 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 px-3 py-2" href="/profile">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                </svg>
+                <span>ข้อมูลส่วนตัว</span>
+            </a>
+
+            <hr class="border-gray-200 dark:border-gray-600">
 
             <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <svg slot="right" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-gray-500 dark:text-gray-400 cursor-pointer" on:click={() => searchText = ""}><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
-        </Input>
-    </Popover>
-
-    <Popover defaultClass="overflow-hidden w-fit" placement="bottom" class="z-30 w-fit text-sm text-black text-black dark:text-white font-light" shadow triggeredBy="#{tooltips[4].id}" trigger="click" transition={slide} params={{duration: 200}}>
-        <header class="relative text-center text-lg flex items-center justify-center gap-x-1 rounded-t-md py-1">
-            <span class="">การแจ้งเตือน</span>
-            {#if notification?.unreadNotiCount}
-                <Indicator color="red" size="lg">
-                    <span class="text-white text-xs">{notification?.unreadNotiCount}</span>
-                </Indicator>
-            {/if}
-        </header>
-
-        <section>
-            {#each notification?.notiList as noti}
-                <hr class="border-gray-300 dark:border-gray-600">
-
-                <a class="flex items-center gap-x-3 py-2 overflow-x-hidden px-3 cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-500 relative {!noti?.isRead ? 'bg-gray-200 dark:bg-gray-700' : ''}" href="/forum/{noti?.forumUUID}">
-                    <img src={noti.userImageProfile} alt="" class="w-10 rounded-50">
-                    {#if !noti?.isRead}
-                        <Indicator color="red" size="md" border class="absolute left-11 top-3"></Indicator>
-                    {/if}
-
-                    <div class="flex flex-col">
-                        <div class="text-ellipsis overflow-hidden whitespace-nowrap">
-                            <span class="text-lg">{noti.username}</span>&nbsp;
-                            <span class="text-gray-400">{noti.content}</span>
-                        </div>
-                        <div class="font-light text-gray-400">2 วัน</div>
-                    </div>
-                </a>
-            {/each}
-        </section>
-    </Popover>
-
-    <Popover defaultClass="overflow-hidden py-2" placement="bottom" class="z-30 w-fit border text-sm text-black dark:text-white font-light -px-3" shadow triggeredBy="#{tooltips[5].id}" trigger="click" transition={slide} params={{duration: 200}}>
-        <a class="flex items-center gap-x-3 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 px-3 py-2" href="/profile">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-            </svg>
-            <span>ข้อมูลส่วนตัว</span>
-        </a>
-
-        <hr class="border-gray-200 dark:border-gray-600">
-
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <div class="flex items-center gap-x-3 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 px-3 py-2" on:click={signout}>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
-            </svg>
-            <span>ออกจากระบบ</span>
+            <div class="flex items-center gap-x-3 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 px-3 py-2" on:click={signout}>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+                </svg>
+                <span>ออกจากระบบ</span>
+            </div>
         </div>
     </Popover>
 
