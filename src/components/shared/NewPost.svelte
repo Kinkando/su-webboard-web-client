@@ -1,14 +1,13 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
 	import { Button, Input, Label, Spinner, Textarea } from 'flowbite-svelte';
 	import type { Category } from '@models/category';
-	import { getAllCategories } from '@services/category';
 	import CategoryBadgeToggle from '@components/shared/CategoryBadgeToggle.svelte';
 	import type { Attachment, CategoryToggle, FormSchema } from '@models/new-post';
 
     export let title: FormSchema;
     export let description: FormSchema;
     export let categoryIDs: number[] | undefined = undefined;
+    export let categories: Category[] | undefined = undefined;
     export let attachments: Attachment[];
     export let submitName: string;
     export let submit: () => Promise<void>;
@@ -34,12 +33,8 @@
     const removeImage = (index: number) => attachments = attachments.filter((_, idx) => index !== idx)
 
     let categoryToggles: CategoryToggle[] = [];
-    let categories: Category[] = [];
-    if (categoryIDs) {
-        onMount(async () => {
-            categories = await getAllCategories()
-            categories.forEach(category => categoryToggles.push({categoryID: category.categoryID, isActive: false}))
-        })
+    if (categories) {
+        categories.forEach(category => categoryToggles.push({categoryID: category.categoryID, isActive: false}))
     }
 </script>
 
@@ -54,11 +49,11 @@
         <Textarea id="description" class="ease-in duration-200 placeholder-gray-300 min-h-[150px]" placeholder={description.placeholder} required bind:value={description.value} />
     </Label>
 
-    {#if categoryIDs}
+    {#if categoryToggles.length > 0}
         <Label for="category" class="space-y-2 mt-4">
             <span>หมวดหมู่</span>
             <div id="category" class="ease-in duration-200 w-full p-2.5 border dark:border-gray-500 text-sm rounded-lg bg-gray-50 dark:bg-gray-700 overflow-x-hidden flex flex-wrap">
-                {#if categories.length}
+                {#if categories?.length}
                     {#each categories as category, index}
                         <CategoryBadgeToggle {category} bind:isActive={categoryToggles[index].isActive} />
                     {/each}
