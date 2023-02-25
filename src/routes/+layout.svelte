@@ -90,7 +90,7 @@
 {#if $page.status === HTTP.StatusOK && isUserSite}
     {#each tooltips as tooltip}
         {#if tooltip.id !== 'announcement' || user.userType === UserType.TEACHER}
-            <Tooltip triggeredBy="#{tooltip?.id}" shadow trigger="hover" placement="bottom" class="z-30 transition-colors ease-in duration-200 !text-black !bg-[var(--primary-color-75)] dark:!text-white dark:!bg-gray-700">
+            <Tooltip triggeredBy="#{tooltip?.id}" shadow trigger="hover" placement="bottom" class="z-30 transition-colors ease-in duration-200 !bg-white !text-[var(--primary-color)] dark:!text-white dark:!bg-gray-700" transition={slide} params={{duration: 200}}>
                 {tooltip?.text}
             </Tooltip>
         {/if}
