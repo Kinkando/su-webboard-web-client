@@ -11,6 +11,7 @@
             <div class="flex flex-col overflow-hidden">
                 <span class="text-md overflow-hidden text-ellipsis whitespace-nowrap">{announcement?.authorName}</span>
                 <span class="text-xs overflow-hidden text-ellipsis whitespace-nowrap">2 ชั่วโมง</span>
+                <!-- <TimeBadge text="2 ชั่วโมง" /> -->
             </div>
         </header>
         <section class="mt-2">

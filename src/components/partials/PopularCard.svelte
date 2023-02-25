@@ -1,5 +1,5 @@
 <script lang="ts">
-	import CategoryBadge from "@components/shared/CategoryBadge.svelte";
+	import CategoryBadge from "@components/badge/CategoryBadge.svelte";
 	import type { Forum } from "@models/forum";
 
     export let popularTopic: Forum;

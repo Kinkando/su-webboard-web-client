@@ -5,4 +5,4 @@
     const category = data
 </script>
 
-หมวดหมู่ / {category?.categoryName}
+<span class="text-black dark:text-white">หมวดหมู่ / {category?.categoryName}</span>
