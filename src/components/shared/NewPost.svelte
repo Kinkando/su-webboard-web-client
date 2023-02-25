@@ -90,14 +90,14 @@
                     </svg>
                 </div>
                 {#if attachments[index].isLoading}
-                    <figure class="w-full h-48 animate-pulse ease-in duration-200 absolute z-0 bg-gray-400 flex items-center justify-center">
+                    <figure class="w-full h-[225px] animate-pulse ease-in duration-200 absolute z-0 bg-gray-400 flex items-center justify-center">
                         <Spinner size="10" />
                     </figure>
                 {/if}
                 <img
                     src="{attachment.src}"
                     alt="{attachment.file.name}"
-                    class="w-full h-48 hover:scale-105 ease-in duration-200 hover:brightness-75"
+                    class="w-full h-[225px] hover:scale-105 ease-in duration-200 hover:brightness-75"
                     on:load={() => attachment.isLoading = false}
                 >
             </div>
