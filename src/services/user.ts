@@ -11,3 +11,9 @@ export async function getUserProfile(): Promise<User> {
     }
     return user
 }
+
+export async function getAvatars(): Promise<string[]> {
+    const avartarURLs: string[] = [];
+
+    return avartarURLs
+}

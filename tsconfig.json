@@ -15,6 +15,7 @@
 			"@middleware/*": ["./src/middleware/*"],
 			"@models/*": ["./src/models/*"],
 			"@services/*": ["./src/services/*"],
+			"@stores/*": ["./src/stores/*"],
 			"@util/*": ["./src/util/*"],
 		}
 	},

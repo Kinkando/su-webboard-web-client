@@ -26,6 +26,10 @@ export default defineConfig({
 				replacement: '/src/services'
 			},
 			{
+				find: '@stores',
+				replacement: '/src/stores'
+			},
+			{
 				find: '@util',
 				replacement: '/src/util'
 			},

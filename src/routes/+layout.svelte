@@ -10,6 +10,15 @@
     import type { Notification } from "@models/notification";
 	import type { User } from "@models/user";
 	import { UserType } from "@models/auth";
+	import userStore from '@stores/user';
+	import notificationStore from '@stores/notification';
+
+    export let data: any;
+    let notification: Notification = data?.notification;
+    let user: User = data?.user;
+
+    $: if($userStore) { user = $userStore }
+    $: if($notificationStore) { notification = $notificationStore }
 
     let isLoading = true;
     onMount(() => isLoading = false)
@@ -56,10 +65,6 @@
             goto('/search?keyword='+searchText)
         }
     }
-
-    export let data: any;
-    const notification: Notification = data?.notification;
-    const user: User = data?.user;
 
     const tooltips = [
         {
