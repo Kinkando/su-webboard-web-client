@@ -81,7 +81,7 @@
 <!-- Page Container -->
 <main class="relative min-[1000.1px]:ml-[225px] max-[1000.1px]:top-16 h-full overflow-hidden">
     <nav class="h-16 flex items-center px-4 max-[1000.1px]:hidden">
-        <Breadcrumb aria-label="Default breadcrumb example">
+        <Breadcrumb aria-label="SU Webboard">
             <BreadcrumbItem href="{rootPath}" home>หน้าแรก</BreadcrumbItem>
             {#if currentRoute.toString().lastIndexOf("/") > 0}
                 <BreadcrumbItem>{ sidebarItems.find(item => currentRoute === item.href)?.label }</BreadcrumbItem>

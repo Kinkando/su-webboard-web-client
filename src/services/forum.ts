@@ -314,3 +314,31 @@ export async function getForumListByCategoryID(categoryID: number, offset: numbe
 
     return { data, total }
 }
+
+export async function getForumListByPopular(offset: number, limit: number) {
+    const data: Forum[] = [];
+    const total = 97;
+
+    const category1 = await getCategoryByID(1)
+    const category2 = await getCategoryByID(2)
+
+    const forum: Forum = {
+        forumUUID: "xxx-xxx-xxx-xxx",
+        title: "Python vs C: 10 หลักความแตกต่างที่คุณต้องรู้",
+        authorUUID: "yyy-yyy-yyy-yyy",
+        authorName: "Kook Kai",
+        authorImageURL,
+        categories: [ category1!, category2! ],
+        commentCount: 78,
+        likeCount: 3999,
+        createdAt: new Date(),
+    }
+
+    for(let i=offset; i<offset+limit; i++) {
+        const f = {...forum}
+        f.ranking = i+1
+        data.push(f)
+    }
+
+    return { data, total }
+}

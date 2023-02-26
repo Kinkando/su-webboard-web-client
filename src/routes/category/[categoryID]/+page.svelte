@@ -14,10 +14,11 @@
 </script>
 
 <div class="mb-4">
-    <Breadcrumb aria-label="Default breadcrumb example">
+    <Breadcrumb aria-label="SU Webboard">
         <BreadcrumbItem href="/" home>หน้าแรก</BreadcrumbItem>
         <BreadcrumbItem>หมวดหมู่</BreadcrumbItem>
         <BreadcrumbItem>{category?.categoryName}</BreadcrumbItem>
     </Breadcrumb>
 </div>
+
 <ForumList bind:page bind:limit {fetchData} />
