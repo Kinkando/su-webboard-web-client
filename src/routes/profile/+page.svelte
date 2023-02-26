@@ -1,5 +1,5 @@
 <script lang="ts">
-	import SkeletonUpdateProfile from './../../components/skeleton-load/SkeletonUpdateProfile.svelte';
+	import SkeletonUpdateProfile from '@components/skeleton-load/SkeletonUpdateProfile.svelte';
 	import { onMount } from "svelte";
 	import { Button, Input, Label, Radio } from "flowbite-svelte";
 	import ToggleBadge from "@components/badge/ToggleBadge.svelte";

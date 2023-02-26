@@ -1,7 +1,10 @@
+import type { Forum } from "@models/forum";
 import type { Home } from "@models/home";
+import { getCategoryByID } from "./category";
+
+const authorImageURL = "https://ps.w.org/user-avatar-reloaded/assets/icon-128x128.png?rev=2540745";
 
 export async function getHomeData(): Promise<Home> {
-    const authorImageURL = "https://ps.w.org/user-avatar-reloaded/assets/icon-128x128.png?rev=2540745";
     const home: Home = {
         announcements: [
             {
@@ -101,7 +104,7 @@ export async function getHomeData(): Promise<Home> {
                 authorName: "Kook Kai",
                 authorImageURL,
                 createdAt: new Date(),
-                title: "Python vs C: 10 ความแตกต่างที่คุณต้องรู้",
+                title: "Python vs C: 10 หลักความแตกต่างที่คุณต้องรู้",
                 categories: [
                     {
                         categorySeq: 1,
@@ -279,4 +282,35 @@ export async function getHomeData(): Promise<Home> {
     }
     await new Promise(resolve => setTimeout(() => resolve(""), 500))
     return home
+}
+
+export async function getForumListByCategoryID(categoryID: number, offset: number, limit: number) {
+    const data: Forum[] = [];
+    const total = 97;
+
+    const category = await getCategoryByID(categoryID)
+    if (!category) {
+        return { data, total: 0 }
+    }
+
+    const category1 = await getCategoryByID(1)
+    const category2 = await getCategoryByID(2)
+
+    const forum: Forum = {
+        forumUUID: "xxx-xxx-xxx-xxx",
+        title: "Python vs C: 10 หลักความแตกต่างที่คุณต้องรู้",
+        authorUUID: "yyy-yyy-yyy-yyy",
+        authorName: "Kook Kai",
+        authorImageURL,
+        categories: [ category1!, category2! ],
+        commentCount: 78,
+        likeCount: 3999,
+        createdAt: new Date(),
+    }
+
+    for(let i=offset; i<offset+limit; i++) {
+        data.push(forum)
+    }
+
+    return { data, total }
 }

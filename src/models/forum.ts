@@ -10,6 +10,7 @@ export interface Forum {
     authorImageURL: string
     likeCount: number
     commentCount: number
+    ranking?: number
     createdAt: Date
 }
 
