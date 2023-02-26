@@ -7,12 +7,14 @@
     export let popularTopic: Forum;
 </script>
 
-<a class="rounded-lg shadow-md flex flex-col w-full h-56 cursor-pointer overflow-hidden hover:brightness-75 bg-no-repeat bg-cover brightness-20" href="/forum/{popularTopic?.forumUUID}" style={popularTopic?.forumImageURL ? `background-image: linear-gradient(rgba(255,255,255,0.65), rgba(255,255,255,0.65)), url('${popularTopic?.forumImageURL}'` : ''}>
+<a class="rounded-lg shadow-md flex flex-col w-full h-56 cursor-pointer overflow-hidden hover:brightness-75 bg-no-repeat bg-cover brightness-20 ease-in duration-200" href="/forum/{popularTopic?.forumUUID}" style={popularTopic?.forumImageURL ? `background-image: linear-gradient(rgba(255,255,255,0.65), rgba(255,255,255,0.65)), url('${popularTopic?.forumImageURL}'` : ''}>
     <div class="{!popularTopic?.forumImageURL ? 'bg-[var(--primary-color-75)] text-black dark:bg-[var(--primary-color-125)] dark:text-white' : ''} hover:scale-105 ease-in duration-200 w-full h-full p-4 sm:p-6 flex flex-col">
         <header class="flex items-start flex-wrap gap-1 sm:h-44 h-36 overflow-y-hidden">
-            {#each popularTopic?.categories as category}
-                <CategoryBadge {...category} />
-            {/each}
+            {#if popularTopic?.categories}
+                {#each popularTopic.categories as category}
+                    <CategoryBadge {...category} />
+                {/each}
+            {/if}
             <!-- {#each popularTopic?.categories?.slice(0, Math.min(3, popularTopic?.categories?.length)) as category} -->
             <!--
             {#if popularTopic?.categories?.length > 3}
@@ -28,15 +30,19 @@
         <footer class="flex items-center gap-x-3">
             <img src="{popularTopic?.authorImageURL}" alt="" class="w-12">
             <div class="flex flex-col overflow-hidden w-full">
-                <div class="flex items-center justify-between">
-                    <div class="w-full mr-2 text-md overflow-hidden text-ellipsis whitespace-nowrap">{popularTopic?.authorName}</div>
-                    <LikeBadge likeCount={popularTopic?.likeCount} />
-                </div>
+                {#if popularTopic?.likeCount}
+                    <div class="flex items-center justify-between">
+                        <div class="w-full mr-2 text-md overflow-hidden text-ellipsis whitespace-nowrap">{popularTopic?.authorName}</div>
+                        <LikeBadge likeCount={popularTopic?.likeCount} />
+                    </div>
+                {/if}
 
-                <div class="flex items-center justify-between">
-                    <div class="w-full mr-2 text-xs overflow-hidden text-ellipsis whitespace-nowrap">2 ชั่วโมง</div>
-                    <CommentBadge commentCount={popularTopic?.commentCount} />
-                </div>
+                {#if popularTopic?.commentCount}
+                    <div class="flex items-center justify-between">
+                        <div class="w-full mr-2 text-xs overflow-hidden text-ellipsis whitespace-nowrap">2 ชั่วโมง</div>
+                        <CommentBadge commentCount={popularTopic?.commentCount} />
+                    </div>
+                {/if}
             </div>
         </footer>
     </div>
