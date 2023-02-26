@@ -1,11 +1,7 @@
 <script lang="ts">
 	import { Breadcrumb, BreadcrumbItem } from 'flowbite-svelte';
 	import ForumList from '@components/shared/ForumList.svelte';
-	import type { Category } from "@models/category";
 	import { getForumListByPopular } from '@services/forum';
-
-    export let data: Category;
-    const category = data;
 
     let page = 1;
     let limit = 10;

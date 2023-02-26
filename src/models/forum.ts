@@ -27,3 +27,10 @@ export interface ForumDetail {
     commentCount: number
     createdAt: Date
 }
+
+export interface ForumFilter {
+    category?: Category
+    orderBy?: string // likeCount, commentCount
+    filterBy?: string // author or topic title
+    searchText?: string
+}

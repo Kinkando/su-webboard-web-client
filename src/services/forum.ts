@@ -1,4 +1,4 @@
-import type { Forum } from "@models/forum";
+import type { Forum, ForumFilter } from "@models/forum";
 import type { Home } from "@models/home";
 import { getCategoryByID } from "./category";
 
@@ -334,7 +334,7 @@ export async function getForumListByPopular(offset: number, limit: number) {
         createdAt: new Date(),
     }
 
-    for(let i=offset; i<offset+limit; i++) {
+    for(let i=offset; i<Math.min(total, offset+limit); i++) {
         const f = {...forum}
         f.ranking = i+1
         data.push(f)
@@ -342,3 +342,51 @@ export async function getForumListByPopular(offset: number, limit: number) {
 
     return { data, total }
 }
+
+export async function searchForum(filter: ForumFilter, offset: number, limit: number) {
+    const data: Forum[] = [];
+    const total = 97;
+
+    const category1 = await getCategoryByID(1)
+    const category2 = await getCategoryByID(2)
+
+    const forum: Forum = {
+        forumUUID: "xxx-xxx-xxx-xxx",
+        title: "ค้นหากระทู้อยู่ล่ะสิ หึๆ แต่ไม่เจอหรอก เอาไปซะ กระทู้ทิพย์",
+        authorUUID: "yyy-yyy-yyy-yyy",
+        authorName: "Kook Kai",
+        authorImageURL,
+        categories: [ category1!, category2! ],
+        commentCount: 123,
+        likeCount: 9999,
+        createdAt: new Date(),
+    }
+
+    for(let i=offset; i<Math.min(total, offset+limit); i++) {
+        data.push(forum)
+    }
+
+    return { data, total }
+}
+
+// export async function getAnnouncements(offset: number, limit: number) {
+//     const data: Forum[] = [];
+//     const total = 24;
+
+//     const forum: Forum = {
+//         forumUUID: "xxx-xxx-xxx-xxx",
+//         title: "การลงทะเบียนเพิ่มถอนภาคเรียนที่ 2 ปีการศึกษา 2565",
+//         authorUUID: "yyy-yyy-yyy-yyy",
+//         authorName: "มหาวิทยาลัยศิลปากร",
+//         authorImageURL,
+//         createdAt: new Date(),
+//     }
+
+//     for(let i=offset; i<Math.min(total, offset+limit); i++) {
+//         const f = {...forum}
+//         f.ranking = i+1
+//         data.push(f)
+//     }
+
+//     return { data, total }
+// }
