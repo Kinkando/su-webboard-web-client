@@ -98,7 +98,7 @@
 <LoadingSpinner bind:isLoading />
 
 <AuthGuard routeID={data.routeID} userType={data.userType} isValidToken={data.isValid}>
-    {#if $page.status === HTTP.StatusOK && isUserSite}
+    {#if isUserSite}
         {#each tooltips as tooltip}
             {#if tooltip.id !== 'announcement' || data?.userType === UserType.TEACHER}
                 <Tooltip triggeredBy="#{tooltip?.id}" shadow trigger="hover" placement="bottom" class="z-30 transition-colors ease-in duration-200 !bg-white !text-[var(--primary-color)] dark:!text-white dark:!bg-gray-700">
