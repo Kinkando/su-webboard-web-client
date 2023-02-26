@@ -23,21 +23,22 @@
     }
 </script>
 
-{#if isLoading}
-    <SkeletonForumList count={limit} ranking={isRanking} />
-{:else}
-    {#if forums?.length}
-        {#each forums as forum}
-            <div class="my-4">
-                <ForumCard {forum} />
-            </div>
-        {/each}
+{#key total}
+    {#if isLoading}
+        <SkeletonForumList count={limit} ranking={isRanking} />
     {:else}
-        <div class="mt-10 mb-6">
-            <img src="/images/empty.png" alt="" class="m-auto w-48">
-            <div class="text-center mt-4 text-black dark:text-white">ไม่พบข้อมูล</div>
-        </div>
+        {#if forums?.length}
+            {#each forums as forum}
+                <div class="my-4">
+                    <ForumCard {forum} />
+                </div>
+            {/each}
+        {:else}
+            <div class="mt-10 mb-6">
+                <img src="/images/empty.png" alt="" class="m-auto w-48">
+                <div class="text-center mt-4 text-black dark:text-white">ไม่พบข้อมูล</div>
+            </div>
+        {/if}
     {/if}
-{/if}
-
-<Pagination bind:currentPage={page} bind:total bind:limit />
+    <Pagination bind:currentPage={page} bind:total bind:limit />
+{/key}
