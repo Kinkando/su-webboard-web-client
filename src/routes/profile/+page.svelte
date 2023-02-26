@@ -1,4 +1,5 @@
 <script lang="ts">
+	import userStore from '@stores/user';
 	import SkeletonUpdateProfile from '@components/skeleton-load/SkeletonUpdateProfile.svelte';
 	import { onMount } from "svelte";
 	import { Breadcrumb, BreadcrumbItem, Button, Input, Label, Radio } from "flowbite-svelte";
@@ -21,7 +22,7 @@
     $: files && updateProfileImage()
     const updateProfileImage = () => {
         if (files?.length) {
-            user.userImageURL = URL.createObjectURL(files[0])
+            draft.userImageURL = URL.createObjectURL(files[0])
         }
     }
 
@@ -34,6 +35,8 @@
     const updateProfile = async () => {
         user.userDisplayName = draft.userDisplayName
         user.isAnnonymous = statusGroup === StatusGroup.anonymous
+        user.userImageURL = draft.userImageURL;
+        userStore.set(user)
         isUpdate = false
     }
 
@@ -81,7 +84,7 @@
                 <img
                     alt=""
                     class="rounded-full min-w-[225px] min-h-[225px] max-w-[225px] max-h-[225px]"
-                    src="{user?.userImageURL}"
+                    src="{isUpdate ? draft?.userImageURL : user?.userImageURL}"
                 />
 
                 {#if isUpdate}

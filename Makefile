@@ -3,5 +3,5 @@ deploy:
 	git merge develop
 	git push netlify main
 	git checkout develop
-	copy .svelte-kit\.env .
+	copy .vscode\.env .
 	npm run dev
