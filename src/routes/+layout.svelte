@@ -142,7 +142,7 @@
                         <hr class="border-gray-300 dark:border-gray-600">
 
                         <a class="flex items-center gap-x-3 py-2 overflow-x-hidden px-3 cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-500 relative {!noti?.isRead ? 'bg-gray-200 dark:bg-gray-700' : ''}" href="/forum/{noti?.forumUUID}">
-                            <img src={noti.userImageProfile} alt="" class="w-10 rounded-50">
+                            <img src={noti.userImageProfile} alt="" class="w-10 rounded-full">
                             {#if !noti?.isRead}
                                 <Indicator color="red" size="md" border class="absolute left-11 top-3"></Indicator>
                             {/if}
@@ -166,7 +166,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
                     </svg>
-                    <span>ข้อมูลส่วนตัว</span>
+                    <span>โปรไฟล์</span>
                 </a>
 
                 <hr class="border-gray-200 dark:border-gray-600">
@@ -252,7 +252,7 @@
                 <figure id="{tooltips[5].id}" class="w-fit h-fit cursor-pointer">
                     <img
                         alt=""
-                        class="rounded-50 w-10"
+                        class="rounded-full w-10"
                         src="{user?.userImageURL || defaultImageURL}"
                     />
                 </figure>

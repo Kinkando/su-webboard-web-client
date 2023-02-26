@@ -1,7 +1,7 @@
 <script lang="ts">
-	import SkeletonUpdateProfile from './../../components/skeleton-load/SkeletonUpdateProfile.svelte';
+	import SkeletonUpdateProfile from '@components/skeleton-load/SkeletonUpdateProfile.svelte';
 	import { onMount } from "svelte";
-	import { Button, Input, Label, Radio } from "flowbite-svelte";
+	import { Breadcrumb, BreadcrumbItem, Button, Input, Label, Radio } from "flowbite-svelte";
 	import ToggleBadge from "@components/badge/ToggleBadge.svelte";
     import type { User } from "@models/user";
 	import { getUserProfile } from "@services/user";
@@ -66,6 +66,12 @@
     ]
 </script>
 
+<div class="mb-4">
+    <Breadcrumb aria-label="SU Webboard">
+        <BreadcrumbItem href="/" home>หน้าแรก</BreadcrumbItem>
+        <BreadcrumbItem>โปรไฟล์</BreadcrumbItem>
+    </Breadcrumb>
+</div>
 {#if !user}
     <SkeletonUpdateProfile />
 {:else}
