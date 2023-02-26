@@ -11,6 +11,7 @@
     export let page: number;
     export let limit = 10;
     export let isRanking = false;
+    export let isAnnouncement = false;
     export let fetchData: () => Promise<{ data: Forum[], total: number }>;
 
     $: (page || limit) && changePage()
@@ -25,12 +26,12 @@
 
 {#key total}
     {#if isLoading}
-        <SkeletonForumList count={limit} ranking={isRanking} />
+        <SkeletonForumList count={limit} ranking={isRanking} announcement={isAnnouncement} />
     {:else}
         {#if forums?.length}
             {#each forums as forum}
                 <div class="my-4">
-                    <ForumCard {forum} />
+                    <ForumCard {forum} announcement={isAnnouncement} />
                 </div>
             {/each}
         {:else}

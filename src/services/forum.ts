@@ -1,3 +1,4 @@
+import type { Announcement } from "@models/announcement";
 import type { Forum, ForumFilter } from "@models/forum";
 import type { Home } from "@models/home";
 import { getCategoryByID } from "./category";
@@ -308,7 +309,7 @@ export async function getForumListByCategoryID(categoryID: number, offset: numbe
         createdAt: new Date(),
     }
 
-    for(let i=offset; i<offset+limit; i++) {
+    for(let i=offset; i<Math.min(total, offset+limit); i++) {
         data.push(forum)
     }
 
@@ -369,24 +370,22 @@ export async function searchForum(filter: ForumFilter, offset: number, limit: nu
     return { data, total }
 }
 
-// export async function getAnnouncements(offset: number, limit: number) {
-//     const data: Forum[] = [];
-//     const total = 24;
+export async function getAnnouncements(offset: number, limit: number) {
+    const data: Announcement[] = [];
+    const total = 24;
 
-//     const forum: Forum = {
-//         forumUUID: "xxx-xxx-xxx-xxx",
-//         title: "การลงทะเบียนเพิ่มถอนภาคเรียนที่ 2 ปีการศึกษา 2565",
-//         authorUUID: "yyy-yyy-yyy-yyy",
-//         authorName: "มหาวิทยาลัยศิลปากร",
-//         authorImageURL,
-//         createdAt: new Date(),
-//     }
+    const announcement: Announcement = {
+        forumUUID: "xxx-xxx-xxx-xxx",
+        title: "การลงทะเบียนเพิ่มถอนภาคเรียนที่ 2 ปีการศึกษา 2565",
+        authorUUID: "yyy-yyy-yyy-yyy",
+        authorName: "มหาวิทยาลัยศิลปากร",
+        authorImageURL,
+        createdAt: new Date(),
+    }
 
-//     for(let i=offset; i<Math.min(total, offset+limit); i++) {
-//         const f = {...forum}
-//         f.ranking = i+1
-//         data.push(f)
-//     }
+    for(let i=offset; i<Math.min(total, offset+limit); i++) {
+        data.push(announcement)
+    }
 
-//     return { data, total }
-// }
+    return { data, total }
+}

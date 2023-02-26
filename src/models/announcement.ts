@@ -5,5 +5,5 @@ export interface Announcement {
     authorImageURL: string
     createdAt: Date
     title: string
-    description: string
+    description?: string
 }

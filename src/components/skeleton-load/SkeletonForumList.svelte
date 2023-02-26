@@ -3,10 +3,11 @@
 
     export let count: number;
     export let ranking = false;
+    export let announcement = false;
 </script>
 
 {#each Array(count) as _}
     <div class="my-4">
-        <SkeletonForumCard {ranking} />
+        <SkeletonForumCard {ranking} {announcement} />
     </div>
 {/each}

@@ -41,3 +41,15 @@ export const load: LayoutServerLoad = async ({ cookies, route }) => {
 //     const isTeacher = userType === UserType.TEACHER && isValid
 //     return isTeacher
 // }) satisfies LayoutServerLoad;
+
+// change profile image with providing avatar from backend
+// เพิ่ม Notification List Page
+
+// เพิ่ม gallery สำหรับ view รูปภาพในหน้า new forum / new announcement (สามารถคลิกหรือกดลูกศรบนคีย์บอร์ดเพื่อเลื่อนรูปภาพได้)
+// เพิ่มคลิกรูปเพื่อขยาย สำหรับหน้า update profile
+
+// เพิ่ม animation loading เวลา navigate ไปหน้าอื่น (เหมือนในแอพมอของเจได)
+// เพิ่มหน้าดู profile user คนอื่น และเพิ่ม feature ติดตามผู้ใช้งานคนอื่น
+// load data before render layout on user general page
+
+// เพิ่มเมนูเปลี่ยนภาษา ไม่ก็เปลี่ยนแอพให้กลายเป็นภาษาไทย
