@@ -5,7 +5,6 @@
 	import { DarkMode, Indicator, Input, Popover, Tooltip } from "flowbite-svelte";
     import { page } from '$app/stores';
 	import { afterNavigate, beforeNavigate, goto } from "$app/navigation";
-	import HTTP from "@commons/http";
 	import LoadingSpinner from '@components/spinner/LoadingSpinner.svelte';
 	import AuthGuard from '@middleware/AuthGuard.svelte';
     import type { Notification } from "@models/notification";
@@ -46,7 +45,7 @@
             case "/forum/[forumUUID]": return generalUserPrefix + "Forum Detail"
         }
     })()
-    $: isUserSite = $page.route.id?.indexOf("/admin-portal") == -1 && $page.route.id! != "/login";
+    $: isUserSite = !$page.url.pathname?.startsWith("/admin-portal") && $page.url.pathname! != "/login";
 
     const defaultImageURL = "https://cdn-icons-png.flaticon.com/512/149/149071.png"
     let searchText = "";
