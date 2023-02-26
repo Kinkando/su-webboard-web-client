@@ -257,7 +257,7 @@
                 <figure id="{tooltips[5].id}" class="w-fit h-fit cursor-pointer">
                     <img
                         alt=""
-                        class="rounded-full w-10"
+                        class="rounded-full w-10 h-10"
                         src="{user?.userImageURL || defaultImageURL}"
                     />
                 </figure>

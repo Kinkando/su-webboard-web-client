@@ -4,12 +4,12 @@ export interface Forum {
     forumUUID: string
     title: string
     forumImageURL?: string
-    categories: Category[]
+    categories?: Category[]
     authorUUID: string
     authorName: string
     authorImageURL: string
-    likeCount: number
-    commentCount: number
+    likeCount?: number
+    commentCount?: number
     ranking?: number
     createdAt: Date
 }

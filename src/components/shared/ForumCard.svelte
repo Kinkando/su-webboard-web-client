@@ -6,6 +6,7 @@
     import type { Forum } from "@models/forum";
 
     export let forum: Forum;
+    export let announcement = false;
     const rankingColor = (() => {
         switch (forum?.ranking) {
             case 1: return "background-color: #FFD700 !important; color: #000 !important"
@@ -16,7 +17,7 @@
     })()
 </script>
 
-<a class="bg-white text-black dark:bg-gray-700 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-900 cursor-pointer p-4 sm:p-6 shadow-md drop-shadow-md rounded-md ease-in duration-200 w-full h-full flex gap-x-4" href="/forum/{forum?.forumUUID}">
+<a class="bg-white text-black dark:bg-gray-700 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-900 cursor-pointer p-4 sm:p-6 shadow-md drop-shadow-md rounded-md ease-in duration-200 w-full h-full flex gap-x-4" href={!announcement ? `/forum/${forum?.forumUUID}`: `/announcement/${forum?.forumUUID}`}>
     <div class="relative w-fit h-fit">
         {#if forum?.ranking}
             <div class="flex items-center -mr-2 absolute bottom-0 right-0">
@@ -31,17 +32,21 @@
         <div class="font-bold text-lg overflow-hidden text-ellipsis whitespace-nowrap">{forum?.title}</div>
         <div class="text-md overflow-hidden text-ellipsis whitespace-nowrap">{forum?.authorName}</div>
         <TimeBadge text="2 ชั่วโมง" />
-        <div class="flex flex-wrap gap-1 w-full">
-            {#each forum?.categories as category}
-                <CategoryBadge categoryHexColor={category?.categoryHexColor} categoryID={category?.categoryID} categoryName={category?.categoryName} />
-            {/each}
-            <div class="ml-auto">
-                <div class="flex items-center">
-                    <LikeBadge likeCount={forum?.likeCount} />
-                    <div class="mr-2"></div>
-                    <CommentBadge commentCount={forum?.commentCount} />
-                </div>
+        {#if forum?.categories}
+            <div class="flex flex-wrap gap-1 w-full">
+                {#each forum?.categories as category}
+                    <CategoryBadge categoryHexColor={category?.categoryHexColor} categoryID={category?.categoryID} categoryName={category?.categoryName} />
+                {/each}
+                {#if forum?.likeCount !== undefined && forum?.commentCount !== undefined}
+                    <div class="ml-auto">
+                        <div class="flex items-center">
+                            <LikeBadge likeCount={forum?.likeCount} />
+                            <div class="mr-2"></div>
+                            <CommentBadge commentCount={forum?.commentCount} />
+                        </div>
+                    </div>
+                {/if}
             </div>
-        </div>
+        {/if}
     </section>
 </a>
