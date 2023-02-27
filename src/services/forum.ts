@@ -345,7 +345,7 @@ export async function getForumDetail(forumUUID: string) {
     }
     const forumDetail: ForumDetail = {
         forumUUID,
-        title: "อยากหาบัคที่เว็ปนี้อย่างงั้นหรอ หึ งั้นก็ไปตามหาเอาสิ ข้าเอาบัคทุกอย่างไปไว้ที่นั่นแล้ว",
+        title: "อยากหาบัคที่เว็ปนี้อย่างงั้นหรอ หึ งั้นก็ไปตามหาเอาสิ ข้าเอาบัคทุกอย่างไปไว้ที่นั่นหมดแล้ว",
         description: "แด่สหายหมีผู้กินผักทั้งหลาย",
         forumImageURLs: [
             "https://media.timeout.com/images/103662433/750/422/image.jpg",
@@ -359,6 +359,7 @@ export async function getForumDetail(forumUUID: string) {
         authorUUID: "aaa-aaa-aaa-aaa",
         authorName: "Kook Kai",
         authorImageURL,
+        isLike: Math.floor(Math.random() * 10)%2==0,
         likeCount: Math.floor(Math.random() * 5000),
         commentCount: Math.floor(Math.random() * 1000),
         createdAt: new Date(),
@@ -377,6 +378,7 @@ export async function getComments(forumUUID: string, offset: number, limit: numb
         commenterUUID: "xxx-aaa-bbb-ccc",
         commenterName: "Keroro",
         commenterImageURL: authorImageURL,
+        isLike: Math.floor(Math.random() * 10)%2==0,
         likeCount: Math.floor(Math.random() * 100),
         commentCount: Math.floor(Math.random() * 1000),
         createdAt: new Date,

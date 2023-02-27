@@ -23,6 +23,7 @@ export interface ForumDetail {
     authorUUID: string
     authorName: string
     authorImageURL: string
+    isLike: boolean
     likeCount: number
     commentCount: number
     createdAt: Date
@@ -44,6 +45,7 @@ export interface Comment {
     commenterUUID: string
     commenterName: string
     commenterImageURL: string
+    isLike: boolean
     likeCount: number
     commentCount: number
     createdAt: Date
