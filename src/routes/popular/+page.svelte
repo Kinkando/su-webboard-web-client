@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Breadcrumb, BreadcrumbItem } from 'flowbite-svelte';
-	import ForumList from '@components/shared/ForumList.svelte';
+	import ForumList from '@components/forum/ForumList.svelte';
 	import { getForumListByPopular } from '@services/forum';
 
     let page = 1;

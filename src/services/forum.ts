@@ -1,7 +1,7 @@
 import type { Announcement } from "@models/announcement";
-import type { Forum, ForumFilter } from "@models/forum";
+import type { Comment, Forum, ForumDetail, ForumFilter } from "@models/forum";
 import type { Home } from "@models/home";
-import { getCategoryByID } from "./category";
+import { getAllCategoryDetails, getCategoryByID } from "./category";
 
 const authorImageURL = "https://ps.w.org/user-avatar-reloaded/assets/icon-128x128.png?rev=2540745";
 
@@ -208,78 +208,7 @@ export async function getHomeData(): Promise<Home> {
                 likeCount: 200,
             },
         ],
-        categories: [
-            {
-                categoryID: 1,
-                categoryName: "ชีวิตประจำวัน",
-                categoryHexColor: "#86D97F",
-                forumCount: 123,
-                latestUpdatedDate: new Date(),
-            },
-            {
-                categoryID: 2,
-                categoryName: "กีฬา",
-                categoryHexColor: "#4C52E0",
-                forumCount: 456,
-                latestUpdatedDate: new Date(),
-            },
-            {
-                categoryID: 3,
-                categoryName: "อาหาร",
-                categoryHexColor: "#857800",
-                forumCount: 789,
-                latestUpdatedDate: new Date(),
-            },
-            {
-                categoryID: 4,
-                categoryName: "การศึกษา",
-                categoryHexColor: "#E04C6F",
-                forumCount: 159,
-                latestUpdatedDate: new Date(),
-            },
-            {
-                categoryID: 5,
-                categoryName: "โปรแกรมมิ่ง",
-                categoryHexColor: "#48D7E0",
-                forumCount: 357,
-                latestUpdatedDate: new Date(),
-            },
-            {
-                categoryID: 6,
-                categoryName: "เกม",
-                categoryHexColor: "#994a",
-                forumCount: 321,
-                latestUpdatedDate: new Date(),
-            },
-            {
-                categoryID: 7,
-                categoryName: "การทำงาน",
-                categoryHexColor: "#abcd",
-                forumCount: 612,
-                latestUpdatedDate: new Date(),
-            },
-            {
-                categoryID: 8,
-                categoryName: "การท่องเที่ยว",
-                categoryHexColor: "#1296",
-                forumCount: 253,
-                latestUpdatedDate: new Date(),
-            },
-            {
-                categoryID: 9,
-                categoryName: "การทำอาหาร",
-                categoryHexColor: "#4685",
-                forumCount: 999,
-                latestUpdatedDate: new Date(),
-            },
-            {
-                categoryID: 10,
-                categoryName: "การอ่าน",
-                categoryHexColor: "#a9ff",
-                forumCount: 111,
-                latestUpdatedDate: new Date(),
-            },
-        ],
+        categories: await getAllCategoryDetails(),
     }
     await new Promise(resolve => setTimeout(() => resolve(""), 500))
     return home
@@ -293,9 +222,9 @@ export async function getForumListByCategoryID(categoryID: number, offset: numbe
     if (!category) {
         return { data, total: 0 }
     }
-
-    const category1 = await getCategoryByID(1)
-    const category2 = await getCategoryByID(2)
+    if (["6", "7", "8", "9", "10"].includes(categoryID.toString())) {
+        return { data, total: 0 }
+    }
 
     const forum: Forum = {
         forumUUID: "xxx-xxx-xxx-xxx",
@@ -303,7 +232,7 @@ export async function getForumListByCategoryID(categoryID: number, offset: numbe
         authorUUID: "yyy-yyy-yyy-yyy",
         authorName: "Kook Kai",
         authorImageURL,
-        categories: [ category1!, category2! ],
+        categories: [ (await getCategoryByID(1))!, (await getCategoryByID(2))! ],
         commentCount: 78,
         likeCount: 3999,
         createdAt: new Date(),
@@ -388,4 +317,88 @@ export async function getAnnouncements(offset: number, limit: number) {
     }
 
     return { data, total }
+}
+
+export async function getAnnouncementDetail(forumUUID: string) {
+    if (!["xxx-xxx-xxx-xxx", "yyy-yyy-yyy-yyy", "zzz-zzz-zzz-zzz"].includes(forumUUID)) {
+        return null
+    }
+    const forumDetail: Announcement = {
+        forumUUID,
+        title: "แจ้งเรื่องการลงทะเบียนเพิ่ม-ถอน ภาคเรียนที่ 2 ปีการศึกษา 2565",
+        description: "ให้นักศึกษา ...",
+        authorUUID: "aaa-aaa-aaa-aaa",
+        authorName: "มหาวิทยาลัยศิลปากร",
+        authorImageURL,
+        announcementImageURLs: [
+            "https://media.timeout.com/images/103662433/750/422/image.jpg",
+            "https://static.thcdn.com/productimg/1600/1600/12968604-2055002146053883.jpg",
+        ],
+        createdAt: new Date(),
+    }
+    return forumDetail
+}
+
+export async function getForumDetail(forumUUID: string) {
+    if (!["xxx-xxx-xxx-xxx", "yyy-yyy-yyy-yyy", "zzz-zzz-zzz-zzz"].includes(forumUUID)) {
+        return null
+    }
+    const forumDetail: ForumDetail = {
+        forumUUID,
+        title: "อยากหาบัคที่เว็ปนี้อย่างงั้นหรอ หึ งั้นก็ไปตามหาเอาสิ ข้าเอาบัคทุกอย่างไปไว้ที่นั่นหมดแล้ว",
+        description: "แด่สหายหมีผู้กินผักทั้งหลาย",
+        forumImageURLs: [
+            "https://media.timeout.com/images/103662433/750/422/image.jpg",
+            "https://static.thcdn.com/productimg/1600/1600/12968604-2055002146053883.jpg",
+        ],
+        categories: [
+            (await getCategoryByID(1))!,
+            (await getCategoryByID(2))!,
+            (await getCategoryByID(3))!,
+        ],
+        authorUUID: "aaa-aaa-aaa-aaa",
+        authorName: "Kook Kai",
+        authorImageURL,
+        isLike: Math.floor(Math.random() * 10)%2==0,
+        likeCount: Math.floor(Math.random() * 5000),
+        commentCount: Math.floor(Math.random() * 1000),
+        createdAt: new Date(),
+    }
+    return forumDetail
+}
+
+export async function getComments(forumUUID: string, offset: number, limit: number) {
+    const total = 4;
+    if (!["xxx-xxx-xxx-xxx", "yyy-yyy-yyy-yyy", "zzz-zzz-zzz-zzz"].includes(forumUUID) || offset >= total) {
+        return null
+    }
+    const cmt: Comment = {
+        commentUUID: "aaa-bbb-ccc-ddd",
+        commentText: "สุดยอดไปเลยครับเพ่!",
+        commenterUUID: "xxx-aaa-bbb-ccc",
+        commenterName: "Keroro",
+        commenterImageURL: authorImageURL,
+        isLike: Math.floor(Math.random() * 10)%2==0,
+        likeCount: Math.floor(Math.random() * 100),
+        commentCount: Math.floor(Math.random() * 1000),
+        createdAt: new Date,
+    }
+    const comment = (imageCount: number, replyCount: number): Comment => {
+        let comment = cmt;
+        comment.commentImageURLs = [];
+        comment.replyComments = [];
+        for(let i=0; i<imageCount; i++) {
+            comment.commentImageURLs?.push("https://media.timeout.com/images/103662433/750/422/image.jpg")
+        }
+        for(let i=0; i<replyCount; i++) {
+            comment.replyComments.push({...cmt})
+        }
+        return comment
+    }
+
+    const comments: Comment[] = []
+    for(let i=offset; i<Math.min(total, offset+limit); i++) {
+        comments.push({...comment(Math.floor(Math.random() * 3), Math.floor(Math.random() * 5))})
+    }
+    return { data: comments, total }
 }

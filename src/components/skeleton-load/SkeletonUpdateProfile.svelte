@@ -7,12 +7,12 @@
         <div class="space-y-7 w-full mt-0 my-6 md:-ml-6 ">
             {#each Array(5) as index}
                 <div class="space-y-6">
-                    <div class="w-1/2 h-4 bg-gray-300 rounded-full dark:bg-gray-600"></div>
-                    <div class="w-full h-4 bg-gray-300 rounded-full dark:bg-gray-600"></div>
+                    <div class="w-1/2 h-4 bg-gray-300 rounded-full dark:bg-gray-600" />
+                    <div class="w-full h-4 bg-gray-300 rounded-full dark:bg-gray-600" />
                 </div>
             {/each}
         </div>
 
-        <div class="md:w-72 w-full h-10 bg-gray-300 rounded-md dark:bg-gray-600"></div>
+        <div class="md:w-72 w-full h-10 bg-gray-300 rounded-md dark:bg-gray-600" />
     </div>
 </div>

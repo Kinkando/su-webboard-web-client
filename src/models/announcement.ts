@@ -3,6 +3,7 @@ export interface Announcement {
     authorUUID: string
     authorName: string
     authorImageURL: string
+    announcementImageURLs?: string[]
     createdAt: Date
     title: string
     description?: string

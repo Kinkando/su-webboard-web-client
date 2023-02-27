@@ -23,6 +23,7 @@ export interface ForumDetail {
     authorUUID: string
     authorName: string
     authorImageURL: string
+    isLike: boolean
     likeCount: number
     commentCount: number
     createdAt: Date
@@ -34,3 +35,23 @@ export interface ForumFilter {
     filterBy?: string // author or topic title
     searchText?: string
 }
+
+export interface Comment {
+    // forumUUID: string
+    // replyCommentUUID?: string
+    commentUUID: string
+    commentText: string
+    commentImageURLs?: string[]
+    commenterUUID: string
+    commenterName: string
+    commenterImageURL: string
+    isLike: boolean
+    likeCount: number
+    commentCount: number
+    createdAt: Date
+    replyComments?: Comment[]
+}
+
+// Create Comment
+// case 'comment forum': send only forumUUID
+// case 'reply comment': send forumUUID and commentUUID to reference by replyCommentUUID
