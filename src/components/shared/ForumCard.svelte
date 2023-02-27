@@ -41,7 +41,7 @@
                     <div class="ml-auto">
                         <div class="flex items-center">
                             <LikeBadge likeCount={forum?.likeCount} />
-                            <div class="mr-2"></div>
+                            <div class="mr-2" />
                             <CommentBadge commentCount={forum?.commentCount} />
                         </div>
                     </div>

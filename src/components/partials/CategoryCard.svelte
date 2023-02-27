@@ -10,7 +10,7 @@
 
 {#key category}
     <a class="no-select text-black dark:text-white rounded-lg shadow-md flex flex-col w-full h-36 cursor-pointer overflow-hidden relative hover:brightness-75 ease-in duration-200" in:fly={{x, duration: 200, opacity: 1}} href="/category/{category?.categoryID}">
-        <div class="absolute w-full h-full opacity-75 z-0" style="background-color: {category?.categoryHexColor}"></div>
+        <div class="absolute w-full h-full opacity-75 z-0" style="background-color: {category?.categoryHexColor}" />
         <div class="hover:scale-105 w-full h-full transition-[transform] ease-in duration-200 p-4 sm:p-6 z-10">
             <div class="px-2 py-1 text-xl font-bold overflow-hidden w-fit max-w-full rounded-md text-ellipsis whitespace-nowrap" style="background-color: {category?.categoryHexColor}">
                 {category?.categoryName}

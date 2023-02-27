@@ -63,7 +63,7 @@
                     {#each Array(5) as _}
                         <!-- Skeleton Load CategoryBadgeToggle -->
                         <div class="animate-pulse ease-in duration-480">
-                            <div class="w-20 h-8 rounded-md bg-gray-300 dark:bg-gray-800 m-1"></div>
+                            <div class="w-20 h-8 rounded-md bg-gray-300 dark:bg-gray-800 m-1" />
                         </div>
                     {/each}
                 {/if}

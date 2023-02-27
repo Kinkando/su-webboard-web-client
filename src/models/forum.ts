@@ -40,7 +40,7 @@ export interface Comment {
     // replyCommentUUID?: string
     commentUUID: string
     commentText: string
-    commentImageURLs: string[]
+    commentImageURLs?: string[]
     commenterUUID: string
     commenterName: string
     commenterImageURL: string

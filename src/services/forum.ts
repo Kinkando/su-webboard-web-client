@@ -320,13 +320,13 @@ export async function getAnnouncements(offset: number, limit: number) {
 }
 
 export async function getForumDetail(forumUUID: string) {
-    if (!["xxxx-xxxx-xxxx-xxxx", "yyyy-yyyy-yyyy-yyyy", "zzzz-zzzz-zzzz-zzzz"].includes(forumUUID)) {
+    if (!["xxx-xxx-xxx-xxx", "yyy-yyy-yyy-yyy", "zzz-zzz-zzz-zzz"].includes(forumUUID)) {
         return null
     }
     const forumDetail: ForumDetail = {
-        forumUUID: "",
-        title: "",
-        description: "",
+        forumUUID,
+        title: "อยากหาบัคที่เว็ปนี้อย่างงั้นหรอ หึ งั้นก็ไปตามหาเอาสิ ข้าเอาบัคทุกอย่างไปไว้ที่นั่นแล้ว",
+        description: "แด่สหายหมีผู้กินผักทั้งหลาย",
         forumImageURLs: [
             "https://media.timeout.com/images/103662433/750/422/image.jpg",
             "https://static.thcdn.com/productimg/1600/1600/12968604-2055002146053883.jpg",
@@ -339,29 +339,44 @@ export async function getForumDetail(forumUUID: string) {
         authorUUID: "aaa-aaa-aaa-aaa",
         authorName: "Kook Kai",
         authorImageURL,
-        likeCount: 4012,
-        commentCount: 320,
+        likeCount: Math.floor(Math.random() * 5000),
+        commentCount: Math.floor(Math.random() * 1000),
         createdAt: new Date(),
     }
     return forumDetail
 }
 
 export async function getComments(forumUUID: string, offset: number, limit: number) {
-    if (!["xxxx-xxxx-xxxx-xxxx", "yyyy-yyyy-yyyy-yyyy", "zzzz-zzzz-zzzz-zzzz"].includes(forumUUID)) {
+    const total = 4;
+    if (!["xxx-xxx-xxx-xxx", "yyy-yyy-yyy-yyy", "zzz-zzz-zzz-zzz"].includes(forumUUID) || offset >= total) {
         return null
     }
-    const comments: Comment[] = [
-        {
-            commentUUID: "",
-            commentText: "",
-            commentImageURLs: ["https://media.timeout.com/images/103662433/750/422/image.jpg"],
-            commenterUUID: "",
-            commenterName: "",
-            commenterImageURL: "",
-            likeCount: 10,
-            commentCount: 200,
-            createdAt: new Date,
+    const cmt: Comment = {
+        commentUUID: "aaa-bbb-ccc-ddd",
+        commentText: "สุดยอดไปเลยครับเพ่!",
+        commenterUUID: "xxx-aaa-bbb-ccc",
+        commenterName: "Keroro",
+        commenterImageURL: authorImageURL,
+        likeCount: Math.floor(Math.random() * 100),
+        commentCount: Math.floor(Math.random() * 1000),
+        createdAt: new Date,
+    }
+    const comment = (imageCount: number, replyCount: number): Comment => {
+        let comment = cmt;
+        comment.commentImageURLs = [];
+        comment.replyComments = [];
+        for(let i=0; i<imageCount; i++) {
+            comment.commentImageURLs?.push("https://media.timeout.com/images/103662433/750/422/image.jpg")
         }
-    ]
-    return comments
+        for(let i=0; i<replyCount; i++) {
+            comment.replyComments.push({...cmt})
+        }
+        return comment
+    }
+
+    const comments: Comment[] = []
+    for(let i=offset; i<Math.min(total, offset+limit); i++) {
+        comments.push(comment(Math.floor(Math.random() * 3), Math.floor(Math.random() * 5)))
+    }
+    return { data: comments, total }
 }
