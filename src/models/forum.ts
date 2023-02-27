@@ -34,3 +34,22 @@ export interface ForumFilter {
     filterBy?: string // author or topic title
     searchText?: string
 }
+
+export interface Comment {
+    // forumUUID: string
+    // replyCommentUUID?: string
+    commentUUID: string
+    commentText: string
+    commentImageURLs: string[]
+    commenterUUID: string
+    commenterName: string
+    commenterImageURL: string
+    likeCount: number
+    commentCount: number
+    createdAt: Date
+    replyComments?: Comment[]
+}
+
+// Create Comment
+// case 'comment forum': send only forumUUID
+// case 'reply comment': send forumUUID and commentUUID to reference by replyCommentUUID
