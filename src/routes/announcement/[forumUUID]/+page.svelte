@@ -1,5 +1,18 @@
 <script lang="ts">
-    import { page } from "$app/stores";
+	import ForumDetail from "@components/shared/ForumDetail.svelte";
+	import { Breadcrumb, BreadcrumbItem } from "flowbite-svelte";
+    import type { Announcement } from "@models/announcement";
+	import type { ForumDetail as ForumDetailModel } from '@models/forum';
+
+    export let data: { announcement: Announcement }
 </script>
 
-<span class="text-black dark:text-white">ประกาศจากทางมหาวิทยาลัย | {$page.url.pathname?.substring($page.url.pathname?.lastIndexOf("/")+1)}</span>
+<div class="mb-4">
+    <Breadcrumb aria-label="SU Webboard">
+        <BreadcrumbItem href="/" home>หน้าแรก</BreadcrumbItem>
+        <BreadcrumbItem href="/announcement/list">ประกาศ</BreadcrumbItem>
+        <BreadcrumbItem>รายละเอียด</BreadcrumbItem>
+    </Breadcrumb>
+</div>
+
+<ForumDetail bind:forumDetail={data.announcement} />

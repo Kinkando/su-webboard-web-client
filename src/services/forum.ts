@@ -319,6 +319,26 @@ export async function getAnnouncements(offset: number, limit: number) {
     return { data, total }
 }
 
+export async function getAnnouncementDetail(forumUUID: string) {
+    if (!["xxx-xxx-xxx-xxx", "yyy-yyy-yyy-yyy", "zzz-zzz-zzz-zzz"].includes(forumUUID)) {
+        return null
+    }
+    const forumDetail: Announcement = {
+        forumUUID,
+        title: "แจ้งเรื่องการลงทะเบียนเพิ่ม-ถอน ภาคเรียนที่ 2 ปีการศึกษา 2565",
+        description: "ให้นักศึกษา ...",
+        authorUUID: "aaa-aaa-aaa-aaa",
+        authorName: "มหาวิทยาลัยศิลปากร",
+        authorImageURL,
+        announcementImageURLs: [
+            "https://media.timeout.com/images/103662433/750/422/image.jpg",
+            "https://static.thcdn.com/productimg/1600/1600/12968604-2055002146053883.jpg",
+        ],
+        createdAt: new Date(),
+    }
+    return forumDetail
+}
+
 export async function getForumDetail(forumUUID: string) {
     if (!["xxx-xxx-xxx-xxx", "yyy-yyy-yyy-yyy", "zzz-zzz-zzz-zzz"].includes(forumUUID)) {
         return null

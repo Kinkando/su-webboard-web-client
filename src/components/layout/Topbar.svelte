@@ -70,7 +70,7 @@
     {/if}
 {/each}
 
-<Popover placement="bottom" class="z-30 w-64 text-sm font-light min-[820.1px]:hidden" shadow triggeredBy="#{tooltips[1].id}" trigger="click">
+<Popover placement="bottom" class="z-30 w-64 text-sm min-[820.1px]:hidden" shadow triggeredBy="#{tooltips[1].id}" trigger="click">
     <div in:slide>
         <Input
             id={tooltips[1].id}
@@ -88,7 +88,7 @@
     </div>
 </Popover>
 
-<Popover defaultClass="overflow-hidden w-fit" placement="bottom" class="z-30 w-fit text-sm text-black text-black dark:text-white font-light" shadow triggeredBy="#{tooltips[4].id}" trigger="click">
+<Popover defaultClass="overflow-hidden w-fit" placement="bottom" class="z-30 w-fit text-sm text-black text-black dark:text-white" shadow triggeredBy="#{tooltips[4].id}" trigger="click">
     <div in:slide>
         <header class="relative text-center text-lg flex items-center justify-center gap-x-1 rounded-t-md py-1">
             <span>การแจ้งเตือน</span>
@@ -122,7 +122,7 @@
     </div>
 </Popover>
 
-<Popover defaultClass="overflow-hidden py-2" placement="bottom" class="z-30 w-fit border text-sm text-black dark:text-white font-light -px-3" shadow triggeredBy="#{tooltips[5].id}" trigger="click">
+<Popover defaultClass="overflow-hidden py-2" placement="bottom" class="z-30 w-fit border text-sm text-black dark:text-white -px-3" shadow triggeredBy="#{tooltips[5].id}" trigger="click">
     <div in:slide>
         <a class="flex items-center gap-x-3 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 px-3 py-2" href="/profile">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">

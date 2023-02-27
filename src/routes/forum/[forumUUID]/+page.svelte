@@ -1,5 +1,20 @@
 <script lang="ts">
-    import { page } from "$app/stores";
+	import { onMount } from 'svelte';
+	import { Breadcrumb, BreadcrumbItem } from "flowbite-svelte";
+	import ForumDetail from "@components/shared/ForumDetail.svelte";
+	import type { ForumDetail as ForumDetailModel } from '@models/forum';
+
+    export let data: { forumDetail: ForumDetailModel }
+
+    onMount(async () => {
+    })
 </script>
 
-<span class="text-black dark:text-white">รายละเอียดกระทู้ | {$page.url.pathname?.substring($page.url.pathname?.lastIndexOf("/")+1)}</span>
+<div class="mb-4">
+    <Breadcrumb aria-label="SU Webboard">
+        <BreadcrumbItem href="/" home>หน้าแรก</BreadcrumbItem>
+        <BreadcrumbItem>กระทู้</BreadcrumbItem>
+    </Breadcrumb>
+</div>
+
+<ForumDetail bind:forumDetail={data.forumDetail} />
