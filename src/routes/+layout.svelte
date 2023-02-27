@@ -58,10 +58,13 @@
     {#if isUserSite}
         <Topbar bind:data />
 
-        <main class="relative top-16 p-4 min-h-[calc(100vh-64px*2)] overflow-x-hidden bg-gray-200 dark:bg-gray-800 ease-in duration-200">
+        <article class="fixed top-0 w-screen h-screen bg-gray-200 dark:bg-gray-800 ease-in duration-200 transition-colors overflow-hidden" />
+        <main class="relative top-16 min-h-[calc(100vh-64px*2)] overflow-x-hidden">
             {#key $page.url.pathname}
-                <div in:fly={{y: -20, duration: 250, delay: 100}}>
-                    <slot />
+                <div class="p-4 bg-gray-200 dark:bg-gray-800 ease-in duration-200">
+                    <div in:fly={{y: -20, duration: 250, delay: 100}}>
+                        <slot />
+                    </div>
                 </div>
             {/key}
         </main>
