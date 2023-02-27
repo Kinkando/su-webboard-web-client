@@ -1,5 +1,5 @@
 <script lang="ts">
-	import ForumList from "@components/shared/ForumList.svelte";
+	import ForumList from "@components/forum/ForumList.svelte";
 	import type { Forum } from "@models/forum";
 	import { getAnnouncements } from "@services/forum";
 	import { Breadcrumb, BreadcrumbItem } from "flowbite-svelte";

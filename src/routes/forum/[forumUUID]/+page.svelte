@@ -1,13 +1,10 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { Breadcrumb, BreadcrumbItem } from "flowbite-svelte";
-	import ForumDetail from "@components/shared/ForumDetail.svelte";
+	import ForumDetail from "@components/forum/ForumDetail.svelte";
 	import type { ForumDetail as ForumDetailModel } from '@models/forum';
+	import CommentList from '@components/partials/CommentList.svelte';
 
     export let data: { forumDetail: ForumDetailModel }
-
-    onMount(async () => {
-    })
 </script>
 
 <div class="mb-4">
@@ -18,3 +15,4 @@
 </div>
 
 <ForumDetail bind:forumDetail={data.forumDetail} />
+<CommentList bind:forumUUID={data.forumDetail.forumUUID} />

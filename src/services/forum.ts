@@ -398,7 +398,7 @@ export async function getComments(forumUUID: string, offset: number, limit: numb
 
     const comments: Comment[] = []
     for(let i=offset; i<Math.min(total, offset+limit); i++) {
-        comments.push(comment(Math.floor(Math.random() * 3), Math.floor(Math.random() * 5)))
+        comments.push({...comment(Math.floor(Math.random() * 3), Math.floor(Math.random() * 5))})
     }
     return { data: comments, total }
 }

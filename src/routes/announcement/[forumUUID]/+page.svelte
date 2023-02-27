@@ -1,5 +1,5 @@
 <script lang="ts">
-	import ForumDetail from "@components/shared/ForumDetail.svelte";
+	import ForumDetail from "@components/forum/ForumDetail.svelte";
 	import { Breadcrumb, BreadcrumbItem } from "flowbite-svelte";
     import type { Announcement } from "@models/announcement";
 	import type { ForumDetail as ForumDetailModel } from '@models/forum';
