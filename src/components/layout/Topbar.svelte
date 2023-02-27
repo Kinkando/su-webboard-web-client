@@ -70,7 +70,7 @@
     {/if}
 {/each}
 
-<Popover placement="bottom" class="z-30 w-64 text-sm min-[820.1px]:hidden" shadow triggeredBy="#{tooltips[1].id}" trigger="click">
+<Popover placement="bottom" class="{isScrollDown ? 'hidden' : ''} z-30 w-64 text-sm min-[820.1px]:hidden" shadow triggeredBy="#{tooltips[1].id}" trigger="click">
     <div in:slide>
         <Input
             id={tooltips[1].id}
@@ -88,9 +88,9 @@
     </div>
 </Popover>
 
-<Popover defaultClass="overflow-hidden w-fit" placement="bottom" class="z-30 w-fit text-sm text-black text-black dark:text-white" shadow triggeredBy="#{tooltips[4].id}" trigger="click">
-    <div in:slide>
-        <header class="relative text-center text-lg flex items-center justify-center gap-x-1 rounded-t-md py-1">
+<Popover defaultClass="" placement="bottom" class="{isScrollDown ? 'hidden' : ''} overflow-x-hidden z-30 max-w-full min-w-0 text-sm text-black text-black dark:text-white" shadow triggeredBy="#{tooltips[4].id}" trigger="click">
+    <div in:slide class="hide-scrollbar overflow-x-hidden">
+        <header class="fixed z-30 h-10 w-full bg-white dark:bg-gray-900 shadow-md text-center text-lg flex items-center justify-center gap-x-1 rounded-t-md py-1">
             <span>การแจ้งเตือน</span>
             {#if notification?.unreadNotiCount}
                 <Indicator color="red" size="lg">
@@ -99,30 +99,34 @@
             {/if}
         </header>
 
-        <section>
+        <div class="h-10 w-full" />
+        <section class="relative min-w-[330px] max-w-sm max-h-64">
             {#each notification?.notiList as noti}
                 <hr class="border-gray-300 dark:border-gray-600">
-
-                <a class="flex items-center gap-x-3 py-2 overflow-x-hidden px-3 cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-500 relative {!noti?.isRead ? 'bg-gray-200 dark:bg-gray-700' : ''}" href="/forum/{noti?.forumUUID}">
+                <a class="flex items-start gap-x-3 py-2 overflow-x-hidden px-3 cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-500 relative {!noti?.isRead ? 'bg-gray-200 dark:bg-gray-700' : ''}" href="/forum/{noti?.forumUUID}">
                     <img src={noti.userImageProfile} alt="" class="w-10 rounded-full">
                     {#if !noti?.isRead}
-                        <Indicator color="red" size="md" border class="absolute left-11 top-3"></Indicator>
+                        <Indicator color="red" size="md" border class="absolute left-11 top-2"></Indicator>
                     {/if}
 
-                    <div class="flex flex-col">
-                        <div class="text-ellipsis overflow-hidden whitespace-nowrap">
-                            <span class="text-lg">{noti.username}</span>&nbsp;
-                            <span class="text-gray-400">{noti.content}</span>
-                        </div>
-                        <div class="font-light text-gray-400">2 วัน</div>
+                    <div class="overflow-hidden">
+                        <div class="text-lg text-ellipsis overflow-hidden whitespace-nowrap">{noti.username}</div>
+                        <div class="text-gray-400 text-ellipsis overflow-hidden whitespace-nowrap">{noti.content}</div>
+                        <div class="font-light text-gray-400 text-ellipsis overflow-hidden whitespace-nowrap">2 ชั่วโมง</div>
                     </div>
                 </a>
+            {:else}
+                <hr class="border-gray-300 dark:border-gray-600">
+                <div class="flex justify-center py-8">
+                    <img src="/images/no-notification.png" alt="" class="w-16 h-16">
+                </div>
+                <div class="px-2 mb-6 text-center">ยังไม่มีการแจ้งเตือนในขณะนี้</div>
             {/each}
         </section>
     </div>
 </Popover>
 
-<Popover defaultClass="overflow-hidden py-2" placement="bottom" class="z-30 w-fit border text-sm text-black dark:text-white -px-3" shadow triggeredBy="#{tooltips[5].id}" trigger="click">
+<Popover defaultClass="overflow-hidden py-2" placement="bottom" class="{isScrollDown ? 'hidden' : ''} z-30 w-fit border text-sm text-black dark:text-white -px-3" shadow triggeredBy="#{tooltips[5].id}" trigger="click">
     <div in:slide>
         <a class="flex items-center gap-x-3 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 px-3 py-2" href="/profile">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">

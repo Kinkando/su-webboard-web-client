@@ -1,11 +1,13 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-    import { page } from '$app/stores';
+	import Sidebar from './../../components/layout/Sidebar.svelte';
+	import { page } from "$app/stores";
 	import { Breadcrumb, BreadcrumbItem } from "flowbite-svelte";
-	import { fly } from 'svelte/transition';
+	import { fly } from "svelte/transition";
 
-    const rootPath = "/admin-portal"
-    const sidebarItems = [
+    $: currentRoute = $page.route.id!;
+    let rootPath = "/admin-portal"
+    let isSidebarExpand = false;
+    let sidebarItems = [
         {
             prefixIcon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>`,
             label: 'หน้าแรก',
@@ -27,62 +29,14 @@
             href: `${rootPath}/forum`,
         }
     ]
-
-    $: currentRoute = $page.route.id!;
-
-    let isSidebarExpand = false;
-
-    const signout = async () => await fetch("/api/token/revoke", { method: "POST" }).then(res => goto("/login"));
-
-    const hideSidebar = () => isSidebarExpand = false
 </script>
 
-<svelte:window on:resize={() => isSidebarExpand = false}/>
+<Sidebar bind:rootPath bind:sidebarItems bind:isSidebarExpand />
 
-<!-- Sidebar -->
-{#key isSidebarExpand}
-    <aside class="sidebar no-select w-[225px] h-screen bg-[var(--primary-color)] z-50 fixed overflow-x-hidden overflow-y-auto max-[1000.1px]:hidden [&.active]:block {isSidebarExpand ? 'active' : ''}" transition:fly|local={{x: -225, duration: 250, opacity: 1}}>
-        <a class="flex h-16 items-center px-4 py-2 cursor-pointer" on:click={hideSidebar} href={rootPath}>
-            <figure class="mr-2">
-                <img class="w-48 object-cover" src="/images/SU-WEBBOARD-ICON.png" alt="">
-            </figure>
-            <figure>
-                <img class="w-full object-cover" src="/images/SU-WEBBOARD-TEXT.png" alt="">
-            </figure>
-        </a>
-        <hr>
-
-        {#each sidebarItems as item}
-            <nav class="px-2 pt-2">
-                <!-- svelte-ignore a11y-click-events-have-key-events -->
-                <a class="transition-all duration-200 flex items-center p-2 rounded-md hover:text-[var(--primary-color)] hover:shadow-md hover:bg-gray-200 {currentRoute === item.href ? '!text-[var(--primary-color)] shadow-md !bg-white' : 'text-white '}" on:click={hideSidebar} href={item.href}>
-                    <span>{@html item.prefixIcon}</span>
-                    <span class="ml-2">{item.label}</span>
-                </a>
-            </nav>
-        {/each}
-
-        <nav class="bottom-nav">
-            <div class="p-2">
-                <!-- svelte-ignore a11y-click-events-have-key-events -->
-                <div class="transition-all duration-200 flex items-center p-2 rounded-md hover:text-[var(--primary-color)] hover:shadow-md hover:bg-white text-white cursor-pointer" on:click={signout}>
-                    <span>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
-                        </svg>
-                    </span>
-                    <span class="ml-2">ออกจากระบบ</span>
-                </div>
-            </div>
-        </nav>
-    </aside>
-{/key}
-
-<!-- Page Container -->
 <main class="relative min-[1000.1px]:ml-[225px] max-[1000.1px]:top-16 h-full overflow-hidden">
     <nav class="h-16 flex items-center px-4 max-[1000.1px]:hidden">
         <Breadcrumb aria-label="SU Webboard">
-            <BreadcrumbItem href="{rootPath}" home>หน้าแรก</BreadcrumbItem>
+            <BreadcrumbItem href="/" home>หน้าแรก</BreadcrumbItem>
             {#if currentRoute.toString().lastIndexOf("/") > 0}
                 <BreadcrumbItem>{ sidebarItems.find(item => currentRoute === item.href)?.label }</BreadcrumbItem>
             {/if}
@@ -109,22 +63,3 @@
         <span>&copy;&nbsp;</span>su-webboard
     </footer>
 </main>
-
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<article class="top-0 bg-black w-screen h-screen brightness-50 z-40 fixed opacity-50 {isSidebarExpand ? '' : 'hidden'}" on:click={() => isSidebarExpand = false}></article>
-
-<style lang="scss">
-    .sidebar {
-        -ms-overflow-style: none;  /* Internet Explorer 10+ */
-        scrollbar-width: none;  /* Firefox */
-        &::-webkit-scrollbar {
-            display: none;  /* Safari and Chrome */
-        }
-    }
-
-    @media screen and (min-height: 315px) {
-        .bottom-nav {
-            @apply bottom-0 absolute w-full;
-        }
-    }
-</style>

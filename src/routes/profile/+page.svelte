@@ -106,7 +106,7 @@
                             {#if isUpdate && input?.placeholder}
                                 <Input type="text" id="title" class="ease-in duration-200 placeholder-gray-300" placeholder={input?.placeholder} required bind:value={draft[input?.key]} />
                             {:else}
-                                <div class="py-2.5 border text-gray-400 dark:text-gray-600 border border-transparent">{draft[input?.key]}</div>
+                                <div class="py-2.5 border text-gray-400 dark:text-gray-600 border border-transparent break-words">{draft[input?.key]}</div>
                             {/if}
                         </Label>
                     {/each}
