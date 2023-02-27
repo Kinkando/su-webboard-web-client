@@ -51,7 +51,14 @@
             text: "ผู้ใช้",
         },
     ]
+
+    let previousY = 0;
+    let scrollY = 0;
+    $: isScrollDown = scrollY > previousY;
+    const scroll = (e: UIEvent & { currentTarget: EventTarget & Window }) => previousY = scrollY
 </script>
+
+<svelte:window on:scroll={scroll} bind:scrollY />
 
 {#each tooltips as tooltip}
     {#if tooltip.id !== 'announcement' || data?.userType === UserType.TEACHER}
@@ -136,7 +143,9 @@
     </div>
 </Popover>
 
-<header class="h-16 w-full overflow-hidden flex items-center bg-[var(--primary-color)] px-4 no-select fixed z-20">
+<!-- Topbar -->
+<div class="h-16 w-full bg-gray-200 dark:bg-gray-800 absolute top-0 z-0 ease-in duration-200"></div>
+<header class="transition-transform duration-200 h-16 ease-out w-full overflow-hidden flex items-center bg-[var(--primary-color)] px-4 no-select fixed z-20" style={isScrollDown ? `transform: translateY(-${Math.min(scrollY, 64)}px); ${scrollY <= 64 ? 'transition: none;' : ''}` : ''}>
     <a class="flex items-center cursor-pointer h-full gap-x-3" href="/">
         <img class="w-10 object-cover" src="/images/SU-WEBBOARD-ICON.png" alt="">
         <img class="h-6 object-cover max-[570px]:hidden" src="/images/SU-WEBBOARD-TEXT.png" alt="">
