@@ -82,9 +82,9 @@
         </div>
     </Label>
 
-    <div class="my-4 grid gap-2 no-select" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr))">
+    <div class="my-4 grid gap-2 sm:gap-4 no-select" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr))">
         {#each attachments as attachment, index}
-            <div class="relative overflow-hidden rounded-md">
+            <div class="relative overflow-hidden rounded-md  aspect-square">
                 <!-- svelte-ignore a11y-click-events-have-key-events -->
                 <div class="cursor-pointer rounded-full p-1 z-10 absolute top-1 right-1 bg-[#e15e3f] w-fit h-fit" on:click={() => removeImage(index)}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-white">
@@ -92,14 +92,14 @@
                     </svg>
                 </div>
                 {#if attachment.isLoading}
-                    <figure class="w-full h-[225px] animate-pulse ease-in duration-200 absolute z-0 bg-gray-400 flex items-center justify-center">
+                    <figure class="w-full h-full animate-pulse ease-in duration-200 absolute z-0 bg-gray-400 flex items-center justify-center">
                         <Spinner size="10" />
                     </figure>
                 {/if}
                 <img
                     src="{attachment.src}"
                     alt="{attachment.file.name}"
-                    class="w-full h-[225px] hover:scale-105 ease-in duration-200 hover:brightness-75"
+                    class="w-full h-full hover:scale-105 ease-in duration-200 hover:brightness-75 "
                     on:load={() => attachment.isLoading = false}
                 >
             </div>

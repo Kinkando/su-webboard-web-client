@@ -88,7 +88,7 @@
     </div>
 </Popover>
 
-<Popover defaultClass="" placement="bottom" class="{isScrollDown ? 'hidden' : ''} overflow-x-hidden z-30 max-w-full min-w-0 text-sm text-black text-black dark:text-white" shadow triggeredBy="#{tooltips[4].id}" trigger="click">
+<Popover defaultClass="" placement="bottom" class="{isScrollDown ? 'hidden' : ''} hide-scrollbar overflow-x-hidden z-30 max-w-full min-w-0 text-sm text-black text-black dark:text-white" shadow triggeredBy="#{tooltips[4].id}" trigger="click">
     <div in:slide class="hide-scrollbar overflow-x-hidden">
         <header class="fixed z-30 h-10 w-full bg-white dark:bg-gray-900 shadow-md text-center text-lg flex items-center justify-center gap-x-1 rounded-t-md py-1">
             <span>การแจ้งเตือน</span>
