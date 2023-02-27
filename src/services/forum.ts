@@ -368,7 +368,7 @@ export async function getForumDetail(forumUUID: string) {
 }
 
 export async function getComments(forumUUID: string, offset: number, limit: number) {
-    const total = 4;
+    const total = Math.floor(Math.random() * 10);
     if (!["xxx-xxx-xxx-xxx", "yyy-yyy-yyy-yyy", "zzz-zzz-zzz-zzz"].includes(forumUUID) || offset >= total) {
         return null
     }
