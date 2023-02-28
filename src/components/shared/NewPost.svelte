@@ -11,7 +11,7 @@
     export let attachments: Attachment[];
     export let submitName: string = "ยืนยัน";
     export let cancel: () => void;
-    export let submit: () => Promise<void> = async() => {};
+    export let submit: () => void = async() => {};
 
     $: if (categoryIDs && categoryToggles) {
         categoryIDs = categoryToggles.filter(category => category.isActive).map(category => category.categoryID)

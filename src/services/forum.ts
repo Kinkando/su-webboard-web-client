@@ -389,22 +389,28 @@ export async function getComments(forumUUID: string, offset: number, limit: numb
         commentCount: Math.floor(Math.random() * 1000),
         createdAt: new Date,
     }
-    const comment = (imageCount: number, replyCount: number): Comment => {
-        let comment = cmt;
+    const comment = (order: number, imageCount: number, replyCount: number): Comment => {
+        let comment = {...cmt};
         comment.commentImageURLs = [];
         comment.replyComments = [];
         for(let i=0; i<imageCount; i++) {
             comment.commentImageURLs?.push("https://media.timeout.com/images/103662433/750/422/image.jpg")
         }
         for(let i=0; i<replyCount; i++) {
-            comment.replyComments.push({...cmt})
+            let subComment = {...cmt};
+            for(let j=0; j<Math.round(Math.random() * imageCount); j++) {
+                subComment.commentImageURLs?.push("https://media.timeout.com/images/103662433/750/422/image.jpg")
+            }
+            subComment.commentUUID += `${order}-${i}`
+            subComment.commentText += ` ความคิดเห็นที่ ${i+1} ตอนกลับความคิดเห็นที่ ${order+1}`
+            comment.replyComments.push({...subComment})
         }
         return comment
     }
 
     const comments: Comment[] = []
     for(let i=offset; i<Math.min(total, offset+limit); i++) {
-        const cmt = {...comment(Math.floor(Math.random() * 3), Math.floor(Math.random() * 5))};
+        const cmt = {...comment(i, Math.floor(Math.random() * 3), Math.floor(Math.random() * 5))};
         cmt.commentUUID += `${i}`
         cmt.commentText += ` ${i+1}`
         comments.push({...cmt})

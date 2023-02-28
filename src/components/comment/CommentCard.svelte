@@ -3,17 +3,44 @@
 	import ForumImage from "@components/forum/ForumImage.svelte";
 	import EllipsisMenu from "@components/shared/EllipsisMenu.svelte";
 	import type { Comment } from "@models/forum";
+	import type { Attachment } from "@models/new-post";
 
     export let label: string;
     export let comment: Comment;
     export let reply = false;
+
+    let attachments: Attachment[] = [];
+    if (comment.commentImageURLs) {
+        const files: Attachment[] = []
+        comment.commentImageURLs.forEach((url) => {
+            files.push({
+                file: new File([], ""),
+                src: url,
+                isLoading: true,
+            })
+        })
+        attachments = [...files]
+    }
 </script>
 
 <div class="rounded-lg shadow-md w-full h-full p-4 sm:p-6 overflow-hidden bg-white text-black dark:bg-gray-700 dark:text-white ease-in duration-200">
     <div class="flex items-center">
         <div class="font-light text-lg text-gray-400 mb-2 w-full">{label}</div>
-        <EllipsisMenu ellipsisMenuID={comment.commentUUID} />
+        <EllipsisMenu
+            ellipsisMenuID={comment.commentUUID}
+            type="comment"
+            bind:label
+            comment={comment.commentText}
+            {attachments}
+            editable
+            reportable
+            removable
+            on:edit={(event) => console.log(event.detail.comment, event.detail.attachments.length)}
+            on:report={(event) => console.log(`รายงานความคิดเห็น: ${comment.commentUUID}: ${event.detail.reportText}`)}
+            on:delete={() => console.log(`ลบความคิดเห็น: ${comment.commentUUID}`)}
+        />
     </div>
+
     <div class="text-lg min-h-[6rem]">
         <span>{comment.commentText}</span>
         {#if comment.commentImageURLs?.length}
