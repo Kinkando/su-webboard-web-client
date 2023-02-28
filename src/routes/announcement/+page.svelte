@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { goto } from "$app/navigation";
 	import NewPost from "@components/shared/NewPost.svelte";
 	import type { Attachment, FormSchema } from "@models/new-post";
 	import { Breadcrumb, BreadcrumbItem } from "flowbite-svelte";
@@ -26,6 +25,6 @@
         bind:attachments
         bind:submitName
         {submit}
-        footer
+        cancel={() => history.back()}
     />
 </div>

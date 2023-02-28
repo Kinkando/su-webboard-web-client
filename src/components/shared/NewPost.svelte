@@ -9,9 +9,9 @@
     export let categoryIDs: number[] | undefined = undefined;
     export let categories: Category[] | undefined = undefined;
     export let attachments: Attachment[];
-    export let submitName: string = "";
+    export let submitName: string = "ยืนยัน";
+    export let cancel: () => void;
     export let submit: () => Promise<void> = async() => {};
-    export let footer = false;
 
     $: if (categoryIDs && categoryToggles) {
         categoryIDs = categoryToggles.filter(category => category.isActive).map(category => category.categoryID)
@@ -106,9 +106,7 @@
     {/each}
 </div>
 
-{#if footer}
-    <div class="flex items-center justify-end gap-x-2 mt-4">
-        <Button color="dark" size="sm" type="reset" href="/">ยกเลิก</Button>
-        <Button color="green" size="sm" type="submit" disabled={!title?.value || !description?.value} on:click={submit}>{submitName}</Button>
-    </div>
-{/if}
+<div class="flex items-center justify-end gap-x-2 mt-4">
+    <Button color="dark" size="sm" type="reset" on:click={cancel}>ยกเลิก</Button>
+    <Button color="green" size="sm" type="submit" disabled={!title?.value || !description?.value} on:click={submit}>{submitName}</Button>
+</div>

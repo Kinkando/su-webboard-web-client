@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { goto } from "$app/navigation";
 	import NewPost from "@components/shared/NewPost.svelte";
 	import type { Category } from "@models/category";
 	import type { Attachment, FormSchema } from "@models/new-post";
@@ -32,6 +31,6 @@
         bind:attachments
         bind:submitName
         {submit}
-        footer
+        cancel={() => history.back()}
     />
 </div>
