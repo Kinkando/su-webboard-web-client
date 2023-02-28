@@ -2,20 +2,15 @@
 	import { Button, Input, Label, Spinner, Textarea } from 'flowbite-svelte';
 	import type { Category } from '@models/category';
 	import ToggleBadge from '@components/badge/ToggleBadge.svelte';
-	import type { Attachment, CategoryToggle, FormSchema } from '@models/new-post';
+	import type { Attachment, FormSchema } from '@models/new-post';
 
     export let title: FormSchema;
     export let description: FormSchema;
-    export let categoryIDs: number[] | undefined = undefined;
     export let categories: Category[] | undefined = undefined;
     export let attachments: Attachment[];
     export let submitName: string = "ยืนยัน";
     export let cancel: () => void;
     export let submit: () => void = async() => {};
-
-    $: if (categoryIDs && categoryToggles) {
-        categoryIDs = categoryToggles.filter(category => category.isActive).map(category => category.categoryID)
-    }
 
     let fileInput: HTMLInputElement;
     let files: FileList;
@@ -32,11 +27,6 @@
         }))
     }
     const removeImage = (index: number) => attachments = attachments.filter((_, idx) => index !== idx)
-
-    let categoryToggles: CategoryToggle[] = [];
-    if (categories) {
-        categories.forEach(category => categoryToggles.push({categoryID: category.categoryID, isActive: false}))
-    }
 </script>
 
 <Label for="title" class="space-y-2 text-black dark:text-white">
@@ -49,14 +39,14 @@
     <Textarea id="description" class="ease-in duration-200 placeholder-gray-300 min-h-[150px] !bg-gray-50 dark:!bg-gray-700" placeholder={description.placeholder} required bind:value={description.value} />
 </Label>
 
-{#if categoryToggles.length > 0}
+{#if categories}
     <Label for="category" class="space-y-2 mt-4">
         <span>หมวดหมู่</span>
         <div id="category" class="ease-in duration-200 w-full p-2.5 border dark:border-gray-500 text-sm rounded-lg bg-gray-50 dark:bg-gray-700 overflow-x-hidden flex flex-wrap">
             {#if categories?.length}
                 {#each categories as category, index}
                     <div class="m-1.5">
-                        <ToggleBadge toggle hexColor={category.categoryHexColor} name={category.categoryName} bind:isActive={categoryToggles[index].isActive} />
+                        <ToggleBadge toggle hexColor={category.categoryHexColor} name={category.categoryName} bind:isActive={category.isActive} />
                     </div>
                 {/each}
             {:else}

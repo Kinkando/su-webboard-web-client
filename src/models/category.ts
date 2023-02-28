@@ -3,6 +3,7 @@ export interface Category {
     categorySeq?: number
     categoryName: string
     categoryHexColor: string
+    isActive?: boolean
 }
 
 export interface CategoryDetail {

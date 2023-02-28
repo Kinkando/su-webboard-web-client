@@ -28,6 +28,7 @@
         <div class="font-light text-lg text-gray-400 w-full">{label}</div>
         <EllipsisMenu
             ellipsisMenuID={comment.commentUUID}
+            menuSuffixName="ความคิดเห็น"
             type="comment"
             label={`แก้ไข${label}`}
             comment={comment.commentText}

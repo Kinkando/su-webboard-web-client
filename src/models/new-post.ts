@@ -4,11 +4,6 @@ export interface FormSchema {
     placeholder: string
 }
 
-export interface CategoryToggle {
-    categoryID: number
-    isActive: boolean
-}
-
 export interface Attachment {
     src: string
     file: File

@@ -6,10 +6,12 @@
 	import type { Announcement } from "@models/announcement";
     import type { ForumDetail } from "@models/forum";
 	import type { Attachment, FormSchema } from "@models/new-post";
+	import type { Category } from "@models/category";
 
     export let forumDetail: ForumDetail | Announcement;
+    export let categories: Category[] | undefined = undefined;
 
-    $: type = instanceOfForumDetail(forumDetail) ? 'กระทู้' : 'ประกาศ'
+    const type = instanceOfForumDetail(forumDetail) ? 'กระทู้' : 'การประกาศ'
 
     // Edit modal
     let title: FormSchema = {value: forumDetail.title, label: `หัวข้อ${type}`, placeholder: `กรุณาใส่หัวข้อ${type}...`}
@@ -46,14 +48,16 @@
         </div>
         <EllipsisMenu
             ellipsisMenuID={forumDetail?.forumUUID}
-            type="forum"
+            type={type === "กระทู้" ? 'forum': 'announcement'}
+            menuSuffixName={type}
             editable
+            reportable={type === "กระทู้"}
             removable
-            reportable
             {title}
             {description}
+            {categories}
             {attachments}
-            on:edit={(event) => console.log(event.detail.title, event.detail.description, event.detail.attachments.length)}
+            on:edit={(event) => console.log(event.detail.title, event.detail.description, event.detail.categories, event.detail.attachments.length)}
             on:report={(event) => console.log(`รายงาน${type}: ${forumDetail.forumUUID}: ${event.detail.reportText}`)}
             on:delete={() => console.log(`ลบ${type}: ${forumDetail.forumUUID}`)}
         />
