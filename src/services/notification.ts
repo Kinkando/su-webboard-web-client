@@ -1,4 +1,5 @@
 import type { Notification } from "@models/notification";
+import { sleep } from "./forum";
 
 export async function getNotiList(): Promise<Notification> {
     // mock
@@ -36,5 +37,6 @@ export async function getNotiList(): Promise<Notification> {
             },
         ]
     }
+    // await sleep()
     return noti
 }

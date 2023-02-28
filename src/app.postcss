@@ -35,6 +35,36 @@
     display: none;  /* Safari and Chrome */
 }
 
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+.dark ::-webkit-scrollbar-track {
+    background: #232323;
+    /* box-shadow: inset 0 0 5px grey; */
+    /* border-radius: 40px; */
+}
+::-webkit-scrollbar-track {
+    background: #ababab;
+    /* box-shadow: inset 0 0 5px grey; */
+    /* border-radius: 40px; */
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #40626D;
+    border-radius: 40px;
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #40526D;
+    border-radius: 40px;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities

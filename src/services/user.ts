@@ -1,4 +1,5 @@
 import type { User } from "@models/user";
+import { sleep } from "./forum";
 
 export async function getUserProfile(): Promise<User> {
     const user: User = {
@@ -9,6 +10,7 @@ export async function getUserProfile(): Promise<User> {
         studentID: "620710001",
         isAnnonymous: false
     }
+    // await sleep()
     return user
 }
 
