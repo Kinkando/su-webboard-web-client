@@ -7,6 +7,8 @@
 	import LoadingSpinner from '@components/spinner/LoadingSpinner.svelte';
 	import AuthGuard from '@middleware/AuthGuard.svelte';
 	import Topbar from "@components/layout/Topbar.svelte";
+	import { getUserType } from "@util/localstorage";
+	import { browser } from "$app/environment";
 
     export let data: any;
 
@@ -45,6 +47,16 @@
         }
     })()
     $: isUserSite = !$page.url.pathname?.startsWith("/admin-portal") && $page.url.pathname! != "/login";
+
+    // for localStorage
+    // let userType: string;
+    // let isValidToken: boolean;
+    // $: if($page.url.pathname && browser) {
+    //     const local = getUserType()
+    //     userType = local.userType
+    //     isValidToken = local.isValid
+    //     console.log(userType)
+    // }
 </script>
 
 <svelte:head>
@@ -54,7 +66,8 @@
 
 <LoadingSpinner bind:isLoading />
 
-<AuthGuard routeID={data.routeID} userType={data.userType} isValidToken={data.isValid}>
+<!-- <AuthGuard routeID={data.routeID} bind:userType bind:isValidToken> -->
+<AuthGuard bind:routeID={data.routeID} bind:userType={data.userType} bind:isValidToken={data.isValid}>
     {#if isUserSite}
         <Topbar bind:data />
 

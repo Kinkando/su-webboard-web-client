@@ -7,6 +7,7 @@
 	import { UserType } from "@models/auth";
 	import userStore from '@stores/user';
 	import notificationStore from '@stores/notification';
+	import { revokeToken } from '@util/localstorage';
 
     export let data: any;
     let notification: Notification = data?.notification;
@@ -18,7 +19,10 @@
     const defaultImageURL = "https://cdn-icons-png.flaticon.com/512/149/149071.png"
     let searchText = "";
 
-    const signout = async () => await fetch("/api/token/revoke", { method: "POST" }).then(res => goto("/login"));
+    const signout = async () => await fetch("/api/token/revoke", { method: "POST" }).then(res => {
+        // revokeToken(); for localStorage
+        goto("/login");
+    });
     const search = (event: KeyboardEvent) => {
         if (event.key === 'Enter' && searchText) {
             goto('/search?keyword='+searchText)

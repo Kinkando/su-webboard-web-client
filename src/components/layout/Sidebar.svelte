@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
     import { page } from '$app/stores';
+	import { revokeToken } from '@util/localstorage';
 	import { fly } from 'svelte/transition';
 
     export let rootPath: string;
@@ -8,7 +9,10 @@
     export let isSidebarExpand: boolean;
 
     $: currentRoute = $page.route.id!;
-    const signout = async () => await fetch("/api/token/revoke", { method: "POST" }).then(res => goto("/login"));
+    const signout = async () => await fetch("/api/token/revoke", { method: "POST" }).then(res => {
+        // revokeToken(); for localStorage
+        goto("/login");
+    });
     const hideSidebar = () => isSidebarExpand = false
 </script>
 

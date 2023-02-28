@@ -3,7 +3,7 @@ import type { AxiosRequestCustomConfig } from './api';
 import http from '@commons/http';
 import { TokenType } from '@models/auth';
 import { refreshToken as refreshJWT } from '@services/authen';
-import { revokeToken, setToken } from './token';
+import { revokeToken, setToken } from './cookies';
 
 const instance = axios.create({
 	timeout: 6000,

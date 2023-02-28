@@ -1,5 +1,5 @@
 import type { Handle } from "@sveltejs/kit";
-import { getUserType } from "@util/token";
+import { getUserType } from "@util/cookies";
 import { authGuard } from "@middleware/auth-guard";
 import { createLogger, format, transports } from "winston";
 
