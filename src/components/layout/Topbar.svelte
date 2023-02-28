@@ -20,7 +20,7 @@
     let searchText = "";
 
     const signout = async () => await fetch("/api/token/revoke", { method: "POST" }).then(res => {
-        // revokeToken(); for localStorage
+        revokeToken();
         goto("/login");
     });
     const search = (event: KeyboardEvent) => {

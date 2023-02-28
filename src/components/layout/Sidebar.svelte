@@ -10,7 +10,7 @@
 
     $: currentRoute = $page.route.id!;
     const signout = async () => await fetch("/api/token/revoke", { method: "POST" }).then(res => {
-        // revokeToken(); for localStorage
+        revokeToken();
         goto("/login");
     });
     const hideSidebar = () => isSidebarExpand = false
@@ -18,7 +18,6 @@
 
 <svelte:window on:resize={() => isSidebarExpand = false}/>
 
-<!-- Sidebar -->
 {#key isSidebarExpand}
     <aside class="hide-scrollbar no-select w-[225px] h-screen bg-[var(--primary-color)] z-50 fixed overflow-x-hidden overflow-y-auto max-[1000.1px]:hidden [&.active]:block {isSidebarExpand ? 'active' : ''}" transition:fly|local={{x: -225, duration: 250, opacity: 1}}>
         <a class="flex h-16 items-center px-4 py-2 cursor-pointer" on:click={hideSidebar} href={rootPath}>

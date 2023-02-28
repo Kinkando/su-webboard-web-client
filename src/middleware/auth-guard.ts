@@ -5,7 +5,7 @@ export function authGuard(routeID: string, userType: string, isValidToken: boole
         return ""
     }
 
-    if (routeID === "/login" && isValidToken) {
+    if (routeID === "/login" && isValidToken && userType) {
         return userType === UserType.ADMIN ? "/admin-portal" : "/"
     }
 

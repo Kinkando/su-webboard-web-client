@@ -23,9 +23,8 @@
                     body: JSON.stringify({ idToken: "admin" }),
                 }
             ).then(async (res) => {
-                // for keep token in localStorage
-                // const token = await res.json()
-                // setToken(token.accessToken, token.refreshToken)
+                const token = await res.json()
+                setToken(token.accessToken, token.refreshToken)
                 alert = {
                     color: 'green',
                     message: 'เข้าสู่ระบบสำเร็จ!',
@@ -45,9 +44,8 @@
                 }
             ).
             then(async (res) => {
-                // for keep token in localStorage
-                // const token = await res.json()
-                // setToken(token.accessToken, token.refreshToken)
+                const token = await res.json()
+                setToken(token.accessToken, token.refreshToken)
                 window.location.href = "/";
                 alert = {
                     color: 'green',
