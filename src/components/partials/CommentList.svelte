@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import { inview } from "svelte-inview/dist/index";
+    import { inview } from "svelte-inview";
 	import SyncLoader from 'svelte-loading-spinners/SyncLoader.svelte';
 	import CommentCard from "./CommentCard.svelte";
 	import type { Comment } from "@models/forum";
