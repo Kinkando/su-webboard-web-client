@@ -210,7 +210,7 @@ export async function getHomeData(): Promise<Home> {
         ],
         categories: await getAllCategoryDetails(),
     }
-    await new Promise(resolve => setTimeout(() => resolve(""), 500))
+    await sleep()
     return home
 }
 
@@ -242,6 +242,7 @@ export async function getForumListByCategoryID(categoryID: number, offset: numbe
         data.push(forum)
     }
 
+    await sleep()
     return { data, total }
 }
 
@@ -270,6 +271,7 @@ export async function getForumListByPopular(offset: number, limit: number) {
         data.push(f)
     }
 
+    await sleep()
     return { data, total }
 }
 
@@ -296,6 +298,7 @@ export async function searchForum(filter: ForumFilter, offset: number, limit: nu
         data.push(forum)
     }
 
+    await sleep()
     return { data, total }
 }
 
@@ -316,6 +319,7 @@ export async function getAnnouncements(offset: number, limit: number) {
         data.push(announcement)
     }
 
+    await sleep()
     return { data, total }
 }
 
@@ -336,6 +340,7 @@ export async function getAnnouncementDetail(forumUUID: string) {
         ],
         createdAt: new Date(),
     }
+    await sleep()
     return forumDetail
 }
 
@@ -364,11 +369,12 @@ export async function getForumDetail(forumUUID: string) {
         commentCount: Math.floor(Math.random() * 1000),
         createdAt: new Date(),
     }
+    await sleep()
     return forumDetail
 }
 
 export async function getComments(forumUUID: string, offset: number, limit: number) {
-    const total = Math.floor(Math.random() * 10);
+    const total = 1000;
     if (!["xxx-xxx-xxx-xxx", "yyy-yyy-yyy-yyy", "zzz-zzz-zzz-zzz"].includes(forumUUID) || offset >= total) {
         return null
     }
@@ -400,7 +406,16 @@ export async function getComments(forumUUID: string, offset: number, limit: numb
     for(let i=offset; i<Math.min(total, offset+limit); i++) {
         const cmt = {...comment(Math.floor(Math.random() * 3), Math.floor(Math.random() * 5))};
         cmt.commentUUID += `${i}`
+        cmt.commentText += ` ${i+1}`
         comments.push({...cmt})
     }
+    await sleep()
     return { data: comments, total }
+}
+
+export const sleep = async (time?: number) => {
+    if (!time) {
+        time = 500
+    }
+    return await new Promise(resolve => setTimeout(() => resolve(""), time))
 }

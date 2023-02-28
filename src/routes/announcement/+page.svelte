@@ -18,4 +18,13 @@
     </Breadcrumb>
 </div>
 
-<NewPost bind:title bind:description bind:attachments bind:submitName {submit} />
+<div class="ease-in duration-200 bg-white dark:bg-gray-900 w-full rounded-md shadow-lg p-4 sm:p-6">
+    <NewPost
+        bind:title
+        bind:description
+        bind:attachments
+        bind:submitName
+        {submit}
+        cancel={() => history.back()}
+    />
+</div>
