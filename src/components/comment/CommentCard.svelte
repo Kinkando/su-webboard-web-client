@@ -24,8 +24,8 @@
 </script>
 
 <div class="rounded-lg shadow-md w-full h-full p-4 sm:p-6 overflow-hidden bg-white text-black dark:bg-gray-700 dark:text-white ease-in duration-200">
-    <div class="flex items-center">
-        <div class="font-light text-lg text-gray-400 mb-2 w-full">{label}</div>
+    <div class="flex items-center mb-2">
+        <div class="font-light text-lg text-gray-400 w-full">{label}</div>
         <EllipsisMenu
             ellipsisMenuID={comment.commentUUID}
             type="comment"
