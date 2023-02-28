@@ -1,15 +1,30 @@
 <script lang="ts">
+	import type { Attachment } from '@models/new-post';
 	import CommentBadge from "@components/badge/CommentBadge.svelte";
 	import LikeBadge from "@components/badge/LikeBadge.svelte";
-	import { createEventDispatcher } from "svelte";
+	import CommentReply from "@components/comment/CommentReply.svelte";
+	import { Modal } from "flowbite-svelte";
+	import { scale } from "svelte/transition";
 
     export let likeCount: number | undefined = undefined;
     export let commentCount: number | undefined = undefined;
     export let username: string;
     export let userImageURL: string;
+    export let label: string;
+    export let replyText = "ตอบกลับ";
 
-    const dispatch = createEventDispatcher();
-	const dispatchAction = () => dispatch('click')
+    let comment = "";
+    let attachments: Attachment[] = [];
+    let openReplyModal = false;
+    const commentPost = () => {
+        console.log(comment, attachments.length)
+        openReplyModal = false
+    }
+    $: if(openReplyModal) {
+        comment = "";
+        attachments = []
+    }
+
 </script>
 
 <div class="flex items-center justify-between mt-3 -mb-3">
@@ -20,7 +35,7 @@
     {/if}
     {#if commentCount}
         <div class="flex items-center font-bold">
-            <CommentBadge {commentCount} click on:click={dispatchAction} />
+            <CommentBadge {commentCount} click on:click={() => openReplyModal = true} />
         </div>
     {/if}
 </div>
@@ -35,6 +50,17 @@
         </div>
     </div>
     {#if commentCount}
-        <div class="no-select underline text-[var(--primary-color)] dark:text-[var(--primary-color-75)] cursor-pointer whitespace-nowrap">ตอบกลับ</div>
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <div class="no-select underline text-[var(--primary-color)] dark:text-[var(--primary-color-75)] cursor-pointer break-words" on:click={() => openReplyModal = true}>{replyText}</div>
     {/if}
 </div>
+
+<Modal transition={scale} bind:open={openReplyModal} class="w-full">
+    <CommentReply
+        bind:label
+        bind:comment
+        bind:attachments
+        cancel={() => openReplyModal = false}
+        submit={commentPost}
+    />
+</Modal>

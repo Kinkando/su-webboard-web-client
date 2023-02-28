@@ -2,7 +2,7 @@
 	import { Breadcrumb, BreadcrumbItem } from "flowbite-svelte";
 	import ForumDetail from "@components/forum/ForumDetail.svelte";
 	import type { ForumDetail as ForumDetailModel } from '@models/forum';
-	import CommentList from '@components/partials/CommentList.svelte';
+	import CommentList from '@components/comment/CommentList.svelte';
 
     export let data: { forumDetail: ForumDetailModel }
 </script>

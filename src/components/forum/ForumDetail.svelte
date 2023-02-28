@@ -5,8 +5,17 @@
     import EllipsisMenu from "@components/shared/EllipsisMenu.svelte";
 	import type { Announcement } from "@models/announcement";
     import type { ForumDetail } from "@models/forum";
+	import type { Attachment, FormSchema } from "@models/new-post";
 
     export let forumDetail: ForumDetail | Announcement;
+
+    $: type = instanceOfForumDetail(forumDetail) ? 'กระทู้' : 'ประกาศ'
+
+    // Edit modal
+    let title: FormSchema = {value: forumDetail.title, label: `หัวข้อ${type}`, placeholder: `กรุณาใส่หัวข้อ${type}...`}
+    let description: FormSchema = {value: forumDetail.description!, label: "รายละเอียด", placeholder: "กรุณาใส่รายละเอียด..."}
+    let attachments: Attachment[] = [];
+    let label = "แสดงความคิดเห็น"
 
     function instanceOfForumDetail(object: any): object is ForumDetail {
         return 'categories' in object;
@@ -15,6 +24,15 @@
     const imageURLs = ((): string[] => {
         const urls = instanceOfForumDetail(forumDetail) ? forumDetail.forumImageURLs : forumDetail.announcementImageURLs
         if (urls) {
+            const files: Attachment[] = [];
+            urls.forEach(url => {
+                files.push({
+                    file: new File([], ""),
+                    src: url,
+                    isLoading: true,
+                })
+            })
+            attachments = [...files]
             return urls
         }
         return []
@@ -26,7 +44,19 @@
         <div class="w-full text-xl font-bold">
             {forumDetail.title}
         </div>
-        <EllipsisMenu ellipsisMenuID={forumDetail?.forumUUID} />
+        <EllipsisMenu
+            ellipsisMenuID={forumDetail?.forumUUID}
+            type="forum"
+            editable
+            removable
+            reportable
+            {title}
+            {description}
+            {attachments}
+            on:edit={(event) => console.log(event.detail.title, event.detail.description, event.detail.attachments.length)}
+            on:report={(event) => console.log(`รายงาน${type}: ${forumDetail.forumUUID}: ${event.detail.reportText}`)}
+            on:delete={() => console.log(`ลบ${type}: ${forumDetail.forumUUID}`)}
+        />
     </div>
     {#if instanceOfForumDetail(forumDetail) && forumDetail.categories?.length}
         <div class="flex flex-wrap items-center gap-1 mt-1">
@@ -50,5 +80,7 @@
         userImageURL={forumDetail.authorImageURL}
         likeCount={instanceOfForumDetail(forumDetail) ? forumDetail.likeCount : undefined}
         commentCount={instanceOfForumDetail(forumDetail) ? forumDetail.commentCount : undefined}
+        {label}
+        replyText={label}
     />
 </div>
