@@ -12,14 +12,11 @@
     let limit = 10;
     let comments: Comment[] = [];
     let hasMore = true;
-    let isLoadMore = true;
 
     onMount(() => fetchData())
 
     async function fetchData() {
-        isLoadMore = true;
         const response = await getComments(forumUUID, offset, limit)
-        isLoadMore = false;
         hasMore = response != null && response.data.length > 0
         if (response) {
             comments = [...comments, ...response.data]
@@ -48,7 +45,7 @@
     </div>
 {/each}
 
-{#if isLoadMore}
+{#if hasMore}
     <div class="flex justify-center mt-4">
         <SyncLoader color="green" size="60" />
     </div>
