@@ -374,7 +374,7 @@ export async function getForumDetail(forumUUID: string) {
 }
 
 export async function getComments(forumUUID: string, offset: number, limit: number) {
-    const total = Math.floor(Math.random() * 10);
+    const total = Math.floor(Math.random() * 100);
     if (!["xxx-xxx-xxx-xxx", "yyy-yyy-yyy-yyy", "zzz-zzz-zzz-zzz"].includes(forumUUID) || offset >= total) {
         return null
     }
@@ -406,9 +406,10 @@ export async function getComments(forumUUID: string, offset: number, limit: numb
     for(let i=offset; i<Math.min(total, offset+limit); i++) {
         const cmt = {...comment(Math.floor(Math.random() * 3), Math.floor(Math.random() * 5))};
         cmt.commentUUID += `${i}`
+        cmt.commentText += ` ${i+1}`
         comments.push({...cmt})
     }
-    await sleep()
+    await sleep(1000)
     return { data: comments, total }
 }
 
