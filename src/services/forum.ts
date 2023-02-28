@@ -374,7 +374,7 @@ export async function getForumDetail(forumUUID: string) {
 }
 
 export async function getComments(forumUUID: string, offset: number, limit: number) {
-    const total = Math.floor(Math.random() * 100);
+    const total = 1000;
     if (!["xxx-xxx-xxx-xxx", "yyy-yyy-yyy-yyy", "zzz-zzz-zzz-zzz"].includes(forumUUID) || offset >= total) {
         return null
     }
@@ -409,7 +409,7 @@ export async function getComments(forumUUID: string, offset: number, limit: numb
         cmt.commentText += ` ${i+1}`
         comments.push({...cmt})
     }
-    await sleep(1000)
+    await sleep()
     return { data: comments, total }
 }
 
