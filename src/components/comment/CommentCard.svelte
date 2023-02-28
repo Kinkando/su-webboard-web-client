@@ -29,7 +29,7 @@
         <EllipsisMenu
             ellipsisMenuID={comment.commentUUID}
             type="comment"
-            bind:label
+            label={`แก้ไข${label}`}
             comment={comment.commentText}
             {attachments}
             editable
@@ -53,6 +53,7 @@
         userImageURL={comment.commenterImageURL}
         likeCount={comment.likeCount}
         commentCount={reply ? comment.commentCount : undefined}
+        label={`ตอบกลับ${label}`}
     />
 </div>
 

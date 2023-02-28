@@ -31,19 +31,19 @@
         <div class="font-light text-lg text-gray-400 mb-2 w-full">{label}</div>
     </div>
 
-    <Textarea placeholder="แสดงความคิดเห็นที่นี่ ..." bind:value={comment} class="min-h-[6rem] placeholder-gray-300
+    <Textarea placeholder="ใส่ข้อความเพื่อแสดงความคิดเห็นได้ที่นี่ ..." bind:value={comment} class="min-h-[6rem] placeholder-gray-300
     !bg-gray-50 dark:!bg-gray-700" />
 
     <hr class="my-4 dark:border-gray-600">
     <footer class="flex justify-between items-center">
         <input bind:this={fileInput} type="file" accept="image/*" multiple hidden bind:files>
         <Button size="sm" color="purple" gradient on:click={() => fileInput.click()}>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M18.375 12.739l-7.693 7.693a4.5 4.5 0 01-6.364-6.364l10.94-10.94A3 3 0 1119.5 7.372L8.552 18.32m.009-.01l-.01.01m5.699-9.941l-7.81 7.81a1.5 1.5 0 002.112 2.13" />
             </svg>
-            <span class="ml-2">แนบรูปภาพ</span>
+            <span class="ml-1">แนบรูปภาพ</span>
         </Button>
-        <div class="flex items-center gap-x-2">
+        <div class="flex items-center gap-x-2 ml-2">
             <Button color="pink" size="sm" gradient type="reset" on:click={cancel}>ยกเลิก</Button>
             <Button color="green" size="sm" gradient type="submit" disabled={comment.length === 0} on:click={submit}>ยืนยัน</Button>
         </div>

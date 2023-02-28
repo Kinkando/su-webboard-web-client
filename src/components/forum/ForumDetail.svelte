@@ -15,6 +15,7 @@
     let title: FormSchema = {value: forumDetail.title, label: `หัวข้อ${type}`, placeholder: `กรุณาใส่หัวข้อ${type}...`}
     let description: FormSchema = {value: forumDetail.description!, label: "รายละเอียด", placeholder: "กรุณาใส่รายละเอียด..."}
     let attachments: Attachment[] = [];
+    let label = "แสดงความคิดเห็น"
 
     function instanceOfForumDetail(object: any): object is ForumDetail {
         return 'categories' in object;
@@ -79,5 +80,7 @@
         userImageURL={forumDetail.authorImageURL}
         likeCount={instanceOfForumDetail(forumDetail) ? forumDetail.likeCount : undefined}
         commentCount={instanceOfForumDetail(forumDetail) ? forumDetail.commentCount : undefined}
+        {label}
+        replyText={label}
     />
 </div>
