@@ -64,9 +64,8 @@
 
 <LoadingSpinner bind:isLoading />
 
-<!-- <AuthGuard bind:routeID={data.routeID} bind:userType={data.userType} bind:isValidToken={data.isValid}> -->
 {#key $page.url.pathname}
-    <AuthGuard bind:routeID={data.routeID} bind:userType bind:isValidToken>
+    <AuthGuard bind:routeID={$page.url.pathname} bind:userType bind:isValidToken>
         {#if isUserSite}
             <Topbar bind:data />
 
