@@ -1,5 +1,5 @@
 import type { Handle } from "@sveltejs/kit";
-import { getUserType } from "@util/token";
+import { getUserType } from "@util/cookies";
 import { authGuard } from "@middleware/auth-guard";
 import { createLogger, format, transports } from "winston";
 
@@ -19,10 +19,10 @@ export const handle: Handle = async ({ event, resolve }) => {
 
     logger.info(`routeID: ${event?.route?.id}, userType: ${userType}, isValidToken: ${isValid}`)
 
-    const redirectURL = authGuard(event?.route?.id!, userType, isValid)
-    if (redirectURL) {
-        return new Response('Redirect', {status: 303, headers: { Location: redirectURL }})
-    }
+    // const redirectURL = authGuard(event?.route?.id!, userType, isValid)
+    // if (redirectURL) {
+    //     return new Response('Redirect', {status: 303, headers: { Location: redirectURL }})
+    // }
 
     return response
 }

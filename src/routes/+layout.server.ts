@@ -3,7 +3,7 @@ import type { Notification } from "@models/notification";
 import type { User } from "@models/user";
 import { getNotiList } from "@services/notification";
 import { getUserProfile } from "@services/user";
-import { getUserType } from "@util/token";
+import { getUserType } from "@util/cookies";
 import type { LayoutServerLoad } from "./$types";
 import userStore from '@stores/user'
 import notificationStore from '@stores/notification'

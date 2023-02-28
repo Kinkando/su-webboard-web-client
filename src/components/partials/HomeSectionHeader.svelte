@@ -9,12 +9,16 @@
     export let buttonName = "ดูเพิ่มเติม";
 </script>
 
-<div class="ease-in duration-200 flex items-center gap-x-2 text-black dark:text-white">
-    <figure class="outline outline-[2px] rounded-full p-1">
+<div class="ease-in duration-200 gap-x-2 text-black dark:text-white flex items-center">
+    <figure class="outline outline-[2px] rounded-full p-1 inline-block">
         {@html icon}
     </figure>
-    <span class="uppercase overflow-hidden whitespace-nowrap text-ellipsis">{title}</span>
-    <span class="text-xs text-gray-400 sm:block hidden overflow-hidden whitespace-nowrap text-ellipsis">{description}</span>
+
+    <div class="overflow-hidden">
+        <span class="uppercase overflow-hidden whitespace-nowrap text-ellipsis">{title}</span>
+        <span class="text-xs text-gray-400 sm:inline hidden overflow-hidden whitespace-nowrap text-ellipsis">{description}</span>
+    </div>
+
     <Button class="ml-auto uppercase {href ? 'max-[400.1px]:hidden' : ''}" size="xs" color="green" gradient on:click={action} href={href}>{buttonName}</Button>
     {#if href}
         <a class="ml-auto rounded-full bg-[var(--primary-color-75)] dark:bg-gray-700 p-1 min-[400.1px]:hidden" {href}>

@@ -7,6 +7,7 @@
 	import { UserType } from "@models/auth";
 	import userStore from '@stores/user';
 	import notificationStore from '@stores/notification';
+	import { revokeToken } from '@util/localstorage';
 
     export let data: any;
     let notification: Notification = data?.notification;
@@ -18,7 +19,10 @@
     const defaultImageURL = "https://cdn-icons-png.flaticon.com/512/149/149071.png"
     let searchText = "";
 
-    const signout = async () => await fetch("/api/token/revoke", { method: "POST" }).then(res => goto("/login"));
+    const signout = async () => await fetch("/api/token/revoke", { method: "POST" }).then(res => {
+        revokeToken();
+        goto("/login");
+    });
     const search = (event: KeyboardEvent) => {
         if (event.key === 'Enter' && searchText) {
             goto('/search?keyword='+searchText)
@@ -88,9 +92,9 @@
     </div>
 </Popover>
 
-<Popover defaultClass="" placement="bottom" class="{isScrollDown ? 'hidden' : ''} hide-scrollbar overflow-x-hidden z-30 max-w-full min-w-0 text-sm text-black text-black dark:text-white" shadow triggeredBy="#{tooltips[4].id}" trigger="click">
+<Popover defaultClass="" placement="bottom" class="{isScrollDown ? 'hidden' : ''} shadow-md drop-shadow-md hide-scrollbar overflow-x-hidden z-30 max-w-full min-w-0 text-sm text-black text-black dark:text-white" shadow triggeredBy="#{tooltips[4].id}" trigger="click">
     <div in:slide class="hide-scrollbar overflow-x-hidden">
-        <header class="fixed z-30 h-10 w-full bg-white dark:bg-gray-900 shadow-md text-center text-lg flex items-center justify-center gap-x-1 rounded-t-md py-1">
+        <header class="fixed z-30 h-10 w-full bg-white dark:bg-gray-900 shadow-sm text-center text-lg flex items-center justify-center gap-x-1 rounded-t-md py-1">
             <span>การแจ้งเตือน</span>
             {#if notification?.unreadNotiCount}
                 <Indicator color="red" size="lg">

@@ -7,6 +7,8 @@
 	import LoadingSpinner from '@components/spinner/LoadingSpinner.svelte';
 	import AuthGuard from '@middleware/AuthGuard.svelte';
 	import Topbar from "@components/layout/Topbar.svelte";
+	import { getUserType } from "@util/localstorage";
+	import { browser } from "$app/environment";
 
     export let data: any;
 
@@ -45,6 +47,14 @@
         }
     })()
     $: isUserSite = !$page.url.pathname?.startsWith("/admin-portal") && $page.url.pathname! != "/login";
+
+    let userType: string;
+    let isValidToken: boolean;
+    $: if($page.url.pathname && browser) {
+        const local = getUserType()
+        userType = local.userType
+        isValidToken = local.isValid
+    }
 </script>
 
 <svelte:head>
@@ -54,25 +64,28 @@
 
 <LoadingSpinner bind:isLoading />
 
-<AuthGuard routeID={data.routeID} userType={data.userType} isValidToken={data.isValid}>
-    {#if isUserSite}
-        <Topbar bind:data />
+<!-- <AuthGuard bind:routeID={data.routeID} bind:userType={data.userType} bind:isValidToken={data.isValid}> -->
+{#key $page.url.pathname}
+    <AuthGuard bind:routeID={data.routeID} bind:userType bind:isValidToken>
+        {#if isUserSite}
+            <Topbar bind:data />
 
-        <article class="fixed top-0 w-screen h-screen bg-gray-200 dark:bg-gray-800 ease-in duration-200 transition-colors overflow-hidden" />
-        <main class="relative top-16 min-h-[calc(100vh-64px*2)] overflow-x-hidden">
-            {#key $page.url.pathname}
-                <div class="p-4 bg-gray-200 dark:bg-gray-800 ease-in duration-200">
-                    <div in:fly={{y: -20, duration: 250, delay: 100}}>
-                        <slot />
+            <article class="fixed top-0 w-screen h-screen bg-gray-200 dark:bg-gray-800 ease-in duration-200 transition-colors overflow-hidden" />
+            <main class="relative top-16 min-h-[calc(100vh-64px*2)] overflow-x-hidden">
+                {#key $page.url.pathname}
+                    <div class="p-4 bg-gray-200 dark:bg-gray-800 ease-in duration-200">
+                        <div in:fly={{y: -20, duration: 250, delay: 100}}>
+                            <slot />
+                        </div>
                     </div>
-                </div>
-            {/key}
-        </main>
+                {/key}
+            </main>
 
-        <footer class="relative top-16 h-16 flex items-center px-4 bg-[var(--primary-color)] text-white">
-            <span>&copy;&nbsp;</span>su-webboard
-        </footer>
-    {:else}
-        <slot />
-    {/if}
-</AuthGuard>
+            <footer class="relative top-16 h-16 flex items-center px-4 bg-[var(--primary-color)] text-white">
+                <span>&copy;&nbsp;</span>su-webboard
+            </footer>
+        {:else}
+            <slot />
+        {/if}
+    </AuthGuard>
+{/key}

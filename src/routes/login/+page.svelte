@@ -3,6 +3,7 @@
 	import Alert from '@components/alert/Alert.svelte';
 	import type { Alert as AlertModel } from '@models/alert';
 	import { signinFirebase } from '@services/firebase';
+	import { setToken } from '@util/localstorage';
 
     let alert: AlertModel;
 
@@ -21,13 +22,16 @@
                     method: "POST",
                     body: JSON.stringify({ idToken: "admin" }),
                 }
-            )
-            alert = {
-                color: 'green',
-                message: 'เข้าสู่ระบบสำเร็จ!',
-            }
-            isLoading = false;
-            window.location.href = "/"
+            ).then(async (res) => {
+                const token = await res.json()
+                setToken(token.accessToken, token.refreshToken)
+                alert = {
+                    color: 'green',
+                    message: 'เข้าสู่ระบบสำเร็จ!',
+                }
+                isLoading = false;
+                window.location.href = "/"
+            })
             return
         }
         /////////////////////////////////////////////////////////////////
@@ -39,7 +43,9 @@
                     body: JSON.stringify({ idToken }),
                 }
             ).
-            then(res => {
+            then(async (res) => {
+                const token = await res.json()
+                setToken(token.accessToken, token.refreshToken)
                 window.location.href = "/";
                 alert = {
                     color: 'green',
