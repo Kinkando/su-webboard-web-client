@@ -9,7 +9,7 @@
 
     export let forumDetail: ForumDetail | Announcement;
 
-    $: type = instanceOfForumDetail(forumDetail) ? 'กระทู้' : 'ประกาศ'
+    const type = instanceOfForumDetail(forumDetail) ? 'กระทู้' : 'การประกาศ'
 
     // Edit modal
     let title: FormSchema = {value: forumDetail.title, label: `หัวข้อ${type}`, placeholder: `กรุณาใส่หัวข้อ${type}...`}
@@ -46,14 +46,16 @@
         </div>
         <EllipsisMenu
             ellipsisMenuID={forumDetail?.forumUUID}
-            type="forum"
+            type={type === "กระทู้" ? 'forum': 'announcement'}
+            menuSuffixName={type}
             editable
+            reportable={type === "กระทู้"}
             removable
-            reportable
             {title}
             {description}
+            categories={instanceOfForumDetail(forumDetail) ? forumDetail.categories : undefined}
             {attachments}
-            on:edit={(event) => console.log(event.detail.title, event.detail.description, event.detail.attachments.length)}
+            on:edit={(event) => console.log(event.detail.title, event.detail.description, event.detail.categories?.length, event.detail.attachments.length)}
             on:report={(event) => console.log(`รายงาน${type}: ${forumDetail.forumUUID}: ${event.detail.reportText}`)}
             on:delete={() => console.log(`ลบ${type}: ${forumDetail.forumUUID}`)}
         />
