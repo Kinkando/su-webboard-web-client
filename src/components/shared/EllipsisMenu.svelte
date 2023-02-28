@@ -51,7 +51,11 @@
             editDescription = {...description}
         }
         if (categories) {
-            editCategories = [...categories]
+            const cloneCategories: Category[] = [];
+            categories.forEach(category => {
+                cloneCategories.push({...category})
+            })
+            editCategories = [...cloneCategories]
         }
         if (comment) {
             editComment = comment

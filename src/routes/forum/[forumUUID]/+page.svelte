@@ -3,8 +3,9 @@
 	import ForumDetail from "@components/forum/ForumDetail.svelte";
 	import type { ForumDetail as ForumDetailModel } from '@models/forum';
 	import CommentList from '@components/comment/CommentList.svelte';
+	import type { Category } from "@models/category";
 
-    export let data: { forumDetail: ForumDetailModel }
+    export let data: { forumDetail: ForumDetailModel, categories: Category[] }
 </script>
 
 <div class="mb-4">
@@ -14,5 +15,5 @@
     </Breadcrumb>
 </div>
 
-<ForumDetail bind:forumDetail={data.forumDetail} />
+<ForumDetail bind:forumDetail={data.forumDetail} bind:categories={data.categories} />
 <CommentList bind:forumUUID={data.forumDetail.forumUUID} />

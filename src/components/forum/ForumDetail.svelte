@@ -6,8 +6,10 @@
 	import type { Announcement } from "@models/announcement";
     import type { ForumDetail } from "@models/forum";
 	import type { Attachment, FormSchema } from "@models/new-post";
+	import type { Category } from "@models/category";
 
     export let forumDetail: ForumDetail | Announcement;
+    export let categories: Category[] | undefined = undefined;
 
     const type = instanceOfForumDetail(forumDetail) ? 'กระทู้' : 'การประกาศ'
 
@@ -53,9 +55,9 @@
             removable
             {title}
             {description}
-            categories={instanceOfForumDetail(forumDetail) ? forumDetail.categories : undefined}
+            {categories}
             {attachments}
-            on:edit={(event) => console.log(event.detail.title, event.detail.description, event.detail.categories?.length, event.detail.attachments.length)}
+            on:edit={(event) => console.log(event.detail.title, event.detail.description, event.detail.categories, event.detail.attachments.length)}
             on:report={(event) => console.log(`รายงาน${type}: ${forumDetail.forumUUID}: ${event.detail.reportText}`)}
             on:delete={() => console.log(`ลบ${type}: ${forumDetail.forumUUID}`)}
         />
