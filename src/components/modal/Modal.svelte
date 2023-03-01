@@ -3,11 +3,15 @@
     export let open = false;
     export let title: string = "";
     export let defaultClass = "w-full max-w-2xl"
+
+    // $: if (open != null) {
+    //     document.body.style.overflow = open ? "hidden" : "auto";
+    // }
 </script>
 
 {#key open}
     {#if open}
-        <div class="fixed inset-0 z-40 bg-gray-900 bg-opacity-50 dark:bg-opacity-80 ease-in duration-200" transition:fade />
+        <div class="fixed inset-0 z-40 w-screen h-[200vh] bg-gray-900 bg-opacity-50 dark:bg-opacity-80 ease-in duration-200" transition:fade />
         <div class="fixed top-0 left-0 right-0 z-50 p-4 h-full w-full flex justify-center items-center" tabindex="-1" aria-modal="true" role="dialog" transition:scale >
             <div class="flex relative max-h-full {defaultClass}">
                 <div class="bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 rounded-lg overflow-hidden border-gray-200 dark:border-gray-700 shadow-md relative flex flex-col mx-auto w-full">
