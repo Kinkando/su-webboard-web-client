@@ -3,8 +3,7 @@
 	import CommentBadge from "@components/badge/CommentBadge.svelte";
 	import LikeBadge from "@components/badge/LikeBadge.svelte";
 	import CommentReply from "@components/comment/CommentReply.svelte";
-	import { Modal } from "flowbite-svelte";
-	import { scale } from "svelte/transition";
+	import Modal from "@components/modal/Modal.svelte";
 
     export let likeCount: number | undefined = undefined;
     export let commentCount: number | undefined = undefined;
@@ -55,7 +54,7 @@
     {/if}
 </div>
 
-<Modal transition={scale} bind:open={openReplyModal} class="w-full">
+<Modal bind:open={openReplyModal}>
     <CommentReply
         bind:label
         bind:comment
