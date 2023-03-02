@@ -3,6 +3,7 @@
 	import type { ForumReport } from '@models/forum';
 	import type { ActionTable, DataTable } from "@models/table";
 	import { getForumReport } from "@services/admin";
+	import { Button } from 'flowbite-svelte';
 
     let limit = 10;
     let total = 0;
@@ -57,5 +58,8 @@
 </script>
 
 <div class="rounded-lg shadow-md w-full h-full p-4 sm:p-6 overflow-hidden bg-white text-black dark:bg-gray-700 dark:text-white ease-in duration-200">
+    <div class="mb-4">
+        <h1 class="font-bold text-2xl">รายงานกระทู้</h1>
+    </div>
     <Table bind:limit bind:total {columns} bind:data skeletonLoad multiSelect on:fetch={fetchForumReports} {actions} />
 </div>

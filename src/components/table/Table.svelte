@@ -3,6 +3,7 @@
 	import type { ActionTable, DataTable } from "@models/table";
 	import { Checkbox, Label } from 'flowbite-svelte';
 	import { createEventDispatcher, onMount } from "svelte";
+	import Header from './Header.svelte';
 
     export let columns: string[];
     export let data: DataTable[];
@@ -45,6 +46,8 @@
 
     const columnNumber = columns.length + (actions ? 1 : 0) + (multiSelect ? 1 : 0)
 </script>
+
+<Header bind:limit on:search={() => fetch()} />
 
 <!-- TABLE ON TABLET+ -->
 <div class="hidden sm:block relative overflow-x-auto shadow-md drop-shadow-lg rounded-lg mb-4">
@@ -154,7 +157,7 @@
                 {#each item.values as value, i}
                     <Label for="{columns[i]}" class="space-y-2 text-black dark:text-white ease-in duration-200 {i ? 'mt-4' : ''}">
                         <span>{columns[i]}</span>
-                        <div class="border text-gray-500 border border-transparent break-words">{value}</div>
+                        <div class="border text-gray-500 border border-transparent break-words">{@html value}</div>
                     </Label>
                 {/each}
 
