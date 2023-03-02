@@ -3,6 +3,7 @@
 	import type { Category } from '@models/category';
 	import type { ActionTable, DataTable } from "@models/table";
 	import { getCategories, getStudent } from "@services/admin";
+	import { Button } from 'flowbite-svelte';
 
     let limit = 10;
     let total = 0;
@@ -58,5 +59,9 @@
 </script>
 
 <div class="rounded-lg shadow-md w-full h-full p-4 sm:p-6 overflow-hidden bg-white text-black dark:bg-gray-700 dark:text-white ease-in duration-200">
+    <div class="flex items-center justify-between mb-4">
+        <h1 class="font-bold text-2xl">หมวดหมู่</h1>
+        <Button class="hover:scale-105 ease-in duration-200" color="greenToBlue" gradient>เพิ่มหมวดหมู่</Button>
+    </div>
     <Table bind:limit bind:total {columns} bind:data skeletonLoad multiSelect on:fetch={fetchCategories} {actions} />
 </div>
