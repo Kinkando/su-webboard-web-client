@@ -120,7 +120,7 @@
                         {/if}
                     </tr>
                 {:else}
-                    <tr>
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 ease-in duration-200">
                         <td class="py-4 text-center" colspan={columnNumber}>ไม่พบข้อมูล</td>
                     </tr>
                 {/each}
@@ -133,7 +133,7 @@
 <div class="sm:hidden relative overflow-x-auto shadow-md drop-shadow-lg rounded-lg mb-4">
     {#if skeletonLoad && isLoading}
         {#each Array(limit) as _}
-            <div class="py-4 px-4 border dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 ease-in duration-200">
+            <div class="py-4 px-4 border dark:bg-gray-800 dark:border-gray-700 ease-in duration-200">
                 {#each columns as column, i}
                     <Label for="{column}" class="space-y-3 mb-2.5 text-black dark:text-white ease-in duration-200 {i ? 'mt-4' : ''}">
                         <span>{column}</span>
@@ -174,25 +174,12 @@
             </div>
         {/each}
     {/if}
-    <!-- {#each Array(limit) as _}
-        <div class="space-y-7 w-full mt-0 my-6 md:-ml-6 border-b dark:border-gray-700 py-2">
-            {#if skeletonLoad && isLoading}
-                {#each columns as column}
-                    <div class="space-y-6">
-                        <div class="w-1/2 h-4 bg-gray-300 rounded-full dark:bg-gray-600" />
-                        <div class="w-full h-4 bg-gray-300 rounded-full dark:bg-gray-600" />
-                    </div>
-                {/each}
-            {:else}
-
-            {/if}
-        </div>
-    {/each} -->
 </div>
 
 {#if data.length === 0 && (skeletonLoad && !isLoading)}
     <div class="mt-10 mb-6">
         <img src="/images/empty.png" alt="" class="m-auto w-48">
+        <div class="sm:hidden text-center mt-4">ขออภัย ไม่พบข้อมูล</div>
     </div>
 {/if}
 
