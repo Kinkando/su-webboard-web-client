@@ -1,3 +1,5 @@
+import type { Category } from "@models/category";
+import type { ForumReport } from "@models/forum";
 import type { User } from "@models/user";
 import { sleep } from "./forum";
 
@@ -63,5 +65,46 @@ export async function getTeacher(offset: number, limit: number) {
             userType: "tch",
         },
     ];
+    await sleep(500)
     return { data: users, total: users.length }
+}
+
+export async function getForumReport(offset: number, limit: number) {
+    const total = 0;
+    const data: ForumReport[] = []
+    await sleep()
+    return { data, total }
+}
+
+export async function getCategories(offset: number, limit: number) {
+    const total = 0;
+    const data: Category[] = [
+        {
+            categoryID: 1,
+            categoryName: "ชีวิตประจำวัน",
+            categoryHexColor: "#86D97F",
+        },
+        {
+            categoryID: 2,
+            categoryName: "กีฬา",
+            categoryHexColor: "#4C52E0",
+        },
+        {
+            categoryID: 3,
+            categoryName: "อาหาร",
+            categoryHexColor: "#857800",
+        },
+        {
+            categoryID: 4,
+            categoryName: "การศึกษา",
+            categoryHexColor: "#E04C6F",
+        },
+        {
+            categoryID: 5,
+            categoryName: "โปรแกรมมิ่ง",
+            categoryHexColor: "#48D7E0",
+        },
+    ]
+    await sleep()
+    return { data, total }
 }
