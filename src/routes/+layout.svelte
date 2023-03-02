@@ -81,7 +81,7 @@
             </main>
 
             <footer class="relative top-16 h-16 flex items-center px-4 bg-[var(--primary-color)] text-white">
-                <span>&copy;&nbsp;</span>su-webboard
+                <span>&copy;&nbsp;</span>su-webboard - 2023
             </footer>
         {:else}
             <slot />

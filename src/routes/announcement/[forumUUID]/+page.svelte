@@ -2,7 +2,6 @@
 	import ForumDetail from "@components/forum/ForumDetail.svelte";
 	import { Breadcrumb, BreadcrumbItem } from "flowbite-svelte";
     import type { Announcement } from "@models/announcement";
-	import type { ForumDetail as ForumDetailModel } from '@models/forum';
 
     export let data: { announcement: Announcement }
 </script>

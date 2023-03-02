@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Sidebar from './../../components/layout/Sidebar.svelte';
 	import { page } from "$app/stores";
-	import { Breadcrumb, BreadcrumbItem } from "flowbite-svelte";
+	import { Breadcrumb, BreadcrumbItem, DarkMode } from "flowbite-svelte";
 	import { fly } from "svelte/transition";
 
     $: currentRoute = $page.route.id!;
@@ -34,16 +34,7 @@
 <Sidebar bind:rootPath bind:sidebarItems bind:isSidebarExpand />
 
 <main class="relative min-[1000.1px]:ml-[225px] max-[1000.1px]:top-16 h-full overflow-hidden">
-    <nav class="h-16 flex items-center px-4 max-[1000.1px]:hidden">
-        <Breadcrumb aria-label="SU Webboard">
-            <BreadcrumbItem href="/" home>หน้าแรก</BreadcrumbItem>
-            {#if currentRoute.toString().lastIndexOf("/") > 0}
-                <BreadcrumbItem>{ sidebarItems.find(item => currentRoute === item.href)?.label }</BreadcrumbItem>
-            {/if}
-        </Breadcrumb>
-    </nav>
-
-    <header class="fixed w-full top-0 min-[1000.1px]:hidden h-16 flex items-center px-4 text-2xl bg-gray-200 shadow-md">
+    <header class="fixed w-full top-0 min-[1000.1px]:hidden h-16 flex items-center px-4 text-2xl shadow-md text-black bg-white dark:text-gray-300 dark:bg-gray-900 ease-in duration-200">
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <span class="float-left flex items-center sticky top-0 z-40 cursor-pointer" on:click={() => isSidebarExpand = !isSidebarExpand}>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -51,15 +42,28 @@
             </svg>
         </span>
         <span class="ml-2">{ sidebarItems.find(item => currentRoute === item.href)?.label }</span>
+        <DarkMode id="theme-toggle" btnClass="ml-auto scale-110 text-yellow-400 dark:text-yellow-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full p-2 transition-all ease-in duration-200" />
     </header>
 
+    <nav class="h-16 flex items-center px-4 max-[1000.1px]:hidden bg-white dark:bg-gray-900 ease-in duration-200">
+        <Breadcrumb aria-label="SU Webboard">
+            <BreadcrumbItem href="/" home>หน้าแรก</BreadcrumbItem>
+            {#if currentRoute.toString().lastIndexOf("/") > 0}
+                <BreadcrumbItem>{ sidebarItems.find(item => currentRoute === item.href)?.label }</BreadcrumbItem>
+            {/if}
+        </Breadcrumb>
+        <DarkMode id="theme-toggle" btnClass="ml-auto scale-110 text-yellow-400 dark:text-yellow-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full p-2 transition-all ease-in duration-200" />
+    </nav>
+
     {#key currentRoute}
-        <section class="p-4 min-h-[calc(100vh-64px*2)]" in:fly={{y: -20, duration: 250, delay: 100}}>
-            <slot />
+        <section class="p-4 min-h-[calc(100vh-64px*2)] bg-gray-200 dark:bg-gray-800 ease-in duration-200">
+            <div in:fly={{y: -20, duration: 250, delay: 100}}>
+                <slot />
+            </div>
         </section>
     {/key}
 
-    <footer class="h-16 flex items-center px-4 bg-gray-100">
-        <span>&copy;&nbsp;</span>su-webboard
+    <footer class="h-16 flex items-center px-4 bg-gray-100 text-black bg-white dark:text-gray-400 dark:bg-gray-900 ease-in duration-200">
+        <span>&copy;&nbsp;</span>su-webboard - 2023
     </footer>
 </main>
