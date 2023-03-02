@@ -44,6 +44,7 @@ export const load: LayoutServerLoad = async ({ cookies, route }) => {
 
 // change profile image with providing avatar from backend
 // เพิ่ม Notification List Page
+// เพิ่ม option sort by ในหน้า search/category/popular list page
 
 // เพิ่ม gallery สำหรับ view รูปภาพในหน้า new forum / new announcement (สามารถคลิกหรือกดลูกศรบนคีย์บอร์ดเพื่อเลื่อนรูปภาพได้)
 // เพิ่มคลิกรูปเพื่อขยาย สำหรับหน้า update profile

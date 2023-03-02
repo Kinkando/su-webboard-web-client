@@ -11,7 +11,7 @@
     let totalPage = 0;
     let pages: LinkType[] = [];
 
-    $: currentPage && _refreshPageLabel()
+    $: (currentPage || total || limit) && _refreshPageLabel()
 
     function _refreshPageLabel() {
         totalPage = total ? Math.ceil(total/limit) : 0
@@ -28,7 +28,7 @@
         }
     }
 
-    export function genPageButton(currentPage: number, totalPage: number): number[] {
+    function genPageButton(currentPage: number, totalPage: number): number[] {
         let pages: number[] = [];
         if (totalPage === 0) {
             return pages;
@@ -59,6 +59,7 @@
         const elm = e.currentTarget as HTMLElement
         changePage(Number(elm.innerText))
     }
+
     const changePage = (page: number) => {
         if (!page || page > totalPage || page < 1) {
             return
@@ -75,16 +76,17 @@
     }
 </script>
 
-<div class="md:flex md:items-center md:justify-between">
-    <div class="text-sm text-gray-700 dark:text-gray-400 text-center">
-        แสดง <span class="font-semibold text-gray-900 dark:text-white">{firstItem}</span> ถึง
-        <span class="font-semibold text-gray-900 dark:text-white">{lastItem}</span>
-        จากทั้งหมด <span class="font-semibold text-gray-900 dark:text-white">{total}</span> รายการ
+<div class="md:flex md:items-center md:justify-between ease-in duration-200">
+    <div class="text-sm text-gray-700 dark:text-gray-400 text-center ease-in duration-200">
+        แสดง <span class="font-semibold text-gray-900 dark:text-white ease-in duration-200">{firstItem}</span> ถึง
+        <span class="font-semibold text-gray-900 dark:text-white ease-in duration-200">{lastItem}</span>
+        จากทั้งหมด <span class="font-semibold text-gray-900 dark:text-white ease-in duration-200">{total}</span> รายการ
     </div>
 
     <Pagination
         class="flex flex-wrap justify-center w-full mt-3 md:mt-0"
-        activeClass="text-white border border-gray-300 bg-[var(--primary-color)] hover:bg-[var(--primary-color-75)] hover:text-black dark:border-gray-700"
+        activeClass="ease-in duration-200 text-white border border-gray-300 bg-[var(--primary-color)] hover:bg-[var(--primary-color-75)] hover:text-black dark:border-gray-700"
+        normalClass="ease-in duration-200 text-gray-500 bg-white hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
         bind:pages
         on:previous={() => changePage(currentPage-1)}
         on:next={() => changePage(currentPage+1)}

@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
     import { page } from '$app/stores';
 	import { revokeToken } from '@util/localstorage';
-	import { fly } from 'svelte/transition';
+	import { fade, fly } from 'svelte/transition';
 
     export let rootPath: string;
     export let sidebarItems: { prefixIcon: string, label: string, href: string }[]
@@ -54,10 +54,10 @@
             </div>
         </nav>
     </aside>
-{/key}
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<article class="top-0 bg-black w-screen h-screen brightness-50 z-40 fixed opacity-50 {isSidebarExpand ? '' : 'hidden'}" on:click={() => isSidebarExpand = false}></article>
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <article transition:fade|local class="ease-in duration-200 top-0 bg-black w-screen h-screen brightness-50 z-40 fixed opacity-50 {isSidebarExpand ? '' : 'hidden'}" on:click={() => isSidebarExpand = false}></article>
+{/key}
 
 <style lang="scss">
     @media screen and (min-height: 315px) {

@@ -24,9 +24,10 @@
         switch ($page.route.id!) {
             // Admin portal page
             case "/admin-portal": return adminPortalPrefix + "Home"
-            case "/admin-portal/user": return adminPortalPrefix + "Manage User"
             case "/admin-portal/category": return adminPortalPrefix + "Manage Category"
             case "/admin-portal/forum": return adminPortalPrefix + "Manage Forum"
+            case "/admin-portal/student": return adminPortalPrefix + "Manage Student"
+            case "/admin-portal/teacher": return adminPortalPrefix + "Manage Teacher"
 
             // General user page
             case "/": return generalUserPrefix + "Home"
@@ -81,7 +82,7 @@
             </main>
 
             <footer class="relative top-16 h-16 flex items-center px-4 bg-[var(--primary-color)] text-white">
-                <span>&copy;&nbsp;</span>su-webboard
+                <span>&copy;&nbsp;</span>su-webboard - 2023
             </footer>
         {:else}
             <slot />
