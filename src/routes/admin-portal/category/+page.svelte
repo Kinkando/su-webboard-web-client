@@ -1,2 +1,62 @@
-ADMIN | Manage Category<br>
-Lorem ipsum dolor, sit amet consectetur adipisicing elit. Excepturi nulla, voluptates nobis praesentium sit libero harum magni sunt facilis perspiciatis eaque labore dignissimos tenetur ducimus illo voluptatum vel. Deserunt, harum eius sunt corporis, aut quod architecto quos, unde velit aspernatur voluptatibus assumenda cumque ipsum modi cum illo asperiores! Illo error assumenda ex est earum libero voluptatibus sed laborum aliquid et dolorem, optio quidem facere accusantium minima, veniam temporibus iure magni facilis delectus. Tenetur ab veritatis eius facilis explicabo vitae, odit ut voluptatem dolore molestiae voluptatum sequi sit harum quae nisi aspernatur ea neque provident iusto corporis veniam. Quisquam inventore rem labore quod pariatur necessitatibus consequuntur dicta veniam tenetur ab alias cumque animi qui voluptas nisi vitae nihil mollitia, laboriosam reiciendis perferendis placeat cum blanditiis exercitationem! Vero pariatur quos porro iusto qui dicta perspiciatis facilis, maxime doloremque assumenda, est quod fugit quas similique, in ratione saepe obcaecati officiis. Rerum pariatur ad eos itaque architecto ratione provident cupiditate doloremque esse libero saepe alias excepturi nihil, ut quo modi ipsam amet maxime quam quae. Iste eum magnam neque harum illum reiciendis, commodi temporibus officia a velit modi tempora nobis ad laudantium quasi ratione illo necessitatibus porro quas, autem optio aspernatur. Inventore provident eius voluptatibus dolores fugit nisi accusantium porro enim quidem reprehenderit! Distinctio, quibusdam accusamus, iusto ducimus pariatur voluptates blanditiis placeat quaerat architecto libero mollitia rem, similique aut et delectus? Expedita assumenda consectetur laudantium, cupiditate minima quo? Aut labore maiores ab amet dolor fuga reprehenderit obcaecati. Animi dolor non temporibus distinctio voluptatum. Nobis minima corporis aperiam omnis, cum laboriosam commodi praesentium repellat ratione assumenda tempora incidunt nisi veritatis, architecto qui harum et facere fugiat itaque recusandae? In maxime fugiat quasi ut nobis quod praesentium quaerat laudantium eligendi excepturi ullam officia, fugit, natus aspernatur aperiam sint assumenda quae voluptates voluptatum veritatis velit quis sunt accusantium. Distinctio magnam provident quibusdam! Similique temporibus laboriosam voluptates delectus beatae assumenda nostrum itaque velit deserunt fuga ea deleniti minima illum atque expedita asperiores, cupiditate tempora sed maxime! Fugiat distinctio ut officiis deserunt, nesciunt delectus architecto velit veritatis ratione doloribus, hic aut, omnis tempora libero. Exercitationem facere corrupti libero quos modi optio, suscipit neque deleniti cum quam excepturi, maxime numquam expedita fugiat harum explicabo officia unde? Perspiciatis ratione cumque ducimus, rerum natus aperiam id unde harum consectetur quam ipsum qui itaque! Iste explicabo veritatis, dolorem odit doloribus, tenetur repudiandae aspernatur, temporibus atque itaque eos nihil officia sed amet libero suscipit quas laboriosam saepe? Maiores natus distinctio similique ipsam vel suscipit sed nesciunt, culpa debitis officia recusandae alias placeat, provident maxime numquam doloribus error beatae porro temporibus ex pariatur dolorem totam repellendus ad. Et quod sequi enim optio. Quos placeat, impedit aperiam voluptates tempore assumenda voluptatem veniam atque et eius quibusdam iusto rerum nemo exercitationem iure, pariatur quidem? Illum error, magnam rem, porro mollitia facere praesentium, dolorem quasi distinctio similique minima voluptatibus cum vero cupiditate eius animi quas ullam iure quam non necessitatibus fugiat voluptate. Earum, ratione vitae numquam dignissimos, vero harum ipsa mollitia quae est eaque atque aperiam rerum neque.
+<script lang="ts">
+	import Table from '@components/table/Table.svelte';
+	import type { Category } from '@models/category';
+	import type { ActionTable, DataTable } from "@models/table";
+	import { getCategories, getStudent } from "@services/admin";
+
+    let limit = 10;
+    let total = 0;
+    let categories: Category[];
+    const columns: string[] = [
+        "หมวดหมู่",
+        "สี",
+    ]
+    const actions: ActionTable[] = [
+        {
+            html: `
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 cursor-pointer rounded-full p-1 bg-[var(--primary-color)] text-white hover:scale-110 ease-in duration-200">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
+                </svg>
+            `,
+            click(item: DataTable) {
+                console.log("EDIT")
+            },
+        },
+        {
+            html: `
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 cursor-pointer rounded-full p-1 bg-[#e15e3f] text-white hover:scale-110 ease-in duration-200">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                </svg>
+            `,
+            click(item: DataTable) {
+                console.log("DELETE")
+            },
+        },
+    ]
+    $: data = (() => {
+        const dataTable: DataTable[] = [];
+        categories?.forEach(category=> {
+            dataTable.push({
+                "_id": category.categoryID.toString(),
+                values: [
+                    category.categoryName,
+                    `<div class="flex items-center">
+                        <div class="w-4 h-4 mb-0.5" style="background-color: ${category.categoryHexColor}"></div>
+                        <span class="ml-2">${category.categoryHexColor}</span>
+                    </div>`,
+                ],
+            })
+        })
+        return dataTable
+    })()
+
+    const fetchCategories = async(event: CustomEvent<{ page: number }>) => {
+        const res = await getCategories((event.detail.page-1)*limit, limit)
+        categories = res.data
+        total = res.total
+    }
+</script>
+
+<div class="rounded-lg shadow-md w-full h-full p-4 sm:p-6 overflow-hidden bg-white text-black dark:bg-gray-700 dark:text-white ease-in duration-200">
+    <Table bind:limit bind:total {columns} bind:data skeletonLoad multiSelect on:fetch={fetchCategories} {actions} />
+</div>
