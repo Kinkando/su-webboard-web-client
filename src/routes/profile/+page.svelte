@@ -4,13 +4,8 @@
 	import { onMount } from "svelte";
 	import { Breadcrumb, BreadcrumbItem, Button, Input, Label, Radio } from "flowbite-svelte";
 	import ToggleBadge from "@components/badge/ToggleBadge.svelte";
-    import type { User } from "@models/user";
+    import { StatusGroup, type User } from "@models/user";
 	import { getUserProfile } from "@services/user";
-
-    enum StatusGroup {
-        anonymous = "anonymous",
-        nominate = "nominate",
-    }
 
     let isUpdate = false;
     let user: User;

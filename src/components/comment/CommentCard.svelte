@@ -55,6 +55,7 @@
         likeCount={comment.likeCount}
         commentCount={reply ? comment.commentCount : undefined}
         label={`ตอบกลับ${label}`}
+        on:comment={event => console.log("แสดงความคิดเห็น", event.detail.comment, event.detail.attachments.length)}
     />
 </div>
 

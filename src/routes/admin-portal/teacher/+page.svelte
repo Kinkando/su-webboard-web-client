@@ -5,7 +5,7 @@
 	import Table from '@components/table/Table.svelte';
 	import { FormType, type Form } from '@models/form';
 	import type { ActionTable, DataTable } from "@models/table";
-	import type { User } from "@models/user";
+	import { StatusGroup, type User } from "@models/user";
 	import { getTeacher } from "@services/admin";
 	import { Button } from 'flowbite-svelte';
 
@@ -98,16 +98,22 @@
                     value: "",
                 },
                 {
-                    type: "text",
+                    type: "statusToggle",
                     label: "การเปิดเผยตัวตน",
                     placeholder: "กรุณาใส่การเปิดเผยตัวตน",
-                    value: "",
+                    value: StatusGroup.nominate,
                 },
             ]
         }
         if(item) {
             form._id = item._id
-            item.values.forEach((value, index) => form.schemas[index].value = value)
+            item.values.forEach((value, index) => {
+                if (form.schemas[index].type === 'statusToggle') {
+                    form.schemas[index].value = value === 'ไม่เปิดเผยตัวตน' ? StatusGroup.anonymous : StatusGroup.nominate;
+                } else {
+                    form.schemas[index].value = value
+                }
+            })
         }
     }
     const sumbitForm = (event: CustomEvent<Form>) => {
@@ -141,4 +147,6 @@
 </div>
 
 <FormModal bind:open={isOpenFormModal} bind:title bind:form on:submit={sumbitForm} />
-<DeleteModal bind:open={isOpenDeleteModal} content="คุณยืนยันที่จะลบข้อมูลอาจารย์{deleteItem?.values[0]}หรือไม่?" deleteButtonName="ยืนยัน" on:delete={deleteAction} />
+<DeleteModal bind:open={isOpenDeleteModal} deleteButtonName="ยืนยัน" on:delete={deleteAction} >
+    คุณยืนยันที่จะ<span class="text-red-500">ลบข้อมูลอาจารย์ {deleteItem?.values[0]} </span>หรือไม่?
+</DeleteModal>

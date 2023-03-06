@@ -84,10 +84,10 @@
                     value: "",
                 },
                 {
-                    type: "text",
+                    type: "color",
                     label: "สี",
                     placeholder: "กรุณาใส่สี",
-                    value: "",
+                    value: "#000000",
                 },
             ]
         }
@@ -128,4 +128,6 @@
 </div>
 
 <FormModal bind:open={isOpenFormModal} bind:title bind:form on:submit={sumbitForm} />
-<DeleteModal bind:open={isOpenDeleteModal} content="คุณยืนยันที่จะลบหมวดหมู่{deleteItem?.values[0]}หรือไม่?" deleteButtonName="ยืนยัน" on:delete={deleteAction} />
+<DeleteModal bind:open={isOpenDeleteModal} deleteButtonName="ยืนยัน" on:delete={deleteAction} >
+    คุณยืนยันที่จะ<span class="text-red-500">ลบหมวดหมู่{deleteItem?.values[0]}</span>หรือไม่?
+</DeleteModal>
