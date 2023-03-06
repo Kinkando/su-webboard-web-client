@@ -50,9 +50,9 @@
         <DarkMode id="theme-toggle" btnClass="ml-auto scale-110 text-yellow-400 dark:text-yellow-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full p-2 transition-all ease-in duration-200" />
     </header>
 
-    <nav class="h-16 flex items-center px-4 max-[1000.1px]:hidden bg-white dark:bg-gray-900 ease-in duration-200">
+    <nav class="h-16 flex items-center px-4 max-[1000.1px]:hidden bg-gray-200 dark:bg-gray-800 ease-in duration-200">
         <Breadcrumb aria-label="SU Webboard">
-            <BreadcrumbItem href={rootPath} home>หน้าแรก</BreadcrumbItem>
+            <BreadcrumbItem href="/" home>หน้าแรก</BreadcrumbItem>
             {#if currentRoute.toString().lastIndexOf("/") > 0}
                 <BreadcrumbItem>{ sidebarItems.find(item => currentRoute === item.href)?.label }</BreadcrumbItem>
             {/if}
@@ -61,14 +61,14 @@
     </nav>
 
     {#key currentRoute}
-        <section class="p-4 min-h-[calc(100vh-64px*2)] bg-gray-200 dark:bg-gray-800 ease-in duration-200">
+        <section class="px-4 pb-4 max-[1000.1px]:pt-4 min-h-[calc(100vh-64px*2)] bg-gray-200 dark:bg-gray-800 ease-in duration-200">
             <div in:fly={{y: -20, duration: 250, delay: 100}}>
                 <slot />
             </div>
         </section>
     {/key}
 
-    <footer class="h-16 flex items-center px-4 bg-gray-100 text-black bg-white dark:text-gray-400 dark:bg-gray-900 ease-in duration-200">
+    <footer class="h-16 flex items-center px-4 bg-gray-100 text-black dark:text-gray-400 dark:bg-gray-900 ease-in duration-200">
         <span>&copy;&nbsp;</span>su-webboard - 2023
     </footer>
 </main>

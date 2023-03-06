@@ -1,8 +1,10 @@
 <script lang="ts">
+	import AdminHeader from './../../../components/shared/AdminHeader.svelte';
+	import DeleteModal from '@components/modal/DeleteModal.svelte';
 	import Table from '@components/table/Table.svelte';
 	import type { Category } from '@models/category';
 	import type { ActionTable, DataTable } from "@models/table";
-	import { getCategories, getStudent } from "@services/admin";
+	import { getCategories } from "@services/admin";
 	import { Button } from 'flowbite-svelte';
 
     let limit = 10;
@@ -30,7 +32,8 @@
                 </svg>
             `,
             click(item: DataTable) {
-                console.log("DELETE")
+                isOpenDeleteModal = true;
+                deleteItem = {...item};
             },
         },
     ]
@@ -56,12 +59,29 @@
         categories = res.data
         total = res.total
     }
+
+    let isOpenDeleteModal = false;
+    let deleteItem: DataTable;
+    const deleteAction = () => {
+        console.log(`DELETE CATEGORY ID: ${deleteItem._id}`)
+        isOpenDeleteModal = false;
+    }
+    const multiDeleteAction = () => {
+        if (selectedItems.length) {
+            selectedItems.forEach(item => {
+                console.log(`DELETE CATEGORY ID: ${item._id}`)
+            })
+            selectedItems = [];
+        }
+    }
+
+    let selectedItems: DataTable[] = []
 </script>
 
 <div class="rounded-lg shadow-md w-full h-full p-4 sm:p-6 overflow-hidden bg-white text-black dark:bg-gray-700 dark:text-white ease-in duration-200">
-    <div class="flex items-center justify-between mb-4">
-        <h1 class="font-bold text-2xl">หมวดหมู่</h1>
-        <Button class="hover:scale-105 ease-in duration-200" color="greenToBlue" gradient>เพิ่มหมวดหมู่</Button>
-    </div>
-    <Table bind:limit bind:total {columns} bind:data skeletonLoad multiSelect on:fetch={fetchCategories} {actions} />
+    <AdminHeader title="หมวดหมู่" buttonName="เพิ่มหมวดหมู่" bind:deleteItemsCount={selectedItems.length} {multiDeleteAction} />
+    <Table bind:limit bind:total {columns} bind:data skeletonLoad multiSelect on:fetch={fetchCategories} {actions} bind:selectedItems />
 </div>
+
+<DeleteModal bind:open={isOpenDeleteModal} content="คุณยืนยันที่จะลบหมวดหมู่{deleteItem?.values[0]}หรือไม่?" deleteButtonName="ยืนยัน" {deleteAction} />
+<!-- multi delete -->
