@@ -84,10 +84,10 @@
                     value: "",
                 },
                 {
-                    type: "text",
+                    type: "color",
                     label: "สี",
                     placeholder: "กรุณาใส่สี",
-                    value: "",
+                    value: "#000000",
                 },
             ]
         }
