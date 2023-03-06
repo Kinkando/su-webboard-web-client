@@ -1,11 +1,12 @@
 <script lang="ts">
-	import AdminHeader from './../../../components/shared/AdminHeader.svelte';
+	import AdminHeader from '@components/shared/AdminHeader.svelte';
 	import DeleteModal from '@components/modal/DeleteModal.svelte';
+	import FormModal from '@components/modal/FormModal.svelte';
 	import Table from '@components/table/Table.svelte';
 	import type { Category } from '@models/category';
 	import type { ActionTable, DataTable } from "@models/table";
 	import { getCategories } from "@services/admin";
-	import { Button } from 'flowbite-svelte';
+	import { FormType, type Form } from '@models/form';
 
     let limit = 10;
     let total = 0;
@@ -22,7 +23,10 @@
                 </svg>
             `,
             click(item: DataTable) {
-                console.log("EDIT")
+                isOpenFormModal = true;
+                title = "แก้ไขหมวดหมู่";
+                formType = FormType.update;
+                formData(item);
             },
         },
         {
@@ -60,8 +64,50 @@
         total = res.total
     }
 
+    let isOpenFormModal = false;
+    let title = "";
+    let form: Form;
+    let formType: FormType;
+    const addItemAction = () => {
+        isOpenFormModal = true;
+        title = "เพิ่มหมวดหมู่";
+        formType = FormType.create;
+        formData();
+    }
+    const formData = (item?: DataTable) => {
+        form = {
+            schemas: [
+                {
+                    type: "text",
+                    label: "หมวดหมู่",
+                    placeholder: "กรุณาใส่หมวดหมู่",
+                    value: "",
+                },
+                {
+                    type: "text",
+                    label: "สี",
+                    placeholder: "กรุณาใส่สี",
+                    value: "",
+                },
+            ]
+        }
+        if(item) {
+            form._id = item._id
+            form.schemas[0].value = item.values[0]
+            form.schemas[1].value = categories?.find(category => category.categoryID.toString() === item._id)?.categoryHexColor!
+        }
+    }
+    const sumbitForm = (event: CustomEvent<Form>) => {
+        if (formType === FormType.create) {
+            console.log(`CREATE: ${event.detail.schemas[0].value}`)
+        } else {
+            console.log(`UPDATE ${event.detail._id}`)
+        }
+    }
+
     let isOpenDeleteModal = false;
     let deleteItem: DataTable;
+    let selectedItems: DataTable[] = []
     const deleteAction = () => {
         console.log(`DELETE CATEGORY ID: ${deleteItem._id}`)
         isOpenDeleteModal = false;
@@ -74,14 +120,12 @@
             selectedItems = [];
         }
     }
-
-    let selectedItems: DataTable[] = []
 </script>
 
 <div class="rounded-lg shadow-md w-full h-full p-4 sm:p-6 overflow-hidden bg-white text-black dark:bg-gray-700 dark:text-white ease-in duration-200">
-    <AdminHeader title="หมวดหมู่" buttonName="เพิ่มหมวดหมู่" bind:deleteItemsCount={selectedItems.length} {multiDeleteAction} />
+    <AdminHeader title="หมวดหมู่" buttonName="เพิ่มหมวดหมู่" bind:deleteItemsCount={selectedItems.length} on:add={addItemAction} on:delete={multiDeleteAction} />
     <Table bind:limit bind:total {columns} bind:data skeletonLoad multiSelect on:fetch={fetchCategories} {actions} bind:selectedItems />
 </div>
 
-<DeleteModal bind:open={isOpenDeleteModal} content="คุณยืนยันที่จะลบหมวดหมู่{deleteItem?.values[0]}หรือไม่?" deleteButtonName="ยืนยัน" {deleteAction} />
-<!-- multi delete -->
+<FormModal bind:open={isOpenFormModal} bind:title bind:form on:submit={sumbitForm} />
+<DeleteModal bind:open={isOpenDeleteModal} content="คุณยืนยันที่จะลบหมวดหมู่{deleteItem?.values[0]}หรือไม่?" deleteButtonName="ยืนยัน" on:delete={deleteAction} />

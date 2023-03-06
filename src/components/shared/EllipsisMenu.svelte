@@ -185,5 +185,5 @@
     bind:open={openDeleteModal}
     content="คุณแน่ใจหรือไม่ที่จะลบ{menuSuffixName}นี้?"
     deleteButtonName="ลบ{menuSuffixName}"
-    deleteAction={deleteAction}
+    on:delete={deleteAction}
 />

@@ -1,11 +1,16 @@
 <script lang="ts">
 	import Modal from '@components/modal/Modal.svelte';
 	import { Button } from "flowbite-svelte";
+	import { createEventDispatcher } from 'svelte';
 
     export let open: boolean
     export let content: string;
     export let deleteButtonName: string;
-    export let deleteAction: () => void;
+
+	const dispatch = createEventDispatcher();
+    const deleteAction = () => {
+        dispatch("delete")
+    }
 </script>
 
 <Modal bind:open defaultClass="w-fit ease-in">
