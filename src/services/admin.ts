@@ -77,7 +77,7 @@ export async function getForumReport(offset: number, limit: number) {
 }
 
 export async function getCategories(offset: number, limit: number) {
-    const total = 0;
+    const total = 5;
     const data: Category[] = [
         {
             categoryID: 1,

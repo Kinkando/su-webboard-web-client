@@ -1,5 +1,9 @@
 <script lang="ts">
+	import DeleteModal from '@components/modal/DeleteModal.svelte';
+	import FormModal from '@components/modal/FormModal.svelte';
+	import AdminHeader from '@components/shared/AdminHeader.svelte';
 	import Table from '@components/table/Table.svelte';
+	import { FormType, type Form } from '@models/form';
 	import type { ActionTable, DataTable } from "@models/table";
 	import type { User } from "@models/user";
 	import { getTeacher } from "@services/admin";
@@ -22,7 +26,10 @@
                 </svg>
             `,
             click(item: DataTable) {
-                console.log("EDIT")
+                isOpenFormModal = true;
+                title = "แก้ไขข้อมูลอาจารย์";
+                formType = FormType.update;
+                formData(item);
             },
         },
         {
@@ -32,7 +39,8 @@
                 </svg>
             `,
             click(item: DataTable) {
-                console.log("DELETE")
+                isOpenDeleteModal = true;
+                deleteItem = {...item};
             },
         },
     ]
@@ -57,12 +65,80 @@
         teachers = res.data
         total = res.total
     }
+
+    let isOpenFormModal = false;
+    let title = "";
+    let form: Form;
+    let formType: FormType;
+    const addItemAction = () => {
+        isOpenFormModal = true;
+        title = "เพิ่มข้อมูลอาจารย์";
+        formType = FormType.create;
+        formData();
+    }
+    const formData = (item?: DataTable) => {
+        form = {
+            schemas: [
+                {
+                    type: "text",
+                    label: "ชื่อที่แสดง",
+                    placeholder: "กรุณาใส่ชื่อที่แสดง",
+                    value: "",
+                },
+                {
+                    type: "text",
+                    label: "ชื่อ-นามสกุล",
+                    placeholder: "กรุณาใส่ชื่อ-นามสกุล",
+                    value: "",
+                },
+                {
+                    type: "text",
+                    label: "อีเมล",
+                    placeholder: "กรุณาใส่อีเมล",
+                    value: "",
+                },
+                {
+                    type: "text",
+                    label: "การเปิดเผยตัวตน",
+                    placeholder: "กรุณาใส่การเปิดเผยตัวตน",
+                    value: "",
+                },
+            ]
+        }
+        if(item) {
+            form._id = item._id
+            item.values.forEach((value, index) => form.schemas[index].value = value)
+        }
+    }
+    const sumbitForm = (event: CustomEvent<Form>) => {
+        if (formType === FormType.create) {
+            console.log(`CREATE: ${event.detail.schemas[0].value}`)
+        } else {
+            console.log(`UPDATE ${event.detail._id}`)
+        }
+    }
+
+    let isOpenDeleteModal = false;
+    let deleteItem: DataTable;
+    let selectedItems: DataTable[] = []
+    const deleteAction = () => {
+        console.log(`DELETE TEACHER ID: ${deleteItem._id}`)
+        isOpenDeleteModal = false;
+    }
+    const multiDeleteAction = () => {
+        if (selectedItems.length) {
+            selectedItems.forEach(item => {
+                console.log(`DELETE TEACHER ID: ${item._id}`)
+            })
+            selectedItems = [];
+        }
+    }
 </script>
 
 <div class="rounded-lg shadow-md w-full h-full p-4 sm:p-6 overflow-hidden bg-white text-black dark:bg-gray-700 dark:text-white ease-in duration-200">
-    <div class="flex items-center justify-between mb-4">
-        <h1 class="font-bold text-2xl">อาจารย์</h1>
-        <Button class="hover:scale-105 ease-in duration-200" color="greenToBlue" gradient>เพิ่มอาจารย์</Button>
-    </div>
-    <Table bind:limit bind:total {columns} bind:data skeletonLoad multiSelect on:fetch={fetchTeachers} {actions} />
+    <AdminHeader title="อาจารย์" buttonName="เพิ่มอาจารย์" bind:deleteItemsCount={selectedItems.length} on:add={addItemAction} on:delete={multiDeleteAction} />
+    <Table bind:limit bind:total {columns} bind:data skeletonLoad multiSelect on:fetch={fetchTeachers} {actions} bind:selectedItems />
 </div>
+
+<FormModal bind:open={isOpenFormModal} bind:title bind:form on:submit={sumbitForm} />
+<DeleteModal bind:open={isOpenDeleteModal} content="คุณยืนยันที่จะลบข้อมูลอาจารย์{deleteItem?.values[0]}หรือไม่?" deleteButtonName="ยืนยัน" on:delete={deleteAction} />
