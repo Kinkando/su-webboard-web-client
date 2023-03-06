@@ -42,8 +42,6 @@ export const load: LayoutServerLoad = async ({ cookies, route }) => {
 //     return isTeacher
 // }) satisfies LayoutServerLoad;
 
-// floating button go to top (forum detail page)
-// floating button comment reply forum (forum detail page)
 // admin add form validation
 
 // change profile image with providing avatar from backend

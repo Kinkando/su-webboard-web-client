@@ -10,6 +10,7 @@
 
     export let forumDetail: ForumDetail | Announcement;
     export let categories: Category[] | undefined = undefined;
+    export let replyForum = false;
 
     const type = instanceOfForumDetail(forumDetail) ? 'กระทู้' : 'การประกาศ'
 
@@ -86,5 +87,7 @@
         commentCount={instanceOfForumDetail(forumDetail) ? forumDetail.commentCount : undefined}
         {label}
         replyText={label}
+        bind:replyTrigger={replyForum}
+        on:comment={event => console.log("แสดงความคิดเห็น", event.detail.comment, event.detail.attachments.length)}
     />
 </div>
