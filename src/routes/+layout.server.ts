@@ -42,6 +42,10 @@ export const load: LayoutServerLoad = async ({ cookies, route }) => {
 //     return isTeacher
 // }) satisfies LayoutServerLoad;
 
+// floating button go to top (forum detail page)
+// floating button comment reply forum (forum detail page)
+// admin add form validation
+
 // change profile image with providing avatar from backend
 // เพิ่ม Notification List Page
 // เพิ่ม option sort by ในหน้า search/category/popular list page
@@ -51,6 +55,5 @@ export const load: LayoutServerLoad = async ({ cookies, route }) => {
 
 // เพิ่ม animation loading เวลา navigate ไปหน้าอื่น (เหมือนในแอพมอของเจได)
 // เพิ่มหน้าดู profile user คนอื่น และเพิ่ม feature ติดตามผู้ใช้งานคนอื่น
-// load data before render layout on user general page
 
 // เพิ่มเมนูเปลี่ยนภาษา ไม่ก็เปลี่ยนแอพให้กลายเป็นภาษาไทย

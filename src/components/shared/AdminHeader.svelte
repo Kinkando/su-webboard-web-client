@@ -22,4 +22,6 @@
     </div>
 </div>
 
-<DeleteModal bind:open content="คุณยืนยันที่จะลบทั้งหมด {deleteItemsCount} รายการใช่หรือไม่?" deleteButtonName="ยืนยัน" on:delete={multiDeleteAction} />
+<DeleteModal bind:open deleteButtonName="ยืนยัน" on:delete={multiDeleteAction} >
+    คุณยืนยันที่จะ<span class="text-red-500">ลบทั้งหมด {deleteItemsCount} รายการ</span>ใช่หรือไม่?
+</DeleteModal>

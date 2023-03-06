@@ -22,7 +22,7 @@
 
 <div class="sm:flex sm:items-center sm:justify-between block sm:mb-4">
     <ButtonGroup class="w-full sm:w-fit" size="md">
-        <InputAddon class="py-2 ease-in duration-200">จำนวนที่แสดงต่อหน้า</InputAddon>
+        <InputAddon class="py-2 ease-in duration-200 whitespace-nowrap">จำนวนที่แสดงต่อหน้า</InputAddon>
         <div class="px-4 py-2 w-full sm:w-fit sm:max-w-[4rem] ease-in duration-200 border dark:border-gray-900 text-gray-600 bg-white dark:text-gray-400 dark:bg-gray-800 rounded-r-lg">{limit}</div>
         <Dropdown class="w-full sm:w-fit py-2 rounded-md bg-gray-50 dark:bg-gray-900" transition={slide} bind:open>
             {#each entryList as entry}
