@@ -17,7 +17,7 @@ export async function getStudent(offset: number, limit: number) {
         },
         {
             userUUID: "yyy-yyy-yyy-yyy",
-            userDisplayName: "Moe Monday",
+            userDisplayName: "MoeMondays",
             userFullName: "Thanakorn Hemsart",
             userEmail: "hemsart_t@silpakorn.edu",
             studentID: "620710115",
