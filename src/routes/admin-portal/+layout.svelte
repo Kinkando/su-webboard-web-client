@@ -47,7 +47,7 @@
             </svg>
         </span>
         <span class="ml-2">{ sidebarItems.find(item => currentRoute === item.href)?.label }</span>
-        <DarkMode id="theme-toggle" btnClass="ml-auto scale-110 text-yellow-400 dark:text-yellow-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full p-2 transition-all ease-in duration-200" />
+        <DarkMode id="theme-toggle" btnClass="ml-auto scale-110 text-yellow-400 dark:text-yellow-300 hover:bg-gray-300 dark:hover:bg-gray-700 rounded-full p-2 transition-all ease-in duration-200" />
     </header>
 
     <nav class="h-16 flex items-center px-4 max-[1000.1px]:hidden bg-gray-200 dark:bg-gray-800 ease-in duration-200">
@@ -57,7 +57,7 @@
                 <BreadcrumbItem>{ sidebarItems.find(item => currentRoute === item.href)?.label }</BreadcrumbItem>
             {/if}
         </Breadcrumb>
-        <DarkMode id="theme-toggle" btnClass="ml-auto scale-110 text-yellow-400 dark:text-yellow-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full p-2 transition-all ease-in duration-200" />
+        <DarkMode id="theme-toggle" btnClass="ml-auto scale-110 text-yellow-400 dark:text-yellow-300 hover:bg-gray-300 dark:hover:bg-gray-700 rounded-full p-2 transition-all ease-in duration-200" />
     </nav>
 
     {#key currentRoute}
