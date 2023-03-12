@@ -4,13 +4,8 @@
 	import { onMount } from "svelte";
 	import { Breadcrumb, BreadcrumbItem, Button, Input, Label, Radio } from "flowbite-svelte";
 	import ToggleBadge from "@components/badge/ToggleBadge.svelte";
-    import type { User } from "@models/user";
+    import { StatusGroup, type User } from "@models/user";
 	import { getUserProfile } from "@services/user";
-
-    enum StatusGroup {
-        anonymous = "anonymous",
-        nominate = "nominate",
-    }
 
     let isUpdate = false;
     let user: User;
@@ -106,7 +101,7 @@
                             {#if isUpdate && input?.placeholder}
                                 <Input type="text" id="title" class="ease-in duration-200 placeholder-gray-300" placeholder={input?.placeholder} required bind:value={draft[input?.key]} />
                             {:else}
-                                <div class="py-2.5 border text-gray-400 dark:text-gray-600 border border-transparent break-words">{draft[input?.key]}</div>
+                                <div class="py-2.5 text-gray-400 dark:text-gray-600 border border-transparent break-words">{draft[input?.key]}</div>
                             {/if}
                         </Label>
                     {/each}

@@ -17,7 +17,7 @@ export async function getStudent(offset: number, limit: number) {
         },
         {
             userUUID: "yyy-yyy-yyy-yyy",
-            userDisplayName: "Moe Monday",
+            userDisplayName: "MoeMondays",
             userFullName: "Thanakorn Hemsart",
             userEmail: "hemsart_t@silpakorn.edu",
             studentID: "620710115",
@@ -77,7 +77,7 @@ export async function getForumReport(offset: number, limit: number) {
 }
 
 export async function getCategories(offset: number, limit: number) {
-    const total = 0;
+    const total = 5;
     const data: Category[] = [
         {
             categoryID: 1,

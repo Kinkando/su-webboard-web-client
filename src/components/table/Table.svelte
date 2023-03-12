@@ -8,9 +8,10 @@
     export let columns: string[];
     export let data: DataTable[];
     export let total: number;
-    export let multiSelect = false;
-    export let skeletonLoad = false;
     export let limit: number;
+    export let skeletonLoad = false;
+    export let multiSelect = false;
+    export let selectedItems: DataTable[] = [];
     export let actions: ActionTable[]|undefined = undefined;
 
     let actionLabel = "Action";
@@ -20,6 +21,9 @@
     let initialCount = 0;
     $: (currentPage || limit) && fetch()
     $: data && loading()
+    $: if (selectedItems.length === 0) {
+        isSelectAll = false;
+    }
 
     onMount(() => fetch())
     const dispatch = createEventDispatcher<{ [event: string]: { page: number } }>()
@@ -30,7 +34,6 @@
     const loading = () => isLoading = (++initialCount) <= 2
 
     let isSelectAll = false;
-    let selectedItems: DataTable[] = [];
     const selectAll = () => {
         isSelectAll = !isSelectAll;
         selectedItems = isSelectAll ? [...data] : [];
@@ -157,14 +160,14 @@
                 {#each item.values as value, i}
                     <Label for="{columns[i]}" class="space-y-2 text-black dark:text-white ease-in duration-200 {i ? 'mt-4' : ''}">
                         <span>{columns[i]}</span>
-                        <div class="border text-gray-500 border border-transparent break-words">{@html value}</div>
+                        <div class="text-gray-500 border border-transparent break-words">{@html value}</div>
                     </Label>
                 {/each}
 
                 {#if actions}
                     <Label for="{actionLabel}" class="space-y-2 text-black dark:text-white ease-in duration-200 mt-4">
                         <span>{actionLabel}</span>
-                        <div class="border text-gray-500 border border-transparent break-words flex w-fit">
+                        <div class="text-gray-500 border border-transparent break-words flex w-fit">
                             {#each actions as action, index}
                                 <!-- svelte-ignore a11y-click-events-have-key-events -->
                                 <span class="{index ? 'ml-2' : ''}" on:click={() => action.click(item)}>

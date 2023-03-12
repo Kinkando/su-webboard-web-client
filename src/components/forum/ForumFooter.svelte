@@ -4,6 +4,7 @@
 	import LikeBadge from "@components/badge/LikeBadge.svelte";
 	import CommentReply from "@components/comment/CommentReply.svelte";
 	import Modal from "@components/modal/Modal.svelte";
+	import { createEventDispatcher } from 'svelte';
 
     export let likeCount: number | undefined = undefined;
     export let commentCount: number | undefined = undefined;
@@ -11,17 +12,27 @@
     export let userImageURL: string;
     export let label: string;
     export let replyText = "ตอบกลับ";
+    export let replyTrigger = false;
 
     let comment = "";
     let attachments: Attachment[] = [];
     let openReplyModal = false;
+	const dispatch = createEventDispatcher<{[eventName: string]: {comment: string, attachments: Attachment[]}}>();
     const commentPost = () => {
-        console.log(comment, attachments.length)
+        dispatch("comment", { comment, attachments })
         openReplyModal = false
     }
     $: if(openReplyModal) {
         comment = "";
         attachments = []
+    }
+
+    $: replyTrigger === true && replyAction()
+    const replyAction = () => {
+        openReplyModal = true;
+        comment = "";
+        attachments = []
+        replyTrigger = false;
     }
 
 </script>
@@ -61,5 +72,6 @@
         bind:attachments
         cancel={() => openReplyModal = false}
         submit={commentPost}
+        on:comment={event => console.log("แสดงความคิดเห็น", event.detail.comment, event.detail.attachments.length)}
     />
 </Modal>

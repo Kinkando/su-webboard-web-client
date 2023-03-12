@@ -8,3 +8,8 @@ export interface User {
     isAnnonymous: boolean
     userType?: string
 }
+
+export enum StatusGroup {
+    anonymous = "anonymous",
+    nominate = "nominate",
+}

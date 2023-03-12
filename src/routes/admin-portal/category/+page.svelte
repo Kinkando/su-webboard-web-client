@@ -1,9 +1,12 @@
 <script lang="ts">
+	import AdminHeader from '@components/shared/AdminHeader.svelte';
+	import DeleteModal from '@components/modal/DeleteModal.svelte';
+	import FormModal from '@components/modal/FormModal.svelte';
 	import Table from '@components/table/Table.svelte';
 	import type { Category } from '@models/category';
 	import type { ActionTable, DataTable } from "@models/table";
-	import { getCategories, getStudent } from "@services/admin";
-	import { Button } from 'flowbite-svelte';
+	import { getCategories } from "@services/admin";
+	import { FormType, type Form } from '@models/form';
 
     let limit = 10;
     let total = 0;
@@ -20,7 +23,10 @@
                 </svg>
             `,
             click(item: DataTable) {
-                console.log("EDIT")
+                isOpenFormModal = true;
+                title = "แก้ไขหมวดหมู่";
+                formType = FormType.update;
+                formData(item);
             },
         },
         {
@@ -30,7 +36,8 @@
                 </svg>
             `,
             click(item: DataTable) {
-                console.log("DELETE")
+                isOpenDeleteModal = true;
+                deleteItem = {...item};
             },
         },
     ]
@@ -56,12 +63,71 @@
         categories = res.data
         total = res.total
     }
+
+    let isOpenFormModal = false;
+    let title = "";
+    let form: Form;
+    let formType: FormType;
+    const addItemAction = () => {
+        isOpenFormModal = true;
+        title = "เพิ่มหมวดหมู่";
+        formType = FormType.create;
+        formData();
+    }
+    const formData = (item?: DataTable) => {
+        form = {
+            schemas: [
+                {
+                    type: "text",
+                    label: "หมวดหมู่",
+                    placeholder: "กรุณาใส่หมวดหมู่",
+                    value: "",
+                },
+                {
+                    type: "color",
+                    label: "สี",
+                    placeholder: "กรุณาใส่สี",
+                    value: "#000000",
+                },
+            ]
+        }
+        if(item) {
+            form._id = item._id
+            form.schemas[0].value = item.values[0]
+            form.schemas[1].value = categories?.find(category => category.categoryID.toString() === item._id)?.categoryHexColor!
+        }
+    }
+    const sumbitForm = (event: CustomEvent<Form>) => {
+        if (formType === FormType.create) {
+            console.log(`CREATE: ${event.detail.schemas[0].value}`)
+        } else {
+            console.log(`UPDATE ${event.detail._id}`)
+        }
+    }
+
+    let isOpenDeleteModal = false;
+    let deleteItem: DataTable;
+    let selectedItems: DataTable[] = []
+    const deleteAction = () => {
+        console.log(`DELETE CATEGORY ID: ${deleteItem._id}`)
+        isOpenDeleteModal = false;
+    }
+    const multiDeleteAction = () => {
+        if (selectedItems.length) {
+            selectedItems.forEach(item => {
+                console.log(`DELETE CATEGORY ID: ${item._id}`)
+            })
+            selectedItems = [];
+        }
+    }
 </script>
 
 <div class="rounded-lg shadow-md w-full h-full p-4 sm:p-6 overflow-hidden bg-white text-black dark:bg-gray-700 dark:text-white ease-in duration-200">
-    <div class="flex items-center justify-between mb-4">
-        <h1 class="font-bold text-2xl">หมวดหมู่</h1>
-        <Button class="hover:scale-105 ease-in duration-200" color="greenToBlue" gradient>เพิ่มหมวดหมู่</Button>
-    </div>
-    <Table bind:limit bind:total {columns} bind:data skeletonLoad multiSelect on:fetch={fetchCategories} {actions} />
+    <AdminHeader title="หมวดหมู่" buttonName="เพิ่มหมวดหมู่" bind:deleteItemsCount={selectedItems.length} on:add={addItemAction} on:delete={multiDeleteAction} />
+    <Table bind:limit bind:total {columns} bind:data skeletonLoad multiSelect on:fetch={fetchCategories} {actions} bind:selectedItems />
 </div>
+
+<FormModal bind:open={isOpenFormModal} bind:title bind:form on:submit={sumbitForm} />
+<DeleteModal bind:open={isOpenDeleteModal} deleteButtonName="ยืนยัน" on:delete={deleteAction} >
+    คุณยืนยันที่จะ<span class="text-red-500">ลบหมวดหมู่{deleteItem?.values[0]}</span>หรือไม่?
+</DeleteModal>
