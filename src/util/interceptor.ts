@@ -32,7 +32,7 @@ instance.interceptors.request.use(
 		if (accessToken) {
 			config.headers = {
                 'Authorization': `Bearer ${accessToken}`,
-                "Content-Type": "application/json",
+                // "Content-Type": "application/json",
             }
 		}
 		return config
@@ -79,7 +79,7 @@ instance.interceptors.response.use(
 
                 config.headers = {
                     Authorization: `Bearer ${jwt.accessToken}`,
-                    "Content-Type": "application/json",
+                    // "Content-Type": "application/json",
                 }
                 return instance.request(config)
 

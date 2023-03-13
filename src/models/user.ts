@@ -5,7 +5,7 @@ export interface User {
     userFullName: string
     userEmail: string
     studentID?: string
-    isAnnonymous: boolean
+    isAnonymous: boolean
     userType?: string
 }
 

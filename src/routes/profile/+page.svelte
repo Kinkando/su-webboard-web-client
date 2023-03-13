@@ -5,12 +5,16 @@
 	import { Breadcrumb, BreadcrumbItem, Button, Input, Label, Radio } from "flowbite-svelte";
 	import ToggleBadge from "@components/badge/ToggleBadge.svelte";
     import { StatusGroup, type User } from "@models/user";
-	import { getUserProfile } from "@services/user";
+	import { getUserProfile, updateUserProfile } from "@services/user";
+	import LoadingSpinner from '@components/spinner/LoadingSpinner.svelte';
 
+    let isLoading = false;
     let isUpdate = false;
     let user: User;
     let draft: any;
     let statusGroup: string;
+
+    let image: File | undefined
 
     let files: FileList;
     let fileInput: HTMLInputElement;
@@ -18,26 +22,34 @@
     const updateProfileImage = () => {
         if (files?.length) {
             draft.userImageURL = URL.createObjectURL(files[0])
+            image = files[0]
         }
     }
 
     onMount(async () => {
         user = await getUserProfile()
         draft = {...user}
-        statusGroup = user.isAnnonymous ? StatusGroup.anonymous : StatusGroup.nominate
+        statusGroup = user.isAnonymous ? StatusGroup.anonymous : StatusGroup.nominate
     })
 
     const updateProfile = async () => {
+        isLoading = true;
+        await updateUserProfile(draft.userDisplayName, statusGroup === StatusGroup.anonymous, image)
+
+        // update local
+        image = undefined;
         user.userDisplayName = draft.userDisplayName
-        user.isAnnonymous = statusGroup === StatusGroup.anonymous
+        user.isAnonymous = statusGroup === StatusGroup.anonymous
         user.userImageURL = draft.userImageURL;
         userStore.set(user)
         isUpdate = false
+
+        isLoading = false;
     }
 
     $: if(!isUpdate) {
         draft = {...user}
-        statusGroup = user?.isAnnonymous ? StatusGroup.anonymous : StatusGroup.nominate
+        statusGroup = user?.isAnonymous ? StatusGroup.anonymous : StatusGroup.nominate
     }
 
     const inputs = [
@@ -70,6 +82,9 @@
         <BreadcrumbItem>โปรไฟล์</BreadcrumbItem>
     </Breadcrumb>
 </div>
+
+<LoadingSpinner bind:isLoading />
+
 {#if !user}
     <SkeletonUpdateProfile />
 {:else}
@@ -119,7 +134,7 @@
                             </div>
                         {:else}
                             <div class="py-2.5 text-gray-400 dark:text-gray-600">
-                                {user?.isAnnonymous ? 'ปกปิดตัวตน' : 'เปิดเผยตัวตน'}
+                                {user?.isAnonymous ? 'ปกปิดตัวตน' : 'เปิดเผยตัวตน'}
                             </div>
                         {/if}
                     </Label>
