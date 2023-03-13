@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth"
+import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth"
 
 const env = import.meta.env;
 
@@ -37,4 +37,8 @@ export async function signinFirebase(username: string, password: string): Promis
     } catch(err) {
         return ""
     }
+}
+
+export async function resetPassword(email: string) {
+    await sendPasswordResetEmail(auth, email)
 }

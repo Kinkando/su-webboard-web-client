@@ -32,6 +32,7 @@
             // General user page
             case "/": return generalUserPrefix + "Home"
             case "/login": return generalUserPrefix + "Sign in"
+            case "/forgot-password": return generalUserPrefix + "Forgot Password"
             case "/profile": return generalUserPrefix + "Profile"
             case "/announcement": return generalUserPrefix + "New Announcement"
             case "/forum": return generalUserPrefix + "New Forum"
@@ -47,7 +48,7 @@
             case "/forum/[forumUUID]": return generalUserPrefix + "Forum Detail"
         }
     })()
-    $: isUserSite = !$page.url.pathname?.startsWith("/admin-portal") && $page.url.pathname! != "/login";
+    $: isUserSite = !$page.url.pathname?.startsWith("/admin-portal") && !["/login", "/forgot-password"].includes($page.url.pathname!);
 
     let userType: string;
     let isValidToken: boolean;
