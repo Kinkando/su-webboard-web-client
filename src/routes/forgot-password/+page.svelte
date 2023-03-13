@@ -1,6 +1,6 @@
 <script lang="ts">
 	import CommonScreen from '@components/shared/CommonScreen.svelte';
-	import { resetPassword } from '@services/firebase';
+	import { sendResetPassword } from '@services/firebase';
     import { Button, Card, Label, Input } from 'flowbite-svelte';
 
     let email = ""
@@ -14,7 +14,11 @@
                 clearInterval(countdownResetPassword)
             }
         }, 1000)
-        resetPassword(email)
+        sendResetPassword(email)
+    }
+    const isEmail = () => {
+        const regex: RegExp = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g
+        return regex.test(email)
     }
 </script>
 
@@ -40,7 +44,7 @@
             class="mt-6 uppercase"
             color="green"
             on:click={forgotPassword}
-            disabled={!email || countdown > 0}
+            disabled={!email || !isEmail() || countdown > 0}
         >
             {countdown > 0 ? `รอ ${countdown} วินาที` : 'ส่ง'}
         </Button>

@@ -1,5 +1,5 @@
 <script lang="ts">
-    export let page: 'login' | 'forgot-password';
+    export let page: 'login' | 'forgot-password' | 'reset-password';
 </script>
 
 <div id="{page}-screen" class="w-screen h-screen flex overflow-y-auto">
@@ -41,6 +41,21 @@
             #forgot-password-panel {
                 background-color: var(--primary-color); // Must be implement for dark theme
                 #forgot-password-card {
+                    display: block;
+                }
+            }
+        }
+    }
+
+    @media screen and (max-height: 434px) {
+        #reset-password-screen {
+            height: fit-content;
+            #reset-password-logo {
+                display: none;
+            }
+            #reset-password-panel {
+                background-color: var(--primary-color); // Must be implement for dark theme
+                #reset-password-card {
                     display: block;
                 }
             }

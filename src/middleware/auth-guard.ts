@@ -3,7 +3,7 @@ import { UserType } from "@models/auth"
 export function authGuard(routeID: string, userType: string, isValidToken: boolean): string {
     const commonRoutes = ["/login", "/forgot-password"]
 
-    if (routeID?.startsWith("/api")) {
+    if (routeID?.startsWith("/api") || routeID === '/reset-password') {
         return ""
     }
 
