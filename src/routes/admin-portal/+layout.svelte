@@ -61,14 +61,14 @@
     </nav>
 
     {#key currentRoute}
-        <section class="px-4 pb-4 max-[1000.1px]:pt-4 min-h-[calc(100vh-64px*2)] bg-gray-200 dark:bg-gray-800 ease-in duration-200">
+        <section class="px-4 pb-4 max-[1000.1px]:pt-4 min-h-[calc(100vh-64px*2)] bg-gray-200 dark:bg-gray-800 transition-colors ease-in duration-200">
             <div in:fly={{y: -20, duration: 250, delay: 100}}>
                 <slot />
             </div>
         </section>
     {/key}
 
-    <footer class="h-16 flex items-center px-4 bg-gray-100 text-black dark:text-gray-400 dark:bg-gray-900 ease-in duration-200">
+    <footer class="h-16 flex items-center px-4 bg-gray-100 text-black dark:text-gray-400 dark:bg-gray-900 transition-colors ease-in duration-200">
         <span>&copy;&nbsp;</span>su-webboard - 2023
     </footer>
 </main>

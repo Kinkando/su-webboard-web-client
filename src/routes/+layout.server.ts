@@ -20,7 +20,7 @@ export const load: LayoutServerLoad = async ({ cookies, route }) => {
     const { userType, isValid } = getUserType(cookies)
     const res: Layout = { routeID: route?.id!, userType, isValid }
     if ([UserType.STUDENT, UserType.TEACHER].includes(userType as UserType) && isValid) {
-        res.user = await getUserProfile()
+        res.user = await getUserProfile(cookies)
         res.notification = await getNotiList()
         userStore.set({...res.user})
         notificationStore.set({...res.notification})

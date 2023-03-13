@@ -29,7 +29,7 @@ export function getToken(): { accessToken: string|undefined, refreshToken: strin
     const accessToken = localStorage.getItem(TokenType.AccessToken)
     if (accessToken) {
         const decodeJWT = jwtDecode(accessToken) as AccessJWT
-        const now = new Date().getTime();
+        const now = new Date().getTime() / 1000;
         if (now <= decodeJWT.exp) {
             token.accessToken = accessToken;
         }

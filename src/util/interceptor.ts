@@ -3,8 +3,8 @@ import type { AxiosRequestCustomConfig } from './api';
 import http from '@commons/http';
 import { TokenType } from '@models/auth';
 import { refreshToken as refreshJWT } from '@services/authen';
-import { getToken, revokeToken, setToken } from './localstorage';
-// import { revokeToken, setToken } from './cookies';
+import * as LocalStorage from './localstorage';
+import * as Cookies from './cookies';
 
 const instance = axios.create({
 	timeout: 6000,
@@ -22,8 +22,13 @@ instance.interceptors.request.use(
                 }
             }
         }
-        // const accessToken = config.cookie.get(TokenType.AccessToken)
-        const { accessToken } = getToken()
+        let accessToken;
+        if (config.cookie) {
+            accessToken = config.cookie.get(TokenType.AccessToken)
+        } else {
+            let { accessToken: token } = LocalStorage.getToken()
+            accessToken = token
+        }
 		if (accessToken) {
 			config.headers = {
                 'Authorization': `Bearer ${accessToken}`,
@@ -42,20 +47,36 @@ instance.interceptors.response.use(
         if (error.response?.status === http.StatusUnauthorized) {
             try {
                 if (config._isRefreshing) {
-                    revokeToken() // revokeToken(config.cookie);
+                    if (config.cookie) {
+                        Cookies.revokeToken(config.cookie);
+                    } else {
+                        LocalStorage.revokeToken()
+                    }
                     return Promise.reject(error);
                 }
                 config._isRefreshing = true;
 
-                const refreshToken = config.cookie.get(TokenType.RefreshToken)
+                let refreshToken;
+                if (config.cookie) {
+                    refreshToken = config.cookie.get(TokenType.RefreshToken)
+                } else {
+                    let { refreshToken: token } = LocalStorage.getToken()
+                    refreshToken = token
+                }
                 if (!refreshToken) {
                     throw new Error("No refresh token");
                 }
+
                 const jwt = await refreshJWT(refreshToken)
                 if (!jwt) {
                     throw new Error("Refresh Token is invalid")
                 }
-                setToken(jwt.accessToken, jwt.refreshToken) // setToken(config.cookie, jwt.accessToken, jwt.refreshToken)
+                if (config.cookie) {
+                    Cookies.setToken(config.cookie, jwt.accessToken, jwt.refreshToken)
+                } else {
+                    LocalStorage.setToken(jwt.accessToken, jwt.refreshToken)
+                }
+
                 config.headers = {
                     Authorization: `Bearer ${jwt.accessToken}`,
                     "Content-Type": "application/json",

@@ -1,4 +1,3 @@
-import HTTP from "@commons/http";
 import type { JWT } from "@models/auth";
 import axios from "axios";
 
