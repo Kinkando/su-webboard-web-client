@@ -1,5 +1,4 @@
 import { TokenType, type AccessJWT, type RefreshJWT } from "@models/auth";
-import type { Cookies } from "@sveltejs/kit";
 import jwtDecode from "jwt-decode"
 
 export function getUserType(): { userType: string, isValid: boolean } {

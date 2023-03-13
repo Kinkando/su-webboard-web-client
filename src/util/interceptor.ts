@@ -3,7 +3,8 @@ import type { AxiosRequestCustomConfig } from './api';
 import http from '@commons/http';
 import { TokenType } from '@models/auth';
 import { refreshToken as refreshJWT } from '@services/authen';
-import { revokeToken, setToken } from './cookies';
+import { getToken, revokeToken, setToken } from './localstorage';
+// import { revokeToken, setToken } from './cookies';
 
 const instance = axios.create({
 	timeout: 6000,
@@ -21,7 +22,8 @@ instance.interceptors.request.use(
                 }
             }
         }
-        const accessToken = config.cookie.get(TokenType.AccessToken)
+        // const accessToken = config.cookie.get(TokenType.AccessToken)
+        const { accessToken } = getToken()
 		if (accessToken) {
 			config.headers = {
                 'Authorization': `Bearer ${accessToken}`,
@@ -40,7 +42,7 @@ instance.interceptors.response.use(
         if (error.response?.status === http.StatusUnauthorized) {
             try {
                 if (config._isRefreshing) {
-                    revokeToken(config.cookie);
+                    revokeToken() // revokeToken(config.cookie);
                     return Promise.reject(error);
                 }
                 config._isRefreshing = true;
@@ -50,7 +52,10 @@ instance.interceptors.response.use(
                     throw new Error("No refresh token");
                 }
                 const jwt = await refreshJWT(refreshToken)
-                setToken(config.cookie, jwt.accessToken, jwt.refreshToken)
+                if (!jwt) {
+                    throw new Error("Refresh Token is invalid")
+                }
+                setToken(jwt.accessToken, jwt.refreshToken) // setToken(config.cookie, jwt.accessToken, jwt.refreshToken)
                 config.headers = {
                     Authorization: `Bearer ${jwt.accessToken}`,
                     "Content-Type": "application/json",

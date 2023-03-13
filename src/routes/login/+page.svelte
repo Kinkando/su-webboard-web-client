@@ -16,26 +16,6 @@
         if (!username.length || !password.length) { return }
         isLoading = true;
 
-        //////////////////// MOCK FOR LOGIN AS ADMIN ////////////////////
-        if (username === "admin" && password === "admin") {
-            await fetch("/api/token/verify", {
-                    method: "POST",
-                    body: JSON.stringify({ idToken: "admin" }),
-                }
-            ).then(async (res) => {
-                const token = await res.json()
-                setToken(token.accessToken, token.refreshToken)
-                alert = {
-                    color: 'green',
-                    message: 'เข้าสู่ระบบสำเร็จ!',
-                }
-                isLoading = false;
-                window.location.href = "/"
-            })
-            return
-        }
-        /////////////////////////////////////////////////////////////////
-
         const idToken = await signinFirebase(username, password);
         if (idToken) {
             await fetch("/api/token/verify", {

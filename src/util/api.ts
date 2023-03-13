@@ -15,7 +15,7 @@ interface Controller {
 }
 
 export interface AxiosRequestCustomConfig extends AxiosRequestConfig {
-    cookie: Cookies
+    cookie?: Cookies
     signalUUID?: string
     _isRefreshing?: boolean
 }
