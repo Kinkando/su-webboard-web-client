@@ -60,7 +60,7 @@
 {/key}
 
 <style lang="scss">
-    @media screen and (min-height: 315px) {
+    @media screen and (min-height: 362px) {
         .bottom-nav {
             @apply bottom-0 absolute w-full;
         }

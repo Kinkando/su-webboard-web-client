@@ -9,7 +9,7 @@ export const load: PageServerLoad = async ({ url }) => {
     const categories = await getAllCategories()
     if (forumDetail) {
         const categoryIDs = forumDetail.categories.map(category => category.categoryID)
-        categories.forEach(category => {
+        categories?.forEach(category => {
             category.isActive = categoryIDs.includes(category.categoryID);
         })
         return { forumDetail, categories }

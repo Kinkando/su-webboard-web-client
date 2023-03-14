@@ -1,15 +1,17 @@
 import { UserType } from "@models/auth"
 
 export function authGuard(routeID: string, userType: string, isValidToken: boolean): string {
-    if (routeID?.startsWith("/api")) {
+    const commonRoutes = ["/login", "/forgot-password"]
+
+    if (routeID?.startsWith("/api") || routeID === '/reset-password') {
         return ""
     }
 
-    if (routeID === "/login" && isValidToken && userType) {
+    if (commonRoutes.includes(routeID) && isValidToken && userType) {
         return userType === UserType.ADMIN ? "/admin-portal" : "/"
     }
 
-    if ((!userType || !isValidToken) && routeID !== "/login") {
+    if ((!userType || !isValidToken) && !commonRoutes.includes(routeID)) {
         return '/login'
     }
 
