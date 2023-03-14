@@ -116,13 +116,15 @@
                         {/each}
 
                         {#if actions}
-                            <td class="px-2 py-4 flex w-fit">
-                                {#each actions as action, index}
-                                    <!-- svelte-ignore a11y-click-events-have-key-events -->
-                                    <span class="{index ? 'ml-2' : ''}" on:click={() => action.click(item)}>
-                                        {@html action.html}
-                                    </span>
-                                {/each}
+                            <td class="px-2 py-4 w-fit">
+                                <div class="flex">
+                                    {#each actions as action, index}
+                                        <!-- svelte-ignore a11y-click-events-have-key-events -->
+                                        <span class="{index ? 'ml-2' : ''}" on:click={() => action.click(item)}>
+                                            {@html action.html}
+                                        </span>
+                                    {/each}
+                                </div>
                             </td>
                         {/if}
                     </tr>
