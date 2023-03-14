@@ -11,13 +11,13 @@
     export let limit: number;
     export let skeletonLoad = false;
     export let multiSelect = false;
+    export let isLoading = true;
     export let selectedItems: DataTable[] = [];
     export let actions: ActionTable[]|undefined = undefined;
 
     let actionLabel = "Action";
 
     let currentPage = 1;
-    let isLoading = true;
     let initialCount = 0;
     $: (currentPage || limit) && fetch()
     $: data && loading()

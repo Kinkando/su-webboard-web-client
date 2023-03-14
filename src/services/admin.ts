@@ -1,72 +1,45 @@
 import type { Category } from "@models/category";
 import type { ForumReport } from "@models/forum";
 import type { User } from "@models/user";
+import api from "@util/api";
 import { sleep } from "./forum";
 
-export async function getStudent(offset: number, limit: number) {
-    const total = 23;
-    const users: User[] = [
-        {
-            userUUID: "xxx-xxx-xxx-xxx",
-            userDisplayName: "Kook Kai",
-            userFullName: "Kook Kai",
-            userEmail: "kookkai_k@silpakorn.edu",
-            studentID: "620710001",
-            isAnnonymous: false,
-            userType: "std",
-        },
-        {
-            userUUID: "yyy-yyy-yyy-yyy",
-            userDisplayName: "MoeMondays",
-            userFullName: "Thanakorn Hemsart",
-            userEmail: "hemsart_t@silpakorn.edu",
-            studentID: "620710115",
-            isAnnonymous: false,
-            userType: "std",
-        },
-        {
-            userUUID: "zzz-zzz-zzz-zzz",
-            userDisplayName: "Jedi Power",
-            userFullName: "Sorawit Nitrat",
-            userEmail: "nitrat_s@silpakorn.edu",
-            studentID: "620710681",
-            isAnnonymous: true,
-            userType: "std",
-        },
-    ];
+const baseURL = import.meta.env.VITE_API_HOST
 
-    let data: User[] = [];
-    for(let i=offset; i<Math.min(offset+limit, total); i++) {
-        const random = Math.floor(Math.random() * 3)
-        const user = users[random]
-        user.userUUID += `${i}`
-        data.push({...user})
-    }
-    await sleep(500)
-    return { data, total }
+export async function getUser(userType: string, offset: number, limit: number) {
+    const res = await api<{ total: number, data: User[] }>({
+        url: `${baseURL}/admin/user?offset=${offset}&limit=${limit}&userType=${userType}`,
+        method: "GET",
+    })
+    return res.data
 }
 
-export async function getTeacher(offset: number, limit: number) {
-    const users: User[] = [
-        {
-            userUUID: "xxx-xxx-xxx-xxx",
-            userDisplayName: "Onizuka Sensei",
-            userFullName: "Onizuka Sensei",
-            userEmail: "kookkai_k@silpakorn.edu",
-            isAnnonymous: false,
-            userType: "tch",
-        },
-        {
-            userUUID: "yyy-yyy-yyy-yyy",
-            userDisplayName: "Desmond Sensei",
-            userFullName: "Desmond Rescribe",
-            userEmail: "hemsart_t@silpakorn.edu",
-            isAnnonymous: true,
-            userType: "tch",
-        },
-    ];
-    await sleep(500)
-    return { data: users, total: users.length }
+export async function createUser(user: User, userType: 'std' | 'tch') {
+    user.userType = undefined
+    user.userImageURL = undefined
+    await api({
+        url: `${baseURL}/admin/user/${userType}`,
+        method: "POST",
+        data: user,
+    })
+}
+
+export async function updateUser(user: User) {
+    user.userType = undefined
+    user.userImageURL = undefined
+    await api({
+        url: `${baseURL}/admin/user`,
+        method: "PATCH",
+        data: user,
+    })
+}
+
+export async function deleteUser(userUUID: string) {
+    await api({
+        url: `${baseURL}/admin/user`,
+        method: "DELETE",
+        data: { userUUID },
+    })
 }
 
 export async function getForumReport(offset: number, limit: number) {

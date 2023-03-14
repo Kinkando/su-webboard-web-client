@@ -1,11 +1,11 @@
 export interface User {
     userUUID?: string
     userImageURL?: string
-    userDisplayName: string
+    userDisplayName?: string
     userFullName: string
     userEmail: string
     studentID?: string
-    isAnonymous: boolean
+    isAnonymous?: boolean
     userType?: string
 }
 

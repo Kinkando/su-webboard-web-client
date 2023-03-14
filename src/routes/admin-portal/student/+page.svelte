@@ -6,11 +6,12 @@
 	import { FormType, type Form } from '@models/form';
 	import type { ActionTable, DataTable } from "@models/table";
 	import { StatusGroup, type User } from "@models/user";
-	import { getStudent } from "@services/admin";
+	import { getUser, createUser, updateUser, deleteUser } from "@services/admin";
 
+    let isLoading = true;
     let limit = 10;
     let total = 0;
-    let students: User[];
+    let students: User[] = [];
     const columns: string[] = [
         "รหัสนักศึกษา",
         "ชื่อที่แสดง",
@@ -46,25 +47,26 @@
     ]
     $: data = (() => {
         const dataTable: DataTable[] = [];
-        students?.forEach(student => {
+        students.forEach(student => {
             dataTable.push({
                 "_id": student.userUUID!,
                 values: [
                     student.studentID!,
-                    student.userDisplayName,
+                    student.userDisplayName!,
                     student.userFullName,
                     student.userEmail,
-                    student.isAnnonymous ? student.userDisplayName : "ไม่เปิดเผยตัวตน",
+                    student.isAnonymous ? "ไม่เปิดเผยตัวตน" : student.userDisplayName!,
                 ],
             })
         })
         return dataTable
     })()
 
-    const fetchStudents = async(event: CustomEvent<{ page: number }>) => {
-        const res = await getStudent((event.detail.page-1)*limit, limit)
-        students = res.data
-        total = res.total
+    const fetchStudents = async(event: CustomEvent<{ page: number }>) => await getStudents((event.detail.page-1)*limit, limit)
+    const getStudents = async(offset: number, limit: number) => {
+        const res = await getUser('std', offset, limit)
+        students = res?.data || []
+        total = res?.total || 0
     }
 
     let isOpenFormModal = false;
@@ -78,41 +80,41 @@
         formData();
     }
     const formData = (item?: DataTable) => {
-        form = {
-            schemas: [
-                {
-                    type: "text",
-                    label: "รหัสนักศึกษา",
-                    placeholder: "กรุณาใส่ข้อมูลรหัสนักศึกษา",
-                    value: "",
-                },
-                {
-                    type: "text",
-                    label: "ชื่อที่แสดง",
-                    placeholder: "กรุณาใส่ชื่อที่แสดง",
-                    value: "",
-                },
-                {
-                    type: "text",
-                    label: "ชื่อ-นามสกุล",
-                    placeholder: "กรุณาใส่ชื่อ-นามสกุล",
-                    value: "",
-                },
-                {
-                    type: "text",
-                    label: "อีเมล",
-                    placeholder: "กรุณาใส่อีเมล",
-                    value: "",
-                },
-                {
-                    type: "statusToggle",
-                    label: "การเปิดเผยตัวตน",
-                    placeholder: "กรุณาใส่การเปิดเผยตัวตน",
-                    value: StatusGroup.nominate,
-                },
-            ]
-        }
-        if(item) {
+        if (item) {
+            form = {
+                schemas: [
+                    {
+                        type: "text",
+                        label: "รหัสนักศึกษา",
+                        placeholder: "กรุณาใส่ข้อมูลรหัสนักศึกษา",
+                        value: "",
+                    },
+                    {
+                        type: "text",
+                        label: "ชื่อที่แสดง",
+                        placeholder: "กรุณาใส่ชื่อที่แสดง",
+                        value: "",
+                    },
+                    {
+                        type: "text",
+                        label: "ชื่อ-นามสกุล",
+                        placeholder: "กรุณาใส่ชื่อ-นามสกุล",
+                        value: "",
+                    },
+                    {
+                        type: "text",
+                        label: "อีเมล",
+                        placeholder: "กรุณาใส่อีเมล",
+                        value: "",
+                    },
+                    {
+                        type: "statusToggle",
+                        label: "การเปิดเผยตัวตน",
+                        placeholder: "กรุณาใส่การเปิดเผยตัวตน",
+                        value: StatusGroup.nominate,
+                    },
+                ]
+            }
             form._id = item._id
             item.values.forEach((value, index) => {
                 if (form.schemas[index].type === 'statusToggle') {
@@ -121,36 +123,82 @@
                     form.schemas[index].value = value
                 }
             })
+
+        } else {
+            form = {
+                schemas: [
+                    {
+                        type: "text",
+                        label: "รหัสนักศึกษา",
+                        placeholder: "กรุณาใส่ข้อมูลรหัสนักศึกษา",
+                        value: "",
+                    },
+                    {
+                        type: "text",
+                        label: "ชื่อ-นามสกุล",
+                        placeholder: "กรุณาใส่ชื่อ-นามสกุล",
+                        value: "",
+                    },
+                    {
+                        type: "text",
+                        label: "อีเมล",
+                        placeholder: "กรุณาใส่อีเมล",
+                        value: "",
+                    },
+                ]
+            }
         }
     }
-    const sumbitForm = (event: CustomEvent<Form>) => {
+    const sumbitForm = async (event: CustomEvent<Form>) => {
+        isLoading = true
         if (formType === FormType.create) {
-            console.log(`CREATE: ${event.detail.schemas[0].value}`)
+            const user: User = {
+                studentID: event.detail.schemas[0].value,
+                userFullName: event.detail.schemas[1].value,
+                userEmail: event.detail.schemas[2].value,
+            }
+            await createUser(user, 'std')
         } else {
-            console.log(`UPDATE ${event.detail._id}`)
+            const user: User = {
+                userUUID: event.detail._id,
+                studentID: event.detail.schemas[0].value,
+                userDisplayName: event.detail.schemas[1].value,
+                userFullName: event.detail.schemas[2].value,
+                userEmail: event.detail.schemas[3].value,
+                isAnonymous: event.detail.schemas[4].value === 'anonymous',
+            }
+            await updateUser(user)
         }
+        await getStudents(0, limit)
+        isLoading = false
     }
 
     let isOpenDeleteModal = false;
     let deleteItem: DataTable;
     let selectedItems: DataTable[] = []
-    const deleteAction = () => {
-        console.log(`DELETE STUDENT ID: ${deleteItem._id}`)
+    const deleteAction = async () => {
+        isLoading = true
         isOpenDeleteModal = false;
+        await deleteUser(deleteItem._id)
+        await getStudents(0, limit)
+        isLoading = false
     }
-    const multiDeleteAction = () => {
+    const multiDeleteAction = async() => {
         if (selectedItems.length) {
-            selectedItems.forEach(item => {
-                console.log(`DELETE STUDENT ID: ${item._id}`)
-            })
+            isLoading = true
+            for(let item of selectedItems) {
+                await deleteUser(item._id)
+            }
+            await getStudents(0, limit)
             selectedItems = [];
+            isLoading = false
         }
     }
 </script>
 
 <div class="rounded-lg shadow-md w-full h-full p-4 sm:p-6 overflow-hidden bg-white text-black dark:bg-gray-700 dark:text-white ease-in duration-200">
     <AdminHeader title="นักศึกษา" buttonName="เพิ่มนักศึกษา" bind:deleteItemsCount={selectedItems.length} on:add={addItemAction} on:delete={multiDeleteAction} />
-    <Table bind:limit bind:total {columns} bind:data skeletonLoad multiSelect on:fetch={fetchStudents} {actions} bind:selectedItems />
+    <Table bind:limit bind:total {columns} bind:data bind:isLoading skeletonLoad multiSelect on:fetch={fetchStudents} {actions} bind:selectedItems />
 </div>
 
 <FormModal bind:open={isOpenFormModal} bind:title bind:form on:submit={sumbitForm} />

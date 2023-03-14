@@ -6,12 +6,12 @@
 	import { FormType, type Form } from '@models/form';
 	import type { ActionTable, DataTable } from "@models/table";
 	import { StatusGroup, type User } from "@models/user";
-	import { getTeacher } from "@services/admin";
-	import { Button } from 'flowbite-svelte';
+	import { getUser, createUser, updateUser, deleteUser } from "@services/admin";
 
+    let isLoading = true;
     let limit = 10;
     let total = 0;
-    let teachers: User[];
+    let teachers: User[] = [];
     const columns: string[] = [
         "ชื่อที่แสดง",
         "ชื่อ-นามสกุล",
@@ -46,24 +46,25 @@
     ]
     $: data = (() => {
         const dataTable: DataTable[] = [];
-        teachers?.forEach(teacher => {
+        teachers.forEach(teacher => {
             dataTable.push({
                 "_id": teacher.userUUID!,
                 values: [
-                    teacher.userDisplayName,
+                    teacher.userDisplayName!,
                     teacher.userFullName,
                     teacher.userEmail,
-                    teacher.isAnnonymous ? teacher.userDisplayName : "ไม่เปิดเผยตัวตน",
+                    teacher.isAnonymous ? "ไม่เปิดเผยตัวตน" : teacher.userDisplayName!,
                 ],
             })
         })
         return dataTable
     })()
 
-    const fetchTeachers = async(event: CustomEvent<{ page: number }>) => {
-        const res = await getTeacher((event.detail.page-1)*limit, limit)
-        teachers = res.data
-        total = res.total
+    const fetchTeachers = async(event: CustomEvent<{ page: number }>) => await getTeachers((event.detail.page-1)*limit, limit)
+    const getTeachers = async(offset: number, limit: number) => {
+        const res = await getUser('tch', offset, limit)
+        teachers = res?.data || []
+        total = res?.total || 0
     }
 
     let isOpenFormModal = false;
@@ -77,35 +78,35 @@
         formData();
     }
     const formData = (item?: DataTable) => {
-        form = {
-            schemas: [
-                {
-                    type: "text",
-                    label: "ชื่อที่แสดง",
-                    placeholder: "กรุณาใส่ชื่อที่แสดง",
-                    value: "",
-                },
-                {
-                    type: "text",
-                    label: "ชื่อ-นามสกุล",
-                    placeholder: "กรุณาใส่ชื่อ-นามสกุล",
-                    value: "",
-                },
-                {
-                    type: "text",
-                    label: "อีเมล",
-                    placeholder: "กรุณาใส่อีเมล",
-                    value: "",
-                },
-                {
-                    type: "statusToggle",
-                    label: "การเปิดเผยตัวตน",
-                    placeholder: "กรุณาใส่การเปิดเผยตัวตน",
-                    value: StatusGroup.nominate,
-                },
-            ]
-        }
         if(item) {
+            form = {
+                schemas: [
+                    {
+                        type: "text",
+                        label: "ชื่อที่แสดง",
+                        placeholder: "กรุณาใส่ชื่อที่แสดง",
+                        value: "",
+                    },
+                    {
+                        type: "text",
+                        label: "ชื่อ-นามสกุล",
+                        placeholder: "กรุณาใส่ชื่อ-นามสกุล",
+                        value: "",
+                    },
+                    {
+                        type: "text",
+                        label: "อีเมล",
+                        placeholder: "กรุณาใส่อีเมล",
+                        value: "",
+                    },
+                    {
+                        type: "statusToggle",
+                        label: "การเปิดเผยตัวตน",
+                        placeholder: "กรุณาใส่การเปิดเผยตัวตน",
+                        value: StatusGroup.nominate,
+                    },
+                ]
+            }
             form._id = item._id
             item.values.forEach((value, index) => {
                 if (form.schemas[index].type === 'statusToggle') {
@@ -114,36 +115,74 @@
                     form.schemas[index].value = value
                 }
             })
+
+        } else {
+            form = {
+                schemas: [
+                    {
+                        type: "text",
+                        label: "ชื่อ-นามสกุล",
+                        placeholder: "กรุณาใส่ชื่อ-นามสกุล",
+                        value: "",
+                    },
+                    {
+                        type: "text",
+                        label: "อีเมล",
+                        placeholder: "กรุณาใส่อีเมล",
+                        value: "",
+                    },
+                ]
+            }
         }
     }
-    const sumbitForm = (event: CustomEvent<Form>) => {
+    const sumbitForm = async(event: CustomEvent<Form>) => {
+        isLoading = true
         if (formType === FormType.create) {
-            console.log(`CREATE: ${event.detail.schemas[0].value}`)
+            const user: User = {
+                userFullName: event.detail.schemas[0].value,
+                userEmail: event.detail.schemas[1].value,
+            }
+            await createUser(user, 'tch')
         } else {
-            console.log(`UPDATE ${event.detail._id}`)
+            const user: User = {
+                userUUID: event.detail._id,
+                userDisplayName: event.detail.schemas[0].value,
+                userFullName: event.detail.schemas[1].value,
+                userEmail: event.detail.schemas[2].value,
+                isAnonymous: event.detail.schemas[3].value === 'anonymous',
+            }
+            await updateUser(user)
         }
+        await getTeachers(0, limit)
+        isLoading = false
     }
 
     let isOpenDeleteModal = false;
     let deleteItem: DataTable;
     let selectedItems: DataTable[] = []
-    const deleteAction = () => {
-        console.log(`DELETE TEACHER ID: ${deleteItem._id}`)
+    const deleteAction = async () => {
+        isLoading = true
         isOpenDeleteModal = false;
+        await deleteUser(deleteItem._id)
+        await getTeachers(0, limit)
+        isLoading = false
     }
-    const multiDeleteAction = () => {
+    const multiDeleteAction = async() => {
         if (selectedItems.length) {
-            selectedItems.forEach(item => {
-                console.log(`DELETE TEACHER ID: ${item._id}`)
-            })
+            isLoading = true
+            for(let item of selectedItems) {
+                await deleteUser(item._id)
+            }
+            await getTeachers(0, limit)
             selectedItems = [];
+            isLoading = false
         }
     }
 </script>
 
 <div class="rounded-lg shadow-md w-full h-full p-4 sm:p-6 overflow-hidden bg-white text-black dark:bg-gray-700 dark:text-white ease-in duration-200">
     <AdminHeader title="อาจารย์" buttonName="เพิ่มอาจารย์" bind:deleteItemsCount={selectedItems.length} on:add={addItemAction} on:delete={multiDeleteAction} />
-    <Table bind:limit bind:total {columns} bind:data skeletonLoad multiSelect on:fetch={fetchTeachers} {actions} bind:selectedItems />
+    <Table bind:limit bind:total {columns} bind:data bind:isLoading skeletonLoad multiSelect on:fetch={fetchTeachers} {actions} bind:selectedItems />
 </div>
 
 <FormModal bind:open={isOpenFormModal} bind:title bind:form on:submit={sumbitForm} />
