@@ -12,7 +12,7 @@
     $: oobCode = $page.url.searchParams.get('oobCode')!
 
     const resetPass = async () => {
-        if (password === confirmPassword) {
+        if (password.length && password === confirmPassword) {
             await resetPassword(oobCode, password)
             goto('/login')
         }
@@ -36,11 +36,11 @@
             />
         </Label>
         <Label class="space-y-2 mt-4">
-            <span>รหัสผ่าน</span>
+            <span>รหัสผ่านใหม่</span>
             <Input
                 class="placeholder-gray-300"
                 type={isShowPassword ? 'text' : 'password'}
-                placeholder="กรุณากรอกรหัสผ่าน"
+                placeholder="กรุณากรอกรหัสผ่านใหม่"
                 size="md"
                 bind:value={password}
                 on:keydown={event => {
@@ -59,11 +59,11 @@
             </Input>
         </Label>
         <Label class="space-y-2 mt-4">
-            <span>ยืนยันรหัสผ่าน</span>
+            <span>ยืนยันรหัสผ่านใหม่</span>
             <Input
                 class="placeholder-gray-300"
                 type={isShowConfirmPassword ? 'text' : 'password'}
-                placeholder="กรุณากรอกรหัสผ่านอีกครั้ง"
+                placeholder="กรุณากรอกยืนยันรหัสผ่านอีกครั้ง"
                 size="md"
                 bind:value={confirmPassword}
                 on:keydown={event => {

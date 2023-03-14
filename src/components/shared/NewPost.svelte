@@ -98,5 +98,5 @@
 
 <div class="flex items-center justify-end gap-x-2 mt-4">
     <Button color="dark" size="sm" type="reset" on:click={cancel}>ยกเลิก</Button>
-    <Button color="green" size="sm" type="submit" disabled={!title?.value || !description?.value} on:click={submit}>{submitName}</Button>
+    <Button color="green" size="sm" type="submit" disabled={!title?.value || !description?.value || (categories && categories.length && !categories.filter(category => category.isActive)?.length)} on:click={submit}>{submitName}</Button>
 </div>

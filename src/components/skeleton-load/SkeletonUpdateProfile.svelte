@@ -12,7 +12,10 @@
                 </div>
             {/each}
         </div>
+    </div>
 
-        <div class="md:w-72 w-full h-10 bg-gray-300 rounded-md dark:bg-gray-600" />
+    <div class="flex gap-x-4 justify-end">
+        <div class="md:w-36 w-full h-10 bg-gray-300 rounded-md dark:bg-gray-600" />
+        <div class="md:w-36 w-full h-10 bg-gray-300 rounded-md dark:bg-gray-600" />
     </div>
 </div>

@@ -8,16 +8,16 @@
 
     let alert: AlertModel;
 
-    let username = "";
+    let email = "";
     let password = "";
     let showPassword = false;
     let isLoading = false;
 
     const signin = async() => {
-        if (!username.length || !password.length) { return }
+        if (!email.length || !password.length) { return }
         isLoading = true;
 
-        const idToken = await signinFirebase(username, password);
+        const idToken = await signinFirebase(email, password);
         if (idToken) {
             await fetch("/api/token/verify", {
                     method: "POST",
@@ -67,7 +67,7 @@
                 type="email"
                 placeholder="กรุณากรอกอีเมลของท่าน"
                 bind:disabled={isLoading}
-                bind:value={username}
+                bind:value={email}
                 on:keydown={event => {
                     if (event.key === 'Enter') {
                         signin();
@@ -104,7 +104,7 @@
             class="mt-6 uppercase"
             color="green"
             on:click={signin}
-            disabled={!username.length || !password.length || isLoading}
+            disabled={!email.length || !password.length || isLoading}
         >
             เข้าสู่ระบบ
         </Button>
