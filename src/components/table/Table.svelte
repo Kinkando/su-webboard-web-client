@@ -17,19 +17,20 @@
 
     let actionLabel = "Action";
 
+    let searchText = "";
     let currentPage = 1;
     let initialCount = 0;
-    $: (currentPage || limit) && fetch()
+    $: (currentPage || limit || searchText) && fetch()
     $: data && loading()
     $: if (selectedItems.length === 0) {
         isSelectAll = false;
     }
 
     onMount(() => fetch())
-    const dispatch = createEventDispatcher<{ [event: string]: { page: number } }>()
+    const dispatch = createEventDispatcher<{ [event: string]: { page: number, searchText: string } }>()
     const fetch = () => {
         isLoading = true;
-        dispatch("fetch", { page: currentPage })
+        dispatch("fetch", { page: currentPage, searchText })
     }
     const loading = () => isLoading = (++initialCount) <= 2
 
@@ -50,7 +51,7 @@
     const columnNumber = columns.length + (actions ? 1 : 0) + (multiSelect ? 1 : 0)
 </script>
 
-<Header bind:limit on:search={() => fetch()} />
+<Header bind:limit on:search={event => searchText = event.detail.searchText} />
 
 <!-- TABLE ON TABLET+ -->
 <div class="hidden sm:block relative overflow-x-auto shadow-md drop-shadow-lg rounded-lg mb-4">

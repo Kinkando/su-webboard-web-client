@@ -8,6 +8,7 @@
 	import { StatusGroup, type User } from "@models/user";
 	import { getUser, createUser, updateUser, deleteUser } from "@services/admin";
 
+    let searchText = "";
     let isLoading = true;
     let limit = 10;
     let total = 0;
@@ -60,9 +61,12 @@
         return dataTable
     })()
 
-    const fetchTeachers = async(event: CustomEvent<{ page: number }>) => await getTeachers((event.detail.page-1)*limit, limit)
+    const fetchTeachers = async(event: CustomEvent<{ page: number, searchText: string }>) => {
+        searchText = event.detail.searchText
+        await getTeachers((event.detail.page-1)*limit, limit)
+    }
     const getTeachers = async(offset: number, limit: number) => {
-        const res = await getUser('tch', offset, limit)
+        const res = await getUser('tch', searchText, offset, limit)
         teachers = res?.data || []
         total = res?.total || 0
     }

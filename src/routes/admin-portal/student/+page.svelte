@@ -9,6 +9,7 @@
 	import { getUser, createUser, updateUser, deleteUser } from "@services/admin";
 
     let isLoading = true;
+    let searchText = "";
     let limit = 10;
     let total = 0;
     let students: User[] = [];
@@ -62,9 +63,12 @@
         return dataTable
     })()
 
-    const fetchStudents = async(event: CustomEvent<{ page: number }>) => await getStudents((event.detail.page-1)*limit, limit)
+    const fetchStudents = async(event: CustomEvent<{ page: number, searchText: string }>) => {
+        searchText = event.detail.searchText
+        await getStudents((event.detail.page-1)*limit, limit)
+    }
     const getStudents = async(offset: number, limit: number) => {
-        const res = await getUser('std', offset, limit)
+        const res = await getUser('std', searchText, offset, limit)
         students = res?.data || []
         total = res?.total || 0
     }

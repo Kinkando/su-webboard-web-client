@@ -12,10 +12,10 @@
         limit = entry;
         open = false;
     }
-    const dispatch = createEventDispatcher<{ [event: string]: { search: string } }>()
+    const dispatch = createEventDispatcher<{ [event: string]: { searchText: string } }>()
     const search = (event: KeyboardEvent) => {
         if (event.key === 'Enter') {
-            dispatch("search", { search: searchText })
+            dispatch("search", { searchText })
         }
     }
 </script>

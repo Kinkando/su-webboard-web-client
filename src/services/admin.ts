@@ -6,9 +6,9 @@ import { sleep } from "./forum";
 
 const baseURL = import.meta.env.VITE_API_HOST
 
-export async function getUser(userType: string, offset: number, limit: number) {
+export async function getUser(userType: string, search: string, offset: number, limit: number) {
     const res = await api<{ total: number, data: User[] }>({
-        url: `${baseURL}/admin/user?offset=${offset}&limit=${limit}&userType=${userType}`,
+        url: `${baseURL}/admin/user?offset=${offset}&limit=${limit}&userType=${userType}${search ? '&search='+search : ''}`,
         method: "GET",
     })
     return res.data
