@@ -10,7 +10,7 @@
     let page = 1;
     let limit = 10;
 
-    const fetchData = async () => await getForumListByCategoryID(category.categoryID, (page-1)*limit, limit)
+    const fetchData = async () => await getForumListByCategoryID(category?.categoryID!, (page-1)*limit, limit)
 </script>
 
 <div class="mb-4">

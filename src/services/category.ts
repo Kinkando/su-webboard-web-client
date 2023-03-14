@@ -1,35 +1,16 @@
+import type { Cookies } from "@sveltejs/kit";
 import type { Category, CategoryDetail } from "@models/category";
+import api from "@util/api";
 
-export async function getAllCategories() {
-    const categories: Category[] = [
-        {
-            categoryID: 1,
-            categoryName: "ชีวิตประจำวัน",
-            categoryHexColor: "#86D97F",
-        },
-        {
-            categoryID: 2,
-            categoryName: "กีฬา",
-            categoryHexColor: "#4C52E0",
-        },
-        {
-            categoryID: 3,
-            categoryName: "อาหาร",
-            categoryHexColor: "#857800",
-        },
-        {
-            categoryID: 4,
-            categoryName: "การศึกษา",
-            categoryHexColor: "#E04C6F",
-        },
-        {
-            categoryID: 5,
-            categoryName: "โปรแกรมมิ่ง",
-            categoryHexColor: "#48D7E0",
-        },
-    ]
-    await new Promise(resolve => setTimeout(() => resolve(""), 500))
-    return categories
+const baseURL = import.meta.env.VITE_API_HOST
+
+export async function getAllCategories(cookie?: Cookies) {
+    const res = await api<Category[]>({
+        url: `${baseURL}/category`,
+        method: "GET",
+        cookie,
+    })
+    return res.data
 }
 
 export async function getCategoryByID(categoryID: number): Promise<Category|undefined> {
