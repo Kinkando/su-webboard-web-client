@@ -34,11 +34,11 @@ export async function updateUser(user: User) {
     })
 }
 
-export async function deleteUser(userUUID: string) {
+export async function deleteUsers(userUUIDs: string[]) {
     return await api({
         url: `${baseURL}/admin/user`,
         method: "DELETE",
-        data: { userUUID },
+        data: { userUUIDs },
     })
 }
 
@@ -58,11 +58,11 @@ export async function upsertCategory(category: Category) {
     })
 }
 
-export async function deleteCategory(categoryID: number) {
+export async function deleteCategories(categoryIDs: number[]) {
     return await api({
         url: `${baseURL}/admin/category`,
         method: "DELETE",
-        data: { categoryID },
+        data: { categoryIDs },
     })
 }
 

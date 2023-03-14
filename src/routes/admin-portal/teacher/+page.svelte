@@ -6,7 +6,7 @@
 	import { FormType, type Form } from '@models/form';
 	import type { ActionTable, DataTable } from "@models/table";
 	import { StatusGroup, type User } from "@models/user";
-	import { getUser, createUser, updateUser, deleteUser } from "@services/admin";
+	import { getUser, createUser, updateUser, deleteUsers } from "@services/admin";
 
     let searchText = "";
     let isLoading = true;
@@ -169,16 +169,14 @@
     const deleteAction = async () => {
         isLoading = true
         isOpenDeleteModal = false;
-        await deleteUser(deleteItem._id)
+        await deleteUsers([deleteItem._id])
         await getTeachers(offset, limit)
         isLoading = false
     }
     const multiDeleteAction = async() => {
         if (selectedItems.length) {
             isLoading = true
-            for(let item of selectedItems) {
-                await deleteUser(item._id)
-            }
+            await deleteUsers(selectedItems.map(item => item._id))
             await getTeachers(offset, limit)
             selectedItems = [];
             isLoading = false

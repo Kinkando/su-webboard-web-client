@@ -5,7 +5,7 @@
 	import Table from '@components/table/Table.svelte';
 	import type { Category } from '@models/category';
 	import type { ActionTable, DataTable } from "@models/table";
-	import { deleteCategory, getCategories, upsertCategory } from "@services/admin";
+	import { deleteCategories, getCategories, upsertCategory } from "@services/admin";
 	import { FormType, type Form } from '@models/form';
 
     let isLoading = true;
@@ -123,16 +123,14 @@
     const deleteAction = async() => {
         isLoading = true
         isOpenDeleteModal = false
-        await deleteCategory(Number(deleteItem._id))
+        await deleteCategories([Number(deleteItem._id)])
         await fetchCategories(offset, limit)
         isLoading = false
     }
     const multiDeleteAction = async() => {
         if (selectedItems.length) {
             isLoading = true
-            for(const item of selectedItems) {
-                await deleteCategory(Number(item._id))
-            }
+            await deleteCategories(selectedItems.map(item => Number(item._id)))
             await fetchCategories(offset, limit)
             selectedItems = []
             isLoading = false
