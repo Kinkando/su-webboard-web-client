@@ -1,31 +1,32 @@
-import { UserType } from "@models/auth";
-import type { Notification } from "@models/notification";
-import type { User } from "@models/user";
-import { getNotiList } from "@services/notification";
-import { getUserProfile } from "@services/user";
-import { getUserType } from "@util/cookies";
-import type { LayoutServerLoad } from "./$types";
-import userStore from '@stores/user'
-import notificationStore from '@stores/notification'
 
-interface Layout {
-    user?: User
-    notification?: Notification
-    routeID: string
-    userType: string
-    isValid: boolean
-}
+// import { UserType } from "@models/auth";
+// import type { Notification } from "@models/notification";
+// import type { User } from "@models/user";
+// import { getNotiList } from "@services/notification";
+// import { getUserProfile } from "@services/user";
+// import { getUserType } from "@util/cookies";
+import type { LayoutServerLoad } from "./$types";
+// import userStore from '@stores/user'
+// import notificationStore from '@stores/notification'
+
+// interface Layout {
+//     user?: User
+//     notification?: Notification
+//     routeID: string
+//     userType: string
+//     isValid: boolean
+// }
 
 export const load: LayoutServerLoad = async ({ cookies, route }) => {
-    const { userType, isValid } = getUserType(cookies)
-    const res: Layout = { routeID: route?.id!, userType, isValid }
-    if ([UserType.STUDENT, UserType.TEACHER].includes(userType as UserType) && isValid) {
-        res.user = await getUserProfile()
-        res.notification = await getNotiList()
-        userStore.set({...res.user})
-        notificationStore.set({...res.notification})
-    }
-    return res
+    // const { userType, isValid } = getUserType(cookies)
+    // const res: Layout = { routeID: route?.id!, userType, isValid }
+    // if ([UserType.STUDENT, UserType.TEACHER].includes(userType as UserType) && isValid) {
+    //     res.user = await getUserProfile(cookies)
+    //     res.notification = await getNotiList()
+    //     userStore.set({...res.user})
+    //     notificationStore.set({...res.notification})
+    // }
+    // return res
 }
 
 // /** @type {import('./$types').LayoutServerLoad} */
@@ -41,6 +42,13 @@ export const load: LayoutServerLoad = async ({ cookies, route }) => {
 //     const isTeacher = userType === UserType.TEACHER && isValid
 //     return isTeacher
 // }) satisfies LayoutServerLoad;
+
+// onMount twice
+
+// admin portal ui on modal open and resize (backdrop animate) and modal overlap on sidebar
+// admin portal modal form validation
+// admin portal error not found page
+// admin portal internal server error page
 
 // admin add form validation
 

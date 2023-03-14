@@ -1,35 +1,17 @@
-import { initializeApp } from "firebase/app";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth"
+import {
+    signInWithEmailAndPassword,
+    sendPasswordResetEmail,
+    confirmPasswordReset,
+    checkActionCode,
+    updatePassword,
+    reauthenticateWithCredential,
+    EmailAuthProvider,
+} from "firebase/auth"
+import auth from "@util/firebase"
 
-const env = import.meta.env;
-
-interface FirebaseConfiguration {
-  readonly apiKey: string
-  readonly authDomain: string
-  readonly projectId: string
-  readonly storageBucket: string
-  readonly messagingSenderId: string
-  readonly appId: string
-  readonly measurementId: string
-}
-
-const firebaseConfig: FirebaseConfiguration = {
-    apiKey: env.VITE_FIREBASE_API_KEY,
-    authDomain: env.VITE_FIREBASE_AUTH_DOMAIN,
-    projectId: env.VITE_FIREBASE_PROJECT_ID,
-    storageBucket: env.VITE_FIREBASE_STORAGE_BUCKET,
-    messagingSenderId: env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-    appId: env.VITE_FIREBASE_APP_ID,
-    measurementId: env.VITE_FIREBASE_MEASUREMENT_ID,
-}
-
-const firebase = initializeApp(firebaseConfig);
-const auth = getAuth(firebase)
-auth.useDeviceLanguage()
-
-export async function signinFirebase(username: string, password: string): Promise<string> {
+export async function signinFirebase(email: string, password: string): Promise<string> {
     try {
-        const userCredential = await signInWithEmailAndPassword(auth, username, password)
+        const userCredential = await signInWithEmailAndPassword(auth, email, password)
         const idToken = (userCredential as any)._tokenResponse.idToken
         // const email = userCredential.user.email || "";
 
@@ -37,4 +19,31 @@ export async function signinFirebase(username: string, password: string): Promis
     } catch(err) {
         return ""
     }
+}
+
+export async function sendResetPassword(email: string) {
+    await sendPasswordResetEmail(auth, email)
+}
+
+export async function resetPassword(oobCode: string, password: string) {
+    await confirmPasswordReset(auth, oobCode, password)
+}
+
+export async function getEmail(oobCode: string) {
+    const res = await checkActionCode(auth, oobCode)
+    return res?.data?.email
+}
+
+export async function changePassword(email: string, oldPassword: string, newPassword: string) {
+    if (auth.currentUser) {
+        try {
+            const credential = EmailAuthProvider.credential(email, oldPassword)
+            await reauthenticateWithCredential(auth.currentUser, credential)
+            await updatePassword(auth.currentUser, newPassword)
+            return true
+        } catch (error) {
+            return false
+        }
+    }
+    return false
 }

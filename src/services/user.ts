@@ -1,17 +1,32 @@
 import type { User } from "@models/user";
-import { sleep } from "./forum";
+import type { Cookies } from "@sveltejs/kit";
+import api from "@util/api";
 
-export async function getUserProfile(): Promise<User> {
-    const user: User = {
-        userDisplayName: "Kook Kai",
-        userFullName: "Todsapon Prajin",
-        userEmail: "test@email.com",
-        userImageURL: "https://ps.w.org/user-avatar-reloaded/assets/icon-128x128.png?rev=2540745",
-        studentID: "620710001",
-        isAnnonymous: false
+const baseURL = import.meta.env.VITE_API_HOST
+
+export async function getUserProfile(cookie?: Cookies) {
+    const response = await api<User>({
+        url: `${baseURL}/user/profile`,
+        method: 'GET',
+        cookie,
+    })
+    return response.data!
+}
+
+export async function updateUserProfile(userDisplayName: string, isAnonymous: boolean, userImage?: File) {
+    const formData = new FormData();
+    formData.append("data", JSON.stringify({ userDisplayName, isAnonymous }))
+    if (userImage) {
+        formData.append("file", userImage)
     }
-    // await sleep()
-    return user
+    await api<User>({
+        url: `${baseURL}/user/profile`,
+        method: 'PATCH',
+        data: formData,
+        headers: {
+            "Content-Type": 'multipart/form-data'
+        }
+    })
 }
 
 export async function getAvatars(): Promise<string[]> {

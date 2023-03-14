@@ -1,5 +1,4 @@
 import { TokenType, type AccessJWT, type RefreshJWT } from "@models/auth";
-import type { Cookies } from "@sveltejs/kit";
 import jwtDecode from "jwt-decode"
 
 export function getUserType(): { userType: string, isValid: boolean } {
@@ -30,7 +29,7 @@ export function getToken(): { accessToken: string|undefined, refreshToken: strin
     const accessToken = localStorage.getItem(TokenType.AccessToken)
     if (accessToken) {
         const decodeJWT = jwtDecode(accessToken) as AccessJWT
-        const now = new Date().getTime();
+        const now = new Date().getTime() / 1000;
         if (now <= decodeJWT.exp) {
             token.accessToken = accessToken;
         }

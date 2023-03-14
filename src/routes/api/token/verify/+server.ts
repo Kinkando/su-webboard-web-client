@@ -1,4 +1,3 @@
-import { TokenType } from "@models/auth";
 import { verifyToken } from "@services/authen";
 import { json } from "@sveltejs/kit";
 import { setToken } from "@util/cookies";

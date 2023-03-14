@@ -30,7 +30,7 @@ export function getToken(cookies: Cookies): { accessToken: string|undefined, ref
     const accessToken = cookies.get(TokenType.AccessToken)
     if (accessToken) {
         const decodeJWT = jwtDecode(accessToken) as AccessJWT
-        const now = new Date().getTime();
+        const now = new Date().getTime() / 1000;
         if (now <= decodeJWT.exp) {
             token.accessToken = accessToken;
         }
