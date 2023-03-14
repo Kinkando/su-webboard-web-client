@@ -45,7 +45,7 @@ export default async function api<T>(config: AxiosRequestCustomConfig): Promise<
             })
             .catch((err: AxiosError) => {
                 if (err.response?.status === http.StatusInternalServerError) {
-                    goto("/internal-server-error");
+                    // goto("/internal-server-error");
                 }
                 response.status = err.response?.status
                 response.error = err.response?.data as ErrorResult

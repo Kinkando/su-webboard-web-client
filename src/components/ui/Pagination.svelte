@@ -24,7 +24,9 @@
         firstItem = !total ? 0 : (currentPage-1) * limit + 1;
         lastItem = Math.min(firstItem+limit-1, total);
         if(firstItem > total) {
-            currentPage = -1;
+            currentPage = 1;
+            firstItem = total ? 1 : 0;
+            lastItem = Math.min(firstItem+limit-1, total);
         }
     }
 

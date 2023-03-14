@@ -11,6 +11,7 @@
     let isLoading = true;
     let searchText = "";
     let limit = 10;
+    let offset = 0;
     let total = 0;
     let students: User[] = [];
     const columns: string[] = [
@@ -65,7 +66,8 @@
 
     const fetchStudents = async(event: CustomEvent<{ page: number, searchText: string }>) => {
         searchText = event.detail.searchText
-        await getStudents((event.detail.page-1)*limit, limit)
+        offset = (event.detail.page > 0 ? event.detail.page-1 : 0)*limit
+        await getStudents(offset, limit)
     }
     const getStudents = async(offset: number, limit: number) => {
         const res = await getUser('std', searchText, offset, limit)
@@ -173,7 +175,7 @@
             }
             await updateUser(user)
         }
-        await getStudents(0, limit)
+        await getStudents(offset, limit)
         isLoading = false
     }
 
@@ -184,7 +186,7 @@
         isLoading = true
         isOpenDeleteModal = false;
         await deleteUser(deleteItem._id)
-        await getStudents(0, limit)
+        await getStudents(offset, limit)
         isLoading = false
     }
     const multiDeleteAction = async() => {
@@ -193,7 +195,7 @@
             for(let item of selectedItems) {
                 await deleteUser(item._id)
             }
-            await getStudents(0, limit)
+            await getStudents(offset, limit)
             selectedItems = [];
             isLoading = false
         }

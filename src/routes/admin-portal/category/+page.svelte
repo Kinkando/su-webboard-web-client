@@ -5,12 +5,15 @@
 	import Table from '@components/table/Table.svelte';
 	import type { Category } from '@models/category';
 	import type { ActionTable, DataTable } from "@models/table";
-	import { getCategories } from "@services/admin";
+	import { deleteCategory, getCategories, upsertCategory } from "@services/admin";
 	import { FormType, type Form } from '@models/form';
 
+    let isLoading = true;
+    let searchText = "";
     let limit = 10;
+    let offset = 0;
     let total = 0;
-    let categories: Category[];
+    let categories: Category[] = []
     const columns: string[] = [
         "หมวดหมู่",
         "สี",
@@ -45,7 +48,7 @@
         const dataTable: DataTable[] = [];
         categories?.forEach(category=> {
             dataTable.push({
-                "_id": category.categoryID.toString(),
+                "_id": category.categoryID!.toString(),
                 values: [
                     category.categoryName,
                     `<div class="flex items-center">
@@ -58,10 +61,15 @@
         return dataTable
     })()
 
-    const fetchCategories = async(event: CustomEvent<{ page: number }>) => {
-        const res = await getCategories((event.detail.page-1)*limit, limit)
-        categories = res.data
-        total = res.total
+    const fetch = async(event: CustomEvent<{ page: number, searchText: string }>) => {
+        searchText = event.detail.searchText
+        offset = (event.detail.page > 0 ? event.detail.page-1 : 0)*limit
+        await fetchCategories(offset, limit)
+    }
+    const fetchCategories = async(offset: number, limit: number) => {
+        const res = await getCategories(searchText, offset, limit)
+        categories = res?.data || []
+        total = res?.total || 0
     }
 
     let isOpenFormModal = false;
@@ -94,37 +102,47 @@
         if(item) {
             form._id = item._id
             form.schemas[0].value = item.values[0]
-            form.schemas[1].value = categories?.find(category => category.categoryID.toString() === item._id)?.categoryHexColor!
+            form.schemas[1].value = categories?.find(category => category?.categoryID?.toString() === item._id)?.categoryHexColor!
         }
     }
-    const sumbitForm = (event: CustomEvent<Form>) => {
-        if (formType === FormType.create) {
-            console.log(`CREATE: ${event.detail.schemas[0].value}`)
-        } else {
-            console.log(`UPDATE ${event.detail._id}`)
+    const sumbitForm = async (event: CustomEvent<Form>) => {
+        isLoading = true
+        const category: Category = {
+            categoryID: Number(event.detail._id),
+            categoryName: event.detail.schemas[0].value,
+            categoryHexColor: event.detail.schemas[1].value,
         }
+        await upsertCategory(category)
+        await fetchCategories(offset, limit)
+        isLoading = false
     }
 
     let isOpenDeleteModal = false;
     let deleteItem: DataTable;
     let selectedItems: DataTable[] = []
-    const deleteAction = () => {
-        console.log(`DELETE CATEGORY ID: ${deleteItem._id}`)
-        isOpenDeleteModal = false;
+    const deleteAction = async() => {
+        isLoading = true
+        isOpenDeleteModal = false
+        await deleteCategory(Number(deleteItem._id))
+        await fetchCategories(offset, limit)
+        isLoading = false
     }
-    const multiDeleteAction = () => {
+    const multiDeleteAction = async() => {
         if (selectedItems.length) {
-            selectedItems.forEach(item => {
-                console.log(`DELETE CATEGORY ID: ${item._id}`)
-            })
-            selectedItems = [];
+            isLoading = true
+            for(const item of selectedItems) {
+                await deleteCategory(Number(item._id))
+            }
+            await fetchCategories(offset, limit)
+            selectedItems = []
+            isLoading = false
         }
     }
 </script>
 
 <div class="rounded-lg shadow-md w-full h-full p-4 sm:p-6 overflow-hidden bg-white text-black dark:bg-gray-700 dark:text-white ease-in duration-200">
     <AdminHeader title="หมวดหมู่" buttonName="เพิ่มหมวดหมู่" bind:deleteItemsCount={selectedItems.length} on:add={addItemAction} on:delete={multiDeleteAction} />
-    <Table bind:limit bind:total {columns} bind:data skeletonLoad multiSelect on:fetch={fetchCategories} {actions} bind:selectedItems />
+    <Table bind:limit bind:total {columns} bind:data bind:isLoading skeletonLoad multiSelect on:fetch={fetch} {actions} bind:selectedItems />
 </div>
 
 <FormModal bind:open={isOpenFormModal} bind:title bind:form on:submit={sumbitForm} />

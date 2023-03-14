@@ -65,7 +65,6 @@ export async function getHomeData(): Promise<Home> {
                 title: "ใช้ชีวิตยังไงให้สนุก",
                 categories: [
                     {
-                        categorySeq: 1,
                         categoryID: 1,
                         categoryName: "ชีวิตประจำวัน",
                         categoryHexColor: "#86D97F",
@@ -84,13 +83,11 @@ export async function getHomeData(): Promise<Home> {
                 title: "ทำไมโปรตีนถึงดีกว่าที่คุณคิด?",
                 categories: [
                     {
-                        categorySeq: 1,
                         categoryID: 2,
                         categoryName: "กีฬา",
                         categoryHexColor: "#4C52E0",
                     },
                     {
-                        categorySeq: 2,
                         categoryID: 3,
                         categoryName: "อาหาร",
                         categoryHexColor: "#857800",
@@ -108,13 +105,11 @@ export async function getHomeData(): Promise<Home> {
                 title: "Python vs C: 10 หลักความแตกต่างที่คุณต้องรู้",
                 categories: [
                     {
-                        categorySeq: 1,
                         categoryID: 4,
                         categoryName: "การศึกษา",
                         categoryHexColor: "#E04C6F",
                     },
                     {
-                        categorySeq: 2,
                         categoryID: 5,
                         categoryName: "โปรแกรมมิ่ง",
                         categoryHexColor: "#48D7E0",
@@ -132,49 +127,41 @@ export async function getHomeData(): Promise<Home> {
                 title: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt maiores dolor suscipit laudantium error aperiam quo fuga ratione rem ut.",
                 categories: [
                     {
-                        categorySeq: 1,
                         categoryID: 4,
                         categoryName: "การศึกษา",
                         categoryHexColor: "#E04C6F",
                     },
                     {
-                        categorySeq: 2,
                         categoryID: 5,
                         categoryName: "โปรแกรมมิ่ง",
                         categoryHexColor: "#48D7E0",
                     },
                     {
-                        categorySeq: 3,
                         categoryID: 2,
                         categoryName: "กีฬา",
                         categoryHexColor: "#4C52E0",
                     },
                     {
-                        categorySeq: 4,
                         categoryID: 3,
                         categoryName: "อาหาร",
                         categoryHexColor: "#857800",
                     },
                     {
-                        categorySeq: 5,
                         categoryID: 6,
                         categoryName: "เกม",
                         categoryHexColor: "#994a",
                     },
                     {
-                        categorySeq: 6,
                         categoryID: 7,
                         categoryName: "การทำงาน",
                         categoryHexColor: "#abcd",
                     },
                     {
-                        categorySeq: 7,
                         categoryID: 8,
                         categoryName: "การท่องเที่ยว",
                         categoryHexColor: "#1296",
                     },
                     {
-                        categorySeq: 8,
                         categoryID: 9,
                         categoryName: "การทำอาหาร",
                         categoryHexColor: "#4685",
@@ -192,13 +179,11 @@ export async function getHomeData(): Promise<Home> {
                 title: "ทดสอบกระทู้ยอดนิยมอันดับที่ 5",
                 categories: [
                     {
-                        categorySeq: 1,
                         categoryID: 4,
                         categoryName: "การศึกษา",
                         categoryHexColor: "#E04C6F",
                     },
                     {
-                        categorySeq: 2,
                         categoryID: 5,
                         categoryName: "โปรแกรมมิ่ง",
                         categoryHexColor: "#48D7E0",

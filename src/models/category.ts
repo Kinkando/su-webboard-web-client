@@ -1,6 +1,5 @@
 export interface Category {
-    categoryID: number
-    categorySeq?: number
+    categoryID?: number
     categoryName: string
     categoryHexColor: string
     isActive?: boolean
@@ -8,7 +7,6 @@ export interface Category {
 
 export interface CategoryDetail {
     categoryID: number
-    categorySeq?: number
     categoryName: string
     categoryHexColor: string
     latestUpdatedDate: Date
