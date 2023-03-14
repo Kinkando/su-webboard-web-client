@@ -2,20 +2,17 @@
     import "../app.postcss";
 	import { onMount } from 'svelte';
 	import { fly } from 'svelte/transition';
+	import { browser } from "$app/environment";
+	import { afterNavigate, beforeNavigate } from "$app/navigation";
     import { page } from '$app/stores';
-	import { afterNavigate, beforeNavigate, goto } from "$app/navigation";
+	import Topbar from "@components/layout/Topbar.svelte";
 	import LoadingSpinner from '@components/spinner/LoadingSpinner.svelte';
 	import AuthGuard from '@middleware/AuthGuard.svelte';
-	import Topbar from "@components/layout/Topbar.svelte";
+	import { getNotiList } from "@services/notification";
+	import { getUserProfile } from "@services/user";
+    import notificationStore from '@stores/notification'
+    import userStore from '@stores/user'
 	import { getUserType } from "@util/localstorage";
-	import { browser } from "$app/environment";
-
-    export let data: any;
-
-    let isLoading = true;
-    onMount(() => isLoading = false)
-    beforeNavigate(() => isLoading = true)
-    afterNavigate(() => isLoading = false)
 
     $: title = (() => {
         const adminPortalPrefix = "ADMIN PORTAL | "
@@ -58,6 +55,17 @@
         userType = local.userType
         isValidToken = local.isValid
     }
+
+    let isLoading = true;
+    onMount(async() => {
+        isLoading = false;
+        if (isUserSite) {
+            userStore.set(await getUserProfile())
+            notificationStore.set(await getNotiList())
+        }
+    })
+    beforeNavigate(() => isLoading = true)
+    afterNavigate(() => isLoading = false)
 </script>
 
 <svelte:head>
@@ -70,7 +78,7 @@
 {#key $page.url.pathname}
     <AuthGuard bind:routeID={$page.url.pathname} bind:userType bind:isValidToken>
         {#if isUserSite}
-            <Topbar bind:data />
+            <Topbar bind:userType />
 
             <article class="fixed top-0 w-screen h-screen bg-gray-200 dark:bg-gray-800 ease-in duration-200 transition-colors overflow-hidden" />
             <main class="relative top-16 min-h-[calc(100vh-64px*2)] overflow-x-hidden">

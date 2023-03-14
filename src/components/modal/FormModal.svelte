@@ -34,7 +34,7 @@
                 {#if schema?.type === "color"}
                     <div id="category" class="ease-in duration-200 w-full p-2.5 border dark:border-gray-500 text-sm rounded-lg bg-gray-50 dark:bg-gray-700 overflow-x-hidden flex items-center flex-wrap">
                         <input type="color" id="title" class="ease-in duration-200 placeholder-gray-300" bind:value={editableForm.schemas[index].value} placeholder={schema.placeholder} required />
-                        <input class="ml-2 bg-inherit text-inherit focus:outline-none" bind:value={editableForm.schemas[index].value} placeholder={schema.placeholder} required />
+                        <input class="w-[calc(100%-4rem)] ml-2 bg-inherit text-inherit focus:outline-none" bind:value={editableForm.schemas[index].value} placeholder={schema.placeholder} required />
                     </div>
                 {:else if schema?.type === "statusToggle"}
                     <div class="flex gap-x-2.5">
