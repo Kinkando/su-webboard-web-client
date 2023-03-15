@@ -1,10 +1,13 @@
 <script lang="ts">
+	import { page } from '$app/stores';
     import { Button, Card, Label, Input, Spinner } from 'flowbite-svelte';
 	import Alert from '@components/alert/Alert.svelte';
 	import type { Alert as AlertModel } from '@models/alert';
 	import { signinFirebase } from '@services/firebase';
 	import { setToken } from '@util/localstorage';
 	import CommonScreen from '@components/shared/CommonScreen.svelte';
+	import { getGoogleOauthToken, redirectGoogleLogin } from '@services/googles';
+	import { onMount } from 'svelte';
 
     let alert: AlertModel;
 
@@ -13,20 +16,47 @@
     let showPassword = false;
     let isLoading = false;
 
+    $: code = $page.url.searchParams.get('code')
+
+    onMount(async() => {
+        if (code) {
+            const google = await getGoogleOauthToken(code)
+            if (google && google.access_token) {
+                isLoading = true;
+                email = "**********"
+                password = "**********"
+                await verify('google', undefined, google.access_token);
+                isLoading = false
+                email = ""
+                password = ""
+            }
+        }
+    })
+
     const signin = async() => {
         if (!email.length || !password.length) { return }
         isLoading = true;
 
         const idToken = await signinFirebase(email, password);
         if (idToken) {
-            await fetch("/api/token/verify", {
-                    method: "POST",
-                    body: JSON.stringify({ idToken }),
-                }
-            ).
+            await verify('verify', idToken)
+        } else {
+            alert = {
+                color: 'red',
+                message: 'ชื่อผู้ใช้หรือรหัสผ่านผิดพลาด โปรดลองใหม่อีกครั้ง!',
+            }
+        }
+        isLoading = false
+    }
+
+    const verify = async (provider: 'google' | 'verify', idToken?: string, accessToken?: string) => {
+        await fetch("/api/token/" + provider, {
+                method: "POST",
+                body: JSON.stringify({ idToken, accessToken }),
+            }).
             then(async (res) => {
                 const token = await res.json()
-                if (token) {
+                if (token?.accessToken && token?.refreshToken) {
                     setToken(token.accessToken, token.refreshToken)
                     window.location.href = "/";
                     alert = {
@@ -36,7 +66,7 @@
                 } else {
                     alert = {
                         color: 'red',
-                        message: 'เกิดข้อผิดพลาดทางเทคนิคเล็กน้อย โปรดลองใหม่อีกครั้ง!',
+                        message: provider === 'google' ? 'ขออภัย ไม่พบบัญชีนี้ในระบบ โปรดลองใหม่อีกครั้ง!' : 'เกิดข้อผิดพลาดทางเทคนิคเล็กน้อย โปรดลองใหม่อีกครั้ง!',
                     }
                 }
             }).
@@ -46,13 +76,6 @@
                     message: 'ชื่อผู้ใช้หรือรหัสผ่านผิดพลาด โปรดลองใหม่อีกครั้ง!',
                 }
             })
-        } else {
-            alert = {
-                color: 'red',
-                message: 'ชื่อผู้ใช้หรือรหัสผ่านผิดพลาด โปรดลองใหม่อีกครั้ง!',
-            }
-        }
-        isLoading = false
     }
 </script>
 
@@ -106,9 +129,17 @@
                 </button>
             </Input>
         </Label>
+
+        <Button class="my-6 !bg-white !text-black !border !border-gray-300 drop-shadow-sm hover:!bg-gray-200 ease-in duration-200" href={redirectGoogleLogin}>
+            <div class="flex items-center">
+                <img src="/images/google-icon.png" alt="" class="w-6 h-6">
+                <span class="ml-4">Sign in with Google</span>
+            </div>
+        </Button>
+
         <Button
             type="submit"
-            class="mt-6 uppercase"
+            class="uppercase"
             color="green"
             on:click={signin}
             disabled={!email.length || !password.length || isLoading}
