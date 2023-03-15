@@ -165,14 +165,16 @@
         isLoading = true
         isOpenDeleteModal = false;
         await deleteUsers([deleteItem._id])
-        await getTeachers(offset, limit)
+        data = data.filter(item => item._id !== deleteItem._id)
+        total -= 1
         isLoading = false
     }
     const multiDeleteAction = async() => {
         if (selectedItems.length) {
             isLoading = true
             await deleteUsers(selectedItems.map(item => item._id))
-            await getTeachers(offset, limit)
+            data = data.filter(item => !selectedItems.map(selectedItem => selectedItem._id).includes(item._id))
+            total -= selectedItems.length
             selectedItems = [];
             isLoading = false
         }
@@ -186,5 +188,5 @@
 
 <FormModal bind:open={isOpenFormModal} bind:title bind:form on:submit={sumbitForm} />
 <DeleteModal bind:open={isOpenDeleteModal} deleteButtonName="ยืนยัน" on:delete={deleteAction} >
-    คุณยืนยันที่จะ<span class="text-red-500">ลบข้อมูลอาจารย์ {deleteItem?.values[0]} </span>หรือไม่?
+    คุณยืนยันที่จะ<span class="text-red-500">ลบข้อมูลอาจารย์ {deleteItem?.values[1]} </span>หรือไม่?
 </DeleteModal>
