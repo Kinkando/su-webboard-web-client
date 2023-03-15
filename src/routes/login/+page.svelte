@@ -4,7 +4,7 @@
 	import Alert from '@components/alert/Alert.svelte';
 	import type { Alert as AlertModel } from '@models/alert';
 	import { signinFirebase } from '@services/firebase';
-	import { setToken } from '@util/localstorage';
+	import { getUserType, setToken } from '@util/localstorage';
 	import CommonScreen from '@components/shared/CommonScreen.svelte';
 	import { getGoogleOauthToken, redirectGoogleLogin } from '@services/googles';
 	import { onMount } from 'svelte';
@@ -58,7 +58,8 @@
                 const token = await res.json()
                 if (token?.accessToken && token?.refreshToken) {
                     setToken(token.accessToken, token.refreshToken)
-                    window.location.href = "/";
+                    const { userType } = getUserType()
+                    window.location.href = userType === 'adm' ? "/admin-portal" : "/"
                     alert = {
                         color: 'green',
                         message: 'เข้าสู่ระบบสำเร็จ!',

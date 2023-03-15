@@ -7,6 +7,7 @@ export interface User {
     studentID?: string
     isAnonymous?: boolean
     userType?: string
+    lastLogin?: Date
 }
 
 export enum StatusGroup {

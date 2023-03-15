@@ -42,6 +42,14 @@ export async function deleteUsers(userUUIDs: string[]) {
     })
 }
 
+export async function revokeUsers(userUUIDs: string[]) {
+    return await api({
+        url: `${baseURL}/admin/user/revoke`,
+        method: "POST",
+        data: { userUUIDs },
+    })
+}
+
 export async function getCategories(search: string, offset: number, limit: number) {
     const res = await api<{ total: number, data: Category[] }>({
         url: `${baseURL}/admin/category?offset=${offset}&limit=${limit}${search ? '&search='+search : ''}`,

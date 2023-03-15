@@ -1,4 +1,5 @@
 <script lang="ts">
+	import ConfirmModal from '@components/modal/ConfirmModal.svelte';
 	import DeleteModal from '@components/modal/DeleteModal.svelte';
 	import FormModal from '@components/modal/FormModal.svelte';
 	import AdminHeader from '@components/shared/AdminHeader.svelte';
@@ -6,7 +7,7 @@
 	import { FormType, type Form } from '@models/form';
 	import type { ActionTable, DataTable } from "@models/table";
 	import { StatusGroup, type User } from "@models/user";
-	import { getUser, createUser, updateUser, deleteUsers } from "@services/admin";
+	import { getUser, createUser, updateUser, deleteUsers, revokeUsers } from "@services/admin";
 
     let searchText = "";
     let isLoading = true;
@@ -20,6 +21,7 @@
         "ชื่อ-นามสกุล",
         "อีเมล",
         "การเปิดเผยตัวตน",
+        "เข้าสู่ระบบล่าสุด",
     ]
     const actions: ActionTable[] = [
         {
@@ -43,7 +45,18 @@
             `,
             click(item: DataTable) {
                 isOpenDeleteModal = true;
-                deleteItem = {...item};
+                selectedItem = {...item};
+            },
+        },
+        {
+            html: `
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 cursor-pointer rounded-full p-1 bg-purple-400 text-white hover:scale-110 ease-in duration-200">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+                </svg>
+            `,
+            click(item: DataTable) {
+                isOpenForceLogoutModal = true;
+                selectedItem = {...item};
             },
         },
     ]
@@ -58,6 +71,7 @@
                     teacher.userFullName,
                     teacher.userEmail,
                     teacher.isAnonymous ? "ไม่เปิดเผยตัวตน" : teacher.userDisplayName!,
+                    teacher.lastLogin ? new Date(teacher.lastLogin).toLocaleString('th', { year: 'numeric', month: 'narrow', day: '2-digit', hour12: false, hour: '2-digit', minute: '2-digit' }) : 'ยังไม่เคยเข้าสู่ระบบ'
                 ],
             })
         })
@@ -159,13 +173,13 @@
     }
 
     let isOpenDeleteModal = false;
-    let deleteItem: DataTable;
+    let selectedItem: DataTable;
     let selectedItems: DataTable[] = []
     const deleteAction = async () => {
         isLoading = true
         isOpenDeleteModal = false;
-        await deleteUsers([deleteItem._id])
-        data = data.filter(item => item._id !== deleteItem._id)
+        await deleteUsers([selectedItem._id])
+        data = data.filter(item => item._id !== selectedItem._id)
         total -= 1
         isLoading = false
     }
@@ -179,6 +193,12 @@
             isLoading = false
         }
     }
+
+    let isOpenForceLogoutModal = false;
+    const forceLogout = async() => {
+        isOpenForceLogoutModal = false;
+        await revokeUsers([selectedItem._id])
+    }
 </script>
 
 <div class="rounded-lg shadow-md w-full h-full p-4 sm:p-6 overflow-hidden bg-white text-black dark:bg-gray-700 dark:text-white ease-in duration-200">
@@ -188,5 +208,8 @@
 
 <FormModal bind:open={isOpenFormModal} bind:title bind:form on:submit={sumbitForm} />
 <DeleteModal bind:open={isOpenDeleteModal} deleteButtonName="ยืนยัน" on:delete={deleteAction} >
-    คุณยืนยันที่จะ<span class="text-red-500">ลบข้อมูลอาจารย์ {deleteItem?.values[1]} </span>หรือไม่?
+    คุณยืนยันที่จะ<span class="text-red-500">ลบข้อมูลอาจารย์ {selectedItem?.values[1]} </span>หรือไม่?
 </DeleteModal>
+<ConfirmModal bind:open={isOpenForceLogoutModal} on:confirm={forceLogout} icon="logout">
+    คุณยืนยันที่จะ<span class="text-red-500">บังคับอาจารย์ {selectedItem?.values[1]} ออกจากระบบ</span>หรือไม่?
+</ConfirmModal>
