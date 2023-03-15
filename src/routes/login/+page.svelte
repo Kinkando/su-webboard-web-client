@@ -26,11 +26,18 @@
             ).
             then(async (res) => {
                 const token = await res.json()
-                setToken(token.accessToken, token.refreshToken)
-                window.location.href = "/";
-                alert = {
-                    color: 'green',
-                    message: 'เข้าสู่ระบบสำเร็จ!',
+                if (token) {
+                    setToken(token.accessToken, token.refreshToken)
+                    window.location.href = "/";
+                    alert = {
+                        color: 'green',
+                        message: 'เข้าสู่ระบบสำเร็จ!',
+                    }
+                } else {
+                    alert = {
+                        color: 'red',
+                        message: 'เกิดข้อผิดพลาดทางเทคนิคเล็กน้อย โปรดลองใหม่อีกครั้ง!',
+                    }
                 }
             }).
             catch(err => {
