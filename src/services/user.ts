@@ -1,14 +1,12 @@
 import type { User } from "@models/user";
-import type { Cookies } from "@sveltejs/kit";
 import api from "@util/api";
 
 const baseURL = import.meta.env.VITE_API_HOST
 
-export async function getUserProfile(cookie?: Cookies) {
+export async function getUserProfile() {
     const response = await api<User>({
         url: `${baseURL}/user/profile`,
         method: 'GET',
-        cookie,
     })
     return response.data!
 }
