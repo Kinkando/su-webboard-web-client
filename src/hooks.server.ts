@@ -19,10 +19,10 @@ export const handle: Handle = async ({ event, resolve }) => {
 
     logger.info(`routeID: ${event?.route?.id}, userType: ${userType}, isValidToken: ${isValid}`)
 
-    const redirectURL = authGuard(event?.route?.id!, userType, isValid)
-    if (redirectURL) {
-        return new Response('Redirect', {status: 303, headers: { Location: redirectURL }})
-    }
+    // const redirectURL = authGuard(event?.route?.id!, userType, isValid)
+    // if (redirectURL) {
+    //     return new Response('Redirect', {status: 303, headers: { Location: redirectURL }})
+    // }
 
     return response
 }
