@@ -2,7 +2,7 @@ import axios, { AxiosError } from 'axios'
 import type { AxiosRequestCustomConfig } from './api';
 import http from '@commons/http';
 import { TokenType } from '@models/auth';
-import { refreshToken as refreshJWT } from '@services/authen';
+import { refreshToken as refreshJWT, revokeToken } from '@services/authen';
 import * as LocalStorage from './localstorage';
 import * as Cookies from './cookies';
 
@@ -30,10 +30,10 @@ instance.interceptors.request.use(
             accessToken = token
         }
 		if (accessToken) {
-			config.headers = {
-                'Authorization': `Bearer ${accessToken}`,
-                // "Content-Type": "application/json",
+            if (!config.headers) {
+                config.headers = { "Content-Type": "application/json" }
             }
+            config.headers.Authorization = `Bearer ${accessToken}`
 		}
 		return config
     },
@@ -52,17 +52,12 @@ instance.interceptors.response.use(
                     } else {
                         LocalStorage.revokeToken()
                     }
+                    window.location.href="/login"
                     return Promise.reject(error);
                 }
                 config._isRefreshing = true;
 
-                let refreshToken;
-                if (config.cookie) {
-                    refreshToken = config.cookie.get(TokenType.RefreshToken)
-                } else {
-                    let { refreshToken: token } = LocalStorage.getToken()
-                    refreshToken = token
-                }
+                let refreshToken = config.cookie ? config.cookie.get(TokenType.RefreshToken) : localStorage.getItem(TokenType.RefreshToken)
                 if (!refreshToken) {
                     throw new Error("No refresh token");
                 }
@@ -77,13 +72,20 @@ instance.interceptors.response.use(
                     LocalStorage.setToken(jwt.accessToken, jwt.refreshToken)
                 }
 
-                config.headers = {
-                    Authorization: `Bearer ${jwt.accessToken}`,
-                    // "Content-Type": "application/json",
+                if (!config.headers) {
+                    config.headers = { "Content-Type": "application/json" }
                 }
+                config.headers.Authorization = `Bearer ${jwt.accessToken}`
+
                 return instance.request(config)
 
             } catch (error: any) {
+                if (config.cookie) {
+                    Cookies.revokeToken(config.cookie);
+                } else {
+                    LocalStorage.revokeToken()
+                }
+                window.location.href="/login"
                 return Promise.reject(error)
             }
         }

@@ -203,7 +203,7 @@
                     </Label>
                 {:else}
                     {#each Object.keys(password) as type}
-                        <Label class="space-y-2 mt-4">
+                        <Label class="space-y-2">
                             <span>{password[type].label}</span>
                             <Input
                                 class="placeholder-gray-300"

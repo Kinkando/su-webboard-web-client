@@ -22,3 +22,13 @@ export async function refreshToken(refreshToken: string) {
     })
     return response.data
 }
+
+export async function revokeToken(accessToken?: string, refreshToken?: string) {
+    try {
+        await axios.request({
+            url: `${baseURL}/authen/token/revoke`,
+            method: 'POST',
+            data: { accessToken, refreshToken },
+        })
+    } catch (error) {}
+}

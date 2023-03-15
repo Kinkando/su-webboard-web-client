@@ -16,6 +16,7 @@
     let teachers: User[] = [];
     const columns: string[] = [
         "ชื่อที่แสดง",
+        "รูปโปรไฟล์",
         "ชื่อ-นามสกุล",
         "อีเมล",
         "การเปิดเผยตัวตน",
@@ -52,6 +53,7 @@
             dataTable.push({
                 "_id": teacher.userUUID!,
                 values: [
+                    `<img src=${teacher.userImageURL} style="min-width: 4rem; max-width: 4rem; min-height: 4rem; max-height: 4rem; border-radius: 100%">`,
                     teacher.userDisplayName!,
                     teacher.userFullName,
                     teacher.userEmail,
@@ -86,41 +88,34 @@
     const formData = (item?: DataTable) => {
         if(item) {
             form = {
+                _id: item._id,
                 schemas: [
                     {
                         type: "text",
                         label: "ชื่อที่แสดง",
                         placeholder: "กรุณาใส่ชื่อที่แสดง",
-                        value: "",
+                        value: item.values[1],
                     },
                     {
                         type: "text",
                         label: "ชื่อ-นามสกุล",
                         placeholder: "กรุณาใส่ชื่อ-นามสกุล",
-                        value: "",
+                        value: item.values[2],
                     },
                     {
                         type: "text",
                         label: "อีเมล",
                         placeholder: "กรุณาใส่อีเมล",
-                        value: "",
+                        value: item.values[3],
                     },
                     {
                         type: "statusToggle",
                         label: "การเปิดเผยตัวตน",
                         placeholder: "กรุณาใส่การเปิดเผยตัวตน",
-                        value: StatusGroup.nominate,
+                        value: item.values[4] === "ไม่เปิดเผยตัวตน" ? StatusGroup.anonymous : StatusGroup.nominate,
                     },
                 ]
             }
-            form._id = item._id
-            item.values.forEach((value, index) => {
-                if (form.schemas[index].type === 'statusToggle') {
-                    form.schemas[index].value = value === 'ไม่เปิดเผยตัวตน' ? StatusGroup.anonymous : StatusGroup.nominate;
-                } else {
-                    form.schemas[index].value = value
-                }
-            })
 
         } else {
             form = {
