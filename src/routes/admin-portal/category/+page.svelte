@@ -124,14 +124,16 @@
         isLoading = true
         isOpenDeleteModal = false
         await deleteCategories([Number(deleteItem._id)])
-        await fetchCategories(offset, limit)
+        data = data.filter(item => item._id !== deleteItem._id)
+        total -= 1
         isLoading = false
     }
     const multiDeleteAction = async() => {
         if (selectedItems.length) {
             isLoading = true
             await deleteCategories(selectedItems.map(item => Number(item._id)))
-            await fetchCategories(offset, limit)
+            data = data.filter(item => !selectedItems.map(item => item._id).includes(item._id))
+            total -= selectedItems.length
             selectedItems = []
             isLoading = false
         }
