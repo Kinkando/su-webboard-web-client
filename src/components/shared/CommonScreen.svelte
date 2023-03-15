@@ -17,7 +17,7 @@
 </div>
 
 <style lang="scss">
-    @media screen and (max-height: 382px) {
+    @media screen and (max-height: 454px) {
         #login-screen {
             height: fit-content;
             #login-logo {

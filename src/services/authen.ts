@@ -14,6 +14,16 @@ export async function verifyToken(idToken: string) {
     return response.data
 }
 
+export async function verifyGoogle(accessToken: string) {
+    const response = await axios.request<JWT>({
+        url: `${baseURL}/authen/token/google`,
+        method: 'POST',
+        headers: {'X-Api-Key': apiKey},
+        data: { accessToken },
+    })
+    return response.data
+}
+
 export async function refreshToken(refreshToken: string) {
     const response = await axios.request<JWT>({
         url: `${baseURL}/authen/token/refresh`,
