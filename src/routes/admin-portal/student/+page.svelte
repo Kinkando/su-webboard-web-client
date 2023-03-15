@@ -15,8 +15,8 @@
     let total = 0;
     let students: User[] = [];
     const columns: string[] = [
-        "รหัสนักศึกษา",
         "รูปโปรไฟล์",
+        "รหัสนักศึกษา",
         "ชื่อที่แสดง",
         "ชื่อ-นามสกุล",
         "อีเมล",
@@ -54,8 +54,8 @@
             dataTable.push({
                 "_id": student.userUUID!,
                 values: [
-                    student.studentID!,
                     `<img src=${student.userImageURL} style="min-width: 4rem; max-width: 4rem; min-height: 4rem; max-height: 4rem; border-radius: 100%">`,
+                    student.studentID!,
                     student.userDisplayName!,
                     student.userFullName,
                     student.userEmail,
@@ -96,7 +96,7 @@
                         type: "text",
                         label: "รหัสนักศึกษา",
                         placeholder: "กรุณาใส่ข้อมูลรหัสนักศึกษา",
-                        value: item.values[0],
+                        value: item.values[1],
                     },
                     {
                         type: "text",
@@ -204,5 +204,5 @@
 
 <FormModal bind:open={isOpenFormModal} bind:title bind:form on:submit={sumbitForm} />
 <DeleteModal bind:open={isOpenDeleteModal} deleteButtonName="ยืนยัน" on:delete={deleteAction}>
-    คุณยืนยันที่จะ<span class="text-red-500">ลบข้อมูลนักศึกษา {deleteItem?.values[0]} </span>หรือไม่?
+    คุณยืนยันที่จะ<span class="text-red-500">ลบข้อมูลนักศึกษา {deleteItem?.values[1]} </span>หรือไม่?
 </DeleteModal>
