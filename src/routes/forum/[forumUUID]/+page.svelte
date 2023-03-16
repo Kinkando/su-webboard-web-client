@@ -21,9 +21,11 @@
 
     onMount(() => {
         const socket = io(import.meta.env.VITE_API_HOST)
-        socket.on('connect', () => console.log('connect'))
+        socket.on('connect', () => {
+            socket.emit('ping')
+            console.log('ping')
+        })
         socket.on('pong', (data) => console.log(data.message))
-        socket.emit('ping')
     })
 </script>
 
