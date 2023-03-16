@@ -7,6 +7,7 @@
     import type { ForumDetail } from "@models/forum";
 	import type { Attachment, FormSchema } from "@models/new-post";
 	import type { Category } from "@models/category";
+	import { defined } from "@util/generic";
 
     export let forumDetail: ForumDetail | Announcement;
     export let categories: Category[] | undefined = undefined;
@@ -66,7 +67,7 @@
     {#if instanceOfForumDetail(forumDetail) && forumDetail.categories?.length}
         <div class="flex flex-wrap items-center gap-1 mt-1">
             {#each forumDetail.categories as category}
-                <CategoryBadge {...category} />
+                <CategoryBadge categoryID={defined(category.categoryID)} categoryName={category.categoryName} categoryHexColor={category.categoryHexColor} />
             {/each}
         </div>
     {/if}
