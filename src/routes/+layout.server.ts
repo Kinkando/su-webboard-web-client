@@ -50,6 +50,10 @@ export const load: LayoutServerLoad = async ({ cookies, route }) => {
 // admin portal error not found page
 // admin portal internal server error page
 
+// DELETE announcement/[forumUUID]/+page.server.ts AND USE LOCALSTORAGE INSTEAD
+// DELETE category/[categoryID]/+page.server.ts AND USE LOCALSTORAGE INSTEAD
+// DELETE forum/[forumUUID]/+page.server.ts AND USE LOCALSTORAGE INSTEAD
+
 // admin add form validation
 
 // change profile image with providing avatar from backend
