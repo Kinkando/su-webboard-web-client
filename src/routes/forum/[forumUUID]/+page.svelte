@@ -1,9 +1,11 @@
 <script lang="ts">
+	import { onMount } from "svelte";
 	import { Breadcrumb, BreadcrumbItem, SpeedDial, SpeedDialButton } from "flowbite-svelte";
-	import ForumDetail from "@components/forum/ForumDetail.svelte";
-	import type { ForumDetail as ForumDetailModel } from '@models/forum';
 	import CommentList from '@components/comment/CommentList.svelte';
+	import ForumDetail from "@components/forum/ForumDetail.svelte";
 	import type { Category } from "@models/category";
+	import type { ForumDetail as ForumDetailModel } from '@models/forum';
+    import io from 'socket.io-client'
 
     export let data: { forumDetail: ForumDetailModel, categories: Category[] }
 
@@ -16,6 +18,13 @@
     let replyForum = false;
     let scrollY = 0;
     $: isShowOnTop = scrollY > 0;
+
+    onMount(() => {
+        const socket = io(import.meta.env.VITE_API_HOST)
+        socket.on('connect', () => console.log('connect'))
+        socket.on('pong', (data) => console.log(data.message))
+        socket.emit('ping')
+    })
 </script>
 
 <svelte:window bind:scrollY />

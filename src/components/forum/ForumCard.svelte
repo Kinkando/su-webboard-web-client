@@ -4,6 +4,7 @@
 	import LikeBadge from "@components/badge/LikeBadge.svelte";
 	import TimeBadge from "@components/badge/TimeBadge.svelte";
     import type { Forum } from "@models/forum";
+	import { defined } from "@util/generic";
 
     export let forum: Forum;
     export let announcement = false;
@@ -35,7 +36,7 @@
         {#if forum?.categories}
             <div class="flex flex-wrap gap-1 w-full">
                 {#each forum?.categories as category}
-                    <CategoryBadge categoryHexColor={category?.categoryHexColor} categoryID={category?.categoryID} categoryName={category?.categoryName} />
+                    <CategoryBadge categoryHexColor={category?.categoryHexColor} categoryID={defined(category?.categoryID)} categoryName={category?.categoryName} />
                 {/each}
                 {#if forum?.likeCount !== undefined && forum?.commentCount !== undefined}
                     <div class="ml-auto">

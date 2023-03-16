@@ -1,0 +1,1 @@
+export const defined = <T>(value: T) => value!

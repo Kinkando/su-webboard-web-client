@@ -3,6 +3,7 @@
 	import CommentBadge from "@components/badge/CommentBadge.svelte";
 	import LikeBadge from "@components/badge/LikeBadge.svelte";
 	import type { Forum } from "@models/forum";
+	import { defined } from "@util/generic";
 
     export let popularTopic: Forum;
 </script>
@@ -12,7 +13,7 @@
         <header class="flex items-start flex-wrap gap-1 sm:h-44 h-36 overflow-y-hidden">
             {#if popularTopic?.categories}
                 {#each popularTopic.categories as category}
-                    <CategoryBadge {...category} />
+                    <CategoryBadge categoryID={defined(category.categoryID)} categoryName={category.categoryName} categoryHexColor={category.categoryHexColor} />
                 {/each}
             {/if}
             <!-- {#each popularTopic?.categories?.slice(0, Math.min(3, popularTopic?.categories?.length)) as category} -->
