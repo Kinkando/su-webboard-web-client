@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Tooltip } from "flowbite-svelte";
+	import { Textarea, Tooltip } from "flowbite-svelte";
 	import { slide } from "svelte/transition";
 
     export let text: string;
@@ -134,7 +134,7 @@
                     <path d="M474.609 228.901a453.124 453.124 0 0 0-103.219-98.287l67.345-67.345c6.78-6.548 6.968-17.352.42-24.132-6.548-6.78-17.352-6.968-24.132-.42-.142.137-.282.277-.42.42l-73.574 73.506a220.702 220.702 0 0 0-102.093-27.307C109.229 85.336 7.529 223.03 3.262 228.9a17.068 17.068 0 0 0 0 20.07 453.124 453.124 0 0 0 103.219 98.287l-67.345 67.345c-6.78 6.548-6.968 17.352-.42 24.132 6.548 6.78 17.352 6.968 24.132.42.142-.137.282-.277.42-.42l73.574-73.506a220.702 220.702 0 0 0 102.093 27.307c129.707 0 231.407-137.694 235.674-143.565a17.063 17.063 0 0 0 0-20.069zm-343.313 93.593a424.95 424.95 0 0 1-92.484-83.558c25.122-30.43 106.598-119.467 200.124-119.467a180.655 180.655 0 0 1 76.612 18.773L285.92 167.87c-39.2-26.025-92.076-15.345-118.101 23.855-18.958 28.555-18.958 65.691 0 94.246l-36.523 36.523zm153.72-105.489a50.36 50.36 0 0 1 5.12 21.931c0 28.277-22.923 51.2-51.2 51.2a50.36 50.36 0 0 1-21.931-5.12l68.011-68.011zm-92.16 43.861a50.36 50.36 0 0 1-5.12-21.931c0-28.277 22.923-51.2 51.2-51.2a50.36 50.36 0 0 1 21.931 5.12l-68.011 68.011zm46.08 97.536a180.659 180.659 0 0 1-76.612-18.773l29.628-29.628c39.2 26.025 92.076 15.345 118.101-23.855 18.958-28.555 18.958-65.691 0-94.246l36.523-36.523a424.975 424.975 0 0 1 92.484 83.558c-25.123 30.431-106.599 119.467-200.124 119.467z" fill="#fff" />
                 </svg>
             `,
-            action: () => {}
+            action: () => console.log(text)
         },
     ]
 
@@ -147,6 +147,30 @@
     let videos: FileList;
     $: videos && addVideo(...videos)
     const addVideo = (...files: File[]) => files.forEach(file => text += `<video src=${URL.createObjectURL(file)} type="video/mp4" controls="controls" />`)
+
+    let focusText = "";
+    function currentText() {
+        const selection = window.getSelection();
+        if (selection) {
+            focusText = selection.anchorNode?.nodeValue || ''
+            const highlight = focusText.substring(0, selection.anchorOffset) || focusText
+            console.log(selection)
+            if (!selection.isCollapsed) {
+                console.log('highlight:', focusText.substring(selection.anchorOffset, selection.focusOffset))
+            }
+        }
+    }
+
+    function setCaret(line: number, col: number) {
+        // var ele = element;
+        // var rng = document.createRange();
+        // var sel = window.getSelection()!;
+        // rng.setStart(ele.childNodes[line], col);
+        // rng.collapse(true);
+        // sel.removeAllRanges();
+        // sel.addRange(rng);
+        // ele.focus();
+    }
 </script>
 
 {#each toolbar as item}
@@ -173,6 +197,8 @@
     class="ease-in duration-200 transition-colors min-h-[150px] px-2 pb-2 pt-12 max-[439px]:pt-20 max-[271px]:pt-28 bg-gray-50 dark:bg-gray-700 rounded-md outline-none border-2 dark:border-gray-700 border-gray-200 focus:border-blue-500 dark:focus:border-blue-500"
     contenteditable="true"
     bind:innerHTML={text}
+    on:mouseup={currentText}
+    on:keyup={currentText}
 />
 
 <input bind:this={imageInput} type="file" accept="image/*" multiple hidden bind:files={images}>

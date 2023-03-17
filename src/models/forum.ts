@@ -50,6 +50,7 @@ export interface Comment {
     commentCount: number
     createdAt: Date
     replyComments?: Comment[]
+    replyCursor?: number
 }
 
 export interface ForumReport {
