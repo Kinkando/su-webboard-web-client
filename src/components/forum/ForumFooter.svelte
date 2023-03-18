@@ -7,6 +7,8 @@
 	import { createEventDispatcher } from 'svelte';
 	import { timeRange } from '@util/datetime';
 
+    export let uuid: string;
+    export let isLike: boolean;
     export let likeCount: number | undefined = undefined;
     export let commentCount: number | undefined = undefined;
     export let username: string;
@@ -41,12 +43,12 @@
 </script>
 
 <div class="flex items-center justify-between mt-3 -mb-3">
-    {#if likeCount}
+    {#if likeCount !== undefined}
         <div class="flex items-center font-bold">
-            <LikeBadge {likeCount} toggle type="forum" />
+            <LikeBadge {likeCount} bind:uuid bind:isLike toggle type="forum" />
         </div>
     {/if}
-    {#if commentCount}
+    {#if commentCount !== undefined}
         <div class="flex items-center font-bold">
             <CommentBadge {commentCount} click on:click={() => openReplyModal = true} />
         </div>
@@ -62,7 +64,7 @@
             <div class="font-light text-sm overflow-hidden text-ellipsis whitespace-nowrap">{time}</div>
         </div>
     </div>
-    {#if commentCount}
+    {#if commentCount !== undefined}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div class="no-select underline text-[var(--primary-color)] dark:text-[var(--primary-color-75)] cursor-pointer break-words" on:click={() => openReplyModal = true}>{replyText}</div>
     {/if}

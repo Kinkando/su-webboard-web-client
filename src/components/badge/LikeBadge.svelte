@@ -1,19 +1,23 @@
 <script lang="ts">
+	import { likeComment } from "@services/comment";
+	import { likeForum } from "@services/forum";
+
+    export let uuid: string;
     export let likeCount: number;
     export let toggle = false;
     export let isLike = false;
     export let type = ""; // forum or comment
 
-    const likeToggle = () => {
+    const likeToggle = async() => {
         if (toggle) {
             isLike = !isLike
             likeCount += isLike ? 1 : -1;
 
             // Call API like forum or comment, but not wait for response
             if (type === "forum") {
-
+                await likeForum(uuid, isLike)
             } else if (type === "comment") {
-
+                await likeComment(uuid, isLike)
             }
         }
     }

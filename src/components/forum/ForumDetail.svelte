@@ -28,6 +28,13 @@
         return object && 'categories' in object;
     }
 
+    const isLike = () => {
+        if (instanceOfForumDetail(forumDetail)) {
+            return forumDetail.isLike
+        }
+        return false
+    }
+
     function initImages() {
         const images = instanceOfForumDetail(forumDetail) ? forumDetail.forumImages : forumDetail.announcementImages
         if (images) {
@@ -152,6 +159,8 @@
     {/if}
 
     <ForumFooter
+        isLike={isLike()}
+        uuid={forumDetail.forumUUID}
         username={forumDetail.authorName}
         userImageURL={forumDetail.authorImageURL}
         likeCount={instanceOfForumDetail(forumDetail) ? forumDetail.likeCount : undefined}
