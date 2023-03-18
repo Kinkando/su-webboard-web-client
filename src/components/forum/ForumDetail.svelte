@@ -8,6 +8,7 @@
 	import type { Attachment, FormSchema } from "@models/new-post";
 	import type { Category } from "@models/category";
 	import { defined } from "@util/generic";
+	import { getUserUUID } from "@util/localstorage";
 
     export let forumDetail: ForumDetail | Announcement;
     export let categories: Category[] | undefined = undefined;
@@ -22,7 +23,7 @@
     let label = "แสดงความคิดเห็น"
 
     function instanceOfForumDetail(object: any): object is ForumDetail {
-        return 'categories' in object;
+        return object && 'categories' in object;
     }
 
     const imageURLs = ((): string[] => {
@@ -41,6 +42,8 @@
         }
         return []
     })()
+
+    $: userUUID = getUserUUID()
 </script>
 
 <div class="rounded-lg shadow-md w-full h-full p-4 sm:p-6 overflow-hidden bg-white text-black dark:bg-gray-700 dark:text-white ease-in duration-200">
@@ -52,9 +55,9 @@
             ellipsisMenuID={forumDetail?.forumUUID}
             type={type === "กระทู้" ? 'forum': 'announcement'}
             menuSuffixName={type}
-            editable
-            reportable={type === "กระทู้"}
-            removable
+            editable={forumDetail.authorUUID === userUUID}
+            reportable={type === "กระทู้" && forumDetail.authorUUID !== userUUID}
+            removable={forumDetail.authorUUID === userUUID}
             {title}
             {description}
             {categories}
@@ -88,6 +91,7 @@
         commentCount={instanceOfForumDetail(forumDetail) ? forumDetail.commentCount : undefined}
         {label}
         replyText={label}
+        createdAt={forumDetail.createdAt}
         bind:replyTrigger={replyForum}
         on:comment={event => console.log("แสดงความคิดเห็น", event.detail.comment, event.detail.attachments.length)}
     />

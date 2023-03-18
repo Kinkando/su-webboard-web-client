@@ -3,8 +3,8 @@
     import { inview } from "svelte-inview";
 	import SyncLoader from 'svelte-loading-spinners/SyncLoader.svelte';
 	import CommentCard from "./CommentCard.svelte";
-	import type { Comment } from "@models/forum";
-	import { getComments } from "@services/forum";
+	import type { Comment } from "@models/comment";
+	import { getComments } from "@services/comment";
 	import { Button } from "flowbite-svelte";
 
     export let forumUUID: string;

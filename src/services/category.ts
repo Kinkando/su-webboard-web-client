@@ -1,12 +1,14 @@
 import type { Category, CategoryDetail } from "@models/category";
+import type { Cookies } from "@sveltejs/kit";
 import api from "@util/api";
 
 const baseURL = import.meta.env.VITE_API_HOST
 
-export async function getAllCategories() {
+export async function getAllCategories(cookie?: Cookies) {
     const res = await api<Category[]>({
         url: `${baseURL}/category`,
         method: "GET",
+        cookie,
     })
     return res.data
 }

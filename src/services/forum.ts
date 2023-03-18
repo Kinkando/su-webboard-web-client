@@ -1,6 +1,7 @@
 import type { Announcement } from "@models/announcement";
-import type { Comment, Forum, ForumDetail, ForumFilter } from "@models/forum";
+import type { Forum, ForumDetail, ForumFilter } from "@models/forum";
 import type { Home } from "@models/home";
+import type { Cookies } from "@sveltejs/kit";
 import api from "@util/api";
 import { getAllCategoryDetails, getCategoryByID } from "./category";
 
@@ -286,79 +287,13 @@ export async function getAnnouncementDetail(forumUUID: string) {
     return forumDetail
 }
 
-export async function getForumDetail(forumUUID: string) {
-    if (!["xxx-xxx-xxx-xxx", "yyy-yyy-yyy-yyy", "zzz-zzz-zzz-zzz"].includes(forumUUID)) {
-        return null
-    }
-    const forumDetail: ForumDetail = {
-        forumUUID,
-        title: "อยากหาบัคที่เว็ปนี้อย่างงั้นหรอ หึ งั้นก็ไปตามหาเอาสิ ข้าเอาบัคทุกอย่างไปไว้ที่นั่นหมดแล้ว",
-        description: "แด่สหายหมีผู้กินผักทั้งหลาย",
-        forumImageURLs: [
-            "https://media.timeout.com/images/103662433/750/422/image.jpg",
-            "https://static.thcdn.com/productimg/1600/1600/12968604-2055002146053883.jpg",
-        ],
-        categories: [
-            (await getCategoryByID(1))!,
-            (await getCategoryByID(2))!,
-            (await getCategoryByID(3))!,
-        ],
-        authorUUID: "aaa-aaa-aaa-aaa",
-        authorName: "Kook Kai",
-        authorImageURL,
-        isLike: Math.floor(Math.random() * 10)%2==0,
-        likeCount: Math.floor(Math.random() * 5000),
-        commentCount: Math.floor(Math.random() * 1000),
-        createdAt: new Date(),
-    }
-    await sleep()
-    return forumDetail
-}
-
-export async function getComments(forumUUID: string, offset: number, limit: number) {
-    const total = 123;
-    if (!["xxx-xxx-xxx-xxx", "yyy-yyy-yyy-yyy", "zzz-zzz-zzz-zzz"].includes(forumUUID) || offset >= total) {
-        return null
-    }
-    const cmt: Comment = {
-        commentUUID: "aaa-bbb-ccc-dddd",
-        commentText: "สุดยอดไปเลยครับเพ่!",
-        commenterUUID: "xxx-aaa-bbb-ccc",
-        commenterName: "Keroro",
-        commenterImageURL: authorImageURL,
-        isLike: Math.floor(Math.random() * 10)%2==0,
-        likeCount: Math.floor(Math.random() * 100),
-        commentCount: Math.floor(Math.random() * 1000),
-        createdAt: new Date,
-    }
-    const comment = (order: number, imageCount: number, replyCount: number): Comment => {
-        let comment = {...cmt};
-        comment.commentImageURLs = [];
-        comment.replyComments = [];
-        for(let i=0; i<imageCount; i++) {
-            comment.commentImageURLs?.push("https://media.timeout.com/images/103662433/750/422/image.jpg")
-        }
-        for(let i=0; i<replyCount; i++) {
-            let subComment = {...cmt};
-            for(let j=0; j<Math.round(Math.random() * imageCount); j++) {
-                subComment.commentImageURLs?.push("https://media.timeout.com/images/103662433/750/422/image.jpg")
-            }
-            subComment.commentUUID += `${order}-${i}`
-            subComment.commentText += ` ความคิดเห็นที่ ${i+1} ตอนกลับความคิดเห็นที่ ${order+1}`
-            comment.replyComments.push({...subComment})
-        }
-        return comment
-    }
-
-    const comments: Comment[] = []
-    for(let i=offset; i<Math.min(total, offset+limit); i++) {
-        const cmt = {...comment(i, Math.floor(Math.random() * 3), Math.floor(10+Math.random() * 5))};
-        cmt.commentUUID += `${i}`
-        cmt.commentText += ` ${i+1}`
-        comments.push({...cmt})
-    }
-    await sleep()
-    return { data: comments, total }
+export async function getForumDetail(forumUUID: string, cookie?: Cookies) {
+    const res = await api<ForumDetail>({
+        url: `${baseURL}/forum/${forumUUID}`,
+        method: "GET",
+        cookie,
+    })
+    return res.data
 }
 
 export const sleep = async (time?: number) => {

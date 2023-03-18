@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { onMount } from "svelte";
 	import { Breadcrumb, BreadcrumbItem, SpeedDial, SpeedDialButton } from "flowbite-svelte";
+    import io from 'socket.io-client'
+	import { onMount } from "svelte";
 	import CommentList from '@components/comment/CommentList.svelte';
 	import ForumDetail from "@components/forum/ForumDetail.svelte";
 	import type { Category } from "@models/category";
 	import type { ForumDetail as ForumDetailModel } from '@models/forum';
-    import io from 'socket.io-client'
 
     export let data: { forumDetail: ForumDetailModel, categories: Category[] }
 

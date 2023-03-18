@@ -117,10 +117,12 @@
             </svg>
             <span>แก้ไข{menuSuffixName}</span>
         </div>
-        <hr class="border-gray-200 dark:border-gray-600">
     {/if}
 
     {#if reportable}
+        {#if editable}
+            <hr class="border-gray-200 dark:border-gray-600">
+        {/if}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div class="flex items-center gap-x-3 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 px-3 py-2" on:click={() => openReportModal = true}>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -128,10 +130,12 @@
             </svg>
             <span>รายงาน{menuSuffixName}</span>
         </div>
-        <hr class="border-gray-200 dark:border-gray-600">
     {/if}
 
     {#if removable}
+        {#if editable || reportable}
+            <hr class="border-gray-200 dark:border-gray-600">
+        {/if}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div class="flex items-center gap-x-3 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 px-3 py-2" on:click={() => openDeleteModal = true}>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">

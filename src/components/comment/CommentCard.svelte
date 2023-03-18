@@ -2,8 +2,9 @@
 	import ForumFooter from "@components/forum/ForumFooter.svelte";
 	import ForumImage from "@components/forum/ForumImage.svelte";
 	import EllipsisMenu from "@components/shared/EllipsisMenu.svelte";
-	import type { Comment } from "@models/forum";
+	import type { Comment } from "@models/comment";
 	import type { Attachment } from "@models/new-post";
+	import { getUserUUID } from "@util/localstorage";
 
     export let label: string;
     export let comment: Comment;
@@ -21,6 +22,8 @@
         })
         attachments = [...files]
     }
+
+    $: userUUID = getUserUUID()
 </script>
 
 <div class="rounded-lg shadow-md w-full h-full p-4 sm:p-6 overflow-hidden bg-white text-black dark:bg-gray-700 dark:text-white ease-in duration-200">
@@ -33,9 +36,9 @@
             label={`แก้ไข${label}`}
             comment={comment.commentText}
             {attachments}
-            editable
-            reportable
-            removable
+            editable={comment.commenterUUID === userUUID}
+            reportable={comment.commenterUUID !== userUUID}
+            removable={comment.commenterUUID === userUUID}
             on:edit={(event) => console.log(event.detail.comment, event.detail.attachments.length)}
             on:report={(event) => console.log(`รายงานความคิดเห็น: ${comment.commentUUID}: ${event.detail.reportText}`)}
             on:delete={() => console.log(`ลบความคิดเห็น: ${comment.commentUUID}`)}
@@ -55,6 +58,7 @@
         likeCount={comment.likeCount}
         commentCount={reply ? comment.commentCount : undefined}
         label={`ตอบกลับ${label}`}
+        createdAt={comment.createdAt}
         on:comment={event => console.log("แสดงความคิดเห็น", event.detail.comment, event.detail.attachments.length)}
     />
 </div>
