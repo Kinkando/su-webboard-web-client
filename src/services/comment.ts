@@ -10,3 +10,37 @@ export async function getComments(forumUUID: string, offset: number, limit: numb
     })
     return res.data
 }
+
+export async function upsertComment(comment: Comment, files: File[]) {
+    const formData = new FormData();
+    formData.append("data", JSON.stringify(comment))
+    if (files) {
+        for(let file of files) {
+            formData.append("files", file)
+        }
+    }
+    return await api<{ commentUUID: string }>({
+        url: `${baseURL}/comment`,
+        method: "PUT",
+        data: formData,
+        headers: {
+            "Content-Type": 'multipart/form-data'
+        }
+    })
+}
+
+export async function deleteComment(commentUUID: string) {
+    return await api({
+        url: `${baseURL}/comment`,
+        method: "DELETE",
+        data: { commentUUID },
+    })
+}
+
+export async function likeComment(commentUUID: string, isLike: boolean) {
+    return await api({
+        url: `${baseURL}/comment/like`,
+        method: "PATCH",
+        data: { commentUUID, isLike },
+    })
+}

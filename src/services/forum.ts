@@ -1,5 +1,5 @@
 import type { Announcement } from "@models/announcement";
-import type { Forum, ForumDetail, ForumFilter } from "@models/forum";
+import type { Forum, ForumDetail, ForumFilter, ForumRequest } from "@models/forum";
 import type { Home } from "@models/home";
 import type { Cookies } from "@sveltejs/kit";
 import api from "@util/api";
@@ -200,6 +200,40 @@ export async function getHomeData(): Promise<Home> {
     }
     await sleep()
     return home
+}
+
+export async function upsertForum(forum: ForumRequest, files: File[]) {
+    const formData = new FormData();
+    formData.append("data", JSON.stringify(forum))
+    if (files) {
+        for(let file of files) {
+            formData.append("files", file)
+        }
+    }
+    return await api<{ forumUUID: string }>({
+        url: `${baseURL}/forum`,
+        method: "PUT",
+        data: formData,
+        headers: {
+            "Content-Type": 'multipart/form-data'
+        }
+    })
+}
+
+export async function deleteForum(forumUUID: string) {
+    return await api({
+        url: `${baseURL}/forum`,
+        method: "DELETE",
+        data: { forumUUID },
+    })
+}
+
+export async function likeForum(forumUUID: string, isLike: boolean) {
+    return await api({
+        url: `${baseURL}/forum/like`,
+        method: "PATCH",
+        data: { forumUUID, isLike },
+    })
 }
 
 export async function getForumListByCategoryID(categoryID: number, offset: number, limit: number) {

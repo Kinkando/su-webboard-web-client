@@ -24,8 +24,8 @@
                 comment.replyCursor = Math.min(comment.replyComments?.length || 0, replyLimit);
             }
         }
-        hasMore = response != null && response.data.length > 0
-        if (response) {
+        hasMore = response != null && response.data?.length > 0
+        if (response?.data) {
             comments = [...comments, ...response.data]
         }
     }

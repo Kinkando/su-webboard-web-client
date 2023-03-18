@@ -1,8 +1,12 @@
 <script lang="ts">
+	import { goto } from "$app/navigation";
+	import HTTP from "@commons/http";
 	import NewPost from "@components/shared/NewPost.svelte";
 	import type { Category } from "@models/category";
+	import type { ForumRequest } from "@models/forum";
 	import type { Attachment, FormSchema } from "@models/new-post";
 	import { getAllCategories } from "@services/category";
+	import { upsertForum } from "@services/forum";
 	import { Breadcrumb, BreadcrumbItem } from "flowbite-svelte";
 	import { onMount } from "svelte";
 
@@ -11,7 +15,19 @@
     let categories: Category[] = [];
     let attachments: Attachment[] = [];
     let submitName = "สร้างกระทู้";
-    let submit = async() => console.log(title.value, description.value, categories, attachments.length)
+    let submit = async() => {
+        const files = attachments.map(attachment => attachment.file)
+        const categoryIDs = categories.filter(category => category.isActive).map(category => category.categoryID!)
+        const forum: ForumRequest = {
+            title: title.value,
+            description: description.value,
+            categoryIDs,
+        }
+        const res = await upsertForum(forum, files)
+        if (res.status === HTTP.StatusOK && res.data) {
+            goto(`/forum/${res.data.forumUUID}`)
+        }
+    }
 
     let isLoading = true;
     onMount(async() => {

@@ -14,6 +14,13 @@ export interface Forum {
     createdAt: Date
 }
 
+export interface ForumRequest {
+    forumUUID?: string
+    title: string
+    description: string
+    categoryIDs: number[]
+}
+
 export interface ForumDetail {
     forumUUID: string
     title: string
