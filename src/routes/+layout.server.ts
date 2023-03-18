@@ -45,6 +45,10 @@ export const load: LayoutServerLoad = async ({ cookies, route }) => {
 
 // onMount twice
 
+// SETTING PAGE
+// - change theme
+// - set sorting comment (default comment #1-#10), can set by latest comment first
+
 // ADD SKELETON LOAD ON FORUM AND ANNOUNCEMENT DETAIL
 
 // admin portal ui on modal open and resize (backdrop animate) and modal overlap on sidebar
