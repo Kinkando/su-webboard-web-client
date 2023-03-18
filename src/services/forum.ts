@@ -1,206 +1,16 @@
-import type { Announcement } from "@models/announcement";
 import type { Forum, ForumDetail, ForumFilter, ForumRequest, Document } from "@models/forum";
 import type { Home } from "@models/home";
 import type { Cookies } from "@sveltejs/kit";
 import api from "@util/api";
-import { getAllCategoryDetails, getCategoryByID } from "./category";
 
 const baseURL = import.meta.env.VITE_API_HOST
-const authorImageURL = "https://ps.w.org/user-avatar-reloaded/assets/icon-128x128.png?rev=2540745";
 
-// Mock
 export async function getHomeData(): Promise<Home> {
-    const home: Home = {
-        announcements: [
-            {
-                announcementUUID: "xxx-xxx-xxx-xxx",
-                authorUUID: "",
-                authorName: "Silpakorn University",
-                authorImageURL,
-                createdAt: new Date(),
-                title: "เอิ่ม อิ่มโลลิค่อน",
-                description: "อิ่มชอบกินเด็กครับ...",
-            },
-            {
-                announcementUUID: "yyy-yyy-yyy-yyy",
-                authorUUID: "",
-                authorName: "Silpakorn University",
-                authorImageURL,
-                createdAt: new Date(),
-                title: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Rerum amet assumenda quaerat in corrupti ea ipsum nostrum quod explicabo non.",
-                description: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ipsum dolorem illum laudantium voluptatem hic accusantium placeat minus cum eius eveniet dicta pariatur quos aspernatur aliquam asperiores voluptas iste aut maxime quo neque ipsa dolorum, expedita deserunt. Voluptates magni qui repudiandae odio aperiam voluptatibus nisi itaque dolores aliquam? Qui, rem nam!",
-            },
-            {
-                announcementUUID: "zzz-zzz-zzz-zzz",
-                authorUUID: "",
-                authorName: "Silpakorn University",
-                authorImageURL,
-                createdAt: new Date(),
-                title: "ห้องหนึ่งย้ายไปเรียนที่ห้องสอง",
-                description: "รายละเอียด...",
-            },
-            {
-                announcementUUID: "zzz-zzz-zzz-zzz",
-                authorUUID: "",
-                authorName: "Silpakorn University",
-                authorImageURL,
-                createdAt: new Date(),
-                title: "ห้องสองย้ายไปห้องสาม",
-                description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit aspernatur quod voluptatum quidem atque cupiditate amet in quibusdam inventore! Doloremque.",
-            },
-            {
-                announcementUUID: "zzz-zzz-zzz-zzz",
-                authorUUID: "",
-                authorName: "Silpakorn University",
-                authorImageURL,
-                createdAt: new Date(),
-                title: "Class 3 move to room 4",
-                description: "Description...",
-            },
-        ],
-        popularTopics: [
-            {
-                forumUUID: "xxx-xxx-xxx-xxx",
-                authorUUID: "",
-                authorName: "Kook Kai",
-                authorImageURL,
-                createdAt: new Date(),
-                forumImageURL: "https://media.timeout.com/images/103662433/750/422/image.jpg",
-                title: "ใช้ชีวิตยังไงให้สนุก",
-                categories: [
-                    {
-                        categoryID: 1,
-                        categoryName: "ชีวิตประจำวัน",
-                        categoryHexColor: "#86D97F",
-                    },
-                ],
-                commentCount: 300,
-                likeCount: 200,
-            },
-            {
-                forumUUID: "yyy-yyy-yyy-yyy",
-                authorUUID: "",
-                authorName: "Kook Kai",
-                authorImageURL,
-                createdAt: new Date(),
-                forumImageURL: "https://static.thcdn.com/productimg/1600/1600/12968604-2055002146053883.jpg",
-                title: "ทำไมโปรตีนถึงดีกว่าที่คุณคิด?",
-                categories: [
-                    {
-                        categoryID: 2,
-                        categoryName: "กีฬา",
-                        categoryHexColor: "#4C52E0",
-                    },
-                    {
-                        categoryID: 3,
-                        categoryName: "อาหาร",
-                        categoryHexColor: "#857800",
-                    },
-                ],
-                commentCount: 300,
-                likeCount: 200,
-            },
-            {
-                forumUUID: "zzz-zzz-zzz-zzz",
-                authorUUID: "",
-                authorName: "Kook Kai",
-                authorImageURL,
-                createdAt: new Date(),
-                title: "Python vs C: 10 หลักความแตกต่างที่คุณต้องรู้",
-                categories: [
-                    {
-                        categoryID: 4,
-                        categoryName: "การศึกษา",
-                        categoryHexColor: "#E04C6F",
-                    },
-                    {
-                        categoryID: 5,
-                        categoryName: "โปรแกรมมิ่ง",
-                        categoryHexColor: "#48D7E0",
-                    },
-                ],
-                commentCount: 300,
-                likeCount: 200,
-            },
-            {
-                forumUUID: "zzz-zzz-zzz-zzz",
-                authorUUID: "",
-                authorName: "Kook Kai Karichaimashita",
-                authorImageURL,
-                createdAt: new Date(),
-                title: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt maiores dolor suscipit laudantium error aperiam quo fuga ratione rem ut.",
-                categories: [
-                    {
-                        categoryID: 4,
-                        categoryName: "การศึกษา",
-                        categoryHexColor: "#E04C6F",
-                    },
-                    {
-                        categoryID: 5,
-                        categoryName: "โปรแกรมมิ่ง",
-                        categoryHexColor: "#48D7E0",
-                    },
-                    {
-                        categoryID: 2,
-                        categoryName: "กีฬา",
-                        categoryHexColor: "#4C52E0",
-                    },
-                    {
-                        categoryID: 3,
-                        categoryName: "อาหาร",
-                        categoryHexColor: "#857800",
-                    },
-                    {
-                        categoryID: 6,
-                        categoryName: "เกม",
-                        categoryHexColor: "#994a",
-                    },
-                    {
-                        categoryID: 7,
-                        categoryName: "การทำงาน",
-                        categoryHexColor: "#abcd",
-                    },
-                    {
-                        categoryID: 8,
-                        categoryName: "การท่องเที่ยว",
-                        categoryHexColor: "#1296",
-                    },
-                    {
-                        categoryID: 9,
-                        categoryName: "การทำอาหาร",
-                        categoryHexColor: "#4685",
-                    },
-                ],
-                commentCount: 300,
-                likeCount: 200,
-            },
-            {
-                forumUUID: "zzz-zzz-zzz-zzz",
-                authorUUID: "",
-                authorName: "Kook Kai",
-                authorImageURL,
-                createdAt: new Date(),
-                title: "ทดสอบกระทู้ยอดนิยมอันดับที่ 5",
-                categories: [
-                    {
-                        categoryID: 4,
-                        categoryName: "การศึกษา",
-                        categoryHexColor: "#E04C6F",
-                    },
-                    {
-                        categoryID: 5,
-                        categoryName: "โปรแกรมมิ่ง",
-                        categoryHexColor: "#48D7E0",
-                    },
-                ],
-                commentCount: 300,
-                likeCount: 200,
-            },
-        ],
-        categories: await getAllCategoryDetails(),
-    }
-    await sleep()
-    return home
+    const res = await api<Home>({
+        url: `${baseURL}/home`,
+        method: "GET",
+    })
+    return res.data!
 }
 
 export async function upsertForum(forum: ForumRequest, files: File[]) {
@@ -238,47 +48,23 @@ export async function likeForum(forumUUID: string, isLike: boolean) {
 }
 
 export async function getForumListByCategoryID(categoryID: number, offset: number, limit: number) {
-    const res = await api<{ total: number, data: Forum[] }>({
-        url: `${baseURL}/forum?limit${limit}&offset=${offset}&categoryID=${categoryID}`,
-        method: "GET",
-    })
-    return res.data || { total: 0, data: [] as Forum[] }
+    return _getForumList(offset, limit, 'createdAt@DESC', categoryID)
 }
 
 export async function getForumListByPopular(offset: number, limit: number) {
+    return _getForumList(offset, limit, 'ranking@ASC')
+}
+
+export async function searchForum(filter: ForumFilter, offset: number, limit: number) {
+    return _getForumList(offset, limit, 'createdAt@DESC', undefined, filter.searchText)
+}
+
+async function _getForumList(offset: number, limit: number, sortBy: string, categoryID?: number, search?: string) {
     const res = await api<{ total: number, data: Forum[] }>({
-        url: `${baseURL}/forum?limit${limit}&offset=${offset}&sortBy=ranking@ASC`,
+        url: `${baseURL}/forum?limit${limit}&offset=${offset}&sortBy=${sortBy}${categoryID ? `&categoryID=${categoryID}` : ''}${search ? `&search=${search}` : ''}`,
         method: "GET",
     })
     return res.data || { total: 0, data: [] as Forum[] }
-}
-
-// Mock
-export async function searchForum(filter: ForumFilter, offset: number, limit: number) {
-    const data: Forum[] = [];
-    const total = 97;
-
-    const category1 = await getCategoryByID(1)
-    const category2 = await getCategoryByID(2)
-
-    const forum: Forum = {
-        forumUUID: "xxx-xxx-xxx-xxx",
-        title: "ค้นหากระทู้อยู่ล่ะสิ หึๆ แต่ไม่เจอหรอก เอาไปซะ กระทู้ทิพย์",
-        authorUUID: "yyy-yyy-yyy-yyy",
-        authorName: "Kook Kai",
-        authorImageURL,
-        categories: [ category1!, category2! ],
-        commentCount: 123,
-        likeCount: 9999,
-        createdAt: new Date(),
-    }
-
-    for(let i=offset; i<Math.min(total, offset+limit); i++) {
-        data.push(forum)
-    }
-
-    await sleep()
-    return { data, total }
 }
 
 export async function getForumDetail(forumUUID: string, cookie?: Cookies) {
