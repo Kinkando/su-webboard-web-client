@@ -5,6 +5,7 @@ export interface FormSchema {
 }
 
 export interface Attachment {
+    uuid?: string
     src: string
     file: File
     isLoading: boolean

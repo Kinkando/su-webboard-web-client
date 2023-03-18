@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { Button, Input, Label, Spinner, Textarea } from 'flowbite-svelte';
-	import type { Category } from '@models/category';
 	import ToggleBadge from '@components/badge/ToggleBadge.svelte';
+	import type { Category } from '@models/category';
 	import type { Attachment, FormSchema } from '@models/new-post';
+	import PostDescription from './PostDescription.svelte';
 
     export let title: FormSchema;
     export let description: FormSchema;
@@ -11,6 +12,7 @@
     export let submitName: string = "ยืนยัน";
     export let cancel: () => void;
     export let submit: () => void = async() => {};
+    export let deleteImageUUIDs: string[] = [];
 
     let fileInput: HTMLInputElement;
     let files: FileList;
@@ -26,7 +28,12 @@
             return attachment
         }))
     }
-    const removeImage = (index: number) => attachments = attachments.filter((_, idx) => index !== idx)
+    const removeImage = (index: number) => {
+        if (attachments[index].uuid) {
+            deleteImageUUIDs.push(attachments[index].uuid!)
+        }
+        attachments = attachments.filter((_, idx) => index !== idx)
+    }
 </script>
 
 <Label for="title" class="space-y-2 text-black dark:text-white">
@@ -36,7 +43,8 @@
 
 <Label for="description" class="space-y-2 mt-4 text-black dark:text-white">
     <span>{description.label}</span>
-    <Textarea id="description" class="ease-in duration-200 placeholder-gray-300 min-h-[150px] !bg-gray-50 dark:!bg-gray-700" placeholder={description.placeholder} required bind:value={description.value} />
+    <!-- <PostDescription bind:text={description.value} /> -->
+    <Textarea id="description" class="ease-in duration-200 transition-colors placeholder-gray-300 min-h-[300px] !bg-gray-50 dark:!bg-gray-700" placeholder={description.placeholder} required bind:value={description.value} />
 </Label>
 
 {#if categories}

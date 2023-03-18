@@ -23,12 +23,8 @@
             const google = await getGoogleOauthToken(code)
             if (google && google.access_token) {
                 isLoading = true;
-                email = "**********"
-                password = "**********"
                 await verify('google', undefined, google.access_token);
                 isLoading = false
-                email = ""
-                password = ""
             }
         }
     })
