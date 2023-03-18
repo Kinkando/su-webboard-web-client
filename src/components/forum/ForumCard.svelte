@@ -8,7 +8,6 @@
 	import { defined } from "@util/generic";
 
     export let forum: Forum;
-    export let announcement = false;
     const rankingColor = (() => {
         switch (forum?.ranking) {
             case 1: return "background-color: #FFD700 !important; color: #000 !important"
@@ -21,7 +20,7 @@
     const time = (() => timeRange(forum?.createdAt))()
 </script>
 
-<a class="bg-white text-black dark:bg-gray-700 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-900 cursor-pointer p-4 sm:p-6 shadow-md drop-shadow-md rounded-md ease-in duration-200 w-full h-full flex gap-x-4" href={!announcement ? `/forum/${forum?.forumUUID}`: `/announcement/${forum?.forumUUID}`}>
+<a class="bg-white text-black dark:bg-gray-700 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-900 cursor-pointer p-4 sm:p-6 shadow-md drop-shadow-md rounded-md ease-in duration-200 w-full h-full flex gap-x-4" href={`/forum/${forum?.forumUUID}`}>
     <div class="relative w-fit h-fit">
         {#if forum?.ranking}
             <div class="flex items-center -mr-2 absolute bottom-0 right-0">

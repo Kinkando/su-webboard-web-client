@@ -1,23 +1,22 @@
 <script lang="ts">
 	import SkeletonForumList from "@components/skeleton-load/SkeletonForumList.svelte";
 	import Pagination from "@components/ui/Pagination.svelte";
-    import type { Forum } from "@models/forum";
-	import ForumCard from "./ForumCard.svelte";
+    import type { Announcement } from "@models/announcement";
+	import AnnouncementCard from "./AnnouncementCard.svelte";
 
     let total = 0;
-    let forums: Forum[] = [];
+    let announcements: Announcement[] = [];
     let isLoading = true;
 
     export let page: number;
     export let limit = 10;
-    export let isRanking = false;
-    export let fetchData: () => Promise<{ data: Forum[], total: number }>;
+    export let fetchData: () => Promise<{ data: Announcement[], total: number }>;
 
     $: (page || limit) && changePage()
     const changePage = async() => {
         isLoading = true;
         const res = await fetchData();
-        forums = res.data;
+        announcements = res.data;
         total = res.total;
         isLoading = false;
     }
@@ -25,12 +24,12 @@
 
 {#key total}
     {#if isLoading}
-        <SkeletonForumList count={limit} ranking={isRanking} />
+        <SkeletonForumList count={limit} announcement />
     {:else}
-        {#if forums?.length}
-            {#each forums as forum}
+        {#if announcements?.length}
+            {#each announcements as announcement}
                 <div class="my-4">
-                    <ForumCard {forum} />
+                    <AnnouncementCard {announcement} />
                 </div>
             {/each}
         {:else}
