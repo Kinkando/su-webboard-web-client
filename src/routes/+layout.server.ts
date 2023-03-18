@@ -45,6 +45,8 @@ export const load: LayoutServerLoad = async ({ cookies, route }) => {
 
 // onMount twice
 
+// ADD SKELETON LOAD ON FORUM AND ANNOUNCEMENT DETAIL
+
 // admin portal ui on modal open and resize (backdrop animate) and modal overlap on sidebar
 // admin portal modal form validation
 // admin portal error not found page

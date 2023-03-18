@@ -1,7 +1,7 @@
 <script lang="ts">
-	import ForumList from "@components/forum/ForumList.svelte";
-	import type { Forum } from "@models/forum";
-	import { getAnnouncements } from "@services/forum";
+	import AnnouncementList from "@components/announcement/AnnouncementList.svelte";
+	import type { Announcement } from "@models/announcement";
+	import { getAnnouncements } from "@services/announcement";
 	import { Breadcrumb, BreadcrumbItem } from "flowbite-svelte";
 
     let page = 1;
@@ -9,10 +9,10 @@
 
     const fetchData = async () => {
         const { data, total } = await getAnnouncements((page-1)*limit, limit)
-        const forums: Forum[] = [];
+        const announcements: Announcement[] = [];
         data.forEach(announcement => {
-            forums.push({
-                forumUUID: announcement.forumUUID,
+            announcements.push({
+                announcementUUID: announcement.announcementUUID,
                 title: announcement.title,
                 authorImageURL: announcement.authorImageURL,
                 authorName: announcement.authorName,
@@ -20,7 +20,7 @@
                 createdAt: announcement.createdAt,
             })
         })
-        return { data: forums, total }
+        return { data: announcements, total }
     }
 </script>
 
@@ -31,4 +31,4 @@
     </Breadcrumb>
 </div>
 
-<ForumList bind:page bind:limit {fetchData} isAnnouncement />
+<AnnouncementList bind:page bind:limit {fetchData} />
