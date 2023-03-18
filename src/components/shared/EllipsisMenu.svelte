@@ -45,6 +45,8 @@
         }
     }
 
+    let deleteImageUUIDs: string[] = [];
+
     const initialize = () => {
         element.click(); // hide ellipsis menu while open modal immediately
         if (title) {
@@ -80,11 +82,13 @@
                 description: editDescription?.value,
                 categories: editCategories,
                 attachments: editAttachments,
+                deleteImageUUIDs,
             }
         } else {
             event = {
                 comment: editComment,
                 attachments: editAttachments,
+                deleteImageUUIDs,
             }
         }
         dispatch('edit', event);
@@ -153,6 +157,7 @@
             bind:description={editDescription}
             bind:attachments={editAttachments}
             bind:categories={editCategories}
+            bind:deleteImageUUIDs
             cancel={() => openEditForumModal = false}
             submit={editAction}
         />

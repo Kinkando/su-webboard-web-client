@@ -19,13 +19,14 @@ export interface ForumRequest {
     title: string
     description: string
     categoryIDs: number[]
+    forumImageUUIDs?: string[]
 }
 
 export interface ForumDetail {
     forumUUID: string
     title: string
     description: string
-    forumImageURLs?: string[]
+    forumImages?: Document[]
     categories: Category[]
     authorUUID: string
     authorName: string
@@ -50,6 +51,11 @@ export interface ForumReport {
     plaintiffUUID: string
     plaintiffName: string
     description: string
+}
+
+export interface Document {
+    url: string
+    uuid: string
 }
 
 // Create Comment

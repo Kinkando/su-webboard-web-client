@@ -1,4 +1,5 @@
 import type { Comment } from "@models/comment";
+import type { Document } from "@models/forum";
 import api from "@util/api";
 
 const baseURL = import.meta.env.VITE_API_HOST
@@ -19,7 +20,7 @@ export async function upsertComment(comment: Comment, files: File[]) {
             formData.append("files", file)
         }
     }
-    return await api<{ commentUUID: string }>({
+    return await api<{ commentUUID: string, documents: Document[] }>({
         url: `${baseURL}/comment`,
         method: "PUT",
         data: formData,

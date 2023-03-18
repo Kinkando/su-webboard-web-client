@@ -12,6 +12,7 @@
     export let submitName: string = "ยืนยัน";
     export let cancel: () => void;
     export let submit: () => void = async() => {};
+    export let deleteImageUUIDs: string[] = [];
 
     let fileInput: HTMLInputElement;
     let files: FileList;
@@ -27,7 +28,12 @@
             return attachment
         }))
     }
-    const removeImage = (index: number) => attachments = attachments.filter((_, idx) => index !== idx)
+    const removeImage = (index: number) => {
+        if (attachments[index].uuid) {
+            deleteImageUUIDs.push(attachments[index].uuid!)
+        }
+        attachments = attachments.filter((_, idx) => index !== idx)
+    }
 </script>
 
 <Label for="title" class="space-y-2 text-black dark:text-white">

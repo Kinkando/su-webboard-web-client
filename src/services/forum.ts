@@ -1,5 +1,5 @@
 import type { Announcement } from "@models/announcement";
-import type { Forum, ForumDetail, ForumFilter, ForumRequest } from "@models/forum";
+import type { Forum, ForumDetail, ForumFilter, ForumRequest, Document } from "@models/forum";
 import type { Home } from "@models/home";
 import type { Cookies } from "@sveltejs/kit";
 import api from "@util/api";
@@ -210,7 +210,7 @@ export async function upsertForum(forum: ForumRequest, files: File[]) {
             formData.append("files", file)
         }
     }
-    return await api<{ forumUUID: string }>({
+    return await api<{ forumUUID: string, documents: Document[] }>({
         url: `${baseURL}/forum`,
         method: "PUT",
         data: formData,
@@ -311,9 +311,9 @@ export async function getAnnouncementDetail(forumUUID: string) {
         authorUUID: "aaa-aaa-aaa-aaa",
         authorName: "มหาวิทยาลัยศิลปากร",
         authorImageURL,
-        announcementImageURLs: [
-            "https://media.timeout.com/images/103662433/750/422/image.jpg",
-            "https://static.thcdn.com/productimg/1600/1600/12968604-2055002146053883.jpg",
+        announcementImages: [
+            // "https://media.timeout.com/images/103662433/750/422/image.jpg",
+            // "https://static.thcdn.com/productimg/1600/1600/12968604-2055002146053883.jpg",
         ],
         createdAt: new Date(),
     }
