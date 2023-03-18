@@ -8,12 +8,13 @@
     let forums: Forum[] = [];
     let isLoading = true;
 
+    export let search = "";
     export let page: number;
     export let limit = 10;
     export let isRanking = false;
     export let fetchData: () => Promise<{ data: Forum[], total: number }>;
 
-    $: (page || limit) && changePage()
+    $: (page || limit || search) && changePage()
     const changePage = async() => {
         isLoading = true;
         const res = await fetchData();

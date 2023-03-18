@@ -24,4 +24,4 @@
     </Breadcrumb>
 </div>
 
-<ForumList bind:page={currentPage} bind:limit {fetchData} />
+<ForumList bind:page={currentPage} bind:limit {fetchData} bind:search={filter.searchText} />
