@@ -5,6 +5,7 @@
     export let label: string;
     export let comment: string;
     export let attachments: Attachment[];
+    export let deleteImageUUIDs: string[] = [];
 
     export let cancel: () => void;
     export let submit: () => void;
@@ -23,7 +24,12 @@
             return attachment
         }))
     }
-    const removeImage = (index: number) => attachments = attachments.filter((_, idx) => index !== idx)
+    const removeImage = (index: number) => {
+        if (attachments[index].uuid) {
+            deleteImageUUIDs.push(attachments[index].uuid!)
+        }
+        attachments = attachments.filter((_, idx) => index !== idx)
+    }
 </script>
 
 <div>

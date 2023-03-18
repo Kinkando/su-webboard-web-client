@@ -1,11 +1,12 @@
 <script lang="ts">
-	import { onMount } from "svelte";
 	import { Breadcrumb, BreadcrumbItem, SpeedDial, SpeedDialButton } from "flowbite-svelte";
+    import io from 'socket.io-client'
+	import { onMount } from "svelte";
 	import CommentList from '@components/comment/CommentList.svelte';
 	import ForumDetail from "@components/forum/ForumDetail.svelte";
 	import type { Category } from "@models/category";
 	import type { ForumDetail as ForumDetailModel } from '@models/forum';
-    import io from 'socket.io-client'
+	import type { Comment } from '@models/comment';
 
     export let data: { forumDetail: ForumDetailModel, categories: Category[] }
 
@@ -15,15 +16,20 @@
         // document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
     }
 
+    let total = 0;
+    let newComment: (comment: Comment) => any;
+    let element: any;
     let replyForum = false;
     let scrollY = 0;
     $: isShowOnTop = scrollY > 0;
 
     onMount(() => {
         const socket = io(import.meta.env.VITE_API_HOST)
-        socket.on('connect', () => console.log('connect'))
+        socket.on('connect', () => {
+            socket.emit('ping')
+            console.log('ping')
+        })
         socket.on('pong', (data) => console.log(data.message))
-        socket.emit('ping')
     })
 </script>
 
@@ -36,8 +42,8 @@
     </Breadcrumb>
 </div>
 
-<ForumDetail bind:forumDetail={data.forumDetail} bind:categories={data.categories} bind:replyForum />
-<CommentList bind:forumUUID={data.forumDetail.forumUUID} />
+<ForumDetail bind:forumDetail={data.forumDetail} bind:categories={data.categories} bind:replyForum on:comment={(event) => newComment(event.detail)} bind:total />
+<CommentList bind:this={element} bind:forumUUID={data.forumDetail.forumUUID} bind:newComment bind:totalComments={total} />
 
 <SpeedDial defaultClass="fixed right-6 bottom-6 ease-in duration-200 z-50">
     <svg slot="icon" aria-hidden="true" class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"></path></svg>

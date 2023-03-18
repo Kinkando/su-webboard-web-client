@@ -14,11 +14,19 @@ export interface Forum {
     createdAt: Date
 }
 
+export interface ForumRequest {
+    forumUUID?: string
+    title: string
+    description: string
+    categoryIDs: number[]
+    forumImageUUIDs?: string[]
+}
+
 export interface ForumDetail {
     forumUUID: string
     title: string
     description: string
-    forumImageURLs?: string[]
+    forumImages?: Document[]
     categories: Category[]
     authorUUID: string
     authorName: string
@@ -36,22 +44,6 @@ export interface ForumFilter {
     searchText?: string
 }
 
-export interface Comment {
-    // forumUUID: string
-    // replyCommentUUID?: string
-    commentUUID: string
-    commentText: string
-    commentImageURLs?: string[]
-    commenterUUID: string
-    commenterName: string
-    commenterImageURL: string
-    isLike: boolean
-    likeCount: number
-    commentCount: number
-    createdAt: Date
-    replyComments?: Comment[]
-}
-
 export interface ForumReport {
     reportUUID: string
     reporterUUID: string
@@ -59,6 +51,11 @@ export interface ForumReport {
     plaintiffUUID: string
     plaintiffName: string
     description: string
+}
+
+export interface Document {
+    url: string
+    uuid: string
 }
 
 // Create Comment
