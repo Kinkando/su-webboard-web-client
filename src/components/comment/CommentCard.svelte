@@ -4,23 +4,74 @@
 	import EllipsisMenu from "@components/shared/EllipsisMenu.svelte";
 	import type { Comment } from "@models/comment";
 	import type { Attachment } from "@models/new-post";
+    import type { Document } from "@models/forum";
+	import { deleteComment, upsertComment } from "@services/comment";
 	import { getUserUUID } from "@util/localstorage";
+	import { createEventDispatcher } from "svelte";
 
     export let label: string;
     export let comment: Comment;
-    export let reply = false;
+    export let forumUUID: string;
+    export let replyCommentUUID: string = "";
 
     let attachments: Attachment[] = [];
-    if (comment.commentImageURLs) {
-        const files: Attachment[] = []
-        comment.commentImageURLs.forEach((url) => {
-            files.push({
-                file: new File([], ""),
-                src: url,
-                isLoading: true,
+    $: comment.commentImages !== undefined && initImages();
+    const initImages = () => {
+        if (comment.commentImages) {
+            const files: Attachment[] = [];
+            comment.commentImages.forEach(async (image) => {
+                files.push({
+                    uuid: image?.uuid || undefined,
+                    file: new File([], ""),
+                    src: image.url,
+                    isLoading: true,
+                })
             })
-        })
-        attachments = [...files]
+            attachments = [...files]
+        }
+    }
+
+    const dispatch = createEventDispatcher()
+
+    const editCommentAction = async(commentEdit: string, attachmentsEdit: Attachment[], deleteImageUUIDs: string[]) => {
+        comment.commentText = commentEdit;
+        const files = attachmentsEdit.map(attachment => attachment.file)
+        const res = await upsertComment(forumUUID, comment, files, deleteImageUUIDs, replyCommentUUID || undefined)
+
+        // update data on local
+        let tempCommentImages: Document[] = []
+        if (deleteImageUUIDs && comment.commentImages) {
+            tempCommentImages = comment.commentImages.filter(image => !deleteImageUUIDs.includes(image.uuid)) || []
+        }
+        if (res.data?.documents) {
+            if (tempCommentImages) {
+                comment.commentImages = [...tempCommentImages, ...res.data.documents]
+            } else {
+                comment.commentImages = [...res.data.documents]
+            }
+        }
+    }
+
+    const reportCommentAction = async(reason: string) => {
+        console.log(`รายงานความคิดเห็น: ${comment.commentUUID}: ${reason}`)
+    }
+
+    const deleteCommentAction = async() => {
+        await deleteComment(comment.commentUUID)
+        dispatch('delete', { comment })
+    }
+
+    const createCommentAction = async(commentCreate: string, attachments: Attachment[]) => {
+        const files = attachments.map(attachment => attachment.file)
+        const res = await upsertComment(forumUUID, { commentText: commentCreate } as any, files, undefined, comment.commentUUID)
+        if (res?.data) {
+            dispatch('create', {
+                comment: {
+                    commentUUID: res?.data.commentUUID,
+                    commentText: commentCreate,
+                }
+            })
+        }
     }
 
     $: userUUID = getUserUUID()
@@ -39,27 +90,30 @@
             editable={comment.commenterUUID === userUUID}
             reportable={comment.commenterUUID !== userUUID}
             removable={comment.commenterUUID === userUUID}
-            on:edit={(event) => console.log(event.detail.comment, event.detail.attachments.length)}
-            on:report={(event) => console.log(`รายงานความคิดเห็น: ${comment.commentUUID}: ${event.detail.reportText}`)}
-            on:delete={() => console.log(`ลบความคิดเห็น: ${comment.commentUUID}`)}
+            on:edit={(event) => editCommentAction(event.detail.comment, event.detail.attachments, event.detail.deleteImageUUIDs)}
+            on:report={(event) => reportCommentAction(event.detail.reportText)}
+            on:delete={() => deleteCommentAction()}
         />
     </div>
 
     <div class="text-lg min-h-[6rem]">
         <span>{comment.commentText}</span>
-        {#if comment.commentImageURLs?.length}
-            <ForumImage imageURLs={comment.commentImageURLs} />
+        {#if comment.commentImages?.length}
+            <ForumImage imageURLs={comment.commentImages?.map(doc => doc.url)} />
         {/if}
     </div>
 
     <ForumFooter
+        type="comment"
+        uuid={comment.commentUUID}
+        isLike={comment.isLike}
         username={comment.commenterName}
         userImageURL={comment.commenterImageURL}
         likeCount={comment.likeCount}
-        commentCount={reply ? comment.commentCount : undefined}
+        commentCount={!replyCommentUUID ? (comment.replyComments?.length || 0) : undefined}
         label={`ตอบกลับ${label}`}
         createdAt={comment.createdAt}
-        on:comment={event => console.log("แสดงความคิดเห็น", event.detail.comment, event.detail.attachments.length)}
+        on:comment={event => createCommentAction(event.detail.comment, event.detail.attachments)}
     />
 </div>
 

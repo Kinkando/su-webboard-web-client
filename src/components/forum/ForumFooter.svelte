@@ -7,8 +7,9 @@
 	import { createEventDispatcher } from 'svelte';
 	import { timeRange } from '@util/datetime';
 
+    export let type: 'forum' | 'comment'
     export let uuid: string;
-    export let isLike: boolean;
+    export let isLike: boolean | undefined;
     export let likeCount: number | undefined = undefined;
     export let commentCount: number | undefined = undefined;
     export let username: string;
@@ -45,7 +46,7 @@
 <div class="flex items-center justify-between mt-3 -mb-3">
     {#if likeCount !== undefined}
         <div class="flex items-center font-bold">
-            <LikeBadge {likeCount} bind:uuid bind:isLike toggle type="forum" />
+            <LikeBadge {likeCount} bind:uuid bind:isLike toggle bind:type />
         </div>
     {/if}
     {#if commentCount !== undefined}

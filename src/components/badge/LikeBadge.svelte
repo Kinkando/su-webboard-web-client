@@ -2,11 +2,11 @@
 	import { likeComment } from "@services/comment";
 	import { likeForum } from "@services/forum";
 
-    export let uuid: string;
+    export let uuid: string = "";
     export let likeCount: number;
     export let toggle = false;
-    export let isLike = false;
-    export let type = ""; // forum or comment
+    export let isLike: boolean = false;
+    export let type: 'forum' | 'comment' | undefined = undefined
 
     const likeToggle = async() => {
         if (toggle) {

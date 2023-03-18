@@ -170,6 +170,7 @@
             bind:label
             bind:comment={editComment}
             bind:attachments={editAttachments}
+            bind:deleteImageUUIDs
             cancel={() => openEditCommentModal = false}
             submit={editAction}
         />

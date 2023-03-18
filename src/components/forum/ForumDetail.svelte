@@ -10,10 +10,13 @@
 	import { defined } from "@util/generic";
 	import { getUserUUID } from "@util/localstorage";
 	import { deleteForum, upsertForum } from "@services/forum";
+	import { upsertComment } from "@services/comment";
+	import { createEventDispatcher } from "svelte";
 
     export let forumDetail: ForumDetail | Announcement;
     export let categories: Category[] | undefined = undefined;
     export let replyForum = false;
+    export let total = 0;
 
     const type = instanceOfForumDetail(forumDetail) ? 'กระทู้' : 'การประกาศ'
 
@@ -54,6 +57,8 @@
 
     let imageURLs = initImages()
 
+    const dispatch = createEventDispatcher()
+
     const editForumAction = async(titleEdit: string, descriptionEdit: string, categoriesEdit: Category[], attachmentsEdit: Attachment[], deleteImageUUIDs: string[]) => {
         const files = attachmentsEdit.map(attachment => attachment.file)
         const categoryIDs = categoriesEdit.filter(category => category.isActive).map(category => category.categoryID!)
@@ -74,12 +79,6 @@
         if (categories) {
             categories.forEach((category, index) => category.isActive = categoriesEdit[index].isActive)
         }
-
-        // const images = attachmentsEdit.map(attachment => {
-        //     return {
-        //         url: URL.createObjectURL(attachment.file),
-        //     } as Document
-        // })
         if (instanceOfForumDetail(forumDetail)) {
             if (deleteImageUUIDs && forumDetail.forumImages) {
                 forumDetail.forumImages = forumDetail.forumImages.filter(image => !deleteImageUUIDs.includes(image.uuid))
@@ -114,6 +113,20 @@
 
     const reportForumAction = async(reason: string) => {
         console.log(`รายงาน${type}: ${forumDetail.forumUUID}: ${reason}`)
+    }
+
+    const commentForumAction = async(commentText: string, attachments: Attachment[]) => {
+        const files = attachments.map(attachment => attachment.file)
+        const comment: any = {
+            commentText,
+            forumUUID: forumDetail.forumUUID,
+        }
+        const res = await upsertComment(forumDetail.forumUUID, comment, files)
+        if (res?.data) {
+            comment.commentUUID = res.data.commentUUID
+            comment.commentImages = res.data.documents
+            dispatch('comment', comment)
+        }
     }
 
     $: userUUID = getUserUUID()
@@ -158,16 +171,17 @@
     {/if}
 
     <ForumFooter
+        type="forum"
         isLike={isLike()}
         uuid={forumDetail.forumUUID}
         username={forumDetail.authorName}
         userImageURL={forumDetail.authorImageURL}
         likeCount={instanceOfForumDetail(forumDetail) ? forumDetail.likeCount : undefined}
-        commentCount={instanceOfForumDetail(forumDetail) ? forumDetail.commentCount : undefined}
+        commentCount={instanceOfForumDetail(forumDetail) ? (forumDetail.commentCount || total) : undefined}
         {label}
         replyText={label}
         createdAt={forumDetail.createdAt}
         bind:replyTrigger={replyForum}
-        on:comment={event => console.log("แสดงความคิดเห็น", event.detail.comment, event.detail.attachments.length)}
+        on:comment={event => commentForumAction(event.detail.comment, event.detail.attachments)}
     />
 </div>

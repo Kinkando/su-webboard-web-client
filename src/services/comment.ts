@@ -4,6 +4,14 @@ import api from "@util/api";
 
 const baseURL = import.meta.env.VITE_API_HOST
 
+export async function getComment(forumUUID: string, commentUUID: string) {
+    const res = await api<Comment>({
+        url: `${baseURL}/comment/${forumUUID}/${commentUUID}`,
+        method: "GET",
+    })
+    return res.data
+}
+
 export async function getComments(forumUUID: string, offset: number, limit: number) {
     const res = await api<{ total: number, data: Comment[]}>({
         url: `${baseURL}/comment/${forumUUID}?limit${limit}&offset=${offset}`,
@@ -12,9 +20,18 @@ export async function getComments(forumUUID: string, offset: number, limit: numb
     return res.data
 }
 
-export async function upsertComment(comment: Comment, files: File[]) {
+export async function upsertComment(forumUUID: string, comment: Comment, files: File[], commentImageUUIDs?: string[], replyCommentUUID?: string) {
     const formData = new FormData();
-    formData.append("data", JSON.stringify(comment))
+    const data: any = {
+        forumUUID,
+        replyCommentUUID,
+        commentUUID: comment.commentUUID || undefined,
+        commentText: comment.commentText,
+    };
+    if (commentImageUUIDs) {
+        data.commentImageUUIDs = commentImageUUIDs;
+    }
+    formData.append("data", JSON.stringify(data))
     if (files) {
         for(let file of files) {
             formData.append("files", file)
