@@ -29,7 +29,7 @@
                 </div>
             </div>
         {/if}
-        <img src={forum?.authorImageURL} alt="" class="min-w-[4rem] max-w-[4rem] rounded-full">
+        <img src={forum?.authorImageURL} alt="" class="min-w-[4rem] max-w-[4rem] min-h-[4rem] max-h-[4rem] rounded-full">
     </div>
     <section class="w-full max-w-full overflow-hidden flex flex-col gap-y-1">
         <div class="font-bold text-lg overflow-hidden text-ellipsis whitespace-nowrap">{forum?.title}</div>

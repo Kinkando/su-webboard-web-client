@@ -4,10 +4,10 @@
     export let announcement: Announcement;
 </script>
 
-<a class="rounded-lg shadow-md flex flex-col w-full h-56 cursor-pointer overflow-hidden" href="/announcement/{announcement?.forumUUID}">
+<a class="rounded-lg shadow-md flex flex-col w-full h-56 cursor-pointer overflow-hidden" href="/announcement/{announcement?.announcementUUID}">
     <div class="bg-[var(--primary-color-75)] text-black dark:bg-[var(--primary-color-125)] dark:text-white ease-in duration-200 hover:brightness-75 hover:scale-105 w-full h-full p-4 sm:p-6">
         <header class="flex items-center gap-x-3">
-            <img src="{announcement?.authorImageURL}" alt="" class="w-12">
+            <img src="{announcement?.authorImageURL}" alt="" class="min-w-[3rem] max-w-[3rem] min-h-[3rem] max-h-[3rem] rounded-full">
             <div class="flex flex-col overflow-hidden">
                 <span class="text-md overflow-hidden text-ellipsis whitespace-nowrap">{announcement?.authorName}</span>
                 <span class="text-xs overflow-hidden text-ellipsis whitespace-nowrap">2 ชั่วโมง</span>

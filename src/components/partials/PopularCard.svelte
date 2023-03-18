@@ -29,7 +29,7 @@
         </section>
 
         <footer class="flex items-center gap-x-3">
-            <img src="{popularTopic?.authorImageURL}" alt="" class="w-12">
+            <img src="{popularTopic?.authorImageURL}" alt="" class="min-w-[3rem] max-w-[3rem] min-h-[3rem] max-h-[3rem] rounded-full">
             <div class="flex flex-col overflow-hidden w-full">
                 {#if popularTopic?.likeCount}
                     <div class="flex items-center justify-between">
