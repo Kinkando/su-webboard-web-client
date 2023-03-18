@@ -10,7 +10,7 @@
 
 <a class="bg-white text-black dark:bg-gray-700 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-900 cursor-pointer p-4 sm:p-6 shadow-md drop-shadow-md rounded-md ease-in duration-200 w-full h-full flex gap-x-4" href={`/announcement/${announcement.announcementUUID}`}>
     <div class="relative w-fit h-fit">
-        <img src={announcement?.authorImageURL} alt="" class="min-w-[4rem] max-w-[4rem] rounded-full">
+        <img src={announcement?.authorImageURL} alt="" class="min-w-[4rem] max-w-[4rem] min-h-[4rem] max-h-[4rem] rounded-full">
     </div>
     <section class="w-full max-w-full overflow-hidden flex flex-col gap-y-1">
         <div class="font-bold text-lg overflow-hidden text-ellipsis whitespace-nowrap">{announcement?.title}</div>
