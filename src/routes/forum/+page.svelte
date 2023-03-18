@@ -2,6 +2,7 @@
 	import { goto } from "$app/navigation";
 	import HTTP from "@commons/http";
 	import NewPost from "@components/shared/NewPost.svelte";
+	import LoadingSpinner from "@components/spinner/LoadingSpinner.svelte";
 	import type { Category } from "@models/category";
 	import type { ForumRequest } from "@models/forum";
 	import type { Attachment, FormSchema } from "@models/new-post";
@@ -23,7 +24,9 @@
             description: description.value,
             categoryIDs,
         }
+        isLoading = true;
         const res = await upsertForum(forum, files)
+        isLoading = false;
         if (res.status === HTTP.StatusOK && res.data) {
             goto(`/forum/${res.data.forumUUID}`)
         }
@@ -42,6 +45,8 @@
         <BreadcrumbItem>สร้างกระทู้</BreadcrumbItem>
     </Breadcrumb>
 </div>
+
+<LoadingSpinner bind:isLoading />
 
 <div class="ease-in duration-200 bg-white dark:bg-gray-900 w-full rounded-md shadow-lg p-4 sm:p-6">
     <NewPost

@@ -4,13 +4,12 @@
 	import CategoryBadge from "@components/badge/CategoryBadge.svelte";
     import EllipsisMenu from "@components/shared/EllipsisMenu.svelte";
 	import type { Announcement } from "@models/announcement";
-    import type { Document, ForumDetail, ForumRequest } from "@models/forum";
+    import type { ForumDetail, ForumRequest } from "@models/forum";
 	import type { Attachment, FormSchema } from "@models/new-post";
 	import type { Category } from "@models/category";
 	import { defined } from "@util/generic";
 	import { getUserUUID } from "@util/localstorage";
 	import { deleteForum, upsertForum } from "@services/forum";
-	import { goto } from "$app/navigation";
 
     export let forumDetail: ForumDetail | Announcement;
     export let categories: Category[] | undefined = undefined;
@@ -110,7 +109,7 @@
 
     const deleteForumAction = async() => {
         await deleteForum(forumDetail?.forumUUID)
-        goto('')
+        window.location.href = '/'
     }
 
     const reportForumAction = async(reason: string) => {
