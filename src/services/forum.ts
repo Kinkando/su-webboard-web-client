@@ -8,11 +8,12 @@ import { getAllCategoryDetails, getCategoryByID } from "./category";
 const baseURL = import.meta.env.VITE_API_HOST
 const authorImageURL = "https://ps.w.org/user-avatar-reloaded/assets/icon-128x128.png?rev=2540745";
 
+// Mock
 export async function getHomeData(): Promise<Home> {
     const home: Home = {
         announcements: [
             {
-                forumUUID: "xxx-xxx-xxx-xxx",
+                announcementUUID: "xxx-xxx-xxx-xxx",
                 authorUUID: "",
                 authorName: "Silpakorn University",
                 authorImageURL,
@@ -21,7 +22,7 @@ export async function getHomeData(): Promise<Home> {
                 description: "อิ่มชอบกินเด็กครับ...",
             },
             {
-                forumUUID: "yyy-yyy-yyy-yyy",
+                announcementUUID: "yyy-yyy-yyy-yyy",
                 authorUUID: "",
                 authorName: "Silpakorn University",
                 authorImageURL,
@@ -30,7 +31,7 @@ export async function getHomeData(): Promise<Home> {
                 description: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ipsum dolorem illum laudantium voluptatem hic accusantium placeat minus cum eius eveniet dicta pariatur quos aspernatur aliquam asperiores voluptas iste aut maxime quo neque ipsa dolorum, expedita deserunt. Voluptates magni qui repudiandae odio aperiam voluptatibus nisi itaque dolores aliquam? Qui, rem nam!",
             },
             {
-                forumUUID: "zzz-zzz-zzz-zzz",
+                announcementUUID: "zzz-zzz-zzz-zzz",
                 authorUUID: "",
                 authorName: "Silpakorn University",
                 authorImageURL,
@@ -39,7 +40,7 @@ export async function getHomeData(): Promise<Home> {
                 description: "รายละเอียด...",
             },
             {
-                forumUUID: "zzz-zzz-zzz-zzz",
+                announcementUUID: "zzz-zzz-zzz-zzz",
                 authorUUID: "",
                 authorName: "Silpakorn University",
                 authorImageURL,
@@ -48,7 +49,7 @@ export async function getHomeData(): Promise<Home> {
                 description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit aspernatur quod voluptatum quidem atque cupiditate amet in quibusdam inventore! Doloremque.",
             },
             {
-                forumUUID: "zzz-zzz-zzz-zzz",
+                announcementUUID: "zzz-zzz-zzz-zzz",
                 authorUUID: "",
                 authorName: "Silpakorn University",
                 authorImageURL,
@@ -252,6 +253,7 @@ export async function getForumListByPopular(offset: number, limit: number) {
     return res.data || { total: 0, data: [] as Forum[] }
 }
 
+// Mock
 export async function searchForum(filter: ForumFilter, offset: number, limit: number) {
     const data: Forum[] = [];
     const total = 97;
@@ -277,48 +279,6 @@ export async function searchForum(filter: ForumFilter, offset: number, limit: nu
 
     await sleep()
     return { data, total }
-}
-
-export async function getAnnouncements(offset: number, limit: number) {
-    const data: Announcement[] = [];
-    const total = 24;
-
-    const announcement: Announcement = {
-        forumUUID: "xxx-xxx-xxx-xxx",
-        title: "การลงทะเบียนเพิ่มถอนภาคเรียนที่ 2 ปีการศึกษา 2565",
-        authorUUID: "yyy-yyy-yyy-yyy",
-        authorName: "มหาวิทยาลัยศิลปากร",
-        authorImageURL,
-        createdAt: new Date(),
-    }
-
-    for(let i=offset; i<Math.min(total, offset+limit); i++) {
-        data.push(announcement)
-    }
-
-    await sleep()
-    return { data, total }
-}
-
-export async function getAnnouncementDetail(forumUUID: string) {
-    if (!["xxx-xxx-xxx-xxx", "yyy-yyy-yyy-yyy", "zzz-zzz-zzz-zzz"].includes(forumUUID)) {
-        return null
-    }
-    const forumDetail: Announcement = {
-        forumUUID,
-        title: "แจ้งเรื่องการลงทะเบียนเพิ่ม-ถอน ภาคเรียนที่ 2 ปีการศึกษา 2565",
-        description: "ให้นักศึกษา ...",
-        authorUUID: "aaa-aaa-aaa-aaa",
-        authorName: "มหาวิทยาลัยศิลปากร",
-        authorImageURL,
-        announcementImages: [
-            // "https://media.timeout.com/images/103662433/750/422/image.jpg",
-            // "https://static.thcdn.com/productimg/1600/1600/12968604-2055002146053883.jpg",
-        ],
-        createdAt: new Date(),
-    }
-    await sleep()
-    return forumDetail
 }
 
 export async function getForumDetail(forumUUID: string, cookie?: Cookies) {

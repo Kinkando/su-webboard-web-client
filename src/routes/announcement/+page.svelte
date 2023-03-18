@@ -1,14 +1,34 @@
 <script lang="ts">
+	import { goto } from "$app/navigation";
+	import HTTP from "@commons/http";
 	import NewPost from "@components/shared/NewPost.svelte";
+	import LoadingSpinner from "@components/spinner/LoadingSpinner.svelte";
+	import type { AnnouncementRequest } from "@models/announcement";
 	import type { Attachment, FormSchema } from "@models/new-post";
+	import { upsertAnnouncement } from "@services/announcement";
 	import { Breadcrumb, BreadcrumbItem } from "flowbite-svelte";
 
     let title: FormSchema = {value: "", label: "หัวข้อการประกาศ", placeholder: "กรุณาใส่หัวข้อสำหรับประกาศจากทางมหาวิทยาลัย..."}
     let description: FormSchema = {value: "", label: "รายละเอียด", placeholder: "กรุณาใส่รายละเอียด..."}
     let attachments: Attachment[] = [];
     let submitName = "ยืนยัน"
-    let submit = async() => console.log(title.value, description.value, attachments.length)
+    let isLoading = false;
+    let submit = async() => {
+        const files = attachments.map(attachment => attachment.file)
+        const announcement: AnnouncementRequest = {
+            title: title.value,
+            description: description.value,
+        }
+        isLoading = true;
+        const res = await upsertAnnouncement(announcement, files)
+        isLoading = false;
+        if (res.status === HTTP.StatusOK && res.data) {
+            goto(`/announcement/${res.data.announcementUUID}`)
+        }
+    }
 </script>
+
+<LoadingSpinner bind:isLoading />
 
 <div class="mb-4">
     <Breadcrumb aria-label="SU Webboard">

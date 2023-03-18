@@ -1,7 +1,7 @@
-import type { Document } from "./forum"
+import type { Document } from './forum'
 
 export interface Announcement {
-    forumUUID: string
+    announcementUUID: string
     authorUUID: string
     authorName: string
     authorImageURL: string
@@ -9,4 +9,11 @@ export interface Announcement {
     createdAt: Date
     title: string
     description?: string
+}
+
+export interface AnnouncementRequest {
+    announcementUUID?: string
+    title: string
+    description: string
+    announcementImageUUIDs?: string[]
 }

@@ -3,7 +3,6 @@
 	import ForumFooter from "./ForumFooter.svelte";
 	import CategoryBadge from "@components/badge/CategoryBadge.svelte";
     import EllipsisMenu from "@components/shared/EllipsisMenu.svelte";
-	import type { Announcement } from "@models/announcement";
     import type { ForumDetail, ForumRequest } from "@models/forum";
 	import type { Attachment, FormSchema } from "@models/new-post";
 	import type { Category } from "@models/category";
@@ -13,32 +12,19 @@
 	import { upsertComment } from "@services/comment";
 	import { createEventDispatcher } from "svelte";
 
-    export let forumDetail: ForumDetail | Announcement;
-    export let categories: Category[] | undefined = undefined;
+    export let forumDetail: ForumDetail;
+    export let categories: Category[];
     export let replyForum = false;
     export let total = 0;
 
-    const type = instanceOfForumDetail(forumDetail) ? 'กระทู้' : 'การประกาศ'
-
     // Edit modal
-    let title: FormSchema = {value: forumDetail.title, label: `หัวข้อ${type}`, placeholder: `กรุณาใส่หัวข้อ${type}...`}
+    let title: FormSchema = {value: forumDetail.title, label: `หัวข้อกระทู้`, placeholder: `กรุณาใส่หัวข้อกระทู้...`}
     let description: FormSchema = {value: forumDetail.description!, label: "รายละเอียด", placeholder: "กรุณาใส่รายละเอียด..."}
     let attachments: Attachment[] = [];
     let label = "แสดงความคิดเห็น"
 
-    function instanceOfForumDetail(object: any): object is ForumDetail {
-        return object && 'categories' in object;
-    }
-
-    const isLike = () => {
-        if (instanceOfForumDetail(forumDetail)) {
-            return forumDetail.isLike
-        }
-        return false
-    }
-
     function initImages() {
-        const images = instanceOfForumDetail(forumDetail) ? forumDetail.forumImages : forumDetail.announcementImages
+        const images = forumDetail.forumImages
         if (images) {
             const files: Attachment[] = [];
             images.forEach(async (image) => {
@@ -79,30 +65,17 @@
         if (categories) {
             categories.forEach((category, index) => category.isActive = categoriesEdit[index].isActive)
         }
-        if (instanceOfForumDetail(forumDetail)) {
-            if (deleteImageUUIDs && forumDetail.forumImages) {
-                forumDetail.forumImages = forumDetail.forumImages.filter(image => !deleteImageUUIDs.includes(image.uuid))
-            }
-            if (res.data?.documents) {
-                if (forumDetail.forumImages) {
-                    forumDetail.forumImages = [...forumDetail.forumImages, ...res.data.documents]
-                } else {
-                    forumDetail.forumImages = [...res.data.documents]
-                }
-            }
-            forumDetail.categories = categories?.filter(category => category.isActive)!
-        } else {
-            if (deleteImageUUIDs && forumDetail.announcementImages) {
-                forumDetail.announcementImages = forumDetail.announcementImages?.filter(image => !deleteImageUUIDs.includes(image.uuid))
-            }
-            if (res.data?.documents) {
-                if (forumDetail.announcementImages) {
-                    forumDetail.announcementImages = [...forumDetail.announcementImages, ...res.data.documents]
-                } else {
-                    forumDetail.announcementImages = [...res.data.documents]
-                }
+        if (deleteImageUUIDs && forumDetail.forumImages) {
+            forumDetail.forumImages = forumDetail.forumImages.filter(image => !deleteImageUUIDs.includes(image.uuid))
+        }
+        if (res.data?.documents) {
+            if (forumDetail.forumImages) {
+                forumDetail.forumImages = [...forumDetail.forumImages, ...res.data.documents]
+            } else {
+                forumDetail.forumImages = [...res.data.documents]
             }
         }
+        forumDetail.categories = categories?.filter(category => category.isActive)!
         imageURLs = initImages()
     }
 
@@ -112,7 +85,7 @@
     }
 
     const reportForumAction = async(reason: string) => {
-        console.log(`รายงาน${type}: ${forumDetail.forumUUID}: ${reason}`)
+        console.log(`รายงานกระทู้: ${forumDetail.forumUUID}: ${reason}`)
     }
 
     const commentForumAction = async(commentText: string, attachments: Attachment[]) => {
@@ -139,10 +112,10 @@
         </div>
         <EllipsisMenu
             ellipsisMenuID={forumDetail?.forumUUID}
-            type={type === "กระทู้" ? 'forum': 'announcement'}
-            menuSuffixName={type}
+            type={'forum'}
+            menuSuffixName={"กระทู้"}
             editable={forumDetail.authorUUID === userUUID}
-            reportable={type === "กระทู้" && forumDetail.authorUUID !== userUUID}
+            reportable={forumDetail.authorUUID !== userUUID}
             removable={forumDetail.authorUUID === userUUID}
             {title}
             {description}
@@ -153,7 +126,7 @@
             on:delete={() => deleteForumAction()}
         />
     </div>
-    {#if instanceOfForumDetail(forumDetail) && forumDetail.categories?.length}
+    {#if forumDetail.categories?.length}
         <div class="flex flex-wrap items-center gap-1 mt-1">
             {#each forumDetail.categories as category}
                 <CategoryBadge categoryID={defined(category.categoryID)} categoryName={category.categoryName} categoryHexColor={category.categoryHexColor} />
@@ -172,12 +145,12 @@
 
     <ForumFooter
         type="forum"
-        isLike={isLike()}
+        isLike={forumDetail.isLike}
         uuid={forumDetail.forumUUID}
         username={forumDetail.authorName}
         userImageURL={forumDetail.authorImageURL}
-        likeCount={instanceOfForumDetail(forumDetail) ? forumDetail.likeCount : undefined}
-        commentCount={instanceOfForumDetail(forumDetail) ? (forumDetail.commentCount || total) : undefined}
+        likeCount={forumDetail.likeCount}
+        commentCount={forumDetail.commentCount || total}
         {label}
         replyText={label}
         createdAt={forumDetail.createdAt}

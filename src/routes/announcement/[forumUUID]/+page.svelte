@@ -1,5 +1,5 @@
 <script lang="ts">
-	import ForumDetail from "@components/forum/ForumDetail.svelte";
+	import AnnouncementDetail from "@components/announcement/AnnouncementDetail.svelte";
 	import { Breadcrumb, BreadcrumbItem } from "flowbite-svelte";
     import type { Announcement } from "@models/announcement";
 
@@ -14,4 +14,4 @@
     </Breadcrumb>
 </div>
 
-<ForumDetail bind:forumDetail={data.announcement} />
+<AnnouncementDetail bind:announcementDetail={data.announcement} />
