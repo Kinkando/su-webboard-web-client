@@ -1,8 +1,10 @@
 import type { Announcement } from "@models/announcement";
 import type { Comment, Forum, ForumDetail, ForumFilter } from "@models/forum";
 import type { Home } from "@models/home";
+import api from "@util/api";
 import { getAllCategoryDetails, getCategoryByID } from "./category";
 
+const baseURL = import.meta.env.VITE_API_HOST
 const authorImageURL = "https://ps.w.org/user-avatar-reloaded/assets/icon-128x128.png?rev=2540745";
 
 export async function getHomeData(): Promise<Home> {
@@ -200,64 +202,19 @@ export async function getHomeData(): Promise<Home> {
 }
 
 export async function getForumListByCategoryID(categoryID: number, offset: number, limit: number) {
-    const data: Forum[] = [];
-    const total = 97;
-
-    const category = await getCategoryByID(categoryID)
-    if (!category) {
-        return { data, total: 0 }
-    }
-    if (["6", "7", "8", "9", "10"].includes(categoryID.toString())) {
-        return { data, total: 0 }
-    }
-
-    const forum: Forum = {
-        forumUUID: "xxx-xxx-xxx-xxx",
-        title: "Python vs C: 10 หลักความแตกต่างที่คุณต้องรู้",
-        authorUUID: "yyy-yyy-yyy-yyy",
-        authorName: "Kook Kai",
-        authorImageURL,
-        categories: [ (await getCategoryByID(1))!, (await getCategoryByID(2))! ],
-        commentCount: 78,
-        likeCount: 3999,
-        createdAt: new Date(),
-    }
-
-    for(let i=offset; i<Math.min(total, offset+limit); i++) {
-        data.push(forum)
-    }
-
-    await sleep()
-    return { data, total }
+    const res = await api<{ total: number, data: Forum[] }>({
+        url: `${baseURL}/forum?limit${limit}&offset=${offset}&categoryID=${categoryID}`,
+        method: "GET",
+    })
+    return res.data || { total: 0, data: [] as Forum[] }
 }
 
 export async function getForumListByPopular(offset: number, limit: number) {
-    const data: Forum[] = [];
-    const total = 97;
-
-    const category1 = await getCategoryByID(1)
-    const category2 = await getCategoryByID(2)
-
-    const forum: Forum = {
-        forumUUID: "xxx-xxx-xxx-xxx",
-        title: "Python vs C: 10 หลักความแตกต่างที่คุณต้องรู้",
-        authorUUID: "yyy-yyy-yyy-yyy",
-        authorName: "Kook Kai",
-        authorImageURL,
-        categories: [ category1!, category2! ],
-        commentCount: 78,
-        likeCount: 3999,
-        createdAt: new Date(),
-    }
-
-    for(let i=offset; i<Math.min(total, offset+limit); i++) {
-        const f = {...forum}
-        f.ranking = i+1
-        data.push(f)
-    }
-
-    await sleep()
-    return { data, total }
+    const res = await api<{ total: number, data: Forum[] }>({
+        url: `${baseURL}/forum?limit${limit}&offset=${offset}&sortBy=ranking@ASC`,
+        method: "GET",
+    })
+    return res.data || { total: 0, data: [] as Forum[] }
 }
 
 export async function searchForum(filter: ForumFilter, offset: number, limit: number) {
