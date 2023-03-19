@@ -53,7 +53,7 @@ export const load: LayoutServerLoad = async ({ cookies, route }) => {
 // add delete all forum and announcement when admin delete user
 
 // ADD SKELETON LOAD ON FORUM AND ANNOUNCEMENT DETAIL
-
+// remove all related post when delete category (popup or modal to warning before delete)
 // admin portal ui on modal open and resize (backdrop animate) and modal overlap on sidebar
 // admin portal modal form validation
 // admin portal error not found page

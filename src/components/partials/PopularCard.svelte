@@ -3,6 +3,7 @@
 	import CommentBadge from "@components/badge/CommentBadge.svelte";
 	import LikeBadge from "@components/badge/LikeBadge.svelte";
 	import type { Forum } from "@models/forum";
+	import { timeRange } from "@util/datetime";
 	import { defined } from "@util/generic";
 
     export let popularTopic: Forum;
@@ -40,7 +41,7 @@
 
                 {#if popularTopic?.commentCount != undefined}
                     <div class="flex items-center justify-between">
-                        <div class="w-full mr-2 text-xs overflow-hidden text-ellipsis whitespace-nowrap">2 ชั่วโมง</div>
+                        <div class="w-full mr-2 text-xs overflow-hidden text-ellipsis whitespace-nowrap">{timeRange(popularTopic.createdAt)}</div>
                         <CommentBadge commentCount={popularTopic?.commentCount} />
                     </div>
                 {/if}
