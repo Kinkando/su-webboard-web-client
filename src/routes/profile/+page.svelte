@@ -10,6 +10,7 @@
 	import { changePassword } from '@services/firebase';
 	import { getUserProfile, updateUserProfile } from "@services/user";
 	import userStore from '@stores/user';
+	import { getUserType } from "@util/localstorage";
 
     let isLoading = false;
     let mode: 'view' | 'update-profile' | 'change-password' = 'view';
@@ -129,12 +130,16 @@
             placeholder: "",
             key: "userEmail",
         },
-        {
+    ]
+
+    const { userType } = getUserType()
+    if (userType === 'std') {
+        inputs.push({
             label: "รหัสนักศึกษา",
             placeholder: "",
             key: "studentID",
-        },
-    ]
+        })
+    }
 </script>
 
 <Alert bind:alert />
@@ -149,7 +154,7 @@
 </div>
 
 {#if !user}
-    <SkeletonUpdateProfile />
+    <SkeletonUpdateProfile menuCount={userType === 'std' ? 5 : 4} />
 {:else}
     <div class="ease-in duration-200 bg-white dark:bg-gray-900 w-full rounded-md shadow-lg p-4 sm:p-6 max-w-4xl m-auto">
         <div class="md:flex md:items-start md:gap-x-6">
