@@ -8,8 +8,8 @@
     export let popularTopic: Forum;
 </script>
 
-<a class="rounded-lg shadow-md flex flex-col w-full h-56 cursor-pointer overflow-hidden hover:brightness-75 bg-no-repeat bg-cover brightness-20 ease-in duration-200" href="/forum/{popularTopic?.forumUUID}" style={popularTopic?.forumImages ? `background-image: linear-gradient(rgba(255,255,255,0.65), rgba(255,255,255,0.65)), url('${popularTopic?.forumImages[0].url}'` : ''}>
-    <div class="{!popularTopic?.forumImages ? 'bg-[var(--primary-color-75)] text-black dark:bg-[var(--primary-color-125)] dark:text-white' : ''} hover:scale-105 ease-in duration-200 w-full h-full p-4 sm:p-6 flex flex-col">
+<a class="rounded-lg shadow-md flex flex-col w-full h-56 cursor-pointer overflow-hidden hover:brightness-75 bg-no-repeat bg-cover brightness-20 ease-in duration-200" href="/forum/{popularTopic?.forumUUID}" style={popularTopic?.forumImages?.length ? `background-image: linear-gradient(rgba(255,255,255,0.65), rgba(255,255,255,0.65)), url('${popularTopic?.forumImages[0].url}'` : ''}>
+    <div class="{!popularTopic?.forumImages?.length ? 'bg-[var(--primary-color-75)] text-black dark:bg-[var(--primary-color-125)] dark:text-white' : ''} hover:scale-105 ease-in duration-200 w-full h-full p-4 sm:p-6 flex flex-col">
         <header class="flex items-start flex-wrap gap-1 sm:h-44 h-36 overflow-y-hidden">
             {#if popularTopic?.categories}
                 {#each popularTopic.categories as category}
