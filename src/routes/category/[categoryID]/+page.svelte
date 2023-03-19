@@ -15,8 +15,19 @@
         const res = await getCategoryByID(categoryID)
         if (res) {
             category = res
+            clearInterval(period)
         }
     })
+
+    let periodText = "."
+    const period = setInterval(() => {
+        if (periodText.length === 5) {
+            periodText = ""
+        }
+        periodText += "."
+    }, 300)
+
+    $: categoryName = category?.categoryName ?? periodText
 
     const fetchData = async () => await getForumListByCategoryID(categoryID, (currentPage-1)*limit, limit)
 </script>
@@ -25,7 +36,7 @@
     <Breadcrumb aria-label="SU Webboard">
         <BreadcrumbItem href="/" home>หน้าแรก</BreadcrumbItem>
         <BreadcrumbItem>หมวดหมู่</BreadcrumbItem>
-        <BreadcrumbItem>{category?.categoryName}</BreadcrumbItem>
+        <BreadcrumbItem>{categoryName}</BreadcrumbItem>
     </Breadcrumb>
 </div>
 
