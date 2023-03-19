@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Announcement } from "@models/announcement";
+	import { timeRange } from "@util/datetime";
 
     export let announcement: Announcement;
 </script>
@@ -10,7 +11,7 @@
             <img src="{announcement?.authorImageURL}" alt="" class="min-w-[3rem] max-w-[3rem] min-h-[3rem] max-h-[3rem] rounded-full">
             <div class="flex flex-col overflow-hidden">
                 <span class="text-md overflow-hidden text-ellipsis whitespace-nowrap">{announcement?.authorName}</span>
-                <span class="text-xs overflow-hidden text-ellipsis whitespace-nowrap">2 ชั่วโมง</span>
+                <span class="text-xs overflow-hidden text-ellipsis whitespace-nowrap">{timeRange(announcement.createdAt)}</span>
                 <!-- <TimeBadge text="2 ชั่วโมง" /> -->
             </div>
         </header>

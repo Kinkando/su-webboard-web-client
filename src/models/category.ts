@@ -9,6 +9,6 @@ export interface CategoryDetail {
     categoryID: number
     categoryName: string
     categoryHexColor: string
-    latestUpdatedDate: Date
+    lastActive: Date
     forumCount: number
 }

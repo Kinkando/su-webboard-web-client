@@ -13,9 +13,11 @@
     let category: Category;
     onMount(async() => {
         const res = await getCategoryByID(categoryID)
+        clearInterval(period)
         if (res) {
             category = res
-            clearInterval(period)
+        } else {
+            periodText = 'ไม่พบหมวดหมู่'
         }
     })
 
