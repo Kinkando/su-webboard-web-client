@@ -1,3 +1,7 @@
+<script lang="ts">
+    export let menuCount: number;
+</script>
+
 <div class="ease-in duration-200 bg-white dark:bg-gray-900 w-full rounded-md shadow-lg p-4 sm:p-6 max-w-4xl m-auto">
     <div class="md:flex md:items-start md:gap-x-6">
         <figure class="md:-ml-6 md:mt-auto -mt-6 w-fit h-fit cursor-pointer m-auto relative">
@@ -5,7 +9,7 @@
         </figure>
 
         <div class="space-y-7 w-full mt-0 my-6 md:-ml-6 ">
-            {#each Array(5) as index}
+            {#each Array(menuCount) as index}
                 <div class="space-y-6">
                     <div class="w-1/2 h-4 bg-gray-300 rounded-full dark:bg-gray-600" />
                     <div class="w-full h-4 bg-gray-300 rounded-full dark:bg-gray-600" />

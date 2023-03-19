@@ -49,6 +49,9 @@ export const load: LayoutServerLoad = async ({ cookies, route }) => {
 // - change theme
 // - set sorting comment (default comment #1-#10), can set by latest comment first
 
+// ทำให้ text editor รองรับการเว้นบรรทัด เวลาแสดงผลในหน้า home, announcement detail
+// add delete all forum and announcement when admin delete user
+
 // ADD SKELETON LOAD ON FORUM AND ANNOUNCEMENT DETAIL
 
 // admin portal ui on modal open and resize (backdrop animate) and modal overlap on sidebar
