@@ -3,7 +3,7 @@ import type { Category } from "./category"
 export interface Forum {
     forumUUID: string
     title: string
-    forumImageURL?: string
+    forumImages?: Document[]
     categories?: Category[]
     authorUUID: string
     authorName: string
