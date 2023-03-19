@@ -97,7 +97,7 @@
     </div>
 
     <div class="text-lg min-h-[6rem]">
-        <span>{comment.commentText}</span>
+        <span>{@html comment.commentText.replaceAll('\n', '<br>')}</span>
         {#if comment.commentImages?.length}
             <ForumImage imageURLs={comment.commentImages?.map(doc => doc.url)} />
         {/if}
