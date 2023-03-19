@@ -136,7 +136,7 @@
 
     <hr class="my-3 dark:border-gray-500">
     <div class="font-medium">
-        {forumDetail.description}
+        {@html forumDetail.description.replaceAll('\n', '<br>')}
     </div>
 
     {#if imageURLs?.length}
