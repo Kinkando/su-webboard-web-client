@@ -7,7 +7,7 @@ import * as LocalStorage from './localstorage';
 import * as Cookies from './cookies';
 
 const instance = axios.create({
-	timeout: 6000,
+	timeout: 30000,
 	headers: {
 		"Content-Type": "application/json",
 	},
