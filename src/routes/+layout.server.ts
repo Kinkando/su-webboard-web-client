@@ -45,9 +45,23 @@ export const load: LayoutServerLoad = async ({ cookies, route }) => {
 
 // onMount twice
 
+// ADD VIEW COUNT AT ANNOUNCEMENT DETAIL PAGE
+// *********************** BUG ADMIN REDIRECT TO LOGIN PAGE (BECAUSE OF CALLING API PROFILE AND GET 401)
+
 // SETTING PAGE
 // - change theme
 // - set sorting comment (default comment #1-#10), can set by latest comment first
+// - ปักหมุด topbar ให้ไม่หุบเมื่อเลื่อนลง
+
+// or SORTING COMMENT ON FORUM DETAIL PAGE
+// ADD MINIMUM HEIGHT OF FORUM DESCRIPTION COMPONENT
+// เพิ่ม แก้ไขข้อความเมื่อ ... ในหน้า Forum Detail (Compare change before calling API)
+
+// เพิ่มหน้า Sign Up สำหรับนักศึกษา โดยสามารถ sign up ได้ผ่านเมลมหาวิทยาลัยเท่านั้น และหลังจาก verify จะให้กรอก
+// - รหัสนักศึกษา (โดยมี warning ว่า ไม่สามารถเปลี่ยนได้ด้วยตนเองในภายหลัง และต้องมีการ validate format เพิ่ม)
+// - userDisplayName
+// - userFullName
+// โดยที่ userFullName จะ prefill ให้จาก ชื่อใน gmail (googleUserProfile)
 
 // ทำให้ text editor รองรับการเว้นบรรทัด เวลาแสดงผลในหน้า home, announcement detail
 // add delete all forum and announcement when admin delete user
