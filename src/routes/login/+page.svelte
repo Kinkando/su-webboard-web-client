@@ -88,16 +88,16 @@
     }
 
     const signInWithGoogle = async () => {
-        isLoading = true;
         const user = await signInGoogle()
         if (user) {
+            isLoading = true;
             email = user.email!
             password = '****************************************************'
             await verify('verify', await user.getIdToken())
+            email = ''
+            password = ''
+            isLoading = false
         }
-        email = ''
-        password = ''
-        isLoading = false
     }
 </script>
 
