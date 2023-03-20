@@ -7,7 +7,8 @@
 	import { UserType } from "@models/auth";
 	import userStore from '@stores/user';
 	import notificationStore from '@stores/notification';
-	import { getUserType, revokeToken } from '@util/localstorage';
+	import { revokeToken } from '@util/localstorage';
+	import { Auth } from '@models/common';
 
     export let userType: string
 
@@ -22,7 +23,7 @@
 
     const signout = async () => await fetch("/api/token/revoke", { method: "POST" }).then(res => {
         revokeToken();
-        goto("/login");
+        goto(`/login?error=${Auth.LogoutSuccessfully}`);
     });
     const search = (event: KeyboardEvent) => {
         if (event.key === 'Enter' && searchText) {

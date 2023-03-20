@@ -5,6 +5,7 @@ import { TokenType } from '@models/auth';
 import { refreshToken as refreshJWT, revokeToken } from '@services/authen';
 import * as LocalStorage from './localstorage';
 import * as Cookies from './cookies';
+import { Auth } from '@models/common';
 
 const instance = axios.create({
 	timeout: 30000,
@@ -52,7 +53,7 @@ instance.interceptors.response.use(
                     } else {
                         LocalStorage.revokeToken()
                     }
-                    window.location.href="/login"
+                    window.location.href=`/login?error=${Auth.SessionExpired}`
                     return Promise.reject(error);
                 }
                 config._isRefreshing = true;
@@ -85,7 +86,7 @@ instance.interceptors.response.use(
                 } else {
                     LocalStorage.revokeToken()
                 }
-                window.location.href="/login"
+                window.location.href=`/login?error=${Auth.SessionExpired}`
                 return Promise.reject(error)
             }
         }

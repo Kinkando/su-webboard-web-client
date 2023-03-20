@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
     import { page } from '$app/stores';
+	import { Auth } from '@models/common';
 	import { revokeToken } from '@util/localstorage';
 	import { fade, fly } from 'svelte/transition';
 
@@ -11,7 +12,7 @@
     $: currentRoute = $page.route.id!;
     const signout = async () => await fetch("/api/token/revoke", { method: "POST" }).then(res => {
         revokeToken();
-        goto("/login");
+        goto(`/login?error=${Auth.LogoutSuccessfully}`);
     });
     const hideSidebar = () => isSidebarExpand = false
 </script>
