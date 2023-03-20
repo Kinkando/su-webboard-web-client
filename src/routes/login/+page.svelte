@@ -1,13 +1,14 @@
 <script lang="ts">
-	import { page } from '$app/stores';
     import { Button, Card, Label, Input, Spinner } from 'flowbite-svelte';
 	import Alert from '@components/alert/Alert.svelte';
 	import type { Alert as AlertModel } from '@models/alert';
-	import { signinFirebase } from '@services/firebase';
+	import { signinFirebase, signInGoogle } from '@services/firebase';
 	import { getUserType, setToken } from '@util/localstorage';
 	import CommonScreen from '@components/shared/CommonScreen.svelte';
-	import { getGoogleOauthToken, redirectGoogleLogin } from '@services/googles';
+	import type { JWT } from '@models/auth';
+	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
+	import { Auth } from '@models/common';
 
     let alert: AlertModel;
 
@@ -16,15 +17,25 @@
     let showPassword = false;
     let isLoading = false;
 
-    $: code = $page.url.searchParams.get('code')
+    $: err = $page.url.searchParams.get('error')
+    $: redirect = $page.url.searchParams.get('redirect')
 
     onMount(async() => {
-        if (code) {
-            const google = await getGoogleOauthToken(code)
-            if (google && google.access_token) {
-                isLoading = true;
-                await verify('google', undefined, google.access_token);
-                isLoading = false
+        if (err) {
+            switch(err) {
+                case Auth.SessionExpired:
+                    alert = {
+                        color: 'yellow',
+                        message: 'Session ของคุณหมดอายุ, โปรดเข้าสู่ระบบใหม่อีกครั้ง!',
+                    }
+                    break
+
+                case Auth.LogoutSuccessfully:
+                    alert = {
+                        color: 'green',
+                        message: 'ออกจากระบบสำเร็จ!',
+                    }
+                    break
             }
         }
     })
@@ -51,11 +62,11 @@
                 body: JSON.stringify({ idToken, accessToken }),
             }).
             then(async (res) => {
-                const token = await res.json()
+                const token = await res.json() as JWT
                 if (token?.accessToken && token?.refreshToken) {
                     setToken(token.accessToken, token.refreshToken)
                     const { userType } = getUserType()
-                    window.location.href = userType === 'adm' ? "/admin-portal" : "/"
+                    window.location.href = redirect || (userType === 'adm' ? "/admin-portal" : "/")
                     alert = {
                         color: 'green',
                         message: 'เข้าสู่ระบบสำเร็จ!',
@@ -63,8 +74,9 @@
                 } else {
                     alert = {
                         color: 'red',
-                        message: provider === 'google' ? 'ขออภัย ไม่พบบัญชีนี้ในระบบ โปรดลองใหม่อีกครั้ง!' : 'เกิดข้อผิดพลาดทางเทคนิคเล็กน้อย โปรดลองใหม่อีกครั้ง!',
+                        message: 'ขออภัย ไม่พบบัญชีนี้ในระบบ โปรดลองใหม่อีกครั้ง!',
                     }
+                    // delete new user with google provider that not exist in backend
                 }
             }).
             catch(err => {
@@ -73,6 +85,19 @@
                     message: 'ชื่อผู้ใช้หรือรหัสผ่านผิดพลาด โปรดลองใหม่อีกครั้ง!',
                 }
             })
+    }
+
+    const signInWithGoogle = async () => {
+        isLoading = true;
+        const user = await signInGoogle()
+        if (user) {
+            email = user.email!
+            password = '****************************************************'
+            await verify('verify', await user.getIdToken())
+        }
+        email = ''
+        password = ''
+        isLoading = false
     }
 </script>
 
@@ -127,7 +152,7 @@
             </Input>
         </Label>
 
-        <Button class="my-6 !bg-white !text-black !border !border-gray-300 drop-shadow-sm hover:!bg-gray-200 ease-in duration-200" href={redirectGoogleLogin}>
+        <Button class="my-6 !bg-white !text-black !border !border-gray-300 drop-shadow-sm hover:!bg-gray-200 ease-in duration-200" on:click={signInWithGoogle}>
             <div class="flex items-center">
                 <img src="/images/google-icon.png" alt="" class="w-6 h-6">
                 <span class="ml-4">Sign in with Google</span>

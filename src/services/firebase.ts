@@ -6,6 +6,8 @@ import {
     updatePassword,
     reauthenticateWithCredential,
     EmailAuthProvider,
+    signInWithPopup,
+    GoogleAuthProvider,
 } from "firebase/auth"
 import auth from "@util/firebase"
 
@@ -46,4 +48,12 @@ export async function changePassword(email: string, oldPassword: string, newPass
         }
     }
     return false
+}
+
+export async function signInGoogle() {
+    const provider = new GoogleAuthProvider()
+    const response = await signInWithPopup(auth, provider)
+    if (response?.user) {
+        return response.user
+    }
 }

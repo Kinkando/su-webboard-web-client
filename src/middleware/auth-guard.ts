@@ -1,4 +1,5 @@
 import { UserType } from "@models/auth"
+import { Auth } from "@models/common"
 
 export function authGuard(routeID: string, userType: string, isValidToken: boolean): string {
     const commonRoutes = ["/login", "/forgot-password"]
@@ -12,7 +13,7 @@ export function authGuard(routeID: string, userType: string, isValidToken: boole
     }
 
     if ((!userType || !isValidToken) && !commonRoutes.includes(routeID)) {
-        return '/login'
+        return `/login?error=${Auth.SessionExpired}`
     }
 
     if (userType === UserType.ADMIN && !routeID?.startsWith("/admin-portal")) {
