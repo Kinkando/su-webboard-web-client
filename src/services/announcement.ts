@@ -13,11 +13,11 @@ export async function getAnnouncements(offset: number, limit: number) {
     return res.data || { total: 0, data: [] as Announcement[] }
 }
 
-export async function getAnnouncementDetail(announcementUUID: string, cookie?: Cookies) {
+export async function getAnnouncementDetail(announcementUUID: string, cookies?: Cookies) {
     const res = await api<Announcement>({
         url: `${baseURL}/announcement/${announcementUUID}`,
         method: "GET",
-        cookie,
+        cookies,
     })
     return res.data
 }

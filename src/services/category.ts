@@ -4,11 +4,11 @@ import api from "@util/api";
 
 const baseURL = import.meta.env.VITE_API_HOST
 
-export async function getAllCategories(cookie?: Cookies) {
+export async function getAllCategories(cookies?: Cookies) {
     const res = await api<Category[]>({
         url: `${baseURL}/category`,
         method: "GET",
-        cookie,
+        cookies,
     })
     return res.data
 }
@@ -27,7 +27,7 @@ export async function getAllCategoryDetails(): Promise<CategoryDetail[]> {
             categoryName: category.categoryName,
             categoryHexColor: category.categoryHexColor,
             forumCount: Math.floor(Math.random() * 1000),
-            latestUpdatedDate: new Date(),
+            lastActive: new Date(),
         } as CategoryDetail
     }) || []
     return categoriesDetail

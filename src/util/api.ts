@@ -15,7 +15,7 @@ interface Controller {
 }
 
 export interface AxiosRequestCustomConfig extends AxiosRequestConfig {
-    cookie?: Cookies
+    cookies?: Cookies
     signalUUID?: string
     _isRefreshing?: boolean
 }
@@ -59,4 +59,8 @@ export default async function api<T>(config: AxiosRequestCustomConfig): Promise<
         }
         return Promise.reject(error)
     }
+}
+
+export async function fetchAPI<T>(input: RequestInfo | URL, init?: RequestInit | undefined) {
+    return await fetch(input, init).then(async(res) => await res.json()).then(res => res as T)
 }

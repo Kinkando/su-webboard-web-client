@@ -24,8 +24,8 @@ instance.interceptors.request.use(
             }
         }
         let accessToken;
-        if (config.cookie) {
-            accessToken = config.cookie.get(TokenType.AccessToken)
+        if (config.cookies) {
+            accessToken = config.cookies.get(TokenType.AccessToken)
         } else {
             let { accessToken: token } = LocalStorage.getToken()
             accessToken = token
@@ -48,8 +48,8 @@ instance.interceptors.response.use(
         if (error.response?.status === http.StatusUnauthorized) {
             try {
                 if (config._isRefreshing) {
-                    if (config.cookie) {
-                        Cookies.revokeToken(config.cookie);
+                    if (config.cookies) {
+                        Cookies.revokeToken(config.cookies);
                     } else {
                         LocalStorage.revokeToken()
                     }
@@ -58,7 +58,7 @@ instance.interceptors.response.use(
                 }
                 config._isRefreshing = true;
 
-                let refreshToken = config.cookie ? config.cookie.get(TokenType.RefreshToken) : localStorage.getItem(TokenType.RefreshToken)
+                let refreshToken = config.cookies ? config.cookies.get(TokenType.RefreshToken) : localStorage.getItem(TokenType.RefreshToken)
                 if (!refreshToken) {
                     throw new Error("No refresh token");
                 }
@@ -67,8 +67,8 @@ instance.interceptors.response.use(
                 if (!jwt) {
                     throw new Error("Refresh Token is invalid")
                 }
-                if (config.cookie) {
-                    Cookies.setToken(config.cookie, jwt.accessToken, jwt.refreshToken)
+                if (config.cookies) {
+                    Cookies.setToken(config.cookies, jwt.accessToken, jwt.refreshToken)
                 } else {
                     LocalStorage.setToken(jwt.accessToken, jwt.refreshToken)
                 }
@@ -81,8 +81,8 @@ instance.interceptors.response.use(
                 return instance.request(config)
 
             } catch (error: any) {
-                if (config.cookie) {
-                    Cookies.revokeToken(config.cookie);
+                if (config.cookies) {
+                    Cookies.revokeToken(config.cookies);
                 } else {
                     LocalStorage.revokeToken()
                 }

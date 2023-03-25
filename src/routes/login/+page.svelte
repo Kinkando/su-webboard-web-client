@@ -46,7 +46,7 @@
 
         const idToken = await signinFirebase(email, password);
         if (idToken) {
-            await verify('verify', idToken)
+            await verify(idToken)
         } else {
             alert = {
                 color: 'red',
@@ -56,10 +56,10 @@
         isLoading = false
     }
 
-    const verify = async (provider: 'google' | 'verify', idToken?: string, accessToken?: string) => {
-        await fetch("/api/token/" + provider, {
+    const verify = async (idToken: string) => {
+        await fetch("/api/token/verify", {
                 method: "POST",
-                body: JSON.stringify({ idToken, accessToken }),
+                body: JSON.stringify({ idToken }),
             }).
             then(async (res) => {
                 const token = await res.json() as JWT
@@ -90,10 +90,11 @@
     const signInWithGoogle = async () => {
         const user = await signInGoogle()
         if (user) {
+            console.log(user)
             isLoading = true;
             email = user.email!
             password = '****************************************************'
-            await verify('verify', await user.getIdToken())
+            await verify(await user.getIdToken())
             email = ''
             password = ''
             isLoading = false

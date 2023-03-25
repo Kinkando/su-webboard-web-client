@@ -67,11 +67,11 @@ async function _getForumList(offset: number, limit: number, sortBy: string, cate
     return res.data || { total: 0, data: [] as Forum[] }
 }
 
-export async function getForumDetail(forumUUID: string, cookie?: Cookies) {
+export async function getForumDetail(forumUUID: string, cookies?: Cookies) {
     const res = await api<ForumDetail>({
         url: `${baseURL}/forum/${forumUUID}`,
         method: "GET",
-        cookie,
+        cookies,
     })
     return res.data
 }
