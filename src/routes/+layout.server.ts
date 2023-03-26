@@ -53,7 +53,6 @@ export const load: LayoutServerLoad = async ({ cookies, route }) => {
 // - ปักหมุด topbar ให้ไม่หุบเมื่อเลื่อนลง
 
 // or SORTING COMMENT ON FORUM DETAIL PAGE
-// ADD MINIMUM HEIGHT OF FORUM DESCRIPTION COMPONENT
 // เพิ่ม แก้ไขข้อความเมื่อ ... ในหน้า Forum Detail (Compare change before calling API)
 
 // เพิ่มหน้า Sign Up สำหรับนักศึกษา โดยสามารถ sign up ได้ผ่านเมลมหาวิทยาลัยเท่านั้น และหลังจาก verify จะให้กรอก

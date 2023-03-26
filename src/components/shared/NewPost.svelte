@@ -1,9 +1,10 @@
 <script lang="ts">
-	import { Button, Input, Label, Spinner, Textarea } from 'flowbite-svelte';
+	import PostDescription from './PostDescription.svelte';
+	import { Button, Input, Label, Radio, Spinner, Textarea } from 'flowbite-svelte';
 	import ToggleBadge from '@components/badge/ToggleBadge.svelte';
 	import type { Category } from '@models/category';
 	import type { Attachment, FormSchema } from '@models/new-post';
-	import PostDescription from './PostDescription.svelte';
+	import type { User } from '@models/user';
 
     export let title: FormSchema;
     export let description: FormSchema;
@@ -13,6 +14,8 @@
     export let cancel: () => void;
     export let submit: () => void = async() => {};
     export let deleteImageUUIDs: string[] = [];
+    export let user: User | undefined = undefined;
+    export let isAnonymous: boolean | undefined = undefined;
 
     let fileInput: HTMLInputElement;
     let files: FileList;
@@ -33,6 +36,30 @@
             deleteImageUUIDs.push(attachments[index].uuid!)
         }
         attachments = attachments.filter((_, idx) => index !== idx)
+    }
+
+    const postModes = [
+        {
+            name: 'เปิดเผยตัวตน',
+            value: 'display',
+            mod: '',
+        },
+        {
+            name: 'ปกปิดตัวตน',
+            value: 'anonymous',
+            mod: 'ไม่ระบุตัวตน',
+        },
+    ]
+    let postMode = postModes[0].value;
+    function setDefaultPostMode() {
+        postModes[0].mod += user?.userDisplayName
+        if (user?.isAnonymous) {
+            postMode = postModes[1].value
+        }
+    }
+    $: user && setDefaultPostMode()
+    $: if(postMode) {
+        isAnonymous = postMode === postModes[1].value
     }
 </script>
 
@@ -103,6 +130,15 @@
         </div>
     {/each}
 </div>
+
+{#if isAnonymous !== undefined}
+    <Label for="isAnonymous">
+        <div>การแสดงชื่อผู้สร้างกระทู้</div>
+        {#each postModes as mode}
+            <Radio bind:group={postMode} value={mode.value} class="w-fit my-1.5">{mode.name}&nbsp;<span class="text-blue-400 font-bold">({mode.mod || '...'})</span></Radio>
+        {/each}
+    </Label>
+{/if}
 
 <div class="flex items-center justify-end gap-x-2 mt-4">
     <Button color="dark" size="sm" type="reset" on:click={cancel}>ยกเลิก</Button>

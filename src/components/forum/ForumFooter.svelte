@@ -6,13 +6,16 @@
 	import Modal from "@components/modal/Modal.svelte";
 	import { createEventDispatcher } from 'svelte';
 	import { timeRange } from '@util/datetime';
+	import { goto } from '$app/navigation';
 
     export let type: 'forum' | 'comment'
     export let uuid: string;
     export let isLike: boolean | undefined;
     export let likeCount: number | undefined = undefined;
     export let commentCount: number | undefined = undefined;
-    export let username: string;
+    export let isAnonymous: boolean | undefined;
+    export let userUUID: string;
+    export let userDisplayName: string;
     export let userImageURL: string;
     export let label: string;
     export let replyText = "ตอบกลับ";
@@ -41,6 +44,12 @@
     }
 
     $: time = (() => timeRange(createdAt))()
+
+    function toUserPage() {
+        if (!isAnonymous) {
+            goto(`/user/${userUUID}`)
+        }
+    }
 </script>
 
 <div class="flex items-center justify-between mt-3 -mb-3">
@@ -59,9 +68,10 @@
 <hr class="mt-6 mb-3 dark:border-gray-500">
 <div class="flex justify-between items-center">
     <div class="flex items-center overflow-hidden">
-        <img src={userImageURL} alt="" class="min-w-[4rem] max-w-[4rem] min-h-[4rem] max-h-[4rem] rounded-full">
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <img on:click={toUserPage} src={userImageURL} alt="" class="ease-in duration-200 min-w-[4rem] max-w-[4rem] min-h-[4rem] max-h-[4rem] rounded-full {!isAnonymous ? 'cursor-pointer hover:brightness-75' : ''}">
         <div class="ml-3 space-y-1 overflow-hidden mr-4">
-            <div class="font-bold overflow-hidden text-ellipsis whitespace-nowrap">{username}</div>
+            <div class="font-bold overflow-hidden text-ellipsis whitespace-nowrap">{userDisplayName}</div>
             <div class="font-light text-sm overflow-hidden text-ellipsis whitespace-nowrap">{time}</div>
         </div>
     </div>

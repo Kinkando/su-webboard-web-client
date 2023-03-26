@@ -23,13 +23,20 @@
 <a class="bg-white text-black dark:bg-gray-700 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-900 cursor-pointer p-4 sm:p-6 shadow-md drop-shadow-md rounded-md ease-in duration-200 w-full h-full flex gap-x-4" href={`/forum/${forum?.forumUUID}`}>
     <div class="relative w-fit h-fit">
         {#if forum?.ranking}
-            <div class="flex items-center -mr-2 absolute bottom-0 right-0">
+            <div class="flex items-center -mr-2 absolute bottom-0 right-0 z-10">
                 <div class="w-6 h-6 p-1 rounded-full flex items-center justify-center !bg-gray-200 dark:!bg-gray-800" style={rankingColor}>
                     {forum?.ranking}
                 </div>
             </div>
         {/if}
-        <img src={forum?.authorImageURL} alt="" class="min-w-[4rem] max-w-[4rem] min-h-[4rem] max-h-[4rem] rounded-full">
+
+        {#if !forum.isAnonymous}
+            <a href="user/{forum.authorUUID}">
+                <img src="{forum?.authorImageURL}" alt="" class="z-0 ease-in duration-200 min-w-[4rem] max-w-[4rem] min-h-[4rem] max-h-[4rem] rounded-full {!forum?.isAnonymous ? 'cursor-pointer hover:scale-110' : ''}">
+            </a>
+        {:else}
+            <img src="{forum?.authorImageURL}" alt="" class="z-0 min-w-[4rem] max-w-[4rem] min-h-[4rem] max-h-[4rem] rounded-full">
+        {/if}
     </div>
     <section class="w-full max-w-full overflow-hidden flex flex-col gap-y-1">
         <div class="font-bold text-lg overflow-hidden text-ellipsis whitespace-nowrap">{forum?.title}</div>

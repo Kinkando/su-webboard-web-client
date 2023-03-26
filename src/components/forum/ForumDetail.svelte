@@ -147,7 +147,9 @@
         type="forum"
         isLike={forumDetail.isLike}
         uuid={forumDetail.forumUUID}
-        username={forumDetail.authorName}
+        isAnonymous={forumDetail.isAnonymous}
+        userUUID={forumDetail.authorUUID}
+        userDisplayName={forumDetail.authorName}
         userImageURL={forumDetail.authorImageURL}
         likeCount={forumDetail.likeCount}
         commentCount={forumDetail.commentCount || total}

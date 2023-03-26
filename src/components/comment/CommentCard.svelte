@@ -107,7 +107,9 @@
         type="comment"
         uuid={comment.commentUUID}
         isLike={comment.isLike}
-        username={comment.commenterName}
+        isAnonymous={comment.isAnonymous}
+        userUUID={comment.commenterUUID}
+        userDisplayName={comment.commenterName}
         userImageURL={comment.commenterImageURL}
         likeCount={comment.likeCount}
         commentCount={!replyCommentUUID ? (comment.replyComments?.length || 0) : undefined}

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from "$app/navigation";
 	import CategoryBadge from "@components/badge/CategoryBadge.svelte";
 	import CommentBadge from "@components/badge/CommentBadge.svelte";
 	import LikeBadge from "@components/badge/LikeBadge.svelte";
@@ -30,7 +31,14 @@
         </section>
 
         <footer class="flex items-center gap-x-3">
-            <img src="{popularTopic?.authorImageURL}" alt="" class="min-w-[3rem] max-w-[3rem] min-h-[3rem] max-h-[3rem] rounded-full">
+            {#if !popularTopic.isAnonymous}
+                <a href="user/{popularTopic.authorUUID}">
+                    <img src="{popularTopic?.authorImageURL}" alt="" class="ease-in duration-200 min-w-[3rem] max-w-[3rem] min-h-[3rem] max-h-[3rem] rounded-full {!popularTopic?.isAnonymous ? 'cursor-pointer hover:brightness-125' : ''}">
+                </a>
+            {:else}
+                <img src="{popularTopic?.authorImageURL}" alt="" class="min-w-[3rem] max-w-[3rem] min-h-[3rem] max-h-[3rem] rounded-full">
+            {/if}
+
             <div class="flex flex-col overflow-hidden w-full">
                 {#if popularTopic?.likeCount != undefined}
                     <div class="flex items-center justify-between">

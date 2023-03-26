@@ -6,8 +6,10 @@
 	import type { Category } from "@models/category";
 	import type { ForumRequest } from "@models/forum";
 	import type { Attachment, FormSchema } from "@models/new-post";
+	import type { User } from "@models/user";
 	import { getAllCategories } from "@services/category";
 	import { upsertForum } from "@services/forum";
+	import { getUserProfile } from "@services/user";
 	import { Breadcrumb, BreadcrumbItem } from "flowbite-svelte";
 	import { onMount } from "svelte";
 
@@ -23,6 +25,7 @@
             title: title.value,
             description: description.value,
             categoryIDs,
+            isAnonymous,
         }
         isLoading = true;
         const res = await upsertForum(forum, files)
@@ -32,9 +35,13 @@
         }
     }
 
+    let isAnonymous = false;
     let isLoading = true;
+    let user: User
     onMount(async() => {
         categories = (await getAllCategories())!
+        user = await getUserProfile();
+        isAnonymous = user.isAnonymous!
         isLoading = false;
     })
 </script>
@@ -50,6 +57,8 @@
 
 <div class="ease-in duration-200 bg-white dark:bg-gray-900 w-full rounded-md shadow-lg p-4 sm:p-6">
     <NewPost
+        bind:isAnonymous
+        bind:user
         bind:title
         bind:description
         bind:categories
