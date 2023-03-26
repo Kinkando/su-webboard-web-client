@@ -31,7 +31,7 @@
         {/if}
 
         {#if !forum.isAnonymous}
-            <a href="profile/{forum.authorUUID}">
+            <a href="/profile/{forum.authorUUID}">
                 <img src="{forum?.authorImageURL}" alt="" class="z-0 ease-in duration-200 min-w-[4rem] max-w-[4rem] min-h-[4rem] max-h-[4rem] rounded-full {!forum?.isAnonymous ? 'cursor-pointer hover:scale-110' : ''}">
             </a>
         {:else}

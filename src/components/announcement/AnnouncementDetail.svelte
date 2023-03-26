@@ -112,7 +112,8 @@
     </div>
 
     <AnnouncementFooter
-        username={announcementDetail.authorName}
+        userUUID={announcementDetail.authorUUID}
+        userDisplayName={announcementDetail.authorName}
         userImageURL={announcementDetail.authorImageURL}
         createdAt={announcementDetail.createdAt}
     />

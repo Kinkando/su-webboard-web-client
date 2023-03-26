@@ -1,5 +1,5 @@
 <script lang="ts">
-	import ReportCard from './../partials/ReportCard.svelte';
+	import ReportCard from '@components/partials/ReportCard.svelte';
 	import { createEventDispatcher } from "svelte";
 	import { slide } from "svelte/transition";
 	import { Popover } from "flowbite-svelte";
