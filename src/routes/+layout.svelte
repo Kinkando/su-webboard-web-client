@@ -42,7 +42,7 @@
             case "/search": return generalUserPrefix + "Search"
 
             // Forum page
-            case "/announcement/[forumUUID]": return generalUserPrefix + "Announcement Forum"
+            case "/announcement/[announcementUUID]": return generalUserPrefix + "Announcement Forum"
             case "/forum/[forumUUID]": return generalUserPrefix + "Forum Detail"
         }
     })()

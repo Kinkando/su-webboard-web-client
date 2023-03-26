@@ -7,9 +7,11 @@
 	import { onMount } from 'svelte';
     import { page } from '$app/stores';
 
+    $: categoryID = Number($page.params.categoryID)
+    $: categoryName = category?.categoryName ?? periodText
+
     let currentPage = 1;
     let limit = 10;
-    $: categoryID = Number($page.url.pathname.substring($page.url.pathname.lastIndexOf("/")+1))
     let category: Category;
     onMount(async() => {
         const res = await getCategoryByID(categoryID)
@@ -28,8 +30,6 @@
         }
         periodText += "."
     }, 300)
-
-    $: categoryName = category?.categoryName ?? periodText
 
     const fetchData = async () => await getForumListByCategoryID(categoryID, (currentPage-1)*limit, limit)
 </script>

@@ -90,7 +90,6 @@
     const signInWithGoogle = async () => {
         const user = await signInGoogle()
         if (user) {
-            console.log(user)
             isLoading = true;
             email = user.email!
             password = '****************************************************'
