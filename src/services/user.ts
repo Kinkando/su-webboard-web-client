@@ -51,6 +51,14 @@ export async function getFollowUsers(userUUID: string, type: 'following' | 'foll
     return res.data
 }
 
+export async function searchUsers(search: string, offset: number, limit: number) {
+    const res = await api<{total: number, data: User[]}>({
+        url: `${baseURL}/user?search=${search}&offset=${offset}&limit=${limit}`,
+        method: 'GET',
+    })
+    return res.data
+}
+
 export async function getAvatars(): Promise<string[]> {
     const avartarURLs: string[] = [];
 

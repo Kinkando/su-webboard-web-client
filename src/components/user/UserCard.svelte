@@ -19,7 +19,7 @@
         <div class="text-black dark:text-white overflow-hidden text-ellipsis whitespace-nowrap">{user.userDisplayName}</div>
         <div class="text-gray-500 text-sm overflow-hidden text-ellipsis whitespace-nowrap">{user.userFullName}</div>
     </div>
-    {#if !user.isSelf}
+    {#if !user.isSelf && user.isFollowing !== undefined}
         <Button
             color={user.isFollowing ? 'purpleToBlue' : 'pinkToOrange'}
             gradient

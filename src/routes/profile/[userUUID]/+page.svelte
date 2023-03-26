@@ -65,7 +65,7 @@
             </TabItem>
             {#if selfUUID === userUUID}
                 <TabItem title="ค้นหาผู้ใช้">
-                    <!-- <UserList userUUID={defined(user.userUUID)} type='following' /> -->
+                    <UserList type='search' />
                 </TabItem>
             {/if}
         </Tabs>
