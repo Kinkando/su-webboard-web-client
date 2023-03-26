@@ -135,7 +135,7 @@
     {/if}
 
     <hr class="my-3 dark:border-gray-500">
-    <div class="font-medium">
+    <div class="font-medium min-h-[12rem]">
         {@html forumDetail.description.replaceAll('\n', '<br>')}
     </div>
 

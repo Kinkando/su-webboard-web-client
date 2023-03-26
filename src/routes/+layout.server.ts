@@ -45,8 +45,7 @@ export const load: LayoutServerLoad = async ({ cookies, route }) => {
 
 // onMount twice
 
-// ADD VIEW COUNT AT ANNOUNCEMENT DETAIL PAGE
-// *********************** BUG ADMIN REDIRECT TO LOGIN PAGE (BECAUSE OF CALLING API PROFILE AND GET 401)
+// ADD SORTING OPTION OF SEARCH, FORUM LIST PAGE
 
 // SETTING PAGE
 // - change theme
@@ -72,10 +71,6 @@ export const load: LayoutServerLoad = async ({ cookies, route }) => {
 // admin portal error not found page
 // admin portal internal server error page
 
-// ADD SKELETON LOAD ON FORUM AND ANNOUNCEMENT DETAIL
-// DELETE announcement/[forumUUID]/+page.server.ts AND USE LOCALSTORAGE INSTEAD
-// DELETE forum/[forumUUID]/+page.server.ts AND USE LOCALSTORAGE INSTEAD
-
 // admin add form validation
 
 // change profile image with providing avatar from backend
@@ -87,5 +82,3 @@ export const load: LayoutServerLoad = async ({ cookies, route }) => {
 
 // เพิ่ม animation loading เวลา navigate ไปหน้าอื่น (เหมือนในแอพมอของเจได)
 // เพิ่มหน้าดู profile user คนอื่น และเพิ่ม feature ติดตามผู้ใช้งานคนอื่น
-
-// เพิ่มเมนูเปลี่ยนภาษา ไม่ก็เปลี่ยนแอพให้กลายเป็นภาษาไทย

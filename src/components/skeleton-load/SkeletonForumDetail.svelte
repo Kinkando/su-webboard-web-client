@@ -32,16 +32,16 @@
 
         <div class="m-auto mt-4 w-64 h-64 bg-gray-300 rounded-md dark:bg-gray-600" />
 
-        {#if forumDetail}
-            <div class="flex overflow-hidden mt-4 gap-x-1">
+        <div class="flex overflow-hidden mt-4 gap-x-1">
+            {#if forumDetail}
                 <div class="w-5 h-5 bg-gray-300 rounded-full dark:bg-gray-600" />
                 <div class="w-10 h-5 bg-gray-300 rounded-full dark:bg-gray-600" />
-                <div class="ml-auto flex gap-x-1">
-                    <div class="w-5 h-5 bg-gray-300 rounded-full dark:bg-gray-600" />
-                    <div class="w-10 h-5 bg-gray-300 rounded-full dark:bg-gray-600" />
-                </div>
+            {/if}
+            <div class="ml-auto flex gap-x-1">
+                <div class="w-5 h-5 bg-gray-300 rounded-full dark:bg-gray-600" />
+                <div class="w-10 h-5 bg-gray-300 rounded-full dark:bg-gray-600" />
             </div>
-        {/if}
+        </div>
 
         <hr class="my-3 dark:border-gray-500">
 

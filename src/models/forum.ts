@@ -35,6 +35,7 @@ export interface ForumDetail {
     likeCount: number
     commentCount: number
     createdAt: Date
+    updatedAt?: Date
 }
 
 export interface ForumFilter {

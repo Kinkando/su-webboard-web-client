@@ -13,6 +13,7 @@ export interface Comment {
     likeCount?: number
     commentCount?: number
     createdAt: Date
+    updatedAt?: Date
     replyComments?: Comment[]
     replyCursor?: number
 }
