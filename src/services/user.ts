@@ -3,9 +3,9 @@ import api from "@util/api";
 
 const baseURL = import.meta.env.VITE_API_HOST
 
-export async function getUserProfile() {
+export async function getUserProfile(userUUID?: string) {
     const response = await api<User>({
-        url: `${baseURL}/user/profile`,
+        url: `${baseURL}/user/profile${userUUID ? `?userUUID=${userUUID}` : ''}`,
         method: 'GET',
     })
     return response.data!

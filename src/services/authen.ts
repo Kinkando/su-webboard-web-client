@@ -5,13 +5,12 @@ const baseURL = import.meta.env.VITE_API_HOST
 const apiKey = import.meta.env.VITE_API_KEY
 
 export async function verifyToken(idToken: string) {
-    const response = await axios.request<JWT>({
+    return await axios.request<JWT>({
         url: `${baseURL}/authen/token/verify`,
         method: 'POST',
         headers: {'X-Api-Key': apiKey},
         data: { idToken },
     })
-    return response.data
 }
 
 export async function verifyGoogle(accessToken: string) {

@@ -8,6 +8,8 @@ import {
     EmailAuthProvider,
     signInWithPopup,
     GoogleAuthProvider,
+    deleteUser,
+    type User,
 } from "firebase/auth"
 import auth from "@util/firebase"
 
@@ -56,4 +58,8 @@ export async function signInGoogle() {
     if (response?.user) {
         return response.user
     }
+}
+
+export async function deleteUserFirebase(user: User) {
+    await deleteUser(user)
 }

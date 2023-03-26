@@ -32,6 +32,7 @@
             case "/forgot-password": return generalUserPrefix + "Forgot Password"
             case "/reset-password": return generalUserPrefix + "Reset Password"
             case "/profile": return generalUserPrefix + "Profile"
+            case "/user/[userUUID]": return generalUserPrefix + "User"
             case "/announcement": return generalUserPrefix + "New Announcement"
             case "/forum": return generalUserPrefix + "New Forum"
 

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { revokeToken as revokeTokenSrv } from '@services/authen';
 	import { slide } from 'svelte/transition';
 	import { DarkMode, Indicator, Input, Popover, Tooltip } from "flowbite-svelte";
 	import { goto } from "$app/navigation";
@@ -7,7 +8,7 @@
 	import { UserType } from "@models/auth";
 	import userStore from '@stores/user';
 	import notificationStore from '@stores/notification';
-	import { revokeToken } from '@util/localstorage';
+	import { getToken, revokeToken } from '@util/localstorage';
 	import { Auth } from '@models/common';
 
     export let userType: string
@@ -21,10 +22,14 @@
     const defaultImageURL = "https://cdn-icons-png.flaticon.com/512/149/149071.png"
     let searchText = "";
 
-    const signout = async () => await fetch("/api/token/revoke", { method: "POST" }).then(res => {
+    const signout = async () => {
+        const token = getToken()
+        if (token) {
+            revokeTokenSrv(token.accessToken, token.refreshToken)
+        }
         revokeToken();
         goto(`/login?error=${Auth.LogoutSuccessfully}`);
-    });
+    }
     const search = (event: KeyboardEvent) => {
         if (event.key === 'Enter' && searchText) {
             goto('/search?keyword='+searchText)
