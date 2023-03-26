@@ -28,7 +28,7 @@
     {:else}
         {#if announcements?.length}
             {#each announcements as announcement}
-                <div class="my-4">
+                <div class="mb-4">
                     <AnnouncementCard {announcement} />
                 </div>
             {/each}

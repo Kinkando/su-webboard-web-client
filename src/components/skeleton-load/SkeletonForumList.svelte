@@ -7,7 +7,7 @@
 </script>
 
 {#each Array(count) as _}
-    <div class="my-4">
+    <div class="mb-4">
         <SkeletonForumCard {ranking} {announcement} />
     </div>
 {/each}

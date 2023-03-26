@@ -5,9 +5,9 @@ import type { Cookies } from "@sveltejs/kit"
 
 const baseURL = import.meta.env.VITE_API_HOST
 
-export async function getAnnouncements(offset: number, limit: number) {
+export async function getAnnouncements(offset: number, limit: number, userUUID?: string) {
     const res = await api<{ total: number, data: Announcement[] }>({
-        url: `${baseURL}/announcement?limit${limit}&offset=${offset}`,
+        url: `${baseURL}/announcement?limit${limit}&offset=${offset}${userUUID ? `&userUUID=${userUUID}` : ''}`,
         method: "GET",
     })
     return res.data || { total: 0, data: [] as Announcement[] }
