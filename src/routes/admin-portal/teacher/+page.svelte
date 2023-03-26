@@ -7,7 +7,7 @@
 	import { FormType, type Form } from '@models/form';
 	import type { ActionTable, DataTable } from "@models/table";
 	import { StatusGroup, type User } from "@models/user";
-	import { getUser, createUser, updateUser, deleteUsers, revokeUsers } from "@services/admin";
+	import { getUsers, createUser, updateUser, deleteUsers, revokeUsers } from "@services/admin";
 
     let searchText = "";
     let isLoading = true;
@@ -84,7 +84,7 @@
         await getTeachers(offset, limit)
     }
     const getTeachers = async(offset: number, limit: number) => {
-        const res = await getUser('tch', searchText, offset, limit)
+        const res = await getUsers('tch', searchText, offset, limit)
         teachers = res?.data || []
         total = res?.total || 0
     }

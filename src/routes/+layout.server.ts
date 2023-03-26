@@ -81,3 +81,4 @@ export const load: LayoutServerLoad = async ({ cookies, route }) => {
 
 // เพิ่ม animation loading เวลา navigate ไปหน้าอื่น (เหมือนในแอพมอของเจได)
 // เพิ่มหน้าดู profile user คนอื่น และเพิ่ม feature ติดตามผู้ใช้งานคนอื่น
+// เพิ่ม admin student/teacher คอลัมน์จำนวนผู้ติดตาม และกำลังติดตาม

@@ -8,6 +8,8 @@ export interface User {
     isAnonymous?: boolean
     userType?: string
     lastLogin?: Date
+    followerUserUUIDs?: string[] // ผู้ติดตาม
+    followingUserUUIDs?: string[] // กำลังติดตาม
 }
 
 export enum StatusGroup {

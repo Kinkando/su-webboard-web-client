@@ -47,7 +47,7 @@
 
     function toUserPage() {
         if (!isAnonymous) {
-            goto(`/user/${userUUID}`)
+            goto(`/profile/${userUUID}`)
         }
     }
 </script>
