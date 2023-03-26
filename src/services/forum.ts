@@ -48,20 +48,25 @@ export async function likeForum(forumUUID: string, isLike: boolean) {
 }
 
 export async function getForumListByCategoryID(categoryID: number, offset: number, limit: number) {
-    return _getForumList(offset, limit, 'createdAt@DESC', categoryID)
+    return _getForumList(offset, limit, 'createdAt@DESC', { categoryID })
 }
 
 export async function getForumListByPopular(offset: number, limit: number) {
     return _getForumList(offset, limit, 'ranking@ASC')
 }
 
-export async function searchForum(filter: ForumFilter, offset: number, limit: number) {
-    return _getForumList(offset, limit, 'createdAt@DESC', undefined, filter.searchText)
+export async function getForumListByUserUUID(offset: number, limit: number, userUUID: string) {
+    return _getForumList(offset, limit, 'createdAt@DESC', { userUUID })
 }
 
-async function _getForumList(offset: number, limit: number, sortBy: string, categoryID?: number, search?: string) {
+export async function searchForum(filter: ForumFilter, offset: number, limit: number) {
+    return _getForumList(offset, limit, 'createdAt@DESC', { search: filter.searchText })
+}
+
+async function _getForumList(offset: number, limit: number, sortBy: string, query?: { categoryID?: number, search?: string, userUUID?: string }) {
+    const queryString = `${query?.categoryID ? `&categoryID=${query?.categoryID}` : ''}${query?.search ? `&search=${query?.search}` : ''}${query?.userUUID ? `&userUUID=${query?.userUUID}` : ''}`
     const res = await api<{ total: number, data: Forum[] }>({
-        url: `${baseURL}/forum?limit${limit}&offset=${offset}&sortBy=${sortBy}${categoryID ? `&categoryID=${categoryID}` : ''}${search ? `&search=${search}` : ''}`,
+        url: `${baseURL}/forum?limit${limit}&offset=${offset}&sortBy=${sortBy}${queryString}`,
         method: "GET",
     })
     return res.data || { total: 0, data: [] as Forum[] }

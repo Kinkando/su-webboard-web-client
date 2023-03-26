@@ -45,13 +45,13 @@ export const load: LayoutServerLoad = async ({ cookies, route }) => {
 
 // onMount twice
 
-// ADD SORTING OPTION OF SEARCH, FORUM LIST PAGE
 
 // SETTING PAGE
 // - change theme
 // - set sorting comment (default comment #1-#10), can set by latest comment first
 // - ปักหมุด topbar ให้ไม่หุบเมื่อเลื่อนลง
 
+// ADD SORTING OPTION OF SEARCH, FORUM LIST PAGE
 // or SORTING COMMENT ON FORUM DETAIL PAGE
 // เพิ่ม แก้ไขข้อความเมื่อ ... ในหน้า Forum Detail (Compare change before calling API)
 
@@ -80,5 +80,4 @@ export const load: LayoutServerLoad = async ({ cookies, route }) => {
 // เพิ่มคลิกรูปเพื่อขยาย สำหรับหน้า update profile
 
 // เพิ่ม animation loading เวลา navigate ไปหน้าอื่น (เหมือนในแอพมอของเจได)
-// เพิ่มหน้าดู profile user คนอื่น และเพิ่ม feature ติดตามผู้ใช้งานคนอื่น
 // เพิ่ม admin student/teacher คอลัมน์จำนวนผู้ติดตาม และกำลังติดตาม

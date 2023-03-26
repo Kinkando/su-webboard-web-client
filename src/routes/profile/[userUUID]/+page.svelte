@@ -12,6 +12,7 @@
 	import { getUser } from "@util/localstorage";
 	import UserList from "@components/user/UserList.svelte";
 	import AnnouncementPagination from "@components/partials/AnnouncementPagination.svelte";
+	import ForumPagination from "@components/partials/ForumPagination.svelte";
 
     let user: User;
     let isLoading = true;
@@ -48,10 +49,7 @@
     <div class="m-auto max-w-4xl mt-4 overflow-hidden">
         <Tabs style="underline" defaultClass="flex space-x-2 overflow-x-scroll whitespace-nowrap swipe no-select hide-scrollbar">
             <TabItem open title="กระทู้ที่ตั้ง">
-                <p class="text-sm text-gray-500 dark:text-gray-400"><b>Profile:</b> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-            </TabItem>
-            <TabItem title="กระทู้ที่ตอบ">
-                <p class="text-sm text-gray-500 dark:text-gray-400"><b>Settings:</b> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                <ForumPagination userUUID={defined(user.userUUID)} />
             </TabItem>
             {#if user.userType === 'tch'}
                 <TabItem title="ประกาศที่สร้าง">

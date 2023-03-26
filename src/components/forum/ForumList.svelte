@@ -30,7 +30,7 @@
     {:else}
         {#if forums?.length}
             {#each forums as forum}
-                <div class="my-4">
+                <div class="mb-4">
                     <ForumCard {forum} />
                 </div>
             {/each}
