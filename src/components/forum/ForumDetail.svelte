@@ -13,12 +13,14 @@
 	import { defined } from "@util/generic";
 	import { getUserUUID } from "@util/localstorage";
 	import { timeRange } from "@util/datetime";
+	import LoadingSpinner from "@components/spinner/LoadingSpinner.svelte";
 
     export let forumDetail: ForumDetail;
     export let categories: Category[];
     export let replyForum = false;
     export let total = 0;
 
+    let isLoading = false;
     let orderBy: 'desc' | 'asc';
     let newComment: (comment: Comment) => Promise<void>;
 
@@ -62,6 +64,7 @@
                 categoryIDs: categoryIDsEdit,
                 forumImageUUIDs: deleteImageUUIDs,
             }
+            isLoading = true;
             const res = await upsertForum(forum, files)
 
             // loading edit data
@@ -84,6 +87,7 @@
             }
             forumDetail.categories = categories?.filter(category => category.isActive)!
             imageURLs = initImages()
+            isLoading = false
         }
     }
 
@@ -102,16 +106,20 @@
             commentText,
             forumUUID: forumDetail.forumUUID,
         }
+        isLoading = true;
         const res = await upsertComment(forumDetail.forumUUID, comment, files)
         if (res?.data) {
             comment.commentUUID = res.data.commentUUID
             comment.commentImages = res.data.documents
-            newComment(comment)
+            await newComment(comment)
         }
+        isLoading = false;
     }
 
     $: userUUID = getUserUUID()
 </script>
+
+<LoadingSpinner bind:isLoading />
 
 <div class="rounded-lg shadow-md w-full h-full p-4 sm:p-6 overflow-hidden bg-white text-black dark:bg-gray-700 dark:text-white ease-in duration-200">
     <div class="flex">
