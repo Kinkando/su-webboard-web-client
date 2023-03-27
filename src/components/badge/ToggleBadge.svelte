@@ -21,9 +21,9 @@
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<div class="ease-in duration-150 relative outline outline-2 hover:drop-shadow-md rounded-md p-1 w-fit bg-white {isActive ? '!text-white dark:!text-black' : '!bg-white dark:!bg-gray-800'}" style="background-color: {hexColor}; outline-color: {hexColor}; color: {hexColor}" on:click={dispatchAction}>
+<div class="ease-in duration-100 relative select-none outline outline-2 hover:outline-4 hover:cursor-pointer rounded-md p-1 w-fit bg-white {isActive ? '!text-white dark:!text-black' : '!bg-white dark:!bg-gray-800'}" style="background-color: {hexColor}; outline-color: {hexColor}; color: {hexColor}" on:click={dispatchAction}>
     <div class="flex items-center">
-        <div class="ease-in duration-150 rounded-full min-w-[1.25rem] max-w-[1.25rem] min-h-[1.25rem] max-h-[1.25rem] bg-white dark:bg-gray-800 mr-1 relative border-2" style="border-color: {hexColor}">
+        <div class="ease-in duration-100 rounded-full min-w-[1.25rem] max-w-[1.25rem] min-h-[1.25rem] max-h-[1.25rem] bg-white dark:bg-gray-800 mr-1 relative border-2" style="border-color: {hexColor}">
             {#if isActive}
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5 pr-1 pb-0.5" style="color: {hexColor};">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
