@@ -2,17 +2,19 @@
 	import { onMount } from "svelte";
 	import { Breadcrumb, BreadcrumbItem, Tabs, TabItem } from "flowbite-svelte";
 	import { page } from "$app/stores";
-	import OtherUserProfileCard from "@components/user/OtherUserProfileCard.svelte";
-	import SelfUserProfileCard from "@components/user/SelfUserProfileCard.svelte";
-	import NotFound from "@components/shared/NotFound.svelte";
-	import SkeletonOtherUserProfileCard from "@components/skeleton-load/SkeletonOtherUserProfileCard.svelte";
-	import SkeletonSelfUserProfileCard from '@components/skeleton-load/SkeletonSelfUserProfileCard.svelte';
-    import type { User } from "@models/user";
-	import { getUserProfile } from "@services/user";
-	import { getUser } from "@util/localstorage";
-	import UserList from "@components/user/UserList.svelte";
 	import AnnouncementPagination from "@components/partials/AnnouncementPagination.svelte";
 	import ForumPagination from "@components/partials/ForumPagination.svelte";
+	import NotFound from "@components/shared/NotFound.svelte";
+	import SkeletonForumList from "@components/skeleton-load/SkeletonForumList.svelte";
+	import SkeletonOtherUserProfileCard from "@components/skeleton-load/SkeletonOtherUserProfileCard.svelte";
+	import SkeletonSelfUserProfileCard from '@components/skeleton-load/SkeletonSelfUserProfileCard.svelte';
+	import SkeletonTabs from "@components/skeleton-load/SkeletonTabs.svelte";
+	import OtherUserProfileCard from "@components/user/OtherUserProfileCard.svelte";
+	import SelfUserProfileCard from "@components/user/SelfUserProfileCard.svelte";
+	import UserList from "@components/user/UserList.svelte";
+	import type { User } from "@models/user";
+	import { getUserProfile } from "@services/user";
+	import { getUser } from "@util/localstorage";
 
     let user: User;
     let isLoading = true;
@@ -39,6 +41,10 @@
     {:else}
         <SkeletonOtherUserProfileCard />
     {/if}
+
+    <SkeletonTabs tabCount={3}>
+        <SkeletonForumList count={10} />
+    </SkeletonTabs>
 {:else if user}
     {#if selfUUID === userUUID}
         <SelfUserProfileCard bind:user />
