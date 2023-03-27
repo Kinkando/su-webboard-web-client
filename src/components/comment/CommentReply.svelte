@@ -30,6 +30,8 @@
         }
         attachments = attachments.filter((_, idx) => index !== idx)
     }
+
+    $: isDisabled = !comment && !attachments.length
 </script>
 
 <div>
@@ -51,7 +53,7 @@
         </Button>
         <div class="flex items-center gap-x-2 ml-2">
             <Button color="pink" size="sm" gradient type="reset" on:click={cancel}>ยกเลิก</Button>
-            <Button color="green" size="sm" gradient type="submit" disabled={comment.length === 0} on:click={submit}>ยืนยัน</Button>
+            <Button color="green" size="sm" gradient type="submit" disabled={isDisabled} on:click={submit}>ยืนยัน</Button>
         </div>
     </footer>
 

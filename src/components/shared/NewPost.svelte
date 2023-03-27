@@ -62,6 +62,7 @@
     $: if(postMode) {
         isAnonymous = postMode === postModes[1].value
     }
+    $: isDisabled = !title?.value || (!description?.value && !attachments.length) || (categories && categories.length && !categories.filter(category => category.isActive)?.length)
 </script>
 
 <Label for="title" class="space-y-2 text-black dark:text-white">
@@ -143,5 +144,5 @@
 
 <div class="flex items-center justify-end gap-x-2 mt-4">
     <Button color="dark" size="sm" type="reset" on:click={cancel}>ยกเลิก</Button>
-    <Button color="green" size="sm" type="submit" disabled={!title?.value || !description?.value || (categories && categories.length && !categories.filter(category => category.isActive)?.length)} on:click={submit}>{submitName}</Button>
+    <Button color="green" size="sm" type="submit" disabled={isDisabled} on:click={submit}>{submitName}</Button>
 </div>
