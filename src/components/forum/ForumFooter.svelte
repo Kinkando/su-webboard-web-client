@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import { goto } from '$app/navigation';
     import CommentBadge from "@components/badge/CommentBadge.svelte";
 	import LikeBadge from "@components/badge/LikeBadge.svelte";
 	import CommentReply from "@components/comment/CommentReply.svelte";
@@ -50,12 +49,6 @@
 
     $: time = (() => timeRange(createdAt))()
 
-    function toUserPage() {
-        if (!isAnonymous) {
-            goto(`/profile/${userUUID}`)
-        }
-    }
-
     $: if (orderBy) {
         open = false
     }
@@ -77,10 +70,21 @@
 <hr class="mt-6 mb-3 dark:border-gray-500">
 <div class="flex justify-between items-center">
     <div class="flex items-center overflow-hidden">
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <img on:click={toUserPage} src={userImageURL} alt="" class="ease-in duration-200 min-w-[4rem] max-w-[4rem] min-h-[4rem] max-h-[4rem] rounded-full {!isAnonymous ? 'cursor-pointer hover:brightness-75' : ''}">
+        {#if !isAnonymous}
+            <a href="/profile/{userUUID}">
+                <img src={userImageURL} alt="" class="ease-in duration-200 min-w-[4rem] max-w-[4rem] min-h-[4rem] max-h-[4rem] rounded-full cursor-pointer hover:brightness-75">
+            </a>
+        {:else}
+            <img src={userImageURL} alt="" class="ease-in duration-200 min-w-[4rem] max-w-[4rem] min-h-[4rem] max-h-[4rem] rounded-full">
+        {/if}
         <div class="ml-3 space-y-1 overflow-hidden mr-4">
-            <div class="font-bold overflow-hidden text-ellipsis whitespace-nowrap">{userDisplayName}</div>
+            {#if !isAnonymous}
+                <a href="/profile/{userUUID}">
+                    <div class="font-bold overflow-hidden text-ellipsis whitespace-nowrap hover:underline">{userDisplayName}</div>
+                </a>
+            {:else}
+                <div class="font-bold overflow-hidden text-ellipsis whitespace-nowrap">{userDisplayName}</div>
+            {/if}
             <div class="font-light text-sm overflow-hidden text-ellipsis whitespace-nowrap">{time}</div>
         </div>
     </div>

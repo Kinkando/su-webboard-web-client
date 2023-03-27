@@ -64,7 +64,13 @@
         <div class="flex items-center gap-x-2">
             <div class="flex flex-col gap-y-1 overflow-hidden">
                 <div class="font-bold text-lg overflow-hidden text-ellipsis whitespace-nowrap">{forum?.title}</div>
-                <div class="text-md overflow-hidden text-ellipsis whitespace-nowrap">{forum?.authorName}</div>
+                {#if !forum.isAnonymous}
+                    <a href="/profile/{forum.authorUUID}" class="w-fit">
+                        <div class="text-md overflow-hidden text-ellipsis whitespace-nowrap hover:underline">{forum?.authorName}</div>
+                    </a>
+                {:else}
+                    <div class="text-md overflow-hidden text-ellipsis whitespace-nowrap">{forum?.authorName}</div>
+                {/if}
             </div>
             {#if favorite}
                 <div class="ml-auto" bind:this={button}>
