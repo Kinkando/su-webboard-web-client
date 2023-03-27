@@ -68,6 +68,7 @@
             const res = await upsertForum(forum, files)
 
             // loading edit data
+            forumDetail.updatedAt = new Date();
             forumDetail.title = titleEdit;
             forumDetail.description = descriptionEdit;
             title.value = titleEdit;

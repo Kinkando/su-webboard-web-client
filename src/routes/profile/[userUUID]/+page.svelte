@@ -42,7 +42,7 @@
         <SkeletonOtherUserProfileCard />
     {/if}
 
-    <SkeletonTabs tabCount={3}>
+    <SkeletonTabs tabCount={selfUUID === userUUID ? 5 : 3}>
         <SkeletonForumList count={10} />
     </SkeletonTabs>
 {:else if user}
