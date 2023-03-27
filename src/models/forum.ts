@@ -11,6 +11,7 @@ export interface Forum {
     likeCount?: number
     commentCount?: number
     ranking?: number
+    isFavorite?: boolean
     isAnonymous?: boolean
     createdAt: Date
 }
@@ -39,6 +40,7 @@ export interface ForumDetail {
     createdAt: Date
     updatedAt?: Date
     isAnonymous?: boolean
+    isFavorite?: boolean
 }
 
 export interface ForumFilter {

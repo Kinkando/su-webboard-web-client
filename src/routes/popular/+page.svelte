@@ -16,4 +16,4 @@
     </Breadcrumb>
 </div>
 
-<ForumList bind:page bind:limit {fetchData} isRanking />
+<ForumList bind:page bind:limit {fetchData} ranking />

@@ -9,7 +9,7 @@
     import type { ForumDetail, ForumRequest } from "@models/forum";
 	import type { Attachment, FormSchema } from "@models/new-post";
 	import { upsertComment } from "@services/comment";
-	import { deleteForum, upsertForum } from "@services/forum";
+	import { deleteForum, favoriteForum, upsertForum } from "@services/forum";
 	import { defined } from "@util/generic";
 	import { getUserUUID } from "@util/localstorage";
 	import { timeRange } from "@util/datetime";
@@ -100,6 +100,12 @@
         console.log(`รายงานกระทู้: ${forumDetail.forumUUID}: ${reason}`)
     }
 
+    const favoriteForumAction = async(isFavorite: boolean) => {
+        isLoading = true;
+        await favoriteForum(forumDetail.forumUUID, isFavorite)
+        isLoading = false;
+    }
+
     const commentForumAction = async(commentText: string, attachments: Attachment[]) => {
         const files = attachments.map(attachment => attachment.file)
         const comment: any = {
@@ -133,6 +139,8 @@
             editable={forumDetail.authorUUID === userUUID}
             reportable={forumDetail.authorUUID !== userUUID}
             removable={forumDetail.authorUUID === userUUID}
+            favorite
+            isFavorite={forumDetail.isFavorite}
             {title}
             {description}
             {categories}
@@ -140,6 +148,7 @@
             on:edit={(event) => editForumAction(event.detail.title, event.detail.description, event.detail.categories, event.detail.attachments, event.detail.deleteImageUUIDs)}
             on:report={(event) => reportForumAction(event.detail.reportText)}
             on:delete={() => deleteForumAction()}
+            on:favorite={event => favoriteForumAction(event.detail.isFavorite)}
         />
     </div>
     {#if forumDetail.categories?.length}

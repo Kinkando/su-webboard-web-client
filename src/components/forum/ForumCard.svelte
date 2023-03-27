@@ -4,9 +4,12 @@
 	import LikeBadge from "@components/badge/LikeBadge.svelte";
 	import TimeBadge from "@components/badge/TimeBadge.svelte";
     import type { Forum } from "@models/forum";
+	import { favoriteForum } from "@services/forum";
 	import { timeRange } from "@util/datetime";
 	import { defined } from "@util/generic";
+	import { Button } from "flowbite-svelte";
 
+    export let favorite = false;
     export let forum: Forum;
     const rankingColor = (() => {
         switch (forum?.ranking) {
@@ -17,10 +20,25 @@
         }
     })()
 
+    let anchorElement: HTMLAnchorElement
+    let button: HTMLDivElement
+
+    const favoriteForumAction = async() => {
+        forum.isFavorite = !forum.isFavorite
+        await favoriteForum(forum.forumUUID, forum.isFavorite)
+    }
+
+    const clickAnchor = (event: MouseEvent & { currentTarget: EventTarget & HTMLAnchorElement }) => {
+        const elm = event.target as HTMLElement
+        if (elm.parentElement === button) {
+            event.preventDefault();
+        }
+    }
+
     const time = (() => timeRange(forum?.createdAt))()
 </script>
 
-<a class="bg-white text-black dark:bg-gray-600 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700 cursor-pointer p-4 sm:p-6 shadow-md drop-shadow-md rounded-md ease-in duration-200 w-full h-full flex gap-x-4" href={`/forum/${forum?.forumUUID}`}>
+<a bind:this={anchorElement} on:click={clickAnchor} class="bg-white text-black dark:bg-gray-600 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700 cursor-pointer p-4 sm:p-6 shadow-md drop-shadow-md rounded-md ease-in duration-200 w-full h-full flex gap-x-4" href={`/forum/${forum?.forumUUID}`}>
     <div class="relative w-fit h-fit">
         {#if forum?.ranking}
             <div class="flex items-center -mr-2 absolute bottom-0 right-0 z-10">
@@ -39,9 +57,27 @@
         {/if}
     </div>
     <section class="w-full max-w-full overflow-hidden flex flex-col gap-y-1">
-        <div class="font-bold text-lg overflow-hidden text-ellipsis whitespace-nowrap">{forum?.title}</div>
-        <div class="text-md overflow-hidden text-ellipsis whitespace-nowrap">{forum?.authorName}</div>
-        <TimeBadge text={time} />
+        <div class="flex items-center">
+            <div class="flex flex-col gap-y-1">
+                <div class="font-bold text-lg overflow-hidden text-ellipsis whitespace-nowrap">{forum?.title}</div>
+                <div class="text-md overflow-hidden text-ellipsis whitespace-nowrap">{forum?.authorName}</div>
+                <TimeBadge text={time} />
+            </div>
+            {#if favorite}
+                <div class="ml-auto" bind:this={button}>
+                    <Button
+                        color={forum.isFavorite ? 'purpleToBlue' : 'pinkToOrange'}
+                        gradient
+                        class="whitespace-nowrap"
+                        type="button"
+                        size="sm"
+                        on:click={favoriteForumAction}
+                    >
+                        {forum.isFavorite ? 'ลบออก' : 'เพิ่ม'}
+                    </Button>
+                </div>
+            {/if}
+        </div>
         {#if forum?.categories}
             <div class="flex flex-wrap gap-1 w-full">
                 {#each forum?.categories as category}

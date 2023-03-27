@@ -47,6 +47,14 @@ export async function likeForum(forumUUID: string, isLike: boolean) {
     })
 }
 
+export async function favoriteForum(forumUUID: string, isFavorite: boolean) {
+    return await api({
+        url: `${baseURL}/forum/favorite`,
+        method: "PATCH",
+        data: { forumUUID, isFavorite },
+    })
+}
+
 export async function getForumListByCategoryID(categoryID: number, offset: number, limit: number) {
     return _getForumList(offset, limit, 'createdAt@DESC', { categoryID })
 }
@@ -59,12 +67,16 @@ export async function getForumListByUserUUID(offset: number, limit: number, user
     return _getForumList(offset, limit, 'createdAt@DESC', { userUUID })
 }
 
+export async function getForumListByFavoriteUserUUID(offset: number, limit: number, favoriteUserUUID: string) {
+    return _getForumList(offset, limit, 'createdAt@DESC', { favoriteUserUUID })
+}
+
 export async function searchForum(filter: ForumFilter, offset: number, limit: number) {
     return _getForumList(offset, limit, 'createdAt@DESC', { search: filter.searchText })
 }
 
-async function _getForumList(offset: number, limit: number, sortBy: string, query?: { categoryID?: number, search?: string, userUUID?: string }) {
-    const queryString = `${query?.categoryID ? `&categoryID=${query?.categoryID}` : ''}${query?.search ? `&search=${query?.search}` : ''}${query?.userUUID ? `&userUUID=${query?.userUUID}` : ''}`
+async function _getForumList(offset: number, limit: number, sortBy: string, query?: { categoryID?: number, search?: string, userUUID?: string, favoriteUserUUID?: string }) {
+    const queryString = `${query?.categoryID ? `&categoryID=${query.categoryID}` : ''}${query?.search ? `&search=${query.search}` : ''}${query?.userUUID ? `&userUUID=${query.userUUID}` : ''}${query?.favoriteUserUUID ? `&favoriteUserUUID=${query.favoriteUserUUID}` : ''}`
     const res = await api<{ total: number, data: Forum[] }>({
         url: `${baseURL}/forum?limit${limit}&offset=${offset}&sortBy=${sortBy}${queryString}`,
         method: "GET",
@@ -79,11 +91,4 @@ export async function getForumDetail(forumUUID: string, cookies?: Cookies) {
         cookies,
     })
     return res.data
-}
-
-export const sleep = async (time?: number) => {
-    if (!time) {
-        time = 500
-    }
-    return await new Promise(resolve => setTimeout(() => resolve(""), time))
 }

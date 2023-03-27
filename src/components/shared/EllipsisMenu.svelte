@@ -15,7 +15,9 @@
     export let editable = false;
     export let removable = false;
     export let reportable = false;
+    export let favorite = false;
     export let ellipsisMenuID: string;
+    export let isFavorite = false;
     let openEditForumModal = false;
     let openEditCommentModal = false;
     let openDeleteModal = false;
@@ -100,6 +102,10 @@
         dispatch('delete');
         openDeleteModal = false;
     };
+    const favoriteAction = () => {
+        isFavorite = !isFavorite
+        dispatch('favorite', { isFavorite })
+    }
 
     let element: HTMLDivElement;
 </script>
@@ -121,8 +127,28 @@
         </div>
     {/if}
 
-    {#if reportable}
+    {#if favorite}
         {#if editable}
+            <hr class="border-gray-200 dark:border-gray-600">
+        {/if}
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <div class="flex items-center gap-x-3 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 px-3 py-2" on:click={favoriteAction}>
+            {#if isFavorite}
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 3l1.664 1.664M21 21l-1.5-1.5m-5.485-1.242L12 17.25 4.5 21V8.742m.164-4.078a2.15 2.15 0 011.743-1.342 48.507 48.507 0 0111.186 0c1.1.128 1.907 1.077 1.907 2.185V19.5M4.664 4.664L19.5 19.5" />
+                </svg>
+                <span>ลบจากรายการโปรด</span>
+            {:else}
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" />
+                </svg>
+                <span>เพิ่มในรายการโปรด</span>
+            {/if}
+        </div>
+    {/if}
+
+    {#if reportable}
+        {#if editable || favorite}
             <hr class="border-gray-200 dark:border-gray-600">
         {/if}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -135,7 +161,7 @@
     {/if}
 
     {#if removable}
-        {#if editable || reportable}
+        {#if editable || favorite || reportable}
             <hr class="border-gray-200 dark:border-gray-600">
         {/if}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -175,18 +201,23 @@
     </Modal>
 {/if}
 
-<Modal bind:open={openReportModal} defaultClass="w-fit max-w-md">
-    <ReportCard
-        suffixName={menuSuffixName}
-        bind:open={openReportModal}
-        on:report={event => reportAction(event.detail)}
-    />
-</Modal>
+{#if reportable}
+    <Modal bind:open={openReportModal} defaultClass="w-fit max-w-md">
+        <ReportCard
+            suffixName={menuSuffixName}
+            bind:open={openReportModal}
+            on:report={event => reportAction(event.detail)}
+        />
+    </Modal>
+{/if}
 
-<DeleteModal
-    bind:open={openDeleteModal}
-    deleteButtonName="ลบ{menuSuffixName}"
-    on:delete={deleteAction}
->
-    คุณแน่ใจหรือไม่ที่จะ<span class="text-red-500">ลบ{menuSuffixName}</span>นี้?
-</DeleteModal>
+{#if removable}
+    <!-- content here -->
+    <DeleteModal
+        bind:open={openDeleteModal}
+        deleteButtonName="ลบ{menuSuffixName}"
+        on:delete={deleteAction}
+    >
+        คุณแน่ใจหรือไม่ที่จะ<span class="text-red-500">ลบ{menuSuffixName}</span>นี้?
+    </DeleteModal>
+{/if}
