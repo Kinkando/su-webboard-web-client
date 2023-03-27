@@ -5,7 +5,6 @@ export interface User {
     userFullName: string
     userEmail: string
     studentID?: string
-    isAnonymous?: boolean
     userType?: string
     lastLogin?: Date
     isFollowing?: boolean

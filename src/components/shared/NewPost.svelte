@@ -15,7 +15,7 @@
     export let submit: () => void = async() => {};
     export let deleteImageUUIDs: string[] = [];
     export let user: User | undefined = undefined;
-    export let anonymousePost = false;
+    export let anonymousPost = false;
     export let isAnonymous = false;
 
     let fileInput: HTMLInputElement;
@@ -52,12 +52,7 @@
         },
     ]
     let postMode = postModes[0].value;
-    function setDefaultPostMode() {
-        postModes[0].mod += user?.userDisplayName
-        if (user?.isAnonymous) {
-            postMode = postModes[1].value
-        }
-    }
+    const setDefaultPostMode = () => postModes[0].mod += user?.userDisplayName
     $: user && setDefaultPostMode()
     $: if(postMode) {
         isAnonymous = postMode === postModes[1].value
@@ -133,7 +128,7 @@
     {/each}
 </div>
 
-{#if anonymousePost}
+{#if anonymousPost}
     <Label for="isAnonymous">
         <div>การแสดงชื่อผู้สร้างกระทู้</div>
         {#each postModes as mode}

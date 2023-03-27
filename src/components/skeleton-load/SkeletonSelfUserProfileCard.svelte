@@ -9,7 +9,7 @@
         </figure>
 
         <div class="space-y-7 w-full mt-0 my-6 md:-ml-6 ">
-            {#each Array(menuCount) as index}
+            {#each Array(menuCount) as _}
                 <div class="space-y-6">
                     <div class="w-1/2 h-4 bg-gray-300 rounded-full dark:bg-gray-600" />
                     <div class="w-full h-4 bg-gray-300 rounded-full dark:bg-gray-600" />
