@@ -24,14 +24,18 @@
     let button: HTMLDivElement
 
     const favoriteForumAction = async() => {
-        forum.isFavorite = !forum.isFavorite
-        await favoriteForum(forum.forumUUID, forum.isFavorite)
+        if (favorite) {
+            forum.isFavorite = !forum.isFavorite
+            await favoriteForum(forum.forumUUID, forum.isFavorite)
+        }
     }
 
     const clickAnchor = (event: MouseEvent & { currentTarget: EventTarget & HTMLAnchorElement }) => {
-        const elm = event.target as HTMLElement
-        if (elm.parentElement === button) {
-            event.preventDefault();
+        if (favorite) {
+            const elm = event.target as HTMLElement
+            if (elm.parentElement === button) {
+                event.preventDefault();
+            }
         }
     }
 
@@ -57,11 +61,10 @@
         {/if}
     </div>
     <section class="w-full max-w-full overflow-hidden flex flex-col gap-y-1">
-        <div class="flex items-center">
-            <div class="flex flex-col gap-y-1">
+        <div class="flex items-center gap-x-2">
+            <div class="flex flex-col gap-y-1 overflow-hidden">
                 <div class="font-bold text-lg overflow-hidden text-ellipsis whitespace-nowrap">{forum?.title}</div>
                 <div class="text-md overflow-hidden text-ellipsis whitespace-nowrap">{forum?.authorName}</div>
-                <TimeBadge text={time} />
             </div>
             {#if favorite}
                 <div class="ml-auto" bind:this={button}>
@@ -78,6 +81,7 @@
                 </div>
             {/if}
         </div>
+        <TimeBadge text={time} />
         {#if forum?.categories}
             <div class="flex flex-wrap gap-1 w-full">
                 {#each forum?.categories as category}
