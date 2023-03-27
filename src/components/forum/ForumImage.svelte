@@ -10,7 +10,7 @@
     })()
 </script>
 
-<div class="mt-6 gap-2 no-select flex flex-wrap items-center justify-center w-full h-fit">
+<div class="mt-6 gap-2 select-none flex flex-wrap items-center justify-center w-full h-fit">
     {#each imageURLs as imageURL, index}
         <div class="relative overflow-hidden rounded-md aspect-square">
             <!-- {#if imagesIsLoading[index]}

@@ -42,7 +42,7 @@
                 {#if popularTopic?.likeCount != undefined}
                     <div class="flex items-center justify-between">
                         {#if !popularTopic.isAnonymous}
-                            <a href="/profile/{popularTopic.authorUUID}">
+                            <a href="/profile/{popularTopic.authorUUID}" class="overflow-hidden">
                                 <div class="w-full mr-2 text-md overflow-hidden text-ellipsis whitespace-nowrap hover:underline">{popularTopic?.authorName}</div>
                             </a>
                         {:else}

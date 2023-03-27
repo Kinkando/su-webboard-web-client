@@ -65,7 +65,7 @@
             <div class="flex flex-col gap-y-1 overflow-hidden">
                 <div class="font-bold text-lg overflow-hidden text-ellipsis whitespace-nowrap">{forum?.title}</div>
                 {#if !forum.isAnonymous}
-                    <a href="/profile/{forum.authorUUID}" class="w-fit">
+                    <a href="/profile/{forum.authorUUID}" class="overflow-hidden">
                         <div class="text-md overflow-hidden text-ellipsis whitespace-nowrap hover:underline">{forum?.authorName}</div>
                     </a>
                 {:else}

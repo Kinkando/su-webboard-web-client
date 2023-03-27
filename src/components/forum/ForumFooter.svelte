@@ -79,7 +79,7 @@
         {/if}
         <div class="ml-3 space-y-1 overflow-hidden mr-4">
             {#if !isAnonymous}
-                <a href="/profile/{userUUID}">
+                <a href="/profile/{userUUID}" class="overflow-hidden">
                     <div class="font-bold overflow-hidden text-ellipsis whitespace-nowrap hover:underline">{userDisplayName}</div>
                 </a>
             {:else}
@@ -91,7 +91,7 @@
     {#if commentCount !== undefined}
         <div class="flex flex-col space-y-2 items-end">
             <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <div class="no-select underline text-[var(--primary-color)] dark:text-[var(--primary-color-75)] cursor-pointer break-words" on:click={() => openReplyModal = true}>{replyText}</div>
+            <div class="select-none underline text-[var(--primary-color)] dark:text-[var(--primary-color-75)] cursor-pointer break-words" on:click={() => openReplyModal = true}>{replyText}</div>
             {#if isSortingComment}
                 <Button size="lg" color="alternative" class="md:w-fit w-full whitespace-nowrap focus:!border-transparent focus:!ring-0 !bg-transparent !outline-transparent !border-transparent !p-0 !text-[var(--primary-color)] dark:!text-[var(--primary-color-75)]">
                     <Chevron><div class="whitespace-nowrap">{ orderBy === 'asc' ? 'เรียงตามลำดับ' : 'ใหม่ล่าสุด' }</div></Chevron>

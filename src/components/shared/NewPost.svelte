@@ -4,7 +4,7 @@
 	import ToggleBadge from '@components/badge/ToggleBadge.svelte';
 	import type { Category } from '@models/category';
 	import type { Attachment, FormSchema } from '@models/new-post';
-	import type { User } from '@models/user';
+	import { StatusGroup, type User } from '@models/user';
 
     export let title: FormSchema;
     export let description: FormSchema;
@@ -42,20 +42,20 @@
     const postModes = [
         {
             name: 'เปิดเผยตัวตน',
-            value: 'display',
+            value: StatusGroup.nominate,
             mod: '',
         },
         {
             name: 'ปกปิดตัวตน',
-            value: 'anonymous',
+            value: StatusGroup.anonymous,
             mod: 'ผู้ใช้นิรนาม',
         },
     ]
-    let postMode = postModes[0].value;
+    let postMode = StatusGroup.nominate;
     const setDefaultPostMode = () => postModes[0].mod += user?.userDisplayName
     $: user && setDefaultPostMode()
     $: if(postMode) {
-        isAnonymous = postMode === postModes[1].value
+        isAnonymous = postMode === StatusGroup.anonymous
     }
     $: isDisabled = !title?.value || (!description?.value && !attachments.length) || (categories && categories.length && !categories.filter(category => category.isActive)?.length)
 </script>
@@ -76,7 +76,7 @@
         <span>หมวดหมู่</span>
         <div id="category" class="ease-in duration-200 w-full p-2.5 border dark:border-gray-500 text-sm rounded-lg bg-gray-50 dark:bg-gray-700 overflow-x-hidden flex flex-wrap">
             {#if categories?.length}
-                {#each categories as category, index}
+                {#each categories as category}
                     <div class="m-1.5">
                         <ToggleBadge toggle hexColor={category.categoryHexColor} name={category.categoryName} bind:isActive={category.isActive} />
                     </div>
@@ -104,7 +104,7 @@
     </div>
 </Label>
 
-<div class="my-4 grid gap-2 sm:gap-4 no-select" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr))">
+<div class="my-4 grid gap-2 sm:gap-4 select-none" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr))">
     {#each attachments as attachment, index}
         <div class="relative overflow-hidden rounded-md  aspect-square">
             <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -131,9 +131,13 @@
 {#if anonymousPost}
     <Label for="isAnonymous">
         <div>การแสดงชื่อผู้สร้างกระทู้</div>
-        {#each postModes as mode}
-            <Radio bind:group={postMode} value={mode.value} class="w-fit my-1.5">{mode.name}&nbsp;<span class="text-blue-400 font-bold">({mode.mod || '...'})</span></Radio>
-        {/each}
+        <div class="flex gap-x-2.5 flex-wrap">
+            {#each postModes as mode}
+                <Radio bind:group={postMode} value={mode.value} custom class="w-fit my-1.5">
+                    <ToggleBadge hexColor="primary" name="{mode.name} ({mode.mod || '...'})" isActive={postMode === mode.value} />
+                </Radio>
+            {/each}
+        </div>
     </Label>
 {/if}
 

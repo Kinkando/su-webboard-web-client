@@ -16,7 +16,7 @@
     </div>
     <section class="w-full max-w-full overflow-hidden flex flex-col gap-y-1">
         <div class="font-bold text-lg overflow-hidden text-ellipsis whitespace-nowrap">{announcement?.title}</div>
-        <a href="/profile/{announcement.authorUUID}">
+        <a href="/profile/{announcement.authorUUID}" class="overflow-hidden">
             <div class="text-md overflow-hidden text-ellipsis whitespace-nowrap hover:underline">{announcement?.authorName}</div>
         </a>
         <TimeBadge text={time} />

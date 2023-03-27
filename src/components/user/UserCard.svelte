@@ -16,10 +16,10 @@
         <img src="{user.userImageURL}" alt="" class="z-0 min-w-[4rem] max-w-[4rem] min-h-[4rem] max-h-[4rem] rounded-full hover:scale-110 ease-in duration-200">
     </a>
     <div class="w-fit overflow-hidden">
-        <a href="/profile/{user.userUUID}" class="w-fit">
+        <a href="/profile/{user.userUUID}" class="overflow-hidden">
             <div class="text-black dark:text-white overflow-hidden text-ellipsis whitespace-nowrap hover:underline">{user.userDisplayName}</div>
         </a>
-        <a href="/profile/{user.userUUID}" class="w-fit">
+        <a href="/profile/{user.userUUID}" class="overflow-hidden">
             <div class="text-gray-500 text-sm overflow-hidden text-ellipsis whitespace-nowrap hover:underline">{user.userFullName}</div>
         </a>
     </div>
