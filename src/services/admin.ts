@@ -3,7 +3,6 @@ import type { ForumReport } from "@models/forum";
 import type { User } from "@models/user";
 import type { Cookies } from "@sveltejs/kit";
 import api from "@util/api";
-import { sleep } from "./forum";
 
 const baseURL = import.meta.env.VITE_API_HOST
 
@@ -88,4 +87,11 @@ export async function getForumReport(offset: number, limit: number) {
     const data: ForumReport[] = []
     await sleep()
     return { data, total }
+}
+
+const sleep = async (time?: number) => {
+    if (!time) {
+        time = 500
+    }
+    return await new Promise(resolve => setTimeout(() => resolve(""), time))
 }

@@ -36,13 +36,5 @@ export async function getNotiList(): Promise<Notification> {
             },
         ]
     }
-    // await sleep()
     return noti
 }
-
-// const sleep = async (time?: number) => {
-//     if (!time) {
-//         time = 500
-//     }
-//     return await new Promise(resolve => setTimeout(() => resolve(""), time))
-// }
