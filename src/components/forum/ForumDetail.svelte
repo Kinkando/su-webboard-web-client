@@ -12,6 +12,7 @@
 	import { deleteForum, upsertForum } from "@services/forum";
 	import { defined } from "@util/generic";
 	import { getUserUUID } from "@util/localstorage";
+	import { timeRange } from "@util/datetime";
 
     export let forumDetail: ForumDetail;
     export let categories: Category[];
@@ -50,37 +51,40 @@
     let imageURLs = initImages()
 
     const editForumAction = async(titleEdit: string, descriptionEdit: string, categoriesEdit: Category[], attachmentsEdit: Attachment[], deleteImageUUIDs: string[]) => {
-        const files = attachmentsEdit.map(attachment => attachment.file)
-        const categoryIDs = categoriesEdit.filter(category => category.isActive).map(category => category.categoryID!)
-        const forum: ForumRequest = {
-            forumUUID: forumDetail.forumUUID,
-            title: titleEdit,
-            description: descriptionEdit,
-            categoryIDs,
-            forumImageUUIDs: deleteImageUUIDs,
-        }
-        const res = await upsertForum(forum, files)
-
-        // loading edit data
-        forumDetail.title = titleEdit;
-        forumDetail.description = descriptionEdit;
-        title.value = titleEdit;
-        description.value = descriptionEdit;
-        if (categories) {
-            categories.forEach((category, index) => category.isActive = categoriesEdit[index].isActive)
-        }
-        if (deleteImageUUIDs && forumDetail.forumImages) {
-            forumDetail.forumImages = forumDetail.forumImages.filter(image => !deleteImageUUIDs.includes(image.uuid))
-        }
-        if (res.data?.documents) {
-            if (forumDetail.forumImages) {
-                forumDetail.forumImages = [...forumDetail.forumImages, ...res.data.documents]
-            } else {
-                forumDetail.forumImages = [...res.data.documents]
+        const categoryIDs = categories.filter(category => category.isActive).map(category => category.categoryID!)
+        const categoryIDsEdit = categoriesEdit.filter(category => category.isActive).map(category => category.categoryID!)
+        if (forumDetail.title !== titleEdit || forumDetail.description !== descriptionEdit || attachments.length !== attachmentsEdit.length || deleteImageUUIDs.length !== 0 || categoryIDs.length !== categoryIDsEdit.length || categoryIDs.filter(categoryID => !categoryIDsEdit.includes(categoryID)).length > 0) {
+            const files = attachmentsEdit.map(attachment => attachment.file)
+            const forum: ForumRequest = {
+                forumUUID: forumDetail.forumUUID,
+                title: titleEdit,
+                description: descriptionEdit,
+                categoryIDs: categoryIDsEdit,
+                forumImageUUIDs: deleteImageUUIDs,
             }
+            const res = await upsertForum(forum, files)
+
+            // loading edit data
+            forumDetail.title = titleEdit;
+            forumDetail.description = descriptionEdit;
+            title.value = titleEdit;
+            description.value = descriptionEdit;
+            if (categories) {
+                categories.forEach((category, index) => category.isActive = categoriesEdit[index].isActive)
+            }
+            if (deleteImageUUIDs && forumDetail.forumImages) {
+                forumDetail.forumImages = forumDetail.forumImages.filter(image => !deleteImageUUIDs.includes(image.uuid))
+            }
+            if (res.data?.documents) {
+                if (forumDetail.forumImages) {
+                    forumDetail.forumImages = [...forumDetail.forumImages, ...res.data.documents]
+                } else {
+                    forumDetail.forumImages = [...res.data.documents]
+                }
+            }
+            forumDetail.categories = categories?.filter(category => category.isActive)!
+            imageURLs = initImages()
         }
-        forumDetail.categories = categories?.filter(category => category.isActive)!
-        imageURLs = initImages()
     }
 
     const deleteForumAction = async() => {
@@ -141,10 +145,13 @@
     <hr class="my-3 dark:border-gray-500">
     <div class="font-medium min-h-[12rem]">
         {@html forumDetail.description.replaceAll('\n', '<br>')}
+        {#if imageURLs.length}
+            <ForumImage {imageURLs} />
+        {/if}
     </div>
 
-    {#if imageURLs?.length}
-        <ForumImage {imageURLs} />
+    {#if forumDetail.updatedAt}
+        <div class="mt-4 text-gray-500">แก้ไขล่าสุด: {timeRange(forumDetail.updatedAt)}</div>
     {/if}
 
     <ForumFooter
