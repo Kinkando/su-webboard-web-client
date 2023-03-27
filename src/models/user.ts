@@ -8,6 +8,11 @@ export interface User {
     isAnonymous?: boolean
     userType?: string
     lastLogin?: Date
+    isFollowing?: boolean
+    isSelf?: boolean
+    isNoti?: boolean
+    followingUserUUIDs?: string[]
+    followerUserUUIDs?: string[]
 }
 
 export enum StatusGroup {

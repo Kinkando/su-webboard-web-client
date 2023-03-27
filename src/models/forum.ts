@@ -11,6 +11,7 @@ export interface Forum {
     likeCount?: number
     commentCount?: number
     ranking?: number
+    isAnonymous?: boolean
     createdAt: Date
 }
 
@@ -20,6 +21,7 @@ export interface ForumRequest {
     description: string
     categoryIDs: number[]
     forumImageUUIDs?: string[]
+    isAnonymous?: boolean
 }
 
 export interface ForumDetail {
@@ -35,6 +37,8 @@ export interface ForumDetail {
     likeCount: number
     commentCount: number
     createdAt: Date
+    updatedAt?: Date
+    isAnonymous?: boolean
 }
 
 export interface ForumFilter {

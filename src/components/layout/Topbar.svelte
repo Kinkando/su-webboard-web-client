@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { revokeToken as revokeTokenSrv } from '@services/authen';
 	import { slide } from 'svelte/transition';
 	import { DarkMode, Indicator, Input, Popover, Tooltip } from "flowbite-svelte";
 	import { goto } from "$app/navigation";
@@ -7,7 +8,7 @@
 	import { UserType } from "@models/auth";
 	import userStore from '@stores/user';
 	import notificationStore from '@stores/notification';
-	import { revokeToken } from '@util/localstorage';
+	import { getToken, revokeToken } from '@util/localstorage';
 	import { Auth } from '@models/common';
 
     export let userType: string
@@ -21,10 +22,14 @@
     const defaultImageURL = "https://cdn-icons-png.flaticon.com/512/149/149071.png"
     let searchText = "";
 
-    const signout = async () => await fetch("/api/token/revoke", { method: "POST" }).then(res => {
+    const signout = async () => {
+        const token = getToken()
+        if (token) {
+            revokeTokenSrv(token.accessToken, token.refreshToken)
+        }
         revokeToken();
         goto(`/login?error=${Auth.LogoutSuccessfully}`);
-    });
+    }
     const search = (event: KeyboardEvent) => {
         if (event.key === 'Enter' && searchText) {
             goto('/search?keyword='+searchText)
@@ -58,6 +63,7 @@
         },
     ]
 
+    const isAutoHide = false;
     let previousY = 0;
     let scrollY = 0;
     $: isScrollDown = scrollY > previousY;
@@ -76,7 +82,7 @@
     {/if}
 {/each}
 
-<Popover placement="bottom" class="{isScrollDown ? 'hidden' : ''} z-30 w-64 text-sm min-[820.1px]:hidden" shadow triggeredBy="#{tooltips[1].id}" trigger="click">
+<Popover placement="bottom" class="{isAutoHide && isScrollDown ? 'hidden' : ''} z-30 w-64 text-sm min-[820.1px]:hidden" shadow triggeredBy="#{tooltips[1].id}" trigger="click">
     <div in:slide>
         <Input
             id={tooltips[1].id}
@@ -94,7 +100,7 @@
     </div>
 </Popover>
 
-<Popover defaultClass="" placement="bottom" class="{isScrollDown ? 'hidden' : ''} shadow-md drop-shadow-md hide-scrollbar overflow-x-hidden z-30 max-w-full min-w-0 text-sm text-black dark:text-white" shadow triggeredBy="#{tooltips[4].id}" trigger="click">
+<Popover defaultClass="" placement="bottom" class="{isAutoHide && isScrollDown ? 'hidden' : ''} shadow-md drop-shadow-md hide-scrollbar overflow-x-hidden z-30 max-w-full min-w-0 text-sm text-black dark:text-white" shadow triggeredBy="#{tooltips[4].id}" trigger="click">
     <div in:slide class="hide-scrollbar overflow-x-hidden">
         <header class="fixed z-30 h-10 w-full bg-white dark:bg-gray-900 shadow-sm text-center text-lg flex items-center justify-center gap-x-1 rounded-t-md py-1">
             <span>การแจ้งเตือน</span>
@@ -132,9 +138,9 @@
     </div>
 </Popover>
 
-<Popover defaultClass="overflow-hidden py-2" placement="bottom" class="{isScrollDown ? 'hidden' : ''} z-30 w-fit border text-sm text-black dark:text-white -px-3" shadow triggeredBy="#{tooltips[5].id}" trigger="click">
+<Popover defaultClass="overflow-hidden py-2" placement="bottom" class="{isAutoHide && isScrollDown ? 'hidden' : ''} z-30 w-fit border text-sm text-black dark:text-white -px-3" shadow triggeredBy="#{tooltips[5].id}" trigger="click">
     <div in:slide>
-        <a class="flex items-center gap-x-3 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 px-3 py-2" href="/profile">
+        <a class="flex items-center gap-x-3 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 px-3 py-2" href="/profile/{user.userUUID}">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
             </svg>
@@ -155,7 +161,7 @@
 
 <!-- Topbar -->
 <div class="h-16 w-full bg-gray-200 dark:bg-gray-800 absolute top-0 z-0 ease-in duration-200" />
-<header class="transition-transform duration-200 h-16 ease-out w-full overflow-hidden flex items-center bg-[var(--primary-color)] px-4 no-select fixed z-20" style={isScrollDown ? `transform: translateY(-${Math.min(scrollY, 64)}px); ${scrollY <= 64 ? 'transition: none;' : ''}` : ''}>
+<header class="transition-transform duration-200 h-16 ease-out w-full overflow-hidden flex items-center bg-[var(--primary-color)] px-4 no-select fixed z-20" style={isAutoHide && isScrollDown ? `transform: translateY(-${Math.min(scrollY, 64)}px); ${scrollY <= 64 ? 'transition: none;' : ''}` : ''}>
     <a class="flex items-center cursor-pointer h-full gap-x-3" href="/">
         <img class="w-10 object-cover" src="/images/SU-WEBBOARD-ICON.png" alt="">
         <img class="h-6 object-cover max-[570px]:hidden" src="/images/SU-WEBBOARD-TEXT.png" alt="">

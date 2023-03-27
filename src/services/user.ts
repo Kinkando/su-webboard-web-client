@@ -3,9 +3,9 @@ import api from "@util/api";
 
 const baseURL = import.meta.env.VITE_API_HOST
 
-export async function getUserProfile() {
+export async function getUserProfile(userUUID?: string) {
     const response = await api<User>({
-        url: `${baseURL}/user/profile`,
+        url: `${baseURL}/user/profile${userUUID ? `?userUUID=${userUUID}` : ''}`,
         method: 'GET',
     })
     return response.data!
@@ -25,6 +25,38 @@ export async function updateUserProfile(userDisplayName: string, isAnonymous: bo
             "Content-Type": 'multipart/form-data'
         }
     })
+}
+
+export async function followingUser(userUUID: string, isFollowing: boolean) {
+    return await api<User>({
+        url: `${baseURL}/user/following`,
+        method: 'PATCH',
+        data: { userUUID, isFollowing }
+    })
+}
+
+export async function notificationUser(userUUID: string, isNoti: boolean) {
+    return await api<User>({
+        url: `${baseURL}/user/notification`,
+        method: 'PATCH',
+        data: { userUUID, isNoti }
+    })
+}
+
+export async function getFollowUsers(userUUID: string, type: 'following' | 'follower', offset: number, limit: number) {
+    const res = await api<{total: number, data: User[]}>({
+        url: `${baseURL}/user/${type}?userUUID=${userUUID}&offset=${offset}&limit=${limit}`,
+        method: 'GET',
+    })
+    return res.data
+}
+
+export async function searchUsers(search: string, offset: number, limit: number) {
+    const res = await api<{total: number, data: User[]}>({
+        url: `${baseURL}/user?search=${search}&offset=${offset}&limit=${limit}`,
+        method: 'GET',
+    })
+    return res.data
 }
 
 export async function getAvatars(): Promise<string[]> {

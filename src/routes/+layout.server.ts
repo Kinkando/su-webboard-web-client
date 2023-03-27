@@ -45,17 +45,14 @@ export const load: LayoutServerLoad = async ({ cookies, route }) => {
 
 // onMount twice
 
-// ADD VIEW COUNT AT ANNOUNCEMENT DETAIL PAGE
-// *********************** BUG ADMIN REDIRECT TO LOGIN PAGE (BECAUSE OF CALLING API PROFILE AND GET 401)
-
 // SETTING PAGE
 // - change theme
 // - set sorting comment (default comment #1-#10), can set by latest comment first
 // - ปักหมุด topbar ให้ไม่หุบเมื่อเลื่อนลง
 
-// or SORTING COMMENT ON FORUM DETAIL PAGE
-// ADD MINIMUM HEIGHT OF FORUM DESCRIPTION COMPONENT
-// เพิ่ม แก้ไขข้อความเมื่อ ... ในหน้า Forum Detail (Compare change before calling API)
+// เพิ่ม option sort by ในหน้า search/category/popular list page
+// ADD SORTING OPTION OF SEARCH, FORUM LIST PAGE
+// เพิ่มสามารถ โพสต์ หรือ คอมเมนต์ เฉพาะรูปภาพอย่างเดียวได้ โดยไม่ต้องมีข้อความใดๆ (ลบเงื่อนไขเช็ค text.length) แต่ต้องเช็คเพิ่มว่า ถ้าแก้ไขคอมเมนต์/โพสต์ โดยที่ลบข้อความและรูปภาพทั้งหมด ต้องเด้ง dialog เตือนว่าต้องการลบแทน ใช่หรือไม่
 
 // เพิ่มหน้า Sign Up สำหรับนักศึกษา โดยสามารถ sign up ได้ผ่านเมลมหาวิทยาลัยเท่านั้น และหลังจาก verify จะให้กรอก
 // - รหัสนักศึกษา (โดยมี warning ว่า ไม่สามารถเปลี่ยนได้ด้วยตนเองในภายหลัง และต้องมีการ validate format เพิ่ม)
@@ -66,27 +63,19 @@ export const load: LayoutServerLoad = async ({ cookies, route }) => {
 // ทำให้ text editor รองรับการเว้นบรรทัด เวลาแสดงผลในหน้า home, announcement detail
 // add delete all forum and announcement when admin delete user
 
-// ADD SKELETON LOAD ON FORUM AND ANNOUNCEMENT DETAIL
 // remove all related post when delete category (popup or modal to warning before delete)
 // admin portal ui on modal open and resize (backdrop animate) and modal overlap on sidebar
 // admin portal modal form validation
 // admin portal error not found page
 // admin portal internal server error page
 
-// DELETE announcement/[forumUUID]/+page.server.ts AND USE LOCALSTORAGE INSTEAD
-// DELETE category/[categoryID]/+page.server.ts AND USE LOCALSTORAGE INSTEAD
-// DELETE forum/[forumUUID]/+page.server.ts AND USE LOCALSTORAGE INSTEAD
-
 // admin add form validation
 
 // change profile image with providing avatar from backend
 // เพิ่ม Notification List Page
-// เพิ่ม option sort by ในหน้า search/category/popular list page
 
 // เพิ่ม gallery สำหรับ view รูปภาพในหน้า new forum / new announcement (สามารถคลิกหรือกดลูกศรบนคีย์บอร์ดเพื่อเลื่อนรูปภาพได้)
 // เพิ่มคลิกรูปเพื่อขยาย สำหรับหน้า update profile
 
 // เพิ่ม animation loading เวลา navigate ไปหน้าอื่น (เหมือนในแอพมอของเจได)
-// เพิ่มหน้าดู profile user คนอื่น และเพิ่ม feature ติดตามผู้ใช้งานคนอื่น
-
-// เพิ่มเมนูเปลี่ยนภาษา ไม่ก็เปลี่ยนแอพให้กลายเป็นภาษาไทย
+// เพิ่ม admin student/teacher คอลัมน์จำนวนผู้ติดตาม และกำลังติดตาม

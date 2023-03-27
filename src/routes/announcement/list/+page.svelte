@@ -17,7 +17,9 @@
                 authorImageURL: announcement.authorImageURL,
                 authorName: announcement.authorName,
                 authorUUID: announcement.authorUUID,
+                seeCount: announcement.seeCount,
                 createdAt: announcement.createdAt,
+                updatedAt: announcement.updatedAt,
             })
         })
         return { data: announcements, total }

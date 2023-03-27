@@ -12,9 +12,9 @@ export async function getComment(forumUUID: string, commentUUID: string) {
     return res.data
 }
 
-export async function getComments(forumUUID: string, offset: number, limit: number) {
+export async function getComments(forumUUID: string, offset: number, limit: number, orderBy: 'asc' | 'desc') {
     const res = await api<{ total: number, data: Comment[]}>({
-        url: `${baseURL}/comment/${forumUUID}?limit${limit}&offset=${offset}`,
+        url: `${baseURL}/comment/${forumUUID}?limit${limit}&offset=${offset}&sortBy=createdAt@${orderBy}`,
         method: "GET",
     })
     return res.data

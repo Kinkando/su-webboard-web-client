@@ -6,7 +6,9 @@ export interface Announcement {
     authorName: string
     authorImageURL: string
     announcementImages?: Document[]
+    seeCount: number
     createdAt: Date
+    updatedAt?: Date
     title: string
     description?: string
 }

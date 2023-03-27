@@ -8,6 +8,7 @@
 	import { deleteComment, upsertComment } from "@services/comment";
 	import { getUserUUID } from "@util/localstorage";
 	import { createEventDispatcher } from "svelte";
+	import { timeRange } from "@util/datetime";
 
     export let label: string;
     export let comment: Comment;
@@ -34,11 +35,16 @@
     const dispatch = createEventDispatcher()
 
     const editCommentAction = async(commentEdit: string, attachmentsEdit: Attachment[], deleteImageUUIDs: string[]) => {
+        if (comment.commentText === commentEdit && attachmentsEdit.length === attachments.length && deleteImageUUIDs.length === 0) {
+            return;
+        }
+
         comment.commentText = commentEdit;
         const files = attachmentsEdit.map(attachment => attachment.file)
         const res = await upsertComment(forumUUID, comment, files, deleteImageUUIDs, replyCommentUUID || undefined)
 
         // update data on local
+        comment.updatedAt = new Date();
         let tempCommentImages: Document[] = []
         if (deleteImageUUIDs && comment.commentImages) {
             tempCommentImages = comment.commentImages.filter(image => !deleteImageUUIDs.includes(image.uuid)) || []
@@ -103,11 +109,17 @@
         {/if}
     </div>
 
+    {#if comment.updatedAt}
+        <div class="mt-4 text-gray-500">แก้ไขล่าสุด: {timeRange(comment.updatedAt)}</div>
+    {/if}
+
     <ForumFooter
         type="comment"
         uuid={comment.commentUUID}
         isLike={comment.isLike}
-        username={comment.commenterName}
+        isAnonymous={comment.isAnonymous}
+        userUUID={comment.commenterUUID}
+        userDisplayName={comment.commenterName}
         userImageURL={comment.commenterImageURL}
         likeCount={comment.likeCount}
         commentCount={!replyCommentUUID ? (comment.replyComments?.length || 0) : undefined}

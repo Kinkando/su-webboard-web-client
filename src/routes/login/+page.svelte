@@ -1,14 +1,16 @@
 <script lang="ts">
     import { Button, Card, Label, Input, Spinner } from 'flowbite-svelte';
-	import Alert from '@components/alert/Alert.svelte';
-	import type { Alert as AlertModel } from '@models/alert';
-	import { signinFirebase, signInGoogle } from '@services/firebase';
-	import { getUserType, setToken } from '@util/localstorage';
-	import CommonScreen from '@components/shared/CommonScreen.svelte';
-	import type { JWT } from '@models/auth';
-	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
+	import { page } from '$app/stores';
+	import Alert from '@components/alert/Alert.svelte';
+	import CommonScreen from '@components/shared/CommonScreen.svelte';
+	import HTTP from '@commons/http';
+	import type { Alert as AlertModel } from '@models/alert';
 	import { Auth } from '@models/common';
+	import { verifyToken } from '@services/authen';
+	import { deleteUserFirebase, signinFirebase, signInGoogle } from '@services/firebase';
+	import { getUserType, setToken } from '@util/localstorage';
+	import Error from '../+error.svelte';
 
     let alert: AlertModel;
 
@@ -46,56 +48,61 @@
 
         const idToken = await signinFirebase(email, password);
         if (idToken) {
-            await verify('verify', idToken)
+            await verify(idToken)
         } else {
             alert = {
                 color: 'red',
-                message: 'ชื่อผู้ใช้หรือรหัสผ่านผิดพลาด โปรดลองใหม่อีกครั้ง!',
+                message: 'ชื่อผู้ใช้หรือรหัสผ่านผิดพลาด กรุณาลองใหม่อีกครั้ง!',
             }
         }
         isLoading = false
     }
 
-    const verify = async (provider: 'google' | 'verify', idToken?: string, accessToken?: string) => {
-        await fetch("/api/token/" + provider, {
-                method: "POST",
-                body: JSON.stringify({ idToken, accessToken }),
-            }).
-            then(async (res) => {
-                const token = await res.json() as JWT
-                if (token?.accessToken && token?.refreshToken) {
-                    setToken(token.accessToken, token.refreshToken)
-                    const { userType } = getUserType()
-                    window.location.href = redirect || (userType === 'adm' ? "/admin-portal" : "/")
-                    alert = {
-                        color: 'green',
-                        message: 'เข้าสู่ระบบสำเร็จ!',
-                    }
-                } else {
-                    alert = {
-                        color: 'red',
-                        message: 'ขออภัย ไม่พบบัญชีนี้ในระบบ โปรดลองใหม่อีกครั้ง!',
-                    }
-                    // delete new user with google provider that not exist in backend
+    const verify = async (idToken: string) => {
+        try {
+            const res = await verifyToken(idToken)
+            if (res.data) {
+                setToken(res.data.accessToken, res.data.refreshToken)
+                const { userType } = getUserType()
+                window.location.href = redirect || (userType === 'adm' ? "/admin-portal" : "/")
+                alert = {
+                    color: 'green',
+                    message: 'เข้าสู่ระบบสำเร็จ!',
                 }
-            }).
-            catch(err => {
+                return "success"
+            } else {
+                throw new Error(res as any)
+            }
+        } catch (error: any) {
+            if (error?.response?.status === HTTP.StatusNotFound) {
                 alert = {
                     color: 'red',
-                    message: 'ชื่อผู้ใช้หรือรหัสผ่านผิดพลาด โปรดลองใหม่อีกครั้ง!',
+                    message: 'ขออภัย ไม่พบบัญชีนี้ในระบบ กรุณาลองใหม่อีกครั้ง!',
                 }
-            })
+                return "not found"
+            }
+            alert = {
+                color: 'red',
+                message: 'ชื่อผู้ใช้หรือรหัสผ่านผิดพลาด กรุณาลองใหม่อีกครั้ง!',
+            }
+            return "error"
+        }
     }
 
     const signInWithGoogle = async () => {
+        const tempEmail = `${email}`
+        const tempPassword = `${password}`
         const user = await signInGoogle()
         if (user) {
             isLoading = true;
             email = user.email!
             password = '****************************************************'
-            await verify('verify', await user.getIdToken())
-            email = ''
-            password = ''
+            const res = await verify(await user.getIdToken())
+            if (res === 'not found') {
+                email = tempEmail
+                password = tempPassword
+                deleteUserFirebase(user)
+            }
             isLoading = false
         }
     }
@@ -152,7 +159,7 @@
             </Input>
         </Label>
 
-        <Button class="my-6 !bg-white !text-black !border !border-gray-300 drop-shadow-sm hover:!bg-gray-200 ease-in duration-200" on:click={signInWithGoogle}>
+        <Button disabled={isLoading} class="my-6 !bg-white !text-black !border !border-gray-300 drop-shadow-sm hover:!bg-gray-200 ease-in duration-200" on:click={signInWithGoogle}>
             <div class="flex items-center">
                 <img src="/images/google-icon.png" alt="" class="w-6 h-6">
                 <span class="ml-4">Sign in with Google</span>

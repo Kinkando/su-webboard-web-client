@@ -111,7 +111,7 @@
     <HomeSectionHeader {...sectionHeaders[1]} />
     <div class="flex w-full gap-x-2 mb-10">
         {#if home}
-            {#each home?.popularTopics?.slice(0, Math.min(home?.announcements.length, colAmount)) as popularTopic}
+            {#each home?.popularTopics?.slice(0, Math.min(home?.popularTopics.length, colAmount)) as popularTopic}
                 <PopularCard {popularTopic} />
             {/each}
         {:else}

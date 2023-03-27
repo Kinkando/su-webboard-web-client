@@ -1,7 +1,7 @@
 import { TokenType, type AccessJWT, type RefreshJWT } from "@models/auth";
 import jwtDecode from "jwt-decode"
 
-function getUser(): { userUUID: string, userType: string, isValid: boolean } {
+export function getUser(): { userUUID: string, userType: string, isValid: boolean } {
     let userUUID = "";
     let userType = "";
     let isValid = false;

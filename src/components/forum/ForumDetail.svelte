@@ -2,26 +2,33 @@
 	import ForumImage from "./ForumImage.svelte";
 	import ForumFooter from "./ForumFooter.svelte";
 	import CategoryBadge from "@components/badge/CategoryBadge.svelte";
+	import CommentList from "@components/comment/CommentList.svelte";
     import EllipsisMenu from "@components/shared/EllipsisMenu.svelte";
+	import type { Category } from "@models/category";
+	import type { Comment } from '@models/comment';
     import type { ForumDetail, ForumRequest } from "@models/forum";
 	import type { Attachment, FormSchema } from "@models/new-post";
-	import type { Category } from "@models/category";
+	import { upsertComment } from "@services/comment";
+	import { deleteForum, upsertForum } from "@services/forum";
 	import { defined } from "@util/generic";
 	import { getUserUUID } from "@util/localstorage";
-	import { deleteForum, upsertForum } from "@services/forum";
-	import { upsertComment } from "@services/comment";
-	import { createEventDispatcher } from "svelte";
+	import { timeRange } from "@util/datetime";
 
     export let forumDetail: ForumDetail;
     export let categories: Category[];
     export let replyForum = false;
     export let total = 0;
 
+    let orderBy: 'desc' | 'asc';
+    let newComment: (comment: Comment) => Promise<void>;
+
     // Edit modal
     let title: FormSchema = {value: forumDetail.title, label: `หัวข้อกระทู้`, placeholder: `กรุณาใส่หัวข้อกระทู้...`}
     let description: FormSchema = {value: forumDetail.description!, label: "รายละเอียด", placeholder: "กรุณาใส่รายละเอียด..."}
     let attachments: Attachment[] = [];
     let label = "แสดงความคิดเห็น"
+
+    $: isShowSortingComment = total > 0
 
     function initImages() {
         const images = forumDetail.forumImages
@@ -43,40 +50,41 @@
 
     let imageURLs = initImages()
 
-    const dispatch = createEventDispatcher()
-
     const editForumAction = async(titleEdit: string, descriptionEdit: string, categoriesEdit: Category[], attachmentsEdit: Attachment[], deleteImageUUIDs: string[]) => {
-        const files = attachmentsEdit.map(attachment => attachment.file)
-        const categoryIDs = categoriesEdit.filter(category => category.isActive).map(category => category.categoryID!)
-        const forum: ForumRequest = {
-            forumUUID: forumDetail.forumUUID,
-            title: titleEdit,
-            description: descriptionEdit,
-            categoryIDs,
-            forumImageUUIDs: deleteImageUUIDs,
-        }
-        const res = await upsertForum(forum, files)
-
-        // loading edit data
-        forumDetail.title = titleEdit;
-        forumDetail.description = descriptionEdit;
-        title.value = titleEdit;
-        description.value = descriptionEdit;
-        if (categories) {
-            categories.forEach((category, index) => category.isActive = categoriesEdit[index].isActive)
-        }
-        if (deleteImageUUIDs && forumDetail.forumImages) {
-            forumDetail.forumImages = forumDetail.forumImages.filter(image => !deleteImageUUIDs.includes(image.uuid))
-        }
-        if (res.data?.documents) {
-            if (forumDetail.forumImages) {
-                forumDetail.forumImages = [...forumDetail.forumImages, ...res.data.documents]
-            } else {
-                forumDetail.forumImages = [...res.data.documents]
+        const categoryIDs = categories.filter(category => category.isActive).map(category => category.categoryID!)
+        const categoryIDsEdit = categoriesEdit.filter(category => category.isActive).map(category => category.categoryID!)
+        if (forumDetail.title !== titleEdit || forumDetail.description !== descriptionEdit || attachments.length !== attachmentsEdit.length || deleteImageUUIDs.length !== 0 || categoryIDs.length !== categoryIDsEdit.length || categoryIDs.filter(categoryID => !categoryIDsEdit.includes(categoryID)).length > 0) {
+            const files = attachmentsEdit.map(attachment => attachment.file)
+            const forum: ForumRequest = {
+                forumUUID: forumDetail.forumUUID,
+                title: titleEdit,
+                description: descriptionEdit,
+                categoryIDs: categoryIDsEdit,
+                forumImageUUIDs: deleteImageUUIDs,
             }
+            const res = await upsertForum(forum, files)
+
+            // loading edit data
+            forumDetail.title = titleEdit;
+            forumDetail.description = descriptionEdit;
+            title.value = titleEdit;
+            description.value = descriptionEdit;
+            if (categories) {
+                categories.forEach((category, index) => category.isActive = categoriesEdit[index].isActive)
+            }
+            if (deleteImageUUIDs && forumDetail.forumImages) {
+                forumDetail.forumImages = forumDetail.forumImages.filter(image => !deleteImageUUIDs.includes(image.uuid))
+            }
+            if (res.data?.documents) {
+                if (forumDetail.forumImages) {
+                    forumDetail.forumImages = [...forumDetail.forumImages, ...res.data.documents]
+                } else {
+                    forumDetail.forumImages = [...res.data.documents]
+                }
+            }
+            forumDetail.categories = categories?.filter(category => category.isActive)!
+            imageURLs = initImages()
         }
-        forumDetail.categories = categories?.filter(category => category.isActive)!
-        imageURLs = initImages()
     }
 
     const deleteForumAction = async() => {
@@ -98,7 +106,7 @@
         if (res?.data) {
             comment.commentUUID = res.data.commentUUID
             comment.commentImages = res.data.documents
-            dispatch('comment', comment)
+            newComment(comment)
         }
     }
 
@@ -135,19 +143,24 @@
     {/if}
 
     <hr class="my-3 dark:border-gray-500">
-    <div class="font-medium">
+    <div class="font-medium min-h-[12rem]">
         {@html forumDetail.description.replaceAll('\n', '<br>')}
+        {#if imageURLs.length}
+            <ForumImage {imageURLs} />
+        {/if}
     </div>
 
-    {#if imageURLs?.length}
-        <ForumImage {imageURLs} />
+    {#if forumDetail.updatedAt}
+        <div class="mt-4 text-gray-500">แก้ไขล่าสุด: {timeRange(forumDetail.updatedAt)}</div>
     {/if}
 
     <ForumFooter
         type="forum"
         isLike={forumDetail.isLike}
         uuid={forumDetail.forumUUID}
-        username={forumDetail.authorName}
+        isAnonymous={forumDetail.isAnonymous}
+        userUUID={forumDetail.authorUUID}
+        userDisplayName={forumDetail.authorName}
         userImageURL={forumDetail.authorImageURL}
         likeCount={forumDetail.likeCount}
         commentCount={forumDetail.commentCount || total}
@@ -155,6 +168,10 @@
         replyText={label}
         createdAt={forumDetail.createdAt}
         bind:replyTrigger={replyForum}
+        bind:isSortingComment={isShowSortingComment}
+        bind:orderBy
         on:comment={event => commentForumAction(event.detail.comment, event.detail.attachments)}
     />
 </div>
+
+<CommentList bind:forumUUID={forumDetail.forumUUID} bind:newComment bind:totalComments={total} bind:orderBy />
