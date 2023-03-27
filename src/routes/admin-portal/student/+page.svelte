@@ -6,8 +6,9 @@
 	import Table from '@components/table/Table.svelte';
 	import { FormType, type Form } from '@models/form';
 	import type { ActionTable, DataTable } from "@models/table";
-	import { StatusGroup, type User } from "@models/user";
+	import type { User } from "@models/user";
 	import { getUsers, createUser, updateUser, deleteUsers, revokeUsers } from "@services/admin";
+	import { timeRange } from '@util/datetime';
 
     let isLoading = true;
     let searchText = "";
@@ -21,7 +22,6 @@
         "ชื่อที่แสดง",
         "ชื่อ-นามสกุล",
         "อีเมล",
-        "การเปิดเผยตัวตน",
         "เข้าสู่ระบบล่าสุด",
     ]
     const actions: ActionTable[] = [
@@ -72,8 +72,7 @@
                     student.userDisplayName!,
                     student.userFullName,
                     student.userEmail,
-                    student.isAnonymous ? "ไม่เปิดเผยตัวตน" : student.userDisplayName!,
-                    student.lastLogin ? new Date(student.lastLogin).toLocaleString('th', { year: 'numeric', month: 'narrow', day: '2-digit', hour12: false, hour: '2-digit', minute: '2-digit' }) : 'ยังไม่เคยเข้าสู่ระบบ'
+                    student.lastLogin ? timeRange(student.lastLogin) : 'ยังไม่เคยเข้าสู่ระบบ'
                 ],
             })
         })
@@ -130,12 +129,6 @@
                         placeholder: "กรุณาใส่อีเมล",
                         value: item.values[4],
                     },
-                    {
-                        type: "statusToggle",
-                        label: "การเปิดเผยตัวตน",
-                        placeholder: "กรุณาใส่การเปิดเผยตัวตน",
-                        value: item.values[5] === "ไม่เปิดเผยตัวตน" ? StatusGroup.anonymous : StatusGroup.nominate,
-                    },
                 ]
             }
 
@@ -180,7 +173,6 @@
                 userDisplayName: event.detail.schemas[1].value,
                 userFullName: event.detail.schemas[2].value,
                 userEmail: event.detail.schemas[3].value,
-                isAnonymous: event.detail.schemas[4].value === 'anonymous',
             }
             await updateUser(user)
         }

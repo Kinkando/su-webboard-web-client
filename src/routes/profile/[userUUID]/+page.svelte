@@ -14,6 +14,7 @@
 	import UserList from "@components/user/UserList.svelte";
 	import type { User } from "@models/user";
 	import { getUserProfile } from "@services/user";
+	import { defined } from "@util/generic";
 	import { getUser } from "@util/localstorage";
 
     let user: User;
@@ -24,8 +25,6 @@
         user = await getUserProfile(userUUID)
         isLoading = false
     })
-
-    const defined = (value: any) => value!
 </script>
 
 <div class="mb-4">
@@ -37,7 +36,7 @@
 
 {#if isLoading}
     {#if selfUUID === userUUID}
-        <SkeletonSelfUserProfileCard menuCount={userType === 'std' ? 5 : 4} />
+        <SkeletonSelfUserProfileCard menuCount={userType === 'std' ? 4 : 3} />
     {:else}
         <SkeletonOtherUserProfileCard />
     {/if}

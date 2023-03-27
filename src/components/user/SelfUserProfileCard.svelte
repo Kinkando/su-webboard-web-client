@@ -1,10 +1,9 @@
 <script lang="ts">
 	import userStore from '@stores/user';
-	import ToggleBadge from "@components/badge/ToggleBadge.svelte";
 	import { StatusGroup, type User } from "@models/user";
 	import { getUserType } from "@util/localstorage";
 	import type { Alert as AlertModel } from '@models/alert';
-	import { Label, Radio, Input, Button } from "flowbite-svelte";
+	import { Label, Input, Button } from "flowbite-svelte";
 	import { onMount } from "svelte";
 	import { updateUserProfile } from "@services/user";
 	import { changePassword } from '@services/firebase';
@@ -63,7 +62,6 @@
 
     onMount(async () => {
         draft = {...user}
-        statusGroup = user.isAnonymous ? StatusGroup.anonymous : StatusGroup.nominate
     })
 
     const updateProfile = async () => {
@@ -77,7 +75,6 @@
         // update local
         image = undefined;
         user.userDisplayName = draft.userDisplayName
-        user.isAnonymous = statusGroup === StatusGroup.anonymous
         user.userImageURL = draft.userImageURL;
         userStore.set(user)
         mode = 'view'
@@ -102,7 +99,6 @@
 
     const clear = () => {
         draft = {...user}
-        statusGroup = user.isAnonymous ? StatusGroup.anonymous : StatusGroup.nominate
         Object.keys(password).forEach(type => {
             password[type].value = "";
             password[type].isShowPassword = false;
@@ -171,24 +167,6 @@
                         {/if}
                     </Label>
                 {/each}
-
-                <Label for="isAnonymous" class="space-y-2">
-                    <span>สถานะ</span>
-                    {#if mode === 'update-profile'}
-                        <div class="flex gap-x-2.5">
-                            <Radio bind:group={statusGroup} value={StatusGroup.nominate} custom class="w-fit my-1.5">
-                                <ToggleBadge hexColor="primary" name="เปิดเผยตัวตน" isActive={statusGroup === StatusGroup.nominate} />
-                            </Radio>
-                            <Radio bind:group={statusGroup} value={StatusGroup.anonymous} custom class="w-fit my-1.5">
-                                <ToggleBadge hexColor="primary" name="ปกปิดตัวตน" isActive={statusGroup === StatusGroup.anonymous} />
-                            </Radio>
-                        </div>
-                    {:else}
-                        <div class="py-2.5 text-gray-400 dark:text-gray-600">
-                            {user.isAnonymous ? 'ปกปิดตัวตน' : 'เปิดเผยตัวตน'}
-                        </div>
-                    {/if}
-                </Label>
             {:else}
                 {#each Object.keys(password) as type}
                     <Label class="space-y-2">
