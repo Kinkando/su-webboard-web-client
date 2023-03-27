@@ -47,7 +47,7 @@
         {
             name: 'ปกปิดตัวตน',
             value: 'anonymous',
-            mod: 'ไม่ระบุตัวตน',
+            mod: 'ผู้ใช้นิรนาม',
         },
     ]
     let postMode = postModes[0].value;
