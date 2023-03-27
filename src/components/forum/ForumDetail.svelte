@@ -93,8 +93,10 @@
     }
 
     const deleteForumAction = async() => {
+        isLoading = true;
         await deleteForum(forumDetail?.forumUUID)
         window.location.href = '/'
+        isLoading = false;
     }
 
     const reportForumAction = async(reason: string) => {
