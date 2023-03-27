@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import { goto } from '$app/navigation';
     import CommentBadge from "@components/badge/CommentBadge.svelte";
 	import LikeBadge from "@components/badge/LikeBadge.svelte";
 	import CommentReply from "@components/comment/CommentReply.svelte";
@@ -50,12 +49,6 @@
 
     $: time = (() => timeRange(createdAt))()
 
-    function toUserPage() {
-        if (!isAnonymous) {
-            goto(`/profile/${userUUID}`)
-        }
-    }
-
     $: if (orderBy) {
         open = false
     }
@@ -77,17 +70,28 @@
 <hr class="mt-6 mb-3 dark:border-gray-500">
 <div class="flex justify-between items-center">
     <div class="flex items-center overflow-hidden">
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <img on:click={toUserPage} src={userImageURL} alt="" class="ease-in duration-200 min-w-[4rem] max-w-[4rem] min-h-[4rem] max-h-[4rem] rounded-full {!isAnonymous ? 'cursor-pointer hover:brightness-75' : ''}">
+        {#if !isAnonymous}
+            <a href="/profile/{userUUID}">
+                <img src={userImageURL} alt="" class="ease-in duration-200 min-w-[4rem] max-w-[4rem] min-h-[4rem] max-h-[4rem] rounded-full cursor-pointer hover:brightness-75">
+            </a>
+        {:else}
+            <img src={userImageURL} alt="" class="ease-in duration-200 min-w-[4rem] max-w-[4rem] min-h-[4rem] max-h-[4rem] rounded-full">
+        {/if}
         <div class="ml-3 space-y-1 overflow-hidden mr-4">
-            <div class="font-bold overflow-hidden text-ellipsis whitespace-nowrap">{userDisplayName}</div>
+            {#if !isAnonymous}
+                <a href="/profile/{userUUID}" class="overflow-hidden">
+                    <div class="font-bold overflow-hidden text-ellipsis whitespace-nowrap hover:underline">{userDisplayName}</div>
+                </a>
+            {:else}
+                <div class="font-bold overflow-hidden text-ellipsis whitespace-nowrap">{userDisplayName}</div>
+            {/if}
             <div class="font-light text-sm overflow-hidden text-ellipsis whitespace-nowrap">{time}</div>
         </div>
     </div>
     {#if commentCount !== undefined}
         <div class="flex flex-col space-y-2 items-end">
             <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <div class="no-select underline text-[var(--primary-color)] dark:text-[var(--primary-color-75)] cursor-pointer break-words" on:click={() => openReplyModal = true}>{replyText}</div>
+            <div class="select-none underline text-[var(--primary-color)] dark:text-[var(--primary-color-75)] cursor-pointer break-words" on:click={() => openReplyModal = true}>{replyText}</div>
             {#if isSortingComment}
                 <Button size="lg" color="alternative" class="md:w-fit w-full whitespace-nowrap focus:!border-transparent focus:!ring-0 !bg-transparent !outline-transparent !border-transparent !p-0 !text-[var(--primary-color)] dark:!text-[var(--primary-color-75)]">
                     <Chevron><div class="whitespace-nowrap">{ orderBy === 'asc' ? 'เรียงตามลำดับ' : 'ใหม่ล่าสุด' }</div></Chevron>

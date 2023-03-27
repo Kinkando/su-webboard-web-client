@@ -13,7 +13,9 @@
             </a>
 
             <div class="flex flex-col overflow-hidden">
-                <span class="text-md overflow-hidden text-ellipsis whitespace-nowrap">{announcement?.authorName}</span>
+                <a href="/profile/{announcement.authorUUID}" class="overflow-hidden">
+                    <span class="text-md overflow-hidden text-ellipsis whitespace-nowrap hover:underline">{announcement?.authorName}</span>
+                </a>
                 <span class="text-xs overflow-hidden text-ellipsis whitespace-nowrap">{timeRange(announcement.createdAt)}</span>
                 <!-- <TimeBadge text="2 ชั่วโมง" /> -->
             </div>

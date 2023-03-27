@@ -57,7 +57,7 @@
         </div>
     </footer>
 
-    <div class="no-select flex flex-wrap sm:gap-4 gap-2 {attachments.length ? 'mt-4' : ''}">
+    <div class="select-none flex flex-wrap sm:gap-4 gap-2 {attachments.length ? 'mt-4' : ''}">
         {#each attachments as attachment, index}
             <div class="relative overflow-hidden rounded-md  aspect-square">
                 <!-- svelte-ignore a11y-click-events-have-key-events -->

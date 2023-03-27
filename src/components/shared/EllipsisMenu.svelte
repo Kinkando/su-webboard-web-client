@@ -116,7 +116,7 @@
     </svg>
 </div>
 
-<Popover class="no-select text-sm w-fit transition-colors ease-in duration-200 py-2 shadow-none" defaultClass="p-0 w-fit" transition={slide} params={{duration: 200}} placement="bottom" trigger="click" triggeredBy="#ellipsis-menu-{ellipsisMenuID}">
+<Popover class="select-none text-sm w-fit transition-colors ease-in duration-200 py-2 shadow-none" defaultClass="p-0 w-fit" transition={slide} params={{duration: 200}} placement="bottom" trigger="click" triggeredBy="#ellipsis-menu-{ellipsisMenuID}">
     {#if editable}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div class="flex items-center gap-x-3 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 px-3 py-2" on:click={() => setOpenEditModal(true)}>

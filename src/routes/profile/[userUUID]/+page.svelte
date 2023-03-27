@@ -52,7 +52,7 @@
     {/if}
 
     <div class="m-auto max-w-4xl mt-4 overflow-hidden">
-        <Tabs style="underline" defaultClass="flex space-x-2 overflow-x-scroll whitespace-nowrap swipe no-select hide-scrollbar" contentClass="ease-in duration-200 p-4 bg-gray-50 rounded-lg dark:bg-gray-900 mt-4">
+        <Tabs style="underline" defaultClass="flex space-x-2 overflow-x-scroll whitespace-nowrap swipe select-none hide-scrollbar" contentClass="ease-in duration-200 p-4 bg-gray-50 rounded-lg dark:bg-gray-900 mt-4">
             <TabItem open title="กระทู้ที่ตั้ง">
                 <ForumPagination userUUID={defined(user.userUUID)} query="userUUID" />
             </TabItem>

@@ -32,7 +32,7 @@
         <footer class="flex items-center gap-x-3">
             {#if !popularTopic.isAnonymous}
                 <a href="/profile/{popularTopic.authorUUID}">
-                    <img src="{popularTopic?.authorImageURL}" alt="" class="ease-in duration-200 min-w-[3rem] max-w-[3rem] min-h-[3rem] max-h-[3rem] rounded-full {!popularTopic?.isAnonymous ? 'cursor-pointer hover:brightness-125' : ''}">
+                    <img src="{popularTopic?.authorImageURL}" alt="" class="ease-in duration-200 min-w-[3rem] max-w-[3rem] min-h-[3rem] max-h-[3rem] rounded-full hover:brightness-125">
                 </a>
             {:else}
                 <img src="{popularTopic?.authorImageURL}" alt="" class="min-w-[3rem] max-w-[3rem] min-h-[3rem] max-h-[3rem] rounded-full">
@@ -41,15 +41,26 @@
             <div class="flex flex-col overflow-hidden w-full">
                 {#if popularTopic?.likeCount != undefined}
                     <div class="flex items-center justify-between">
-                        <div class="w-full mr-2 text-md overflow-hidden text-ellipsis whitespace-nowrap">{popularTopic?.authorName}</div>
-                        <LikeBadge likeCount={popularTopic?.likeCount} />
+                        {#if !popularTopic.isAnonymous}
+                            <a href="/profile/{popularTopic.authorUUID}" class="overflow-hidden">
+                                <div class="w-full mr-2 text-md overflow-hidden text-ellipsis whitespace-nowrap hover:underline">{popularTopic?.authorName}</div>
+                            </a>
+                        {:else}
+                            <div class="w-full mr-2 text-md overflow-hidden text-ellipsis whitespace-nowrap">{popularTopic?.authorName}</div>
+                        {/if}
+
+                        <div class="ml-auto flex items-center justify-between">
+                            <LikeBadge likeCount={popularTopic?.likeCount} />
+                        </div>
                     </div>
                 {/if}
 
                 {#if popularTopic?.commentCount != undefined}
                     <div class="flex items-center justify-between">
                         <div class="w-full mr-2 text-xs overflow-hidden text-ellipsis whitespace-nowrap">{timeRange(popularTopic.createdAt)}</div>
-                        <CommentBadge commentCount={popularTopic?.commentCount} />
+                        <div class="ml-auto flex items-center justify-between">
+                            <CommentBadge commentCount={popularTopic?.commentCount} />
+                        </div>
                     </div>
                 {/if}
             </div>
