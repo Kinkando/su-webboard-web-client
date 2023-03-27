@@ -57,6 +57,7 @@
 
 <div class="ease-in duration-200 bg-white dark:bg-gray-900 w-full rounded-md shadow-lg p-4 sm:p-6">
     <NewPost
+        anonymousePost
         bind:isAnonymous
         bind:user
         bind:title

@@ -55,17 +55,22 @@
     <div class="m-auto max-w-4xl mt-4 overflow-hidden">
         <Tabs style="underline" defaultClass="flex space-x-2 overflow-x-scroll whitespace-nowrap swipe no-select hide-scrollbar" contentClass="ease-in duration-200 p-4 bg-gray-50 rounded-lg dark:bg-gray-900 mt-4">
             <TabItem open title="กระทู้ที่ตั้ง">
-                <ForumPagination userUUID={defined(user.userUUID)} />
+                <ForumPagination userUUID={defined(user.userUUID)} query="userUUID" />
             </TabItem>
+            {#if selfUUID === userUUID}
+                <TabItem title="รายการโปรด">
+                    <ForumPagination userUUID={defined(user.userUUID)} query="favoriteUserUUID" />
+                </TabItem>
+            {/if}
             {#if user.userType === 'tch'}
                 <TabItem title="ประกาศที่สร้าง">
                     <AnnouncementPagination userUUID={defined(user.userUUID)} />
                 </TabItem>
             {/if}
-            <TabItem title="ผู้ติดตาม {user.followerUserUUIDs?.length || 0}">
+            <TabItem title="ผู้ติดตาม {user.followerUserUUIDs?.length || 0} คน">
                 <UserList userUUID={defined(user.userUUID)} type='follower' />
             </TabItem>
-            <TabItem title="กำลังติดตาม {user.followingUserUUIDs?.length || 0}">
+            <TabItem title="กำลังติดตาม {user.followingUserUUIDs?.length || 0} คน">
                 <UserList userUUID={defined(user.userUUID)} type='following' />
             </TabItem>
             {#if selfUUID === userUUID}

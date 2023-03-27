@@ -15,7 +15,8 @@
     export let submit: () => void = async() => {};
     export let deleteImageUUIDs: string[] = [];
     export let user: User | undefined = undefined;
-    export let isAnonymous: boolean | undefined = undefined;
+    export let anonymousePost = false;
+    export let isAnonymous = false;
 
     let fileInput: HTMLInputElement;
     let files: FileList;
@@ -131,7 +132,7 @@
     {/each}
 </div>
 
-{#if isAnonymous !== undefined}
+{#if anonymousePost}
     <Label for="isAnonymous">
         <div>การแสดงชื่อผู้สร้างกระทู้</div>
         {#each postModes as mode}

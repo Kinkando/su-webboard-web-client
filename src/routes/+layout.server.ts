@@ -50,8 +50,8 @@ export const load: LayoutServerLoad = async ({ cookies, route }) => {
 // - set sorting comment (default comment #1-#10), can set by latest comment first
 // - ปักหมุด topbar ให้ไม่หุบเมื่อเลื่อนลง
 
-// เพิ่ม option sort by ในหน้า search/category/popular list page
-// ADD SORTING OPTION OF SEARCH, FORUM LIST PAGE
+// Favorite Forum
+// เพิ่ม option sort by ในหน้า search/category list page
 // เพิ่มสามารถ โพสต์ หรือ คอมเมนต์ เฉพาะรูปภาพอย่างเดียวได้ โดยไม่ต้องมีข้อความใดๆ (ลบเงื่อนไขเช็ค text.length) แต่ต้องเช็คเพิ่มว่า ถ้าแก้ไขคอมเมนต์/โพสต์ โดยที่ลบข้อความและรูปภาพทั้งหมด ต้องเด้ง dialog เตือนว่าต้องการลบแทน ใช่หรือไม่
 
 // เพิ่มหน้า Sign Up สำหรับนักศึกษา โดยสามารถ sign up ได้ผ่านเมลมหาวิทยาลัยเท่านั้น และหลังจาก verify จะให้กรอก

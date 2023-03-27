@@ -5,16 +5,18 @@
 	import type { Comment } from "@models/comment";
 	import type { Attachment } from "@models/new-post";
     import type { Document } from "@models/forum";
-	import { deleteComment, upsertComment } from "@services/comment";
+	import { deleteComment, getComment, upsertComment } from "@services/comment";
 	import { getUserUUID } from "@util/localstorage";
 	import { createEventDispatcher } from "svelte";
 	import { timeRange } from "@util/datetime";
+	import LoadingSpinner from "@components/spinner/LoadingSpinner.svelte";
 
     export let label: string;
     export let comment: Comment;
     export let forumUUID: string;
     export let replyCommentUUID: string = "";
 
+    let isLoading = false;
     let attachments: Attachment[] = [];
     $: comment.commentImages !== undefined && initImages();
     const initImages = () => {
@@ -39,6 +41,8 @@
             return;
         }
 
+        isLoading = true;
+
         comment.commentText = commentEdit;
         const files = attachmentsEdit.map(attachment => attachment.file)
         const res = await upsertComment(forumUUID, comment, files, deleteImageUUIDs, replyCommentUUID || undefined)
@@ -56,6 +60,8 @@
                 comment.commentImages = [...res.data.documents]
             }
         }
+
+        isLoading = false;
     }
 
     const reportCommentAction = async(reason: string) => {
@@ -63,25 +69,36 @@
     }
 
     const deleteCommentAction = async() => {
+        isLoading = true;
+
         await deleteComment(comment.commentUUID)
-        dispatch('delete', { comment })
+        dispatch('delete')
+
+        isLoading = false;
     }
 
     const createCommentAction = async(commentCreate: string, attachments: Attachment[]) => {
+        isLoading = true;
+
         const files = attachments.map(attachment => attachment.file)
-        const res = await upsertComment(forumUUID, { commentText: commentCreate } as any, files, undefined, comment.commentUUID)
-        if (res?.data) {
-            dispatch('create', {
-                comment: {
-                    commentUUID: res?.data.commentUUID,
-                    commentText: commentCreate,
-                }
-            })
+        const createCommentReq = await upsertComment(forumUUID, { commentText: commentCreate } as any, files, undefined, comment.commentUUID)
+        if (createCommentReq?.data) {
+            const res = await getComment(forumUUID, createCommentReq.data.commentUUID)
+            if (res) {
+                res.isLike = false;
+                res.likeCount = 0;
+                delete res.replyComments
+                dispatch('create', { comment: res })
+            }
         }
+
+        isLoading = false;
     }
 
     $: userUUID = getUserUUID()
 </script>
+
+<LoadingSpinner bind:isLoading />
 
 <div class="rounded-lg shadow-md w-full h-full p-4 sm:p-6 overflow-hidden bg-white text-black dark:bg-gray-700 dark:text-white ease-in duration-200">
     <div class="flex items-center mb-2">
