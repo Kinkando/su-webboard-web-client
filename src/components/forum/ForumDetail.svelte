@@ -2,26 +2,32 @@
 	import ForumImage from "./ForumImage.svelte";
 	import ForumFooter from "./ForumFooter.svelte";
 	import CategoryBadge from "@components/badge/CategoryBadge.svelte";
+	import CommentList from "@components/comment/CommentList.svelte";
     import EllipsisMenu from "@components/shared/EllipsisMenu.svelte";
+	import type { Category } from "@models/category";
+	import type { Comment } from '@models/comment';
     import type { ForumDetail, ForumRequest } from "@models/forum";
 	import type { Attachment, FormSchema } from "@models/new-post";
-	import type { Category } from "@models/category";
+	import { upsertComment } from "@services/comment";
+	import { deleteForum, upsertForum } from "@services/forum";
 	import { defined } from "@util/generic";
 	import { getUserUUID } from "@util/localstorage";
-	import { deleteForum, upsertForum } from "@services/forum";
-	import { upsertComment } from "@services/comment";
-	import { createEventDispatcher } from "svelte";
 
     export let forumDetail: ForumDetail;
     export let categories: Category[];
     export let replyForum = false;
     export let total = 0;
 
+    let orderBy: 'desc' | 'asc';
+    let newComment: (comment: Comment) => Promise<void>;
+
     // Edit modal
     let title: FormSchema = {value: forumDetail.title, label: `หัวข้อกระทู้`, placeholder: `กรุณาใส่หัวข้อกระทู้...`}
     let description: FormSchema = {value: forumDetail.description!, label: "รายละเอียด", placeholder: "กรุณาใส่รายละเอียด..."}
     let attachments: Attachment[] = [];
     let label = "แสดงความคิดเห็น"
+
+    $: isShowSortingComment = total > 0
 
     function initImages() {
         const images = forumDetail.forumImages
@@ -42,8 +48,6 @@
     }
 
     let imageURLs = initImages()
-
-    const dispatch = createEventDispatcher()
 
     const editForumAction = async(titleEdit: string, descriptionEdit: string, categoriesEdit: Category[], attachmentsEdit: Attachment[], deleteImageUUIDs: string[]) => {
         const files = attachmentsEdit.map(attachment => attachment.file)
@@ -98,7 +102,7 @@
         if (res?.data) {
             comment.commentUUID = res.data.commentUUID
             comment.commentImages = res.data.documents
-            dispatch('comment', comment)
+            newComment(comment)
         }
     }
 
@@ -157,6 +161,10 @@
         replyText={label}
         createdAt={forumDetail.createdAt}
         bind:replyTrigger={replyForum}
+        bind:isSortingComment={isShowSortingComment}
+        bind:orderBy
         on:comment={event => commentForumAction(event.detail.comment, event.detail.attachments)}
     />
 </div>
+
+<CommentList bind:forumUUID={forumDetail.forumUUID} bind:newComment bind:totalComments={total} bind:orderBy />
