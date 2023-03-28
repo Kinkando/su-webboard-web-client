@@ -19,7 +19,7 @@
 
     $: if($userStore) { user = $userStore }
     $: if($notificationStore) { notification = $notificationStore }
-    let searchText = $page.url.searchParams.get('keyword') || ''
+    let searchText = $page.url.searchParams.get('keyword')?.trim() || ''
 
     const defaultImageURL = "https://cdn-icons-png.flaticon.com/512/149/149071.png"
 

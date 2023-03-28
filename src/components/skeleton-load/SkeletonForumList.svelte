@@ -7,7 +7,7 @@
     export let favorite = false;
 </script>
 
-{#each Array(count) as _}
+{#each Array(count>0 ? count : 10) as _}
     <div class="mb-4">
         <SkeletonForumCard {ranking} {announcement} {favorite} />
     </div>
