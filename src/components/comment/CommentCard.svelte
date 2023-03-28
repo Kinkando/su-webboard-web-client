@@ -14,6 +14,7 @@
     export let label: string;
     export let comment: Comment;
     export let forumUUID: string;
+    export let authorUUID: string;
     export let replyCommentUUID: string = "";
 
     let isLoading = false;
@@ -112,7 +113,7 @@
             {attachments}
             editable={comment.commenterUUID === userUUID}
             reportable={comment.commenterUUID !== userUUID}
-            removable={comment.commenterUUID === userUUID}
+            removable={comment.commenterUUID === userUUID || authorUUID === userUUID}
             on:edit={(event) => editCommentAction(event.detail.comment, event.detail.attachments, event.detail.deleteImageUUIDs)}
             on:report={(event) => reportCommentAction(event.detail.reportText)}
             on:delete={() => deleteCommentAction()}
