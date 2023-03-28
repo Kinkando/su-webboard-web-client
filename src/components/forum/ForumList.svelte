@@ -11,11 +11,12 @@
     export let search = "";
     export let page: number;
     export let limit = 10;
+    export let sortBy = "";
     export let ranking = false;
     export let favorite = false;
     export let fetchData: () => Promise<{ data: Forum[], total: number }>;
 
-    $: (page || limit || search) && changePage()
+    $: (page || limit || search || sortBy) && changePage()
     const changePage = async() => {
         isLoading = true;
         const res = await fetchData();

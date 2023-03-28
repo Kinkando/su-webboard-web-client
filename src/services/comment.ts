@@ -1,3 +1,4 @@
+import type { Order } from "@commons/order";
 import type { Comment } from "@models/comment";
 import type { Document } from "@models/forum";
 import api from "@util/api";
@@ -12,7 +13,7 @@ export async function getComment(forumUUID: string, commentUUID: string) {
     return res.data
 }
 
-export async function getComments(forumUUID: string, offset: number, limit: number, orderBy: 'asc' | 'desc') {
+export async function getComments(forumUUID: string, offset: number, limit: number, orderBy: Order) {
     const res = await api<{ total: number, data: Comment[]}>({
         url: `${baseURL}/comment/${forumUUID}?limit${limit}&offset=${offset}&sortBy=createdAt@${orderBy}`,
         method: "GET",

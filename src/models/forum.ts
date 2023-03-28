@@ -43,13 +43,6 @@ export interface ForumDetail {
     isFavorite?: boolean
 }
 
-export interface ForumFilter {
-    category?: Category
-    orderBy?: string // likeCount, commentCount
-    filterBy?: string // author or topic title
-    searchText?: string
-}
-
 export interface ForumReport {
     reportUUID: string
     reporterUUID: string

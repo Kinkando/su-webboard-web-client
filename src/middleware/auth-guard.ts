@@ -1,5 +1,5 @@
 import { UserType } from "@models/auth"
-import { Auth } from "@models/common"
+import { Auth } from "@commons/state"
 
 export function authGuard(routeID: string, userType: string, isValidToken: boolean): string {
     const commonRoutes = ["/login", "/forgot-password"]
