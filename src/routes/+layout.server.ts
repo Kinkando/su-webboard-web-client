@@ -50,7 +50,8 @@ export const load: LayoutServerLoad = async ({ cookies, route }) => {
 // - set sorting comment (default comment #1-#10), can set by latest comment first
 // - ปักหมุด topbar ให้ไม่หุบเมื่อเลื่อนลง
 
-// แก้ไขหน้า home ให้ API Calculate โพสต์ล่าสุดกับจำนวนโพสต์ใน category นั้นๆ ให้ถูกต้อง (ปัจจุบัน mock ไว้ที่โค้ดหลังบ้าน)
+// แก้ calculate ranking ให้จำนวนการกด like เท่ากัน ให้อยู่อันดับเดียวกันได้
+// แก้ไอคอน ranking เพิ่ม trophy ของอันดับ 1-3
 
 // เพิ่มหน้า Sign Up สำหรับนักศึกษา โดยสามารถ sign up ได้ผ่านเมลมหาวิทยาลัยเท่านั้น และหลังจาก verify จะให้กรอก
 // - รหัสนักศึกษา (โดยมี warning ว่า ไม่สามารถเปลี่ยนได้ด้วยตนเองในภายหลัง และต้องมีการ validate format เพิ่ม)

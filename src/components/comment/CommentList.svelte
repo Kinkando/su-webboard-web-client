@@ -7,6 +7,7 @@
 	import { Button } from "flowbite-svelte";
 	import { Order } from "@commons/order";
 
+    export let authorUUID: string;
     export let orderBy: Order;
     export let totalComments = 0;
     export let forumUUID: string;
@@ -110,6 +111,7 @@
 {#each comments as comment, commentIndex}
     <div class="mt-4">
         <CommentCard
+            {authorUUID}
             {forumUUID}
             bind:comment
             label="ความคิดเห็นที่ {commentNo(commentIndex)}"
@@ -120,6 +122,7 @@
                 {#each comment.replyComments.slice(0, comment.replyCursor) as replyComment, replyCommentIndex}
                     <div class="mt-4 ml-8">
                         <CommentCard
+                            {authorUUID}
                             replyCommentUUID={comment.commentUUID}
                             {forumUUID}
                             bind:comment={replyComment}

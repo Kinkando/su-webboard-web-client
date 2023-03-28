@@ -195,4 +195,4 @@
     />
 </div>
 
-<CommentList bind:forumUUID={forumDetail.forumUUID} bind:newComment bind:totalComments={total} bind:orderBy />
+<CommentList bind:authorUUID={forumDetail.authorUUID} bind:forumUUID={forumDetail.forumUUID} bind:newComment bind:totalComments={total} bind:orderBy />
