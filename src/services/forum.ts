@@ -1,4 +1,5 @@
-import type { Forum, ForumDetail, ForumFilter, ForumRequest, Document } from "@models/forum";
+import { Field, Order } from "@commons/order";
+import type { Forum, ForumDetail, ForumRequest, Document } from "@models/forum";
 import type { Home } from "@models/home";
 import type { Cookies } from "@sveltejs/kit";
 import api from "@util/api";
@@ -56,29 +57,29 @@ export async function favoriteForum(forumUUID: string, isFavorite: boolean) {
 }
 
 export async function getForumListByCategoryID(categoryID: number, offset: number, limit: number) {
-    return _getForumList(offset, limit, 'createdAt@DESC', { categoryID })
+    return _getForumList(offset, limit, `${Field.CreatedAt}@${Order.DESC}`, { categoryID })
 }
 
 export async function getForumListByPopular(offset: number, limit: number) {
-    return _getForumList(offset, limit, 'ranking@ASC')
+    return _getForumList(offset, limit, `${Field.Ranking}@${Order.DESC}`)
 }
 
 export async function getForumListByUserUUID(offset: number, limit: number, userUUID: string) {
-    return _getForumList(offset, limit, 'createdAt@DESC', { userUUID })
+    return _getForumList(offset, limit, `${Field.CreatedAt}@${Order.DESC}`, { userUUID })
 }
 
 export async function getForumListByFavoriteUserUUID(offset: number, limit: number, favoriteUserUUID: string) {
-    return _getForumList(offset, limit, 'createdAt@DESC', { favoriteUserUUID })
+    return _getForumList(offset, limit, `${Field.CreatedAt}@${Order.DESC}`, { favoriteUserUUID })
 }
 
-export async function searchForum(filter: ForumFilter, offset: number, limit: number) {
-    return _getForumList(offset, limit, 'createdAt@DESC', { search: filter.searchText })
+export async function searchForum(search: string, sortBy: string, offset: number, limit: number) {
+    return _getForumList(offset, limit, sortBy, { search })
 }
 
 async function _getForumList(offset: number, limit: number, sortBy: string, query?: { categoryID?: number, search?: string, userUUID?: string, favoriteUserUUID?: string }) {
     const queryString = `${query?.categoryID ? `&categoryID=${query.categoryID}` : ''}${query?.search ? `&search=${query.search}` : ''}${query?.userUUID ? `&userUUID=${query.userUUID}` : ''}${query?.favoriteUserUUID ? `&favoriteUserUUID=${query.favoriteUserUUID}` : ''}`
     const res = await api<{ total: number, data: Forum[] }>({
-        url: `${baseURL}/forum?limit${limit}&offset=${offset}&sortBy=${sortBy}${queryString}`,
+        url: `${baseURL}/forum?limit=${limit}&offset=${offset}&sortBy=${sortBy}${queryString}`,
         method: "GET",
     })
     return res.data || { total: 0, data: [] as Forum[] }

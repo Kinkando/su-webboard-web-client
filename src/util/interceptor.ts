@@ -5,7 +5,7 @@ import { TokenType } from '@models/auth';
 import { refreshToken as refreshJWT, revokeToken } from '@services/authen';
 import * as LocalStorage from './localstorage';
 import * as Cookies from './cookies';
-import { Auth } from '@models/common';
+import { Auth } from '@commons/state';
 
 const instance = axios.create({
 	timeout: 30000,

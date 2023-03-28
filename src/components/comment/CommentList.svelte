@@ -5,12 +5,13 @@
 	import type { Comment } from "@models/comment";
 	import { getComment, getComments } from "@services/comment";
 	import { Button } from "flowbite-svelte";
+	import { Order } from "@commons/order";
 
-    export let orderBy: 'desc' | 'asc';
+    export let orderBy: Order;
     export let totalComments = 0;
     export let forumUUID: string;
     export const newComment = async (cm: Comment) => {
-        if (totalComments !== comments.length && orderBy === 'asc') {
+        if (totalComments !== comments.length && orderBy === Order.ASC) {
             return;
         }
         const res = await getComment(forumUUID, cm.commentUUID)
@@ -20,7 +21,7 @@
             res.replyCursor = 0;
             res.replyComments = [];
             if (!comments.find(comment => comment.commentUUID === res.commentUUID)) {
-                comments = orderBy === 'asc' ? [...comments, res] : [res, ...comments]
+                comments = orderBy === Order.ASC ? [...comments, res] : [res, ...comments]
                 totalComments++;
             }
         }
@@ -55,7 +56,7 @@
             const tempComments: Comment[] = []
             response.data.forEach(comment => {
                 if (!comments.find(c => c.commentUUID === comment.commentUUID)) {
-                    if (comment.replyComments && orderBy === 'desc') {
+                    if (comment.replyComments && orderBy === Order.DESC) {
                         comment.replyComments = comment.replyComments.reverse()
                     }
                     tempComments.push(comment)
@@ -96,14 +97,14 @@
             comments[commentIndex].replyCursor!++;
         }
         if (comments[commentIndex].replyComments) {
-            comments[commentIndex].replyComments = orderBy === 'asc' ? [...comments[commentIndex].replyComments!, newComment] : [newComment, ...comments[commentIndex].replyComments!]
+            comments[commentIndex].replyComments = orderBy === Order.ASC ? [...comments[commentIndex].replyComments!, newComment] : [newComment, ...comments[commentIndex].replyComments!]
         } else {
             comments[commentIndex].replyComments = [newComment]
         }
     }
 
-    $: commentNo = (no: number): number => orderBy === 'desc' ? (totalComments - no) : (no+1)
-    const replyCommentNo = (no: number, totalReplyComments: number): number => orderBy === 'desc' ? (totalReplyComments - no) : (no+1)
+    $: commentNo = (no: number): number => orderBy === Order.DESC ? (totalComments - no) : (no+1)
+    const replyCommentNo = (no: number, totalReplyComments: number): number => orderBy === Order.DESC ? (totalReplyComments - no) : (no+1)
 </script>
 
 {#each comments as comment, commentIndex}

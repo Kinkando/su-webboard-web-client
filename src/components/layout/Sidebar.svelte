@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { fade, fly } from 'svelte/transition';
     import { page } from '$app/stores';
-	import { Auth } from '@models/common';
+	import { Auth } from '@commons/state';
 	import { revokeToken as revokeTokenSrv } from '@services/authen';
 	import { getToken, revokeToken } from '@util/localstorage';
 

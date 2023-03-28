@@ -9,7 +9,8 @@
 	import userStore from '@stores/user';
 	import notificationStore from '@stores/notification';
 	import { getToken, revokeToken } from '@util/localstorage';
-	import { Auth } from '@models/common';
+	import { Auth } from '@commons/state';
+	import { page } from '$app/stores';
 
     export let userType: string
 
@@ -18,9 +19,9 @@
 
     $: if($userStore) { user = $userStore }
     $: if($notificationStore) { notification = $notificationStore }
+    let searchText = $page.url.searchParams.get('keyword') || ''
 
     const defaultImageURL = "https://cdn-icons-png.flaticon.com/512/149/149071.png"
-    let searchText = "";
 
     const signout = async () => {
         const token = getToken()

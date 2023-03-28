@@ -8,6 +8,7 @@
 	import { timeRange } from '@util/datetime';
 	import { Button, Chevron, Dropdown, Helper, Radio } from 'flowbite-svelte';
 	import { slide } from 'svelte/transition';
+	import { Order } from '@commons/order';
 
     export let type: 'forum' | 'comment'
     export let uuid: string;
@@ -23,13 +24,13 @@
     export let replyText = "ตอบกลับ";
     export let replyTrigger = false;
     export let createdAt: Date;
-    export let orderBy: 'desc' | 'asc' = 'asc';
+    export let orderBy: Order = Order.ASC;
 
     let open = false;
     let comment = "";
     let attachments: Attachment[] = [];
     let openReplyModal = false;
-	const dispatch = createEventDispatcher<{[eventName: string]: {comment: string, attachments: Attachment[]} | { orderBy: 'desc' | 'asc' }}>();
+	const dispatch = createEventDispatcher<{[eventName: string]: {comment: string, attachments: Attachment[]} | { orderBy: Order.DESC | Order.ASC }}>();
     const commentPost = () => {
         dispatch("comment", { comment, attachments })
         openReplyModal = false
@@ -94,11 +95,11 @@
             <div class="select-none underline text-[var(--primary-color)] dark:text-[var(--primary-color-75)] cursor-pointer break-words" on:click={() => openReplyModal = true}>{replyText}</div>
             {#if isSortingComment}
                 <Button size="lg" color="alternative" class="md:w-fit w-full whitespace-nowrap focus:!border-transparent focus:!ring-0 !bg-transparent !outline-transparent !border-transparent !p-0 !text-[var(--primary-color)] dark:!text-[var(--primary-color-75)]">
-                    <Chevron><div class="whitespace-nowrap">{ orderBy === 'asc' ? 'เรียงตามลำดับ' : 'ใหม่ล่าสุด' }</div></Chevron>
+                    <Chevron><div class="whitespace-nowrap">{ orderBy === Order.ASC ? 'เรียงตามลำดับ' : 'ใหม่ล่าสุด' }</div></Chevron>
                 </Button>
                 <Dropdown class="py-2 rounded-md bg-gray-50 dark:bg-gray-900" transition={slide} bind:open>
                     <li class="p-2 hover:bg-gray-100 dark:hover:bg-gray-600">
-                        <Radio name="group3" bind:group={orderBy} value={'asc'} class="flex flex-start cursor-pointer">
+                        <Radio name="group3" bind:group={orderBy} value={Order.ASC} class="flex flex-start cursor-pointer">
                             <div class="flex flex-col">
                                 <div>เรียงตามลำดับ</div>
                                 <Helper>แสดงความคิดเห็นตามลำดับที่สร้างก่อนขึ้นก่อน</Helper>
@@ -106,7 +107,7 @@
                         </Radio>
                     </li>
                     <li class="p-2 hover:bg-gray-100 dark:hover:bg-gray-600">
-                        <Radio name="group3" bind:group={orderBy} value={'desc'} class="flex flex-start cursor-pointer">
+                        <Radio name="group3" bind:group={orderBy} value={Order.DESC} class="flex flex-start cursor-pointer">
                             <div class="flex flex-col">
                                 <div>ใหม่ล่าสุด</div>
                                 <Helper>แสดงความคิดเห็นใหม่ล่าสุดขึ้นก่อน</Helper>

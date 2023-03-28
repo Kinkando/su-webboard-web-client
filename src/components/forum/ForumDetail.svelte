@@ -14,6 +14,7 @@
 	import { getUserUUID } from "@util/localstorage";
 	import { timeRange } from "@util/datetime";
 	import LoadingSpinner from "@components/spinner/LoadingSpinner.svelte";
+	import type { Order } from "@commons/order";
 
     export let forumDetail: ForumDetail;
     export let categories: Category[];
@@ -21,7 +22,7 @@
     export let total = 0;
 
     let isLoading = false;
-    let orderBy: 'desc' | 'asc';
+    let orderBy: Order;
     let newComment: (comment: Comment) => Promise<void>;
 
     // Edit modal

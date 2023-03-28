@@ -6,7 +6,7 @@
 	import CommonScreen from '@components/shared/CommonScreen.svelte';
 	import HTTP from '@commons/http';
 	import type { Alert as AlertModel } from '@models/alert';
-	import { Auth } from '@models/common';
+	import { Auth } from '@commons/state';
 	import { verifyToken } from '@services/authen';
 	import { deleteUserFirebase, signinFirebase, signInGoogle } from '@services/firebase';
 	import { getUserType, setToken } from '@util/localstorage';
