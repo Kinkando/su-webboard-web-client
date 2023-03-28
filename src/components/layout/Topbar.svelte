@@ -35,11 +35,7 @@
             redirect()
         }
     }
-    const redirect = () => {
-        if (searchText) {
-            goto('/search?keyword='+searchText)
-        }
-    }
+    const redirect = () => goto('/search?keyword='+searchText)
 
     const tooltips = [
         {

@@ -52,8 +52,10 @@
     <Breadcrumb aria-label="SU Webboard">
         <BreadcrumbItem href="/" home>หน้าแรก</BreadcrumbItem>
         <BreadcrumbItem>กระทู้</BreadcrumbItem>
+        <BreadcrumbItem>รายละเอียด</BreadcrumbItem>
     </Breadcrumb>
 </div>
+
 {#if isLoading}
     <SkeletonForumDetail forumDetail />
 {:else if data && data.forumDetail && data.categories}

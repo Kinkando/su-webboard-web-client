@@ -1,6 +1,7 @@
 <script lang="ts">
     export let ranking = false;
     export let announcement = false;
+    export let favorite = false;
 </script>
 
 <div class="select-none ease-in duration-200 bg-gray-50 dark:bg-gray-700 text-black dark:text-gray-400 rounded-md border border-gray-200 dark:border-gray-700 shadow-md drop-shadow-md flex flex-col w-full h-full overflow-hidden">
@@ -16,8 +17,13 @@
             </div>
 
             <section class="flex flex-col gap-y-2 flex-auto {announcement ? 'mt-1' : ''}">
-                <div class="w-2/3 h-5 bg-gray-300 rounded-full dark:bg-gray-600" />
-                <div class="w-1/3 h-5 bg-gray-300 rounded-full dark:bg-gray-600" />
+                <div class="flex flex-col gap-y-2 overflow-hidden relative">
+                    <div class="w-2/3 h-5 bg-gray-300 rounded-full dark:bg-gray-600" />
+                    <div class="w-1/3 h-5 bg-gray-300 rounded-full dark:bg-gray-600" />
+                    {#if favorite}
+                        <div class="absolute right-0 top-1/2 -translate-y-1/2 min-w-[4.5rem] max-w-[4.5rem] h-9 bg-gray-300 rounded-md dark:bg-gray-600" />
+                    {/if}
+                </div>
                 <div class="max-w-[5rem] h-5 bg-gray-300 rounded-md dark:bg-gray-600" />
                 {#if !announcement}
                     <div class="flex flex-wrap items-center gap-1 w-full">

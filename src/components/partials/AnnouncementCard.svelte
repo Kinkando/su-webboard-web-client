@@ -13,7 +13,7 @@
             </a>
 
             <div class="flex flex-col overflow-hidden">
-                <a href="/profile/{announcement.authorUUID}" class="overflow-hidden">
+                <a href="/profile/{announcement.authorUUID}" class="overflow-hidden w-fit max-w-full">
                     <span class="text-md overflow-hidden text-ellipsis whitespace-nowrap hover:underline">{announcement?.authorName}</span>
                 </a>
                 <span class="text-xs overflow-hidden text-ellipsis whitespace-nowrap">{timeRange(announcement.createdAt)}</span>
