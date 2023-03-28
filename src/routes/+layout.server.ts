@@ -50,6 +50,9 @@ export const load: LayoutServerLoad = async ({ cookies, route }) => {
 // - set sorting comment (default comment #1-#10), can set by latest comment first
 // - ปักหมุด topbar ให้ไม่หุบเมื่อเลื่อนลง
 
+// Check permission before delete comment or forum (only yourself, author or admin can remove its)
+// แก้ไขการแสดงผลเวลา (timeRange) ให้ใช้ lib ช่วย (แต่แปลภาษาเอง)
+// add error dialog when error occurs on upsert forum/comment
 // แก้ calculate ranking ให้จำนวนการกด like เท่ากัน ให้อยู่อันดับเดียวกันได้
 // แก้ไอคอน ranking เพิ่ม trophy ของอันดับ 1-3
 

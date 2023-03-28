@@ -21,7 +21,7 @@
         if (type !== 'search') {
             return await getFollowUsers(userUUID, type, offset, limit)
         }
-        return await searchUsers(search, offset, limit)
+        return await searchUsers(search.trim(), offset, limit)
     }
 
     $: (currentPage || limit) && changePage()

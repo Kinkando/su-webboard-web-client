@@ -6,11 +6,22 @@
 	import { Breadcrumb, BreadcrumbItem, Button, Chevron, Dropdown, Helper, Radio } from "flowbite-svelte";
 	import { slide } from "svelte/transition";
 
-    $: searchText = $page.url.searchParams.get('keyword') || ''
+    const defaultMetadata = {
+        page: 1,
+        limit: 10,
+        field: Field.CreatedAt,
+        order: Order.DESC,
+    }
 
-    let currentPage = 1;
-    let limit = 10;
+    $: searchText = $page.url.searchParams.get('keyword')?.trim() || ''
 
+    let currentPage = Number($page.url.searchParams.get('page')) || defaultMetadata.page;
+    let limit = Number($page.url.searchParams.get('limit')) || defaultMetadata.limit;
+    let field: Field = defaultMetadata.field;
+    let order: Order = defaultMetadata.order;
+    let sortBy = `${field}@${order}`
+
+    let open = false
     let fieldsGroup = [
         { name: 'วันที่สร้างกระทู้', value: Field.CreatedAt },
         { name: 'ความนิยม', value: Field.Popular },
@@ -19,11 +30,6 @@
         { name: 'ผู้แต่ง', value: Field.AuthorName },
     ]
     let ordersGroup = [ Order.DESC, Order.ASC ]
-
-    let open = false
-    let field: Field = Field.CreatedAt;
-    let order: Order = Order.DESC
-    let sortBy = `${field}@${order}`
 
     const resetOption = () => {
         const options = sortBy.split('@')
@@ -52,7 +58,32 @@
         }
     }
 
-    const fetchData = async () => await searchForum(searchText, sortBy, (currentPage-1)*limit, limit)
+    const validateQuery = () => {
+        if (currentPage < 1) {
+            currentPage = defaultMetadata.page
+        }
+        if (limit < 1) {
+            limit = defaultMetadata.limit
+        }
+        // const options = sortBy.split('@')
+        // if (!Object.values(Field).includes(options[0] as Field)) {
+        //     field = defaultMetadata.field
+        //     sortBy = field + sortBy.substring(sortBy.indexOf('@'))
+        // }
+        // if (!Object.values(Order).includes(options[1] as Order)) {
+        //     order = defaultMetadata.order
+        //     sortBy = sortBy.substring(0, sortBy.indexOf('@')+1) + order
+        // }
+    }
+
+    const fetchData = async () => {
+        validateQuery()
+        const res = await searchForum(searchText, sortBy, (currentPage-1)*limit, limit)
+        if (res.total && !res.data.length) {
+            currentPage = 1
+        }
+        return res
+    }
 </script>
 
 <div class="mb-4">
@@ -63,32 +94,34 @@
     </Breadcrumb>
 </div>
 
-<Button size="lg" color="alternative" class="float-right mb-4 w-fit whitespace-nowrap focus:!border-transparent focus:!ring-0 !bg-transparent !outline-transparent !border-transparent !p-0 !text-[var(--primary-color)] dark:!text-[var(--primary-color-75)]">
-    <Chevron><div class="whitespace-nowrap">ตั้งค่าการค้นหา</div></Chevron>
-</Button>
-<Dropdown class="py-2 rounded-md bg-gray-50 dark:bg-gray-900 drop-shadow-md shadow-md min-w-[170px]" transition={slide} bind:open>
-    <Helper><div class="px-2 text-sm mb-1 underline">ค้นหาโดยเรียงลำดับจาก</div></Helper>
-    {#each fieldsGroup as fieldGroup}
-        <li class="p-2 hover:bg-gray-100 dark:hover:bg-gray-600">
-            <Radio name="sortBy" bind:group={field} value={fieldGroup.value} class="flex flex-start cursor-pointer">{fieldGroup.name}</Radio>
-        </li>
-    {/each}
+<div class="flex justify-end">
+    <Button size="lg" color="alternative" class="mb-4 w-fit whitespace-nowrap focus:!border-transparent focus:!ring-0 !bg-transparent !outline-transparent !border-transparent !p-0 !text-[var(--primary-color)] dark:!text-[var(--primary-color-75)]">
+        <Chevron><div class="whitespace-nowrap">ตั้งค่าการค้นหา</div></Chevron>
+    </Button>
+    <Dropdown class="py-2 rounded-md bg-gray-50 dark:bg-gray-900 drop-shadow-md shadow-md min-w-[170px]" transition={slide} bind:open>
+        <Helper><div class="px-2 text-sm mb-1 underline">ค้นหาโดยเรียงลำดับจาก</div></Helper>
+        {#each fieldsGroup as fieldGroup}
+            <li class="p-2 hover:bg-gray-100 dark:hover:bg-gray-600">
+                <Radio name="sortBy" bind:group={field} value={fieldGroup.value} class="flex flex-start cursor-pointer">{fieldGroup.name}</Radio>
+            </li>
+        {/each}
 
-    <hr class="border-gray-300 dark:border-gray-600 my-2">
+        <hr class="border-gray-300 dark:border-gray-600 my-2">
 
-    <Helper><div class="px-2 text-sm mb-1 underline">ลำดับการเรียง</div></Helper>
-    {#each ordersGroup as orderGroup}
-        <li class="p-2 hover:bg-gray-100 dark:hover:bg-gray-600">
-            <Radio name="order" bind:group={order} value={orderGroup} class="flex flex-start cursor-pointer">{orderName(orderGroup)}</Radio>
-        </li>
-    {/each}
+        <Helper><div class="px-2 text-sm mb-1 underline">ลำดับการเรียง</div></Helper>
+        {#each ordersGroup as orderGroup}
+            <li class="p-2 hover:bg-gray-100 dark:hover:bg-gray-600">
+                <Radio name="order" bind:group={order} value={orderGroup} class="flex flex-start cursor-pointer">{orderName(orderGroup)}</Radio>
+            </li>
+        {/each}
 
-    <hr class="border-gray-300 dark:border-gray-600 my-2">
+        <hr class="border-gray-300 dark:border-gray-600 my-2">
 
-    <div class="w-full flex gap-x-2 px-2">
-        <Button size="sm" color="red" class="w-full" gradient on:click={resetOption}>ยกเลิก</Button>
-        <Button size="sm" color="green" class="w-full" gradient on:click={searchData}>ยืนยัน</Button>
-    </div>
-</Dropdown>
+        <div class="w-full flex gap-x-2 px-2">
+            <Button size="sm" color="red" class="w-full" gradient on:click={resetOption}>ยกเลิก</Button>
+            <Button size="sm" color="green" class="w-full" gradient on:click={searchData}>ยืนยัน</Button>
+        </div>
+    </Dropdown>
+</div>
 
 <ForumList bind:page={currentPage} bind:limit {fetchData} bind:search={searchText} bind:sortBy />
