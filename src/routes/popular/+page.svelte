@@ -12,6 +12,7 @@
 <div class="mb-4">
     <Breadcrumb aria-label="SU Webboard">
         <BreadcrumbItem href="/" home>หน้าแรก</BreadcrumbItem>
+        <BreadcrumbItem>กระทู้</BreadcrumbItem>
         <BreadcrumbItem>กระทู้ยอดนิยม</BreadcrumbItem>
     </Breadcrumb>
 </div>

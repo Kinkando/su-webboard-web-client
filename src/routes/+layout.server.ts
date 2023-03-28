@@ -51,6 +51,7 @@ export const load: LayoutServerLoad = async ({ cookies, route }) => {
 // - ปักหมุด topbar ให้ไม่หุบเมื่อเลื่อนลง
 
 // เพิ่ม option sort by ในหน้า search/category list page
+// แก้ไขหน้า home ให้ API Calculate โพสต์ล่าสุดกับจำนวนโพสต์ใน category นั้นๆ ให้ถูกต้อง (ปัจจุบัน mock ไว้ที่โค้ดหลังบ้าน)
 
 // เพิ่มหน้า Sign Up สำหรับนักศึกษา โดยสามารถ sign up ได้ผ่านเมลมหาวิทยาลัยเท่านั้น และหลังจาก verify จะให้กรอก
 // - รหัสนักศึกษา (โดยมี warning ว่า ไม่สามารถเปลี่ยนได้ด้วยตนเองในภายหลัง และต้องมีการ validate format เพิ่ม)
@@ -61,6 +62,7 @@ export const load: LayoutServerLoad = async ({ cookies, route }) => {
 // ทำให้ text editor รองรับการเว้นบรรทัด เวลาแสดงผลในหน้า home, announcement detail
 // add delete all forum and announcement when admin delete user
 
+// remove all posts and comments when delete user by admin (and pull out notiUserUUIDs, followerUserUUIDs, followingUserUUIDs of related all users)
 // remove all related post when delete category (popup or modal to warning before delete)
 // admin portal ui on modal open and resize (backdrop animate) and modal overlap on sidebar
 // admin portal modal form validation
@@ -74,6 +76,3 @@ export const load: LayoutServerLoad = async ({ cookies, route }) => {
 
 // เพิ่ม gallery สำหรับ view รูปภาพในหน้า new forum / new announcement (สามารถคลิกหรือกดลูกศรบนคีย์บอร์ดเพื่อเลื่อนรูปภาพได้)
 // เพิ่มคลิกรูปเพื่อขยาย สำหรับหน้า update profile
-
-// เพิ่ม animation loading เวลา navigate ไปหน้าอื่น (เหมือนในแอพมอของเจได)
-// เพิ่ม admin student/teacher คอลัมน์จำนวนผู้ติดตาม และกำลังติดตาม

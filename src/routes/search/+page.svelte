@@ -6,8 +6,8 @@
 	import { Breadcrumb, BreadcrumbItem } from "flowbite-svelte";
 
     $: searchText = $page.url.searchParams.get('keyword')
-    $: if (searchText) {
-        filter.searchText = searchText
+    $: if (searchText !== undefined) {
+        filter.searchText = searchText || ''
     }
 
     let currentPage = 1;
@@ -20,6 +20,7 @@
 <div class="mb-4">
     <Breadcrumb aria-label="SU Webboard">
         <BreadcrumbItem href="/" home>หน้าแรก</BreadcrumbItem>
+        <BreadcrumbItem>กระทู้</BreadcrumbItem>
         <BreadcrumbItem>ค้นหากระทู้</BreadcrumbItem>
     </Breadcrumb>
 </div>

@@ -48,6 +48,7 @@
 <div class="mb-4">
     <Breadcrumb aria-label="SU Webboard">
         <BreadcrumbItem href="/" home>หน้าแรก</BreadcrumbItem>
+        <BreadcrumbItem>กระทู้</BreadcrumbItem>
         <BreadcrumbItem>สร้างกระทู้</BreadcrumbItem>
     </Breadcrumb>
 </div>

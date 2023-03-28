@@ -17,10 +17,10 @@
     </a>
     <div class="w-fit overflow-hidden">
         <a href="/profile/{user.userUUID}" class="overflow-hidden">
-            <div class="text-black dark:text-white overflow-hidden text-ellipsis whitespace-nowrap hover:underline">{user.userDisplayName}</div>
+            <div class="text-black dark:text-white overflow-hidden text-ellipsis w-fit max-w-full whitespace-nowrap hover:underline">{user.userDisplayName}</div>
         </a>
         <a href="/profile/{user.userUUID}" class="overflow-hidden">
-            <div class="text-gray-500 text-sm overflow-hidden text-ellipsis whitespace-nowrap hover:underline">{user.userFullName}</div>
+            <div class="text-gray-500 text-sm overflow-hidden text-ellipsis w-fit max-w-full whitespace-nowrap hover:underline">{user.userFullName}</div>
         </a>
     </div>
     {#if !user.isSelf && user.isFollowing !== undefined}

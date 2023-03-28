@@ -13,7 +13,8 @@ export function authGuard(routeID: string, userType: string, isValidToken: boole
     }
 
     if ((!userType || !isValidToken) && !commonRoutes.includes(routeID)) {
-        return `/login?error=${Auth.SessionExpired}`
+        localStorage.setItem("state", Auth.SessionExpired)
+        return `/login`
     }
 
     if (userType === UserType.ADMIN && !routeID?.startsWith("/admin-portal")) {

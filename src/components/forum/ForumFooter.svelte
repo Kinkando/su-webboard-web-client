@@ -79,7 +79,7 @@
         {/if}
         <div class="ml-3 space-y-1 overflow-hidden mr-4">
             {#if !isAnonymous}
-                <a href="/profile/{userUUID}" class="overflow-hidden">
+                <a href="/profile/{userUUID}" class="overflow-hidden w-fit max-w-full">
                     <div class="font-bold overflow-hidden text-ellipsis whitespace-nowrap hover:underline">{userDisplayName}</div>
                 </a>
             {:else}

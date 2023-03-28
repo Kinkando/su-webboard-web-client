@@ -20,10 +20,8 @@
         const offset = (currentPage-1)*limit;
         if (type !== 'search') {
             return await getFollowUsers(userUUID, type, offset, limit)
-        } else if (search) {
-            return await searchUsers(search, offset, limit)
         }
-        return { total: 0, data: [] }
+        return await searchUsers(search, offset, limit)
     }
 
     $: (currentPage || limit) && changePage()
@@ -43,12 +41,12 @@
         size="md"
         bind:value={search}
         on:keydown={event => {
-            if (event.key === 'Enter' && search.length) {
+            if (event.key === 'Enter') {
                 changePage()
             }
         }}
     >
-        <svg slot="left" aria-hidden="true" class="w-6 h-6 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+        <svg on:click={() => changePage()} slot="left" aria-hidden="true" class="pointer-events-auto cursor-pointer w-6 h-6 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
 
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <svg slot="right" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-gray-500 dark:text-gray-400 cursor-pointer" on:click={() => search = ""}><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
@@ -65,7 +63,6 @@
             {#each users as user}
                 <UserCard {user} />
             {/each}
-            <Pagination bind:currentPage bind:total bind:limit />
         {:else}
             <div class="mt-10 mb-6">
                 <img src="/images/empty.png" alt="" class="m-auto w-48">
@@ -73,4 +70,5 @@
             </div>
         {/if}
     {/if}
+    <Pagination bind:currentPage bind:total bind:limit />
 {/key}

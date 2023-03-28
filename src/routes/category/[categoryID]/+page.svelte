@@ -37,7 +37,7 @@
 <div class="mb-4">
     <Breadcrumb aria-label="SU Webboard">
         <BreadcrumbItem href="/" home>หน้าแรก</BreadcrumbItem>
-        <BreadcrumbItem>หมวดหมู่</BreadcrumbItem>
+        <BreadcrumbItem>กระทู้</BreadcrumbItem>
         <BreadcrumbItem>{categoryName}</BreadcrumbItem>
     </Breadcrumb>
 </div>

@@ -27,7 +27,7 @@
 
 {#key total}
     {#if isLoading}
-        <SkeletonForumList count={limit} {ranking} />
+        <SkeletonForumList count={limit} {ranking} {favorite} />
     {:else}
         {#if forums?.length}
             {#each forums as forum}

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
-	import { onMount, onDestroy } from "svelte";
+	import { onMount } from "svelte";
 	import { authGuard } from "./auth-guard";
 
     export let routeID: string

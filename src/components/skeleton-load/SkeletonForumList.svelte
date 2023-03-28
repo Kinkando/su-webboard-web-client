@@ -4,10 +4,11 @@
     export let count: number;
     export let ranking = false;
     export let announcement = false;
+    export let favorite = false;
 </script>
 
 {#each Array(count) as _}
     <div class="mb-4">
-        <SkeletonForumCard {ranking} {announcement} />
+        <SkeletonForumCard {ranking} {announcement} {favorite} />
     </div>
 {/each}
