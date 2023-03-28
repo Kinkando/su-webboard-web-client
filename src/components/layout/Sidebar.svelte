@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { fade, fly } from 'svelte/transition';
-	import { goto } from '$app/navigation';
     import { page } from '$app/stores';
 	import { Auth } from '@models/common';
 	import { revokeToken as revokeTokenSrv } from '@services/authen';
@@ -17,7 +16,8 @@
             revokeTokenSrv(token.accessToken, token.refreshToken)
         }
         revokeToken();
-        goto(`/login?error=${Auth.LogoutSuccessfully}`);
+        localStorage.setItem("state", Auth.LogoutSuccessfully)
+        window.location.href = `/login`;
     }
     const hideSidebar = () => isSidebarExpand = false
 </script>

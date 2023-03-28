@@ -28,14 +28,15 @@
             revokeTokenSrv(token.accessToken, token.refreshToken)
         }
         revokeToken();
-        goto(`/login?error=${Auth.LogoutSuccessfully}`);
+        localStorage.setItem("state", Auth.LogoutSuccessfully)
+        window.location.href = `/login`;
     }
-    const search = (event: KeyboardEvent) => {
+    const search = async (event: KeyboardEvent) => {
         if (event.key === 'Enter') {
-            redirect()
+            await redirect()
         }
     }
-    const redirect = () => goto('/search?keyword='+searchText)
+    const redirect = async() => await goto('/search?keyword='+searchText)
 
     const tooltips = [
         {

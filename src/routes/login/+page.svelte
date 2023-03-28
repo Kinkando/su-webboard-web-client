@@ -19,27 +19,26 @@
     let showPassword = false;
     let isLoading = false;
 
-    $: err = $page.url.searchParams.get('error')
     $: redirect = $page.url.searchParams.get('redirect')
 
     onMount(async() => {
-        if (err) {
-            switch(err) {
-                case Auth.SessionExpired:
-                    alert = {
-                        color: 'yellow',
-                        message: 'Session ของคุณหมดอายุ, โปรดเข้าสู่ระบบใหม่อีกครั้ง!',
-                    }
-                    break
+        const state = localStorage.getItem("state")
+        switch(state) {
+            case Auth.SessionExpired:
+                alert = {
+                    color: 'yellow',
+                    message: 'Session ของคุณหมดอายุ, โปรดเข้าสู่ระบบใหม่อีกครั้ง!',
+                }
+                break
 
-                case Auth.LogoutSuccessfully:
-                    alert = {
-                        color: 'green',
-                        message: 'ออกจากระบบสำเร็จ!',
-                    }
-                    break
-            }
+            case Auth.LogoutSuccessfully:
+                alert = {
+                    color: 'green',
+                    message: 'ออกจากระบบสำเร็จ!',
+                }
+                break
         }
+        localStorage.removeItem("state")
     })
 
     const signin = async() => {

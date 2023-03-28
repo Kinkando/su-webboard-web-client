@@ -59,8 +59,7 @@
     let isLoading = true;
     onMount(async() => {
         isLoading = false;
-        const { userType } = getUserType()
-        if (isUserSite && userType !== 'adm') {
+        if (userType && userType !== 'adm') {
             userStore.set(await getUserProfile())
             notificationStore.set(await getNotiList())
         }

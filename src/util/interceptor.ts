@@ -53,7 +53,8 @@ instance.interceptors.response.use(
                     } else {
                         LocalStorage.revokeToken()
                     }
-                    window.location.href=`/login?error=${Auth.SessionExpired}`
+                    localStorage.setItem("state", Auth.SessionExpired)
+                    window.location.href=`/login`
                     return Promise.reject(error);
                 }
                 config._isRefreshing = true;
@@ -86,7 +87,8 @@ instance.interceptors.response.use(
                 } else {
                     LocalStorage.revokeToken()
                 }
-                window.location.href=`/login?error=${Auth.SessionExpired}`
+                localStorage.setItem("state", Auth.SessionExpired)
+                window.location.href=`/login`
                 return Promise.reject(error)
             }
         }
