@@ -1,6 +1,6 @@
 <script lang="ts">
-    // import io from 'socket.io-client'
     import { Breadcrumb, BreadcrumbItem, SpeedDial, SpeedDialButton } from "flowbite-svelte";
+    import io, { Socket } from 'socket.io-client'
 	import { onMount } from "svelte";
 	import { page } from "$app/stores";
 	import ForumDetail from "@components/forum/ForumDetail.svelte";
@@ -10,6 +10,7 @@
 	import type { ForumDetail as ForumDetailModel } from '@models/forum';
 	import { getAllCategories } from "@services/category";
 	import { getForumDetail } from "@services/forum";
+	import { getUserUUID } from "@util/localstorage";
 
     export let data: { forumDetail: ForumDetailModel, categories: Category[] }
 
@@ -35,15 +36,36 @@
                 category.isActive = categoryIDs.includes(category.categoryID);
             })
             data = { categories, forumDetail }
+            connectToSocket()
         }
         isLoading = false;
-        // const socket = io(import.meta.env.VITE_API_HOST)
-        // socket.on('connect', () => {
-        //     socket.emit('ping')
-        //     console.log('ping')
-        // })
-        // socket.on('pong', (data) => console.log(data.message))
     })
+
+    let socket: Socket
+    function connectToSocket() {
+        socket = io(import.meta.env.VITE_API_HOST)
+        socket.on('connect', () => socket.emit('join', data.forumDetail.forumUUID))
+
+        socket.on('updateForum', async(editorUUID: string) => {
+            if (editorUUID !== getUserUUID()) {
+                const forumDetail = await getForumDetail(forumUUID)
+                if (forumDetail) {
+                    const categories = (await getAllCategories())!
+                    const categoryIDs = forumDetail.categories.map(category => category.categoryID)
+                    categories?.forEach(category => {
+                        category.isActive = categoryIDs.includes(category.categoryID);
+                    })
+                    data = { categories, forumDetail }
+                }
+            }
+        })
+
+        socket.on('deleteForum', async(editorUUID: string) => {
+            if (editorUUID !== getUserUUID()) {
+                (data as any) = undefined;
+            }
+        })
+    }
 </script>
 
 <svelte:window bind:scrollY />
@@ -59,7 +81,7 @@
 {#if isLoading}
     <SkeletonForumDetail forumDetail />
 {:else if data && data.forumDetail && data.categories}
-    <ForumDetail bind:forumDetail={data.forumDetail} bind:categories={data.categories} bind:replyForum bind:total />
+    <ForumDetail bind:forumDetail={data.forumDetail} bind:categories={data.categories} bind:replyForum bind:total bind:socket />
 
     <SpeedDial defaultClass="fixed right-6 bottom-6 ease-in duration-200 z-50">
         <svg slot="icon" aria-hidden="true" class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"></path></svg>

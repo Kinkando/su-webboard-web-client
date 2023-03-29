@@ -101,18 +101,14 @@
     <Dropdown class="py-2 rounded-md bg-gray-50 dark:bg-gray-900 drop-shadow-md shadow-md min-w-[170px]" transition={slide} bind:open>
         <Helper><div class="px-2 text-sm mb-1 underline">ค้นหาโดยเรียงลำดับจาก</div></Helper>
         {#each fieldsGroup as fieldGroup}
-            <li class="p-2 hover:bg-gray-100 dark:hover:bg-gray-600">
-                <Radio name="sortBy" bind:group={field} value={fieldGroup.value} class="flex flex-start cursor-pointer">{fieldGroup.name}</Radio>
-            </li>
+            <Radio name="sortBy" bind:group={field} value={fieldGroup.value} class="ease-in duration-150 flex flex-start cursor-pointer p-2 hover:bg-gray-100 dark:hover:bg-gray-600">{fieldGroup.name}</Radio>
         {/each}
 
         <hr class="border-gray-300 dark:border-gray-600 my-2">
 
         <Helper><div class="px-2 text-sm mb-1 underline">ลำดับการเรียง</div></Helper>
         {#each ordersGroup as orderGroup}
-            <li class="p-2 hover:bg-gray-100 dark:hover:bg-gray-600">
-                <Radio name="order" bind:group={order} value={orderGroup} class="flex flex-start cursor-pointer">{orderName(orderGroup)}</Radio>
-            </li>
+            <Radio name="order" bind:group={order} value={orderGroup} class="ease-in duration-150 flex flex-start cursor-pointer p-2 hover:bg-gray-100 dark:hover:bg-gray-600">{orderName(orderGroup)}</Radio>
         {/each}
 
         <hr class="border-gray-300 dark:border-gray-600 my-2">

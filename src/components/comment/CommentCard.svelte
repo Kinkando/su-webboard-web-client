@@ -1,7 +1,11 @@
 <script lang="ts">
+	import HTTP from "@commons/http";
+    import Alert from '@components/alert/Alert.svelte';
 	import ForumFooter from "@components/forum/ForumFooter.svelte";
 	import ForumImage from "@components/forum/ForumImage.svelte";
 	import EllipsisMenu from "@components/shared/EllipsisMenu.svelte";
+	import LoadingSpinner from "@components/spinner/LoadingSpinner.svelte";
+	import type { Alert as AlertModel } from '@models/alert';
 	import type { Comment } from "@models/comment";
 	import type { Attachment } from "@models/new-post";
     import type { Document } from "@models/forum";
@@ -9,7 +13,6 @@
 	import { getUserUUID } from "@util/localstorage";
 	import { createEventDispatcher } from "svelte";
 	import { timeRange } from "@util/datetime";
-	import LoadingSpinner from "@components/spinner/LoadingSpinner.svelte";
 
     export let label: string;
     export let comment: Comment;
@@ -17,6 +20,7 @@
     export let authorUUID: string;
     export let replyCommentUUID: string = "";
 
+    let alert: AlertModel;
     let isLoading = false;
     let attachments: Attachment[] = [];
     $: comment.commentImages !== undefined && initImages();
@@ -47,21 +51,26 @@
         comment.commentText = commentEdit;
         const files = attachmentsEdit.map(attachment => attachment.file)
         const res = await upsertComment(forumUUID, comment, files, deleteImageUUIDs, replyCommentUUID || undefined)
-
-        // update data on local
-        comment.updatedAt = new Date();
-        let tempCommentImages: Document[] = []
-        if (deleteImageUUIDs && comment.commentImages) {
-            tempCommentImages = comment.commentImages.filter(image => !deleteImageUUIDs.includes(image.uuid)) || []
-        }
-        if (res.data?.documents) {
-            if (tempCommentImages) {
-                comment.commentImages = [...tempCommentImages, ...res.data.documents]
-            } else {
-                comment.commentImages = [...res.data.documents]
+        if (res.status !== HTTP.StatusOK) {
+            alert = {
+                color: 'red',
+                message: 'ขออภัย, ระบบเกิดความขัดข้อง กรุณาลองใหม่อีกครั้ง!',
+            }
+        } else {
+            // update data on local
+            comment.updatedAt = new Date();
+            let tempCommentImages: Document[] = []
+            if (deleteImageUUIDs && comment.commentImages) {
+                tempCommentImages = comment.commentImages.filter(image => !deleteImageUUIDs.includes(image.uuid)) || []
+            }
+            if (res.data?.documents) {
+                if (tempCommentImages) {
+                    comment.commentImages = [...tempCommentImages, ...res.data.documents]
+                } else {
+                    comment.commentImages = [...res.data.documents]
+                }
             }
         }
-
         isLoading = false;
     }
 
@@ -90,6 +99,16 @@
                 res.likeCount = 0;
                 delete res.replyComments
                 dispatch('create', { comment: res })
+            } else {
+                alert = {
+                    color: 'red',
+                    message: 'ขออภัย, ระบบเกิดความขัดข้อง กรุณาลองใหม่อีกครั้ง!',
+                }
+            }
+        } else {
+            alert = {
+                color: 'red',
+                message: 'ขออภัย, ระบบเกิดความขัดข้อง กรุณาลองใหม่อีกครั้ง!',
             }
         }
 
@@ -98,6 +117,8 @@
 
     $: userUUID = getUserUUID()
 </script>
+
+<Alert bind:alert />
 
 <LoadingSpinner bind:isLoading />
 

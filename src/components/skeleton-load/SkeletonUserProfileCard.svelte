@@ -1,5 +1,6 @@
 <script lang="ts">
     export let menuCount: number;
+    export let self: boolean = false;
 </script>
 
 <div class="ease-in duration-200 bg-white dark:bg-gray-900 w-full rounded-md shadow-lg p-4 sm:p-6 max-w-4xl m-auto animate-pulse">
@@ -19,7 +20,11 @@
     </div>
 
     <div class="flex gap-x-4 justify-end">
-        <div class="md:w-36 w-full h-10 bg-gray-300 rounded-md dark:bg-gray-600" />
-        <div class="md:w-36 w-full h-10 bg-gray-300 rounded-md dark:bg-gray-600" />
+        {#if self}
+            <div class="md:w-36 w-full h-10 bg-gray-300 rounded-md dark:bg-gray-600" />
+            <div class="md:w-36 w-full h-10 bg-gray-300 rounded-md dark:bg-gray-600" />
+        {:else}
+            <div class="w-36 h-10 bg-gray-300 rounded-md dark:bg-gray-600" />
+        {/if}
     </div>
 </div>

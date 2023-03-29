@@ -3,6 +3,7 @@
 	import CommentBadge from "@components/badge/CommentBadge.svelte";
 	import LikeBadge from "@components/badge/LikeBadge.svelte";
 	import TimeBadge from "@components/badge/TimeBadge.svelte";
+	import RankingMedal from "@components/partials/RankingMedal.svelte";
     import type { Forum } from "@models/forum";
 	import { favoriteForum } from "@services/forum";
 	import { timeRange } from "@util/datetime";
@@ -11,14 +12,6 @@
 
     export let favorite = false;
     export let forum: Forum;
-    const rankingColor = (() => {
-        switch (forum?.ranking) {
-            case 1: return "background-color: #FFD700 !important; color: #000 !important"
-            case 2: return "background-color: #C0C0C0 !important; color: #000 !important"
-            case 3: return "background-color: #b87333 !important; color: #000 !important"
-            default: return ""
-        }
-    })()
 
     let anchorElement: HTMLAnchorElement
     let button: HTMLDivElement
@@ -45,11 +38,7 @@
 <a bind:this={anchorElement} on:click={clickAnchor} class="bg-white text-black dark:bg-gray-600 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700 cursor-pointer p-4 sm:p-6 shadow-md drop-shadow-md rounded-md ease-in duration-200 w-full h-full flex gap-x-4" href={`/forum/${forum?.forumUUID}`}>
     <div class="relative w-fit h-fit">
         {#if forum?.ranking}
-            <div class="flex items-center -mr-2 absolute bottom-0 right-0 z-10">
-                <div class="w-6 h-6 p-1 rounded-full flex items-center justify-center !bg-gray-200 dark:!bg-gray-800" style={rankingColor}>
-                    {forum?.ranking}
-                </div>
-            </div>
+            <RankingMedal ranking={forum.ranking} />
         {/if}
 
         {#if !forum.isAnonymous}
