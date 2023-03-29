@@ -1,4 +1,5 @@
 <script lang="ts">
+    import type { Socket } from "socket.io-client";
 	import ForumImage from "./ForumImage.svelte";
 	import ForumFooter from "./ForumFooter.svelte";
     import Alert from '@components/alert/Alert.svelte';
@@ -23,6 +24,7 @@
     export let categories: Category[];
     export let replyForum = false;
     export let total = 0;
+    export let socket: Socket
 
     let isLoading = false;
     let orderBy: Order;
@@ -55,7 +57,12 @@
         return []
     }
 
-    let imageURLs = initImages()
+    $: imageURLs = ((): string[] => {
+        if (forumDetail.forumImages) {
+            return initImages()
+        }
+        return []
+    })()
 
     const editForumAction = async(titleEdit: string, descriptionEdit: string, categoriesEdit: Category[], attachmentsEdit: Attachment[], deleteImageUUIDs: string[]) => {
         const categoryIDs = categories.filter(category => category.isActive).map(category => category.categoryID!)
@@ -213,4 +220,4 @@
     />
 </div>
 
-<CommentList bind:authorUUID={forumDetail.authorUUID} bind:forumUUID={forumDetail.forumUUID} bind:newComment bind:totalComments={total} bind:orderBy />
+<CommentList bind:authorUUID={forumDetail.authorUUID} bind:forumUUID={forumDetail.forumUUID} bind:newComment bind:totalComments={total} bind:orderBy bind:socket />

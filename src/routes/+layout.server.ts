@@ -43,12 +43,15 @@ export const load: LayoutServerLoad = async ({ cookies, route }) => {
 //     return isTeacher
 // }) satisfies LayoutServerLoad;
 
+// แสดงชื่อของคนที่กดถูกใจกระทู้หรือคอมเมนต์ในหน้า ForumDetail (แสดงเฉพาะชื่อคนที่เราติดตาม)
+// เมื่อกดเข้าไปที่ข้อความแสดงชื่อคนกดถูกใจ ให้แสดง popup รายชื่อคนทั้งหมดที่คนถูกใจกระทู้/คอมเมนต์นั้นๆ
+// Disabled open create comment modal when other modal is open
 // Socket realtime forum
-// Check permission before delete comment or forum (only yourself, author or admin can remove its)
 // เพิ่ม gallery สำหรับ view รูปภาพในหน้า new forum / new announcement (สามารถคลิกหรือกดลูกศรบนคีย์บอร์ดเพื่อเลื่อนรูปภาพได้)
 // เพิ่มคลิกรูปเพื่อขยาย สำหรับหน้า update profile
 // Text Editor Component
 
+// Check permission before delete comment or forum (only yourself, author or admin can remove its)
 // edit loading screen on create/update/delete data admin
 // admin add form validation
 // remove all posts and comments when delete user by admin (and pull out notiUserUUIDs, followerUserUUIDs, followingUserUUIDs of related all users)
