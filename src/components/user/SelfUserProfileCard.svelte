@@ -1,12 +1,15 @@
 <script lang="ts">
-	import userStore from '@stores/user';
-	import { StatusGroup, type User } from "@models/user";
-	import { getUserType } from "@util/localstorage";
-	import type { Alert as AlertModel } from '@models/alert';
 	import { Label, Input, Button } from "flowbite-svelte";
 	import { onMount } from "svelte";
-	import { updateUserProfile } from "@services/user";
+    import Alert from '@components/alert/Alert.svelte';
+	import LoadingSpinner from '@components/spinner/LoadingSpinner.svelte';
+	import type { Alert as AlertModel } from '@models/alert';
+	import { StatusGroup, type User } from "@models/user";
 	import { changePassword } from '@services/firebase';
+	import { updateUserProfile } from "@services/user";
+	import userStore from '@stores/user';
+	import { getUserType } from "@util/localstorage";
+	import HTTP from "@commons/http";
 
     export let user!: User;
 
@@ -66,18 +69,25 @@
 
     const updateProfile = async () => {
         isLoading = true;
-        await updateUserProfile(draft.userDisplayName, statusGroup === StatusGroup.anonymous, image)
-        alert = {
-            color: 'green',
-            message: 'อัพเดตข้อมูลส่วนตัวสำเร็จ',
-        }
+        const res = await updateUserProfile(draft.userDisplayName, statusGroup === StatusGroup.anonymous, image)
+        if (res?.data) {
+            alert = {
+                color: 'green',
+                message: 'อัพเดตข้อมูลส่วนตัวสำเร็จ',
+            }
 
-        // update local
-        image = undefined;
-        user.userDisplayName = draft.userDisplayName
-        user.userImageURL = draft.userImageURL;
-        userStore.set(user)
-        mode = 'view'
+            // update local
+            image = undefined;
+            user.userDisplayName = draft.userDisplayName
+            user.userImageURL = draft.userImageURL;
+            userStore.set(user)
+            mode = 'view'
+        } else {
+            alert = {
+                color: 'red',
+                message: 'เกิดข้อผิดพลาดบางอย่าง กรุณาลองใหม่อีกครั้ง',
+            }
+        }
 
         isLoading = false;
     }
@@ -91,7 +101,7 @@
             }
             alert = {
                 color: isSuccess ? 'green' : 'red',
-                message: isSuccess ? 'เปลี่ยนรหัสผ่านสำเร็จ' : 'รหัสผ่านเดิมของคุณผิดพลาด โปรดลองใหม่อีกครั้ง!',
+                message: isSuccess ? 'เปลี่ยนรหัสผ่านสำเร็จ' : 'รหัสผ่านเดิมของคุณผิดพลาด กรุณาลองใหม่อีกครั้ง!',
             }
             isLoading = false
         }
@@ -134,6 +144,10 @@
         })
     }
 </script>
+
+<Alert bind:alert />
+
+<LoadingSpinner bind:isLoading />
 
 <div class="ease-in duration-200 bg-white dark:bg-gray-900 w-full rounded-md shadow-lg p-4 sm:p-6 max-w-4xl m-auto">
     <div class="md:flex md:items-start md:gap-x-6">

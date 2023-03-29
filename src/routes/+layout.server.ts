@@ -45,14 +45,11 @@ export const load: LayoutServerLoad = async ({ cookies, route }) => {
 
 // Socket realtime forum
 // Check permission before delete comment or forum (only yourself, author or admin can remove its)
-// แก้ไขการแสดงผลเวลา (timeRange) ให้ใช้ lib ช่วย (แต่แปลภาษาเอง)
-// add error dialog when error occurs on upsert forum/comment
-// แก้ calculate ranking ให้จำนวนการกด like เท่ากัน ให้อยู่อันดับเดียวกันได้
-// แก้ไอคอน ranking เพิ่ม trophy ของอันดับ 1-3
 // เพิ่ม gallery สำหรับ view รูปภาพในหน้า new forum / new announcement (สามารถคลิกหรือกดลูกศรบนคีย์บอร์ดเพื่อเลื่อนรูปภาพได้)
 // เพิ่มคลิกรูปเพื่อขยาย สำหรับหน้า update profile
 // Text Editor Component
 
+// edit loading screen on create/update/delete data admin
 // admin add form validation
 // remove all posts and comments when delete user by admin (and pull out notiUserUUIDs, followerUserUUIDs, followingUserUUIDs of related all users)
 // remove all related post when delete category (popup or modal to warning before delete)
