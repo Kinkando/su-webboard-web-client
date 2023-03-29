@@ -8,21 +8,18 @@
     const userSchema = [
         {
             label: 'ชื่อที่ใช้แสดง',
-            value: '',
+            value: user.userDisplayName,
         },
         {
             label: 'ชื่อ-นามสกุล',
-            value: '',
+            value: user.userFullName,
         },
         {
             label: 'อีเมล',
-            value: '',
+            value: user.userEmail,
         },
     ]
 
-    userSchema[0].value = user.userDisplayName || user.userFullName
-    userSchema[1].value = user.userFullName
-    userSchema[2].value = user.userEmail
     if (user.userType === 'std') {
         userSchema.push({
             label: 'รหัสนักศึกษา',
@@ -60,15 +57,17 @@
                 </Label>
             {/each}
         </div>
+    </div>
 
+    <div class="flex justify-end">
         {#if user.isFollowing}
-            <Button color="blue" gradient class="md:w-fit w-full whitespace-nowrap"><Chevron><div class="whitespace-nowrap">กำลังติดตาม</div></Chevron></Button>
-            <Dropdown>
+            <Button color="blue" gradient class="md:w-fit whitespace-nowrap"><Chevron><div class="whitespace-nowrap">กำลังติดตาม</div></Chevron></Button>
+            <Dropdown class="w-32">
                 <DropdownItem on:click={notification}>{ user.isNoti ? 'ปิดการแจ้งเตือน' : 'เปิดการแจ้งเตือน' }</DropdownItem>
                 <DropdownItem on:click={following}>เลิกติดตาม</DropdownItem>
             </Dropdown>
         {:else}
-            <Button color="pinkToOrange" gradient class="md:w-fit w-full whitespace-nowrap" type="button" on:click={following}>ติดตาม</Button>
+            <Button color="pinkToOrange" gradient class="md:w-fit whitespace-nowrap" type="button" on:click={following}>ติดตาม</Button>
         {/if}
     </div>
 </div>

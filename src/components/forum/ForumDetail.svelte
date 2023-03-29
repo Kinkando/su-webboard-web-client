@@ -1,9 +1,14 @@
 <script lang="ts">
 	import ForumImage from "./ForumImage.svelte";
 	import ForumFooter from "./ForumFooter.svelte";
+    import Alert from '@components/alert/Alert.svelte';
+	import HTTP from "@commons/http";
+	import type { Order } from "@commons/order";
 	import CategoryBadge from "@components/badge/CategoryBadge.svelte";
 	import CommentList from "@components/comment/CommentList.svelte";
     import EllipsisMenu from "@components/shared/EllipsisMenu.svelte";
+	import LoadingSpinner from "@components/spinner/LoadingSpinner.svelte";
+	import type { Alert as AlertModel } from '@models/alert';
 	import type { Category } from "@models/category";
 	import type { Comment } from '@models/comment';
     import type { ForumDetail, ForumRequest } from "@models/forum";
@@ -13,8 +18,6 @@
 	import { defined } from "@util/generic";
 	import { getUserUUID } from "@util/localstorage";
 	import { timeRange } from "@util/datetime";
-	import LoadingSpinner from "@components/spinner/LoadingSpinner.svelte";
-	import type { Order } from "@commons/order";
 
     export let forumDetail: ForumDetail;
     export let categories: Category[];
@@ -24,6 +27,7 @@
     let isLoading = false;
     let orderBy: Order;
     let newComment: (comment: Comment) => Promise<void>;
+    let alert: AlertModel;
 
     // Edit modal
     let title: FormSchema = {value: forumDetail.title, label: `หัวข้อกระทู้`, placeholder: `กรุณาใส่หัวข้อกระทู้...`}
@@ -68,27 +72,34 @@
             isLoading = true;
             const res = await upsertForum(forum, files)
 
-            // loading edit data
-            forumDetail.updatedAt = new Date();
-            forumDetail.title = titleEdit;
-            forumDetail.description = descriptionEdit;
-            title.value = titleEdit;
-            description.value = descriptionEdit;
-            if (categories) {
-                categories.forEach((category, index) => category.isActive = categoriesEdit[index].isActive)
-            }
-            if (deleteImageUUIDs && forumDetail.forumImages) {
-                forumDetail.forumImages = forumDetail.forumImages.filter(image => !deleteImageUUIDs.includes(image.uuid))
-            }
-            if (res.data?.documents) {
-                if (forumDetail.forumImages) {
-                    forumDetail.forumImages = [...forumDetail.forumImages, ...res.data.documents]
-                } else {
-                    forumDetail.forumImages = [...res.data.documents]
+            if (res.status !== HTTP.StatusOK) {
+                alert = {
+                    color: 'red',
+                    message: 'ขออภัย, ระบบเกิดความขัดข้อง กรุณาลองใหม่อีกครั้ง!',
                 }
+            } else {
+                // loading edit data
+                forumDetail.updatedAt = new Date();
+                forumDetail.title = titleEdit;
+                forumDetail.description = descriptionEdit;
+                title.value = titleEdit;
+                description.value = descriptionEdit;
+                if (categories) {
+                    categories.forEach((category, index) => category.isActive = categoriesEdit[index].isActive)
+                }
+                if (deleteImageUUIDs && forumDetail.forumImages) {
+                    forumDetail.forumImages = forumDetail.forumImages.filter(image => !deleteImageUUIDs.includes(image.uuid))
+                }
+                if (res.data?.documents) {
+                    if (forumDetail.forumImages) {
+                        forumDetail.forumImages = [...forumDetail.forumImages, ...res.data.documents]
+                    } else {
+                        forumDetail.forumImages = [...res.data.documents]
+                    }
+                }
+                forumDetail.categories = categories?.filter(category => category.isActive)!
+                imageURLs = initImages()
             }
-            forumDetail.categories = categories?.filter(category => category.isActive)!
-            imageURLs = initImages()
             isLoading = false
         }
     }
@@ -118,7 +129,12 @@
         }
         isLoading = true;
         const res = await upsertComment(forumDetail.forumUUID, comment, files)
-        if (res?.data) {
+        if (res.status !== HTTP.StatusOK) {
+            alert = {
+                color: 'red',
+                message: 'ขออภัย, ระบบเกิดความขัดข้อง กรุณาลองใหม่อีกครั้ง!',
+            }
+        } else if (res?.data) {
             comment.commentUUID = res.data.commentUUID
             comment.commentImages = res.data.documents
             await newComment(comment)
@@ -128,6 +144,8 @@
 
     $: userUUID = getUserUUID()
 </script>
+
+<Alert bind:alert />
 
 <LoadingSpinner bind:isLoading />
 

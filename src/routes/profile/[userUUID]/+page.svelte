@@ -6,8 +6,7 @@
 	import ForumPagination from "@components/partials/ForumPagination.svelte";
 	import NotFound from "@components/shared/NotFound.svelte";
 	import SkeletonForumList from "@components/skeleton-load/SkeletonForumList.svelte";
-	import SkeletonOtherUserProfileCard from "@components/skeleton-load/SkeletonOtherUserProfileCard.svelte";
-	import SkeletonSelfUserProfileCard from '@components/skeleton-load/SkeletonSelfUserProfileCard.svelte';
+	import SkeletonUserProfileCard from '@components/skeleton-load/SkeletonUserProfileCard.svelte';
 	import SkeletonTabs from "@components/skeleton-load/SkeletonTabs.svelte";
 	import OtherUserProfileCard from "@components/user/OtherUserProfileCard.svelte";
 	import SelfUserProfileCard from "@components/user/SelfUserProfileCard.svelte";
@@ -35,11 +34,7 @@
 </div>
 
 {#if isLoading}
-    {#if selfUUID === userUUID}
-        <SkeletonSelfUserProfileCard menuCount={userType === 'std' ? 4 : 3} />
-    {:else}
-        <SkeletonOtherUserProfileCard />
-    {/if}
+    <SkeletonUserProfileCard menuCount={userType === 'std' ? 4 : 3} self={selfUUID === userUUID} />
 
     <SkeletonTabs tabCount={selfUUID === userUUID ? 5 : 3}>
         <SkeletonForumList count={10} />

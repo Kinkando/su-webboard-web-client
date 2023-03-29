@@ -43,6 +43,30 @@ export const load: LayoutServerLoad = async ({ cookies, route }) => {
 //     return isTeacher
 // }) satisfies LayoutServerLoad;
 
+// Socket realtime forum
+// Check permission before delete comment or forum (only yourself, author or admin can remove its)
+// แก้ไขการแสดงผลเวลา (timeRange) ให้ใช้ lib ช่วย (แต่แปลภาษาเอง)
+// add error dialog when error occurs on upsert forum/comment
+// แก้ calculate ranking ให้จำนวนการกด like เท่ากัน ให้อยู่อันดับเดียวกันได้
+// แก้ไอคอน ranking เพิ่ม trophy ของอันดับ 1-3
+// เพิ่ม gallery สำหรับ view รูปภาพในหน้า new forum / new announcement (สามารถคลิกหรือกดลูกศรบนคีย์บอร์ดเพื่อเลื่อนรูปภาพได้)
+// เพิ่มคลิกรูปเพื่อขยาย สำหรับหน้า update profile
+// Text Editor Component
+
+// admin add form validation
+// remove all posts and comments when delete user by admin (and pull out notiUserUUIDs, followerUserUUIDs, followingUserUUIDs of related all users)
+// remove all related post when delete category (popup or modal to warning before delete)
+// ถ้าลบ category ต้องลบ categoryID ออกจากทุกโพสต์ที่มี categoryID ดังกล่าว (กรณีโพสต์นั้นมี category เดียว และ category นั้นโดนลบ ให้ลบโพสต์ด้วย)
+// remove all forums and announcements when admin delete user
+// admin portal ui on modal open and resize (backdrop animate) and modal overlap on sidebar
+// admin portal modal form validation
+// admin portal error not found page
+// admin portal internal server error page
+
+// change profile image with providing avatar from backend
+// เพิ่ม Notification List Page
+// report view on admin page
+
 // onMount twice
 
 // SETTING PAGE
@@ -50,33 +74,8 @@ export const load: LayoutServerLoad = async ({ cookies, route }) => {
 // - set sorting comment (default comment #1-#10), can set by latest comment first
 // - ปักหมุด topbar ให้ไม่หุบเมื่อเลื่อนลง
 
-// Check permission before delete comment or forum (only yourself, author or admin can remove its)
-// แก้ไขการแสดงผลเวลา (timeRange) ให้ใช้ lib ช่วย (แต่แปลภาษาเอง)
-// add error dialog when error occurs on upsert forum/comment
-// แก้ calculate ranking ให้จำนวนการกด like เท่ากัน ให้อยู่อันดับเดียวกันได้
-// แก้ไอคอน ranking เพิ่ม trophy ของอันดับ 1-3
-
 // เพิ่มหน้า Sign Up สำหรับนักศึกษา โดยสามารถ sign up ได้ผ่านเมลมหาวิทยาลัยเท่านั้น และหลังจาก verify จะให้กรอก
 // - รหัสนักศึกษา (โดยมี warning ว่า ไม่สามารถเปลี่ยนได้ด้วยตนเองในภายหลัง และต้องมีการ validate format เพิ่ม)
 // - userDisplayName
 // - userFullName
 // โดยที่ userFullName จะ prefill ให้จาก ชื่อใน gmail (googleUserProfile)
-
-// ทำให้ text editor รองรับการเว้นบรรทัด เวลาแสดงผลในหน้า home, announcement detail
-// add delete all forum and announcement when admin delete user
-
-// remove all posts and comments when delete user by admin (and pull out notiUserUUIDs, followerUserUUIDs, followingUserUUIDs of related all users)
-// remove all related post when delete category (popup or modal to warning before delete)
-// ถ้าลบ category ต้องลบ categoryID ออกจากทุกโพสต์ที่มี categoryID ดังกล่าว (กรณีโพสต์นั้นมี category เดียว และ category นั้นโดนลบ ให้ลบโพสต์ด้วย)
-// admin portal ui on modal open and resize (backdrop animate) and modal overlap on sidebar
-// admin portal modal form validation
-// admin portal error not found page
-// admin portal internal server error page
-
-// admin add form validation
-
-// change profile image with providing avatar from backend
-// เพิ่ม Notification List Page
-
-// เพิ่ม gallery สำหรับ view รูปภาพในหน้า new forum / new announcement (สามารถคลิกหรือกดลูกศรบนคีย์บอร์ดเพื่อเลื่อนรูปภาพได้)
-// เพิ่มคลิกรูปเพื่อขยาย สำหรับหน้า update profile

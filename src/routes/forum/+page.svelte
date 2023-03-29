@@ -1,8 +1,12 @@
 <script lang="ts">
+	import { Breadcrumb, BreadcrumbItem } from "flowbite-svelte";
+	import { onMount } from "svelte";
 	import { goto } from "$app/navigation";
 	import HTTP from "@commons/http";
+    import Alert from '@components/alert/Alert.svelte';
 	import NewPost from "@components/shared/NewPost.svelte";
 	import LoadingSpinner from "@components/spinner/LoadingSpinner.svelte";
+	import type { Alert as AlertModel } from '@models/alert';
 	import type { Category } from "@models/category";
 	import type { ForumRequest } from "@models/forum";
 	import type { Attachment, FormSchema } from "@models/new-post";
@@ -10,9 +14,8 @@
 	import { getAllCategories } from "@services/category";
 	import { upsertForum } from "@services/forum";
 	import { getUserProfile } from "@services/user";
-	import { Breadcrumb, BreadcrumbItem } from "flowbite-svelte";
-	import { onMount } from "svelte";
 
+    let alert: AlertModel;
     let title: FormSchema = {value: "", label: "หัวข้อกระทู้", placeholder: "กรุณาใส่หัวข้อกระทู้..."}
     let description: FormSchema = {value: "", label: "รายละเอียด", placeholder: "กรุณาใส่รายละเอียด..."}
     let categories: Category[] = [];
@@ -29,10 +32,15 @@
         }
         isLoading = true;
         const res = await upsertForum(forum, files)
-        isLoading = false;
         if (res.status === HTTP.StatusOK && res.data) {
             goto(`/forum/${res.data.forumUUID}`)
+        } else {
+            alert = {
+                color: 'red',
+                message: 'ขออภัย, ระบบเกิดความขัดข้อง กรุณาลองใหม่อีกครั้ง!',
+            }
         }
+        isLoading = false;
     }
 
     let isAnonymous = false;
@@ -52,6 +60,8 @@
         <BreadcrumbItem>สร้างกระทู้</BreadcrumbItem>
     </Breadcrumb>
 </div>
+
+<Alert bind:alert />
 
 <LoadingSpinner bind:isLoading />
 
