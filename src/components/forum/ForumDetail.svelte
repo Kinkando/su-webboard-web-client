@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { onDestroy } from 'svelte';
-    import type { Socket } from "socket.io-client";
 	import ForumImage from "./ForumImage.svelte";
 	import ForumFooter from "./ForumFooter.svelte";
     import Alert from '@components/alert/Alert.svelte';
@@ -25,7 +24,6 @@
     export let categories: Category[];
     export let replyForum = false;
     export let total = 0;
-    export let socket: Socket
 
     let isLoading = false;
     let orderBy: Order = Order.ASC;
@@ -235,4 +233,4 @@
     />
 </div>
 
-<CommentList bind:authorUUID={forumDetail.authorUUID} bind:forumUUID={forumDetail.forumUUID} bind:newComment bind:totalComments={total} bind:orderBy bind:socket />
+<CommentList bind:authorUUID={forumDetail.authorUUID} bind:forumUUID={forumDetail.forumUUID} bind:newComment bind:totalComments={total} bind:orderBy />

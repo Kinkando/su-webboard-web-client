@@ -1,16 +1,15 @@
 <script lang="ts">
     import { inview } from "svelte-inview";
 	import SyncLoader from 'svelte-loading-spinners/SyncLoader.svelte';
-    import type { Socket } from "socket.io-client";
 	import { Button } from "flowbite-svelte";
 	import CommentCard from "./CommentCard.svelte";
 	import { SocketEvent } from "@commons/socket-event";
 	import type { Comment } from "@models/comment";
 	import { Order } from "@commons/order";
 	import { getComment, getComments } from "@services/comment";
+    import socket from '@stores/socket'
 	import { getSessionUUID } from "@util/localstorage";
 
-    export let socket: Socket
     export let authorUUID: string;
     export let orderBy: Order;
     export let totalComments = 0;
@@ -138,8 +137,8 @@
 
     $: selfSessionUUID = getSessionUUID()
 
-    if (socket) {
-        socket.on(SocketEvent.CreateComment, async(data: {sessionUUID: string, commentUUID: string, replyCommentUUID?: string}) => {
+    if ($socket) {
+        $socket.on(SocketEvent.CreateComment, async(data: {sessionUUID: string, commentUUID: string, replyCommentUUID?: string}) => {
             if (data.sessionUUID !== selfSessionUUID) {
                 if (((orderBy === Order.DESC || comments.length === totalComments) && !data.replyCommentUUID) || data.replyCommentUUID) {
                     await newComment({commentUUID: data.commentUUID} as any, data.replyCommentUUID)
@@ -147,7 +146,7 @@
             }
         })
 
-        socket.on(SocketEvent.UpdateComment, async(data: {sessionUUID: string, commentUUID: string, replyCommentUUID?: string}) => {
+        $socket.on(SocketEvent.UpdateComment, async(data: {sessionUUID: string, commentUUID: string, replyCommentUUID?: string}) => {
             if (data.sessionUUID !== selfSessionUUID) {
                 for(let i=0; i<comments.length; i++) {
                     const comment = comments[i]
@@ -179,7 +178,7 @@
             }
         })
 
-        socket.on(SocketEvent.DeleteComment, async(data: {sessionUUID: string, commentUUID: string, replyCommentUUID?: string}) => {
+        $socket.on(SocketEvent.DeleteComment, async(data: {sessionUUID: string, commentUUID: string, replyCommentUUID?: string}) => {
             if (data.sessionUUID !== selfSessionUUID) {
                 if (data.replyCommentUUID) {
                     for(let i=0; i<comments.length; i++) {
