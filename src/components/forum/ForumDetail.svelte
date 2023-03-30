@@ -207,7 +207,7 @@
     <div class="font-medium min-h-[12rem]">
         {@html forumDetail.description.replaceAll('\n', '<br>')}
         {#if imageURLs.length}
-            <ForumImage {imageURLs} />
+            <ForumImage bind:imageURLs />
         {/if}
     </div>
 
@@ -217,16 +217,16 @@
 
     <ForumFooter
         type="forum"
-        isLike={forumDetail.isLike}
-        uuid={forumDetail.forumUUID}
-        isAnonymous={forumDetail.isAnonymous}
-        userUUID={forumDetail.authorUUID}
-        userDisplayName={forumDetail.authorName}
-        userImageURL={forumDetail.authorImageURL}
-        likeCount={forumDetail.likeCount}
+        bind:isLike={forumDetail.isLike}
+        bind:uuid={forumDetail.forumUUID}
+        bind:isAnonymous={forumDetail.isAnonymous}
+        bind:userUUID={forumDetail.authorUUID}
+        bind:userDisplayName={forumDetail.authorName}
+        bind:userImageURL={forumDetail.authorImageURL}
+        bind:likeCount={forumDetail.likeCount}
         commentCount={forumDetail.commentCount || total}
         {label}
-        replyText={label}
+        bind:replyText={label}
         bind:createdAt
         bind:replyTrigger={replyForum}
         bind:isSortingComment={isShowSortingComment}

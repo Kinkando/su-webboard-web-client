@@ -97,7 +97,6 @@
             if (res) {
                 res.isLike = false;
                 res.likeCount = 0;
-                delete res.replyComments
                 dispatch('create', { comment: res })
             } else {
                 alert = {
@@ -168,13 +167,13 @@
 
     <ForumFooter
         type="comment"
-        uuid={comment.commentUUID}
-        isLike={comment.isLike}
-        isAnonymous={comment.isAnonymous}
-        userUUID={comment.commenterUUID}
-        userDisplayName={comment.commenterName}
-        userImageURL={comment.commenterImageURL}
-        likeCount={comment.likeCount}
+        bind:uuid={comment.commentUUID}
+        bind:isLike={comment.isLike}
+        bind:isAnonymous={comment.isAnonymous}
+        bind:userUUID={comment.commenterUUID}
+        bind:userDisplayName={comment.commenterName}
+        bind:userImageURL={comment.commenterImageURL}
+        bind:likeCount={comment.likeCount}
         commentCount={!replyCommentUUID ? (comment.replyComments?.length || 0) : undefined}
         label={`ตอบกลับ${label}`}
         bind:createdAt
