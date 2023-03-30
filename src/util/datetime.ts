@@ -6,13 +6,9 @@ dayjs.extend(relativeTime)
 dayjs.locale('th')
 
 export function timeRange(dateTime: Date) {
+    // const second = dayjs(new Date()).diff(dateTime, 'second')
+    // if (second < 60) {
+    //     return `${second} วินาทีที่แล้ว`
+    // }
     return dayjs(dateTime).fromNow()
-    // return new Date(dateTime).toLocaleString('th', {
-    //     year: 'numeric',
-    //     month: 'narrow',
-    //     day: '2-digit',
-    //     hour12: false,
-    //     hour: '2-digit',
-    //     minute: '2-digit'
-    // })
 }

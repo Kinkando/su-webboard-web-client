@@ -55,12 +55,12 @@
 <div class="flex items-center justify-between mt-3 -mb-3">
     {#if likeCount !== undefined}
         <div class="flex items-center font-bold">
-            <LikeBadge {likeCount} bind:uuid bind:isLike toggle bind:type />
+            <LikeBadge bind:likeCount bind:uuid bind:isLike toggle bind:type />
         </div>
     {/if}
     {#if commentCount !== undefined}
         <div class="flex items-center font-bold">
-            <CommentBadge {commentCount} click on:click={() => openReplyModal = true} />
+            <CommentBadge bind:commentCount click on:click={() => openReplyModal = true} />
         </div>
     {/if}
 </div>
