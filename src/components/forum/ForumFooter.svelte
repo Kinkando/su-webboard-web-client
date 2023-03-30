@@ -5,7 +5,6 @@
 	import CommentReply from "@components/comment/CommentReply.svelte";
 	import Modal from "@components/modal/Modal.svelte";
 	import type { Attachment } from '@models/new-post';
-	import { timeRange } from '@util/datetime';
 	import { Button, Chevron, Dropdown, Helper, Radio } from 'flowbite-svelte';
 	import { slide } from 'svelte/transition';
 	import { Order } from '@commons/order';
@@ -23,7 +22,7 @@
     export let label: string;
     export let replyText = "ตอบกลับ";
     export let replyTrigger = false;
-    export let createdAt: Date;
+    export let createdAt: string;
     export let orderBy: Order = Order.ASC;
 
     let open = false;
@@ -47,8 +46,6 @@
         attachments = []
         replyTrigger = false;
     }
-
-    $: time = (() => timeRange(createdAt))()
 
     $: if (orderBy) {
         open = false
@@ -86,7 +83,7 @@
             {:else}
                 <div class="font-bold overflow-hidden text-ellipsis whitespace-nowrap">{userDisplayName}</div>
             {/if}
-            <div class="font-light text-sm overflow-hidden text-ellipsis whitespace-nowrap">{time}</div>
+            <div class="font-light text-sm overflow-hidden text-ellipsis whitespace-nowrap">{createdAt}</div>
         </div>
     </div>
     {#if commentCount !== undefined}

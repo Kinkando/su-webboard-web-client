@@ -1,10 +1,11 @@
 <script lang="ts">
+	import { onDestroy } from 'svelte';
     import type { Socket } from "socket.io-client";
 	import ForumImage from "./ForumImage.svelte";
 	import ForumFooter from "./ForumFooter.svelte";
     import Alert from '@components/alert/Alert.svelte';
 	import HTTP from "@commons/http";
-	import type { Order } from "@commons/order";
+	import { Order } from "@commons/order";
 	import CategoryBadge from "@components/badge/CategoryBadge.svelte";
 	import CommentList from "@components/comment/CommentList.svelte";
     import EllipsisMenu from "@components/shared/EllipsisMenu.svelte";
@@ -27,7 +28,7 @@
     export let socket: Socket
 
     let isLoading = false;
-    let orderBy: Order;
+    let orderBy: Order = Order.ASC;
     let newComment: (comment: Comment) => Promise<void>;
     let alert: AlertModel;
 
@@ -150,6 +151,20 @@
     }
 
     $: userUUID = getUserUUID()
+
+    $: if(forumDetail.updatedAt !== undefined) {
+        updatedAt = timeRange(forumDetail.updatedAt)
+    }
+
+    let createdAt = timeRange(forumDetail.createdAt)
+    let updatedAt = forumDetail.updatedAt ? timeRange(forumDetail.updatedAt) : ''
+    const period = setInterval(() => {
+        createdAt = timeRange(forumDetail.createdAt)
+        if (forumDetail.updatedAt) {
+            updatedAt = timeRange(forumDetail.updatedAt)
+        }
+    }, 1000)
+    onDestroy(() => clearInterval(period))
 </script>
 
 <Alert bind:alert />
@@ -197,7 +212,7 @@
     </div>
 
     {#if forumDetail.updatedAt}
-        <div class="mt-4 text-gray-500">แก้ไขล่าสุด: {timeRange(forumDetail.updatedAt)}</div>
+        <div class="mt-4 text-gray-500">แก้ไขล่าสุด: {updatedAt}</div>
     {/if}
 
     <ForumFooter
@@ -212,7 +227,7 @@
         commentCount={forumDetail.commentCount || total}
         {label}
         replyText={label}
-        createdAt={forumDetail.createdAt}
+        bind:createdAt
         bind:replyTrigger={replyForum}
         bind:isSortingComment={isShowSortingComment}
         bind:orderBy
