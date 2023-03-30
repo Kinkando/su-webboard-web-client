@@ -4,17 +4,18 @@
     import type { Socket } from "socket.io-client";
 	import { Button } from "flowbite-svelte";
 	import CommentCard from "./CommentCard.svelte";
+	import { SocketEvent } from "@commons/socket-event";
 	import type { Comment } from "@models/comment";
 	import { Order } from "@commons/order";
 	import { getComment, getComments } from "@services/comment";
-	import { getUserUUID } from "@util/localstorage";
+	import { getSessionUUID } from "@util/localstorage";
 
     export let socket: Socket
     export let authorUUID: string;
     export let orderBy: Order;
     export let totalComments = 0;
     export let forumUUID: string;
-    export const newComment = async (cm: Comment) => {
+    export const newComment = async (cm: Comment, replyCommentUUID?: string) => {
         if (totalComments !== comments.length && orderBy === Order.ASC) {
             return;
         }
@@ -22,11 +23,36 @@
         if (res) {
             res.isLike = false;
             res.likeCount = 0;
-            res.replyCursor = 0;
-            res.replyComments = [];
-            if (!comments.find(comment => comment.commentUUID === res.commentUUID)) {
-                comments = orderBy === Order.ASC ? [...comments, res] : [res, ...comments]
-                totalComments++;
+            const isNewComment = !comments.find(comment => {
+                if (replyCommentUUID && comment.replyComments) {
+                    return comment.replyComments.find(replyComment => replyComment.commentUUID === res.commentUUID)
+                }
+                return comment.commentUUID === res.commentUUID
+            })
+            if (isNewComment) {
+                if (!replyCommentUUID) {
+                    // new comment
+                    res.replyCursor = 0;
+                    res.replyComments = [];
+                    comments = orderBy === Order.ASC ? [...comments, res] : [res, ...comments]
+                    totalComments++;
+                } else {
+                    // new reply comment
+                    for(let i=0; i<comments.length; i++) {
+                        const comment = comments[i];
+                        if (comment.commentUUID === replyCommentUUID) {
+                            if (comment.replyCursor === comment.replyComments?.length) {
+                                comments[i].replyCursor!++;
+                            }
+                            if (comment.replyComments) {
+                                comments[i].replyComments = orderBy === Order.ASC ? [...comment.replyComments!, res] : [res, ...comment.replyComments!]
+                            } else {
+                                comments[i].replyComments = [res]
+                            }
+                            break
+                        }
+                    }
+                }
             }
         }
     }
@@ -110,37 +136,19 @@
     $: commentNo = (no: number): number => orderBy === Order.DESC ? (totalComments - no) : (no+1)
     const replyCommentNo = (no: number, totalReplyComments: number): number => orderBy === Order.DESC ? (totalReplyComments - no) : (no+1)
 
-    function socketEvents() {
-        socket.on('createComment', async(data: {editorUUID: string, commentUUID: string, replyCommentUUID?: string}) => {
-            if (data.editorUUID !== getUserUUID()) {
+    $: selfSessionUUID = getSessionUUID()
+
+    if (socket) {
+        socket.on(SocketEvent.CreateComment, async(data: {sessionUUID: string, commentUUID: string, replyCommentUUID?: string}) => {
+            if (data.sessionUUID !== selfSessionUUID) {
                 if (((orderBy === Order.DESC || comments.length === totalComments) && !data.replyCommentUUID) || data.replyCommentUUID) {
-                    const res = await getComment(forumUUID, data.commentUUID)
-                    if (res) {
-                        if (data.replyCommentUUID) {
-                            for(let i=0; i<comments.length; i++) {
-                                const comment = comments[i];
-                                if (comment.commentUUID === data.replyCommentUUID) {
-                                    if (comment.replyCursor === comment.replyComments?.length) {
-                                        comments[i].replyCursor!++;
-                                    }
-                                    if (comment.replyComments) {
-                                        comments[i].replyComments = orderBy === Order.ASC ? [...comment.replyComments!, res] : [res, ...comment.replyComments!]
-                                    } else {
-                                        comments[i].replyComments = [res]
-                                    }
-                                    break
-                                }
-                            }
-                        } else {
-                            await newComment(res)
-                        }
-                    }
+                    await newComment({commentUUID: data.commentUUID} as any, data.replyCommentUUID)
                 }
             }
         })
 
-        socket.on('updateComment', async(data: {editorUUID: string, commentUUID: string, replyCommentUUID?: string}) => {
-            if (data.editorUUID !== getUserUUID()) {
+        socket.on(SocketEvent.UpdateComment, async(data: {sessionUUID: string, commentUUID: string, replyCommentUUID?: string}) => {
+            if (data.sessionUUID !== selfSessionUUID) {
                 for(let i=0; i<comments.length; i++) {
                     const comment = comments[i]
                     if ((data.replyCommentUUID && data.replyCommentUUID === comment.commentUUID) || data.commentUUID === comment.commentUUID) {
@@ -149,12 +157,20 @@
                             if (data.replyCommentUUID && comment.replyComments) {
                                 for(let j=0; j<comment.replyComments.length; j++) {
                                     if (data.commentUUID === comments[i].replyComments![j].commentUUID) {
-                                        comments[i].replyComments![j] = res
+                                        comments[i].replyComments![j] = {
+                                            ...res,
+                                            replyComments: comments[i].replyComments,
+                                            replyCursor: comments[i].replyCursor,
+                                        }
                                         break;
                                     }
                                 }
                             } else {
-                                comments[i] = res
+                                comments[i] = {
+                                    ...res,
+                                    replyComments: comments[i].replyComments,
+                                    replyCursor: comments[i].replyCursor,
+                                }
                             }
                         }
                         break
@@ -163,14 +179,19 @@
             }
         })
 
-        socket.on('deleteComment', async(data: {editorUUID: string, commentUUID: string, replyCommentUUID?: string}) => {
-            if (data.editorUUID !== getUserUUID()) {
+        socket.on(SocketEvent.DeleteComment, async(data: {sessionUUID: string, commentUUID: string, replyCommentUUID?: string}) => {
+            if (data.sessionUUID !== selfSessionUUID) {
                 if (data.replyCommentUUID) {
                     for(let i=0; i<comments.length; i++) {
                         const comment = comments[i]
                         if (data.replyCommentUUID === comment.commentUUID) {
-                            comments[i].replyComments = comments[i].replyComments?.filter(replyComment => replyComment.commentUUID !== data.commentUUID);
-                            comments[i].replyCursor!--;
+                            comments[i].replyComments = comments[i].replyComments?.filter((replyComment, index) => {
+                                const isMatch = replyComment.commentUUID === data.commentUUID
+                                if (isMatch && comments[i].replyCursor! - 1 >= index) {
+                                    comments[i].replyCursor!--;
+                                }
+                                return !isMatch;
+                            });
                             break
                         }
                     }
@@ -180,9 +201,6 @@
                 }
             }
         })
-    }
-    if (socket) {
-        socketEvents()
     }
 </script>
 

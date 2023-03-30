@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { Breadcrumb, BreadcrumbItem } from 'flowbite-svelte';
+    import { Breadcrumb, BreadcrumbItem } from 'flowbite-svelte';
+	import { onDestroy, onMount } from 'svelte';
+    import { page } from '$app/stores';
 	import ForumList from '@components/forum/ForumList.svelte';
 	import type { Category } from "@models/category";
-	import { getForumListByCategoryID } from '@services/forum';
 	import { getCategoryByID } from '@services/category';
-	import { onMount } from 'svelte';
-    import { page } from '$app/stores';
+	import { getForumListByCategoryID } from '@services/forum';
 
     $: categoryID = Number($page.params.categoryID)
     $: categoryName = category?.categoryName ?? periodText
@@ -22,6 +22,7 @@
             periodText = 'ไม่พบหมวดหมู่'
         }
     })
+    onDestroy(() => clearInterval(period))
 
     let periodText = "."
     const period = setInterval(() => {

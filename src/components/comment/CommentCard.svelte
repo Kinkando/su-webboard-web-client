@@ -11,7 +11,7 @@
     import type { Document } from "@models/forum";
 	import { deleteComment, getComment, upsertComment } from "@services/comment";
 	import { getUserUUID } from "@util/localstorage";
-	import { createEventDispatcher } from "svelte";
+	import { createEventDispatcher, onDestroy } from "svelte";
 	import { timeRange } from "@util/datetime";
 
     export let label: string;
@@ -116,6 +116,20 @@
     }
 
     $: userUUID = getUserUUID()
+
+    $: if(comment.updatedAt !== undefined) {
+        updatedAt = timeRange(comment.updatedAt)
+    }
+
+    let createdAt = timeRange(comment.createdAt)
+    let updatedAt = comment.updatedAt ? timeRange(comment.updatedAt) : ''
+    const period = setInterval(() => {
+        createdAt = timeRange(comment.createdAt)
+        if (comment.updatedAt) {
+            updatedAt = timeRange(comment.updatedAt)
+        }
+    }, 1000)
+    onDestroy(() => clearInterval(period))
 </script>
 
 <Alert bind:alert />
@@ -149,7 +163,7 @@
     </div>
 
     {#if comment.updatedAt}
-        <div class="mt-4 text-gray-500">แก้ไขล่าสุด: {timeRange(comment.updatedAt)}</div>
+        <div class="mt-4 text-gray-500">แก้ไขล่าสุด: {updatedAt}</div>
     {/if}
 
     <ForumFooter
@@ -163,7 +177,7 @@
         likeCount={comment.likeCount}
         commentCount={!replyCommentUUID ? (comment.replyComments?.length || 0) : undefined}
         label={`ตอบกลับ${label}`}
-        createdAt={comment.createdAt}
+        bind:createdAt
         on:comment={event => createCommentAction(event.detail.comment, event.detail.attachments)}
     />
 </div>

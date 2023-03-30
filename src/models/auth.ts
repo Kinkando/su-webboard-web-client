@@ -27,4 +27,5 @@ export interface RefreshJWT {
     iat: number
     userType: string
     userUUID: string
+    sessionUUID: string
 }

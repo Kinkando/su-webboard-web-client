@@ -13,7 +13,6 @@ export function authGuard(routeID: string, userType: string, isValidToken: boole
     }
 
     if ((!userType || !isValidToken) && !commonRoutes.includes(routeID)) {
-        localStorage.setItem("state", Auth.SessionExpired)
         return `/login`
     }
 

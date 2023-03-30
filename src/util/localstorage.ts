@@ -1,9 +1,10 @@
 import { TokenType, type AccessJWT, type RefreshJWT } from "@models/auth";
 import jwtDecode from "jwt-decode"
 
-export function getUser(): { userUUID: string, userType: string, isValid: boolean } {
+export function getUser(): { userUUID: string, userType: string, isValid: boolean, sessionUUID: string } {
     let userUUID = "";
     let userType = "";
+    let sessionUUID = "";
     let isValid = false;
     const accessToken = localStorage.getItem(TokenType.AccessToken)
     if (accessToken) {
@@ -12,9 +13,10 @@ export function getUser(): { userUUID: string, userType: string, isValid: boolea
         isValid = now <= decodeJWT.exp
         userType = decodeJWT.userType
         userUUID = decodeJWT.userUUID
+        sessionUUID = decodeJWT.sessionUUID
     }
     if (isValid) {
-        return { userUUID, userType, isValid };
+        return { userUUID, userType, isValid, sessionUUID };
     }
     const refreshToken = localStorage.getItem(TokenType.RefreshToken)
     if (refreshToken) {
@@ -23,8 +25,9 @@ export function getUser(): { userUUID: string, userType: string, isValid: boolea
         isValid = now <= decodeJWT.exp
         userType = decodeJWT.userType
         userUUID = decodeJWT.userUUID
+        // sessionUUID = decodeJWT.sessionUUID
     }
-    return { userUUID, userType, isValid }
+    return { userUUID, userType, isValid, sessionUUID }
 }
 
 export function getUserUUID(): string {
@@ -35,6 +38,11 @@ export function getUserUUID(): string {
 export function getUserType(): { userType: string, isValid: boolean } {
     const { userType, isValid } = getUser()
     return { userType, isValid }
+}
+
+export function getSessionUUID(): string {
+    const { sessionUUID } = getUser()
+    return sessionUUID
 }
 
 export function getToken(): { accessToken: string|undefined, refreshToken: string|undefined } {
