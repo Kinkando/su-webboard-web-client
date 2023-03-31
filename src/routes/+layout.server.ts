@@ -50,13 +50,10 @@ export const load: LayoutServerLoad = async ({ cookies, route }) => {
 // เพิ่มคลิกรูปเพื่อขยาย สำหรับหน้า update profile
 // Text Editor Component
 
+// เพิ่มหน้า internal server error กรณีที่ call APIs return status 500
 // Check permission before delete comment or forum (only yourself, author or admin can remove its)
 // edit loading screen on create/update/delete data admin
 // admin add form validation
-// remove all posts and comments when delete user by admin (and pull out notiUserUUIDs, followerUserUUIDs, followingUserUUIDs of related all users)
-// remove all related post when delete category (popup or modal to warning before delete)
-// ถ้าลบ category ต้องลบ categoryID ออกจากทุกโพสต์ที่มี categoryID ดังกล่าว (กรณีโพสต์นั้นมี category เดียว และ category นั้นโดนลบ ให้ลบโพสต์ด้วย)
-// remove all forums and announcements when admin delete user
 // admin portal ui on modal open and resize (backdrop animate) and modal overlap on sidebar
 // admin portal modal form validation
 // admin portal error not found page

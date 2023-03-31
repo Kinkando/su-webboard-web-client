@@ -73,7 +73,11 @@
         return socket
     }
 
-    onDestroy(() => $socket.disconnect())
+    onDestroy(() => {
+        try {
+            $socket.disconnect()
+        } catch (error) {}
+    })
 </script>
 
 <svelte:window bind:scrollY />

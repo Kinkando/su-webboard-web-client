@@ -3,7 +3,7 @@
 	import { createEventDispatcher } from "svelte";
 	import { slide } from "svelte/transition";
 	import { Popover } from "flowbite-svelte";
-	import NewPost from "./NewPost.svelte";
+	import ForumEditor from "./ForumEditor.svelte";
 	import CommentReply from "@components/comment/CommentReply.svelte";
     import Modal from "@components/modal/Modal.svelte"
 	import DeleteModal from "@components/modal/DeleteModal.svelte";
@@ -176,7 +176,7 @@
 
 {#if title && description}
     <Modal bind:open={openEditForumModal} defaultClass="w-full" title="แก้ไข{menuSuffixName}">
-        <NewPost
+        <ForumEditor
             bind:title={editTitle}
             bind:description={editDescription}
             bind:attachments={editAttachments}

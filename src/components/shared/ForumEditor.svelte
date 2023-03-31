@@ -1,10 +1,12 @@
 <script lang="ts">
-	import PostDescription from './PostDescription.svelte';
-	import { Button, Input, Label, Radio, Spinner, Textarea } from 'flowbite-svelte';
+    import { Button, Input, Label, Radio, Spinner, Textarea } from 'flowbite-svelte';
+	import Alert from '@components/alert/Alert.svelte';
 	import ToggleBadge from '@components/badge/ToggleBadge.svelte';
+	import type { Alert as AlertModel } from '@models/alert';
 	import type { Category } from '@models/category';
 	import type { Attachment, FormSchema } from '@models/new-post';
 	import { StatusGroup, type User } from '@models/user';
+	import { defined } from '@util/generic';
 
     export let title: FormSchema;
     export let description: FormSchema;
@@ -18,6 +20,7 @@
     export let anonymousPost = false;
     export let isAnonymous = false;
 
+    let alert: AlertModel
     let fileInput: HTMLInputElement;
     let files: FileList;
 
@@ -58,7 +61,25 @@
         isAnonymous = postMode === StatusGroup.anonymous
     }
     $: isDisabled = !title?.value || (!description?.value && !attachments.length) || (categories && categories.length && !categories.filter(category => category.isActive)?.length)
+
+    function selectCategory(categoryID: number) {
+        if (categories) {
+            const activeCategory = categories.filter(category => category.isActive)
+            if (activeCategory.length > 5) {
+                const category = categories.find(category => category.categoryID === categoryID)
+                if (category) {
+                    category.isActive = false
+                    alert = {
+                        color: 'yellow',
+                        message: 'คุณสามารถเลือกหมวดหมู่ได้ไม่เกิน 5 หมวดหมู่',
+                    }
+                }
+            }
+        }
+    }
 </script>
+
+<Alert bind:alert />
 
 <Label for="title" class="space-y-2 text-black dark:text-white">
     <span>{title.label}</span>
@@ -67,7 +88,6 @@
 
 <Label for="description" class="space-y-2 mt-4 text-black dark:text-white">
     <span>{description.label}</span>
-    <!-- <PostDescription bind:text={description.value} /> -->
     <Textarea id="description" class="ease-in duration-200 transition-colors placeholder-gray-300 min-h-[300px] !bg-gray-50 dark:!bg-gray-700" placeholder={description.placeholder} required bind:value={description.value} />
 </Label>
 
@@ -78,7 +98,13 @@
             {#if categories?.length}
                 {#each categories as category}
                     <div class="m-1.5">
-                        <ToggleBadge toggle hexColor={category.categoryHexColor} name={category.categoryName} bind:isActive={category.isActive} />
+                        <ToggleBadge
+                            toggle
+                            bind:hexColor={category.categoryHexColor}
+                            bind:name={category.categoryName}
+                            bind:isActive={category.isActive}
+                            on:click={() => selectCategory(defined(category.categoryID))}
+                        />
                     </div>
                 {/each}
             {:else}
