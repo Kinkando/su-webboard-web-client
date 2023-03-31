@@ -17,8 +17,22 @@
 <div class="flex items-center justify-between mb-4">
     <h1 class="font-bold text-2xl">{title}</h1>
     <div class="flex gap-x-2">
-        <Button class="hover:scale-105 ease-in duration-200 hidden sm:block" disabled={deleteItemsCount === 0} on:click={() => open = true} color="red" gradient>ลบหลายรายการ</Button>
-        <Button class="hover:scale-105 ease-in duration-200" color="greenToBlue" gradient on:click={addItemAction}>{buttonName}</Button>
+        <Button class="hover:scale-105 ease-in duration-200" disabled={deleteItemsCount === 0} on:click={() => open = true} color="red" gradient>
+            <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M18 12H6" />
+                </svg>
+                <span class="ml-2 hidden sm:block">ลบหลายรายการ</span>
+            </div>
+        </Button>
+        <Button class="hover:scale-105 ease-in duration-200" color="greenToBlue" gradient on:click={addItemAction}>
+            <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
+                </svg>
+                <span class="ml-2 hidden sm:block">{buttonName}</span>
+            </div>
+        </Button>
     </div>
 </div>
 

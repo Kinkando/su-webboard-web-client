@@ -51,7 +51,6 @@ export const load: LayoutServerLoad = async ({ cookies, route }) => {
 // Text Editor Component
 
 // เพิ่มหน้า internal server error กรณีที่ call APIs return status 500
-// admin add form validation
 // admin portal modal form validation
 // admin portal error not found page
 // admin portal internal server error page
