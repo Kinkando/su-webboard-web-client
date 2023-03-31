@@ -1,8 +1,8 @@
 <script lang="ts">
 	import Sidebar from './../../components/layout/Sidebar.svelte';
 	import { page } from "$app/stores";
-	import { Breadcrumb, BreadcrumbItem, DarkMode } from "flowbite-svelte";
-	import { fly } from "svelte/transition";
+	import { Breadcrumb, BreadcrumbItem, DarkMode, Tooltip } from "flowbite-svelte";
+	import { fly, slide } from "svelte/transition";
 
     $: currentRoute = $page.route.id!;
     let rootPath = "/admin-portal"
@@ -37,6 +37,10 @@
 </script>
 
 <Sidebar bind:rootPath bind:sidebarItems bind:isSidebarExpand />
+
+<Tooltip placement="bottom" shadow trigger="hover" triggeredBy="#theme-toggle" class="z-40 sm:hidden transition-colors ease-in duration-200 !bg-white !text-[var(--primary-color)] dark:!text-white dark:!bg-gray-700">
+    <div in:slide={{duration: 200}}>เปลี่ยนธีม</div>
+</Tooltip>
 
 <main class="relative min-[1000.1px]:ml-[225px] max-[1000.1px]:top-16 h-full overflow-hidden">
     <header class="fixed w-full top-0 min-[1000.1px]:hidden h-16 flex items-center px-4 text-2xl shadow-md text-black bg-white dark:text-gray-300 dark:bg-gray-900 ease-in duration-200 z-30">
