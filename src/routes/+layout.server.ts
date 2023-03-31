@@ -75,3 +75,20 @@ export const load: LayoutServerLoad = async ({ cookies, route }) => {
 // - userDisplayName
 // - userFullName
 // โดยที่ userFullName จะ prefill ให้จาก ชื่อใน gmail (googleUserProfile)
+
+// เมื่อลบ user
+// 1. ลบ file ที่เก็บใน cloud storage ของทุกกระทู้หรือคอมเมนต์ของ user คนนั้น
+// 2. ลบกระทู้ทั้งหมดที่ user คนนั้นเป็นคนสร้าง
+// 3. ลบคอมเมนต์ของ user คนนั้นทั้งหมด
+// 4. ลบประกาศของ user คนนั้นทั้งหมด กรณีที่มี user type เป็นอาจารย์
+// 5. ลบยอดไลค์ทั้งหมดออกจากกระทู้และคอมเมนต์ที่เกี่ยวข้องกับ user คนนั้น รวมถึงถอด user ออกจากรายการโปรดในกระทู้ที่เกี่ยวข้อง
+// 6. ลบยอดการมองเห็นทั้งหมดที่เกี่ยวข้องกับ user คนนั้นออกจากประกาศจากทางมหาวิทยาลัย
+// 7. ลบ user คนนั้น ออกจากผู้ติดตาม และกำลังติดตามของ user คนอื่น รวมถึงปิดการแจ้งเตือนทั้งหมดที่เกี่ยวข้องกับ user คนนั้น
+// 8. ลบข้อมูล user ออกจาก database รวมถึง email และ link account google provider ที่ผูกไว้กับ firebase
+// 9. revoke access token, refresh token ทั้งหมดของ user คนนั้น ออกจาก cache repository redis และ force logout
+// 10. ส่ง event ผ่าน socket เพื่อ trigger ไป refresh หน้าจอบน browser สำหรับ user ทั้งหมดที่อยู่ในหน้ารายละเอียดของกระทู้ที่มีข้อมูลเกี่ยวข้องกับ user คนนั้น
+
+// เมื่อลบ category
+// 1. ลบ category ออกจากกระทู้ทั้งหมดที่เกี่ยวข้อง (กรณีที่กระทู้นั้นมีหลาย category)
+// 2. ลบกระทู้ทั้งหมดที่มี category เดียว และเป็น category เดียวกับที่ต้องการลบ
+// 3. ส่ง event ผ่าน socket เพื่อ trigger ไป refresh หน้าจอ

@@ -1,15 +1,14 @@
 <script lang="ts">
 	import HTTP from "@commons/http";
-    import Alert from '@components/alert/Alert.svelte';
 	import ForumFooter from "@components/forum/ForumFooter.svelte";
 	import ForumImage from "@components/forum/ForumImage.svelte";
 	import EllipsisMenu from "@components/shared/EllipsisMenu.svelte";
 	import LoadingSpinner from "@components/spinner/LoadingSpinner.svelte";
-	import type { Alert as AlertModel } from '@models/alert';
 	import type { Comment } from "@models/comment";
 	import type { Attachment } from "@models/new-post";
     import type { Document } from "@models/forum";
 	import { deleteComment, getComment, upsertComment } from "@services/comment";
+    import { alert } from "@stores/alert";
 	import { getUserUUID } from "@util/localstorage";
 	import { createEventDispatcher, onDestroy } from "svelte";
 	import { timeRange } from "@util/datetime";
@@ -20,7 +19,6 @@
     export let authorUUID: string;
     export let replyCommentUUID: string = "";
 
-    let alert: AlertModel;
     let isLoading = false;
     let attachments: Attachment[] = [];
     $: comment.commentImages !== undefined && initImages();
@@ -52,10 +50,11 @@
         const files = attachmentsEdit.map(attachment => attachment.file)
         const res = await upsertComment(forumUUID, comment, files, deleteImageUUIDs, replyCommentUUID || undefined)
         if (res.status !== HTTP.StatusOK) {
-            alert = {
-                color: 'red',
+
+            alert({
+                type: 'error',
                 message: 'ขออภัย, ระบบเกิดความขัดข้อง กรุณาลองใหม่อีกครั้ง!',
-            }
+            })
         } else {
             // update data on local
             comment.updatedAt = new Date();
@@ -99,16 +98,16 @@
                 res.likeCount = 0;
                 dispatch('create', { comment: res })
             } else {
-                alert = {
-                    color: 'red',
+                alert({
+                    type: 'error',
                     message: 'ขออภัย, ระบบเกิดความขัดข้อง กรุณาลองใหม่อีกครั้ง!',
-                }
+                })
             }
         } else {
-            alert = {
-                color: 'red',
+            alert({
+                type: 'error',
                 message: 'ขออภัย, ระบบเกิดความขัดข้อง กรุณาลองใหม่อีกครั้ง!',
-            }
+            })
         }
 
         isLoading = false;
@@ -130,8 +129,6 @@
     }, 1000)
     onDestroy(() => clearInterval(period))
 </script>
-
-<Alert bind:alert />
 
 <LoadingSpinner bind:isLoading />
 

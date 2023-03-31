@@ -3,7 +3,6 @@
 	import type { ForumReport } from '@models/forum';
 	import type { ActionTable, DataTable } from "@models/table";
 	import { getForumReport } from "@services/admin";
-	import { Button } from 'flowbite-svelte';
 
     let limit = 10;
     let total = 0;

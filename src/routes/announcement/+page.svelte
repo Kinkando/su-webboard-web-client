@@ -2,15 +2,13 @@
 	import { Breadcrumb, BreadcrumbItem } from "flowbite-svelte";
 	import { goto } from "$app/navigation";
 	import HTTP from "@commons/http";
-    import Alert from '@components/alert/Alert.svelte';
 	import ForumEditor from "@components/shared/ForumEditor.svelte";
 	import LoadingSpinner from "@components/spinner/LoadingSpinner.svelte";
-	import type { Alert as AlertModel } from '@models/alert';
 	import type { AnnouncementRequest } from "@models/announcement";
 	import type { Attachment, FormSchema } from "@models/new-post";
 	import { upsertAnnouncement } from "@services/announcement";
+    import { alert } from "@stores/alert";
 
-    let alert: AlertModel;
     let title: FormSchema = {value: "", label: "หัวข้อการประกาศ", placeholder: "กรุณาใส่หัวข้อสำหรับประกาศจากทางมหาวิทยาลัย..."}
     let description: FormSchema = {value: "", label: "รายละเอียด", placeholder: "กรุณาใส่รายละเอียด..."}
     let attachments: Attachment[] = [];
@@ -27,16 +25,14 @@
         if (res.status === HTTP.StatusOK && res.data) {
             goto(`/announcement/${res.data.announcementUUID}`)
         } else {
-            alert = {
-                color: 'red',
+            alert({
+                type: 'error',
                 message: 'ขออภัย, ระบบเกิดความขัดข้อง กรุณาลองใหม่อีกครั้ง!',
-            }
+            })
         }
         isLoading = false;
     }
 </script>
-
-<Alert bind:alert />
 
 <LoadingSpinner bind:isLoading />
 

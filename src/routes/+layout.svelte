@@ -5,11 +5,13 @@
 	import { browser } from "$app/environment";
 	import { afterNavigate, beforeNavigate } from "$app/navigation";
     import { page } from '$app/stores';
+    import Alerts from '@components/alert/Alerts.svelte';
 	import Topbar from "@components/layout/Topbar.svelte";
 	import LoadingSpinner from '@components/spinner/LoadingSpinner.svelte';
 	import AuthGuard from '@middleware/AuthGuard.svelte';
 	import { getNotiList } from "@services/notification";
 	import { getUserProfile } from "@services/user";
+	import { alerts } from '@stores/alert';
     import notificationStore from '@stores/notification'
     import userStore from '@stores/user'
 	import { getUserType } from "@util/localstorage";
@@ -73,6 +75,8 @@
     <link rel="icon" href="/favicon.png">
 </svelte:head>
 
+<Alerts />
+
 <LoadingSpinner bind:isLoading />
 
 {#key $page.url.pathname}
@@ -92,6 +96,7 @@
             </main>
 
             <footer class="relative top-16 h-16 flex items-center px-4 bg-[var(--primary-color)] text-white">
+                test{$alerts.length}
                 <span>&copy;&nbsp;</span>su-webboard - 2023
             </footer>
         {:else}
