@@ -5,7 +5,6 @@
 	import { slide } from "svelte/transition";
 
     export let title: string;
-    export let buttonName: string
     export let deleteItemsCount: number;
 
 	const dispatch = createEventDispatcher();
@@ -19,7 +18,7 @@
     <div in:slide={{duration: 200}}>ลบหลายรายการ</div>
 </Tooltip>
 <Tooltip placement="bottom" shadow trigger="hover" triggeredBy="#add-item-button" class="z-30 sm:hidden transition-colors ease-in duration-200 !bg-white !text-[var(--primary-color)] dark:!text-white dark:!bg-gray-700">
-    <div in:slide={{duration: 200}}>{buttonName}</div>
+    <div in:slide={{duration: 200}}>เพิ่มรายการ</div>
 </Tooltip>
 
 <div class="flex items-center justify-between mb-4">
@@ -41,7 +40,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
                     </svg>
-                    <span class="ml-2 hidden sm:block">{buttonName}</span>
+                    <span class="ml-2 hidden sm:block">เพิ่มรายการ</span>
                 </div>
             </Button>
         </div>

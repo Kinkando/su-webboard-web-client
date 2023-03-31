@@ -1,5 +1,4 @@
 <script lang="ts">
-	import HTTP from '@commons/http';
 	import ConfirmModal from '@components/modal/ConfirmModal.svelte';
 	import DeleteModal from '@components/modal/DeleteModal.svelte';
 	import FormModal from '@components/modal/FormModal.svelte';
@@ -164,7 +163,7 @@
                 isOpenFormModal = false
                 alert({
                     type: 'success',
-                    message: 'เพิ่มข้อมูลอาจารย์สำเร็จ'
+                    message: 'เพิ่มรายการสำเร็จ'
                 })
             }
         } else {
@@ -185,7 +184,7 @@
                 isOpenFormModal = false
                 alert({
                     type: 'success',
-                    message: 'แก้ไขข้อมูลอาจารย์สำเร็จ'
+                    message: 'แก้ไขรายการสำเร็จ'
                 })
             }
         }
@@ -203,7 +202,7 @@
         total -= 1
         alert({
             type: 'success',
-            message: `ลบข้อมูลอาจารย์สำเร็จ`
+            message: `ลบรายการสำเร็จ`
         })
         isLoading = false
     }
@@ -216,7 +215,7 @@
             selectedItems = [];
             alert({
                 type: 'success',
-                message: `ลบข้อมูลอาจารย์สำเร็จ`
+                message: `ลบรายการสำเร็จ`
             })
             isLoading = false
         }
@@ -236,7 +235,7 @@
 <LoadingSpinner bind:isLoading />
 
 <div class="rounded-lg shadow-md w-full h-full p-4 sm:p-6 overflow-hidden bg-white text-black dark:bg-gray-700 dark:text-white ease-in duration-200">
-    <AdminHeader title="อาจารย์" buttonName="เพิ่มอาจารย์" bind:deleteItemsCount={selectedItems.length} on:add={addItemAction} on:delete={multiDeleteAction} />
+    <AdminHeader title="อาจารย์" bind:deleteItemsCount={selectedItems.length} on:add={addItemAction} on:delete={multiDeleteAction} />
     <Table bind:limit bind:total {columns} bind:data skeletonLoad multiSelect on:fetch={fetchTeachers} {actions} bind:selectedItems />
 </div>
 

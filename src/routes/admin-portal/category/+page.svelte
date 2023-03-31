@@ -128,7 +128,7 @@
             isOpenFormModal = false;
             alert({
                 type: 'success',
-                message: res.status === HTTP.StatusCreated ? 'เพิ่มหมวดหมู่สำเร็จ' : `แก้ไขหมวดหมู่สำเร็จ`
+                message: res.status === HTTP.StatusCreated ? 'เพิ่มรายการสำเร็จ' : `แก้ไขรายการสำเร็จ`
             })
         }
     }
@@ -144,7 +144,7 @@
         total -= 1
         alert({
             type: 'success',
-            message: `ลบหมวดหมู่สำเร็จ`
+            message: `ลบรายการสำเร็จ`
         })
         isLoading = false
     }
@@ -157,7 +157,7 @@
             selectedItems = []
             alert({
                 type: 'success',
-                message: `ลบหมวดหมู่สำเร็จ`
+                message: `ลบรายการสำเร็จ`
             })
             isLoading = false
         }
@@ -167,7 +167,7 @@
 <LoadingSpinner bind:isLoading />
 
 <div class="rounded-lg shadow-md w-full h-full p-4 sm:p-6 overflow-hidden bg-white text-black dark:bg-gray-700 dark:text-white ease-in duration-200">
-    <AdminHeader title="หมวดหมู่" buttonName="เพิ่มหมวดหมู่" bind:deleteItemsCount={selectedItems.length} on:add={addItemAction} on:delete={multiDeleteAction} />
+    <AdminHeader title="หมวดหมู่" bind:deleteItemsCount={selectedItems.length} on:add={addItemAction} on:delete={multiDeleteAction} />
     <Table bind:limit bind:total {columns} bind:data skeletonLoad multiSelect on:fetch={fetch} {actions} bind:selectedItems />
 </div>
 
