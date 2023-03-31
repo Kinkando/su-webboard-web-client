@@ -18,6 +18,7 @@
 	import { defined } from "@util/generic";
 	import { getUserUUID } from "@util/localstorage";
 	import { timeRange } from "@util/datetime";
+	import { goto } from '$app/navigation';
 
     export let forumDetail: ForumDetail;
     export let categories: Category[];
@@ -111,8 +112,8 @@
     const deleteForumAction = async() => {
         isLoading = true;
         await deleteForum(forumDetail?.forumUUID)
-        window.location.href = '/'
         isLoading = false;
+        await goto('/')
     }
 
     const reportForumAction = async(reason: string) => {

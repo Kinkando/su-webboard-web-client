@@ -51,7 +51,6 @@ export const load: LayoutServerLoad = async ({ cookies, route }) => {
 // Text Editor Component
 
 // เพิ่มหน้า internal server error กรณีที่ call APIs return status 500
-// Check permission before delete comment or forum (only yourself, author or admin can remove its)
 // edit loading screen on create/update/delete data admin
 // admin add form validation
 // admin portal ui on modal open and resize (backdrop animate) and modal overlap on sidebar

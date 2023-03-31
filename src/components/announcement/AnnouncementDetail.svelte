@@ -7,6 +7,7 @@
 	import { deleteAnnouncement, upsertAnnouncement } from "@services/announcement";
 	import { createEventDispatcher } from "svelte";
 	import AnnouncementFooter from "./AnnouncementFooter.svelte";
+	import { goto } from "$app/navigation";
 
     export let announcementDetail: Announcement;
 
@@ -67,7 +68,7 @@
 
     const deleteAnnouncementAction = async() => {
         await deleteAnnouncement(announcementDetail?.announcementUUID)
-        window.location.href = '/'
+        await goto('/')
     }
 
     $: userUUID = getUserUUID()
