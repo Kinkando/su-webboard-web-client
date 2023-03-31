@@ -6,8 +6,6 @@
 	import { StatusGroup, type User } from '@models/user';
     import { alert } from "@stores/alert";
 	import { defined } from '@util/generic';
-	import PostDescription from './PostDescription.svelte';
-    import TextEditor from './TextEditor.svelte';
 
     export let title: FormSchema;
     export let description: FormSchema;
@@ -86,8 +84,6 @@
 
 <Label for="description" class="space-y-2 mt-4 text-black dark:text-white">
     <span>{description.label}</span>
-    <!-- <PostDescription bind:text={description.value} /> -->
-    <!-- <TextEditor /> -->
     <Textarea id="description" class="ease-in duration-200 transition-colors placeholder-gray-300 min-h-[300px] !bg-gray-50 dark:!bg-gray-700" placeholder={description.placeholder} required bind:value={description.value} />
 </Label>
 
