@@ -38,7 +38,7 @@
 
 <Sidebar bind:rootPath bind:sidebarItems bind:isSidebarExpand />
 
-<Tooltip placement="bottom" shadow trigger="hover" triggeredBy="#theme-toggle" class="z-40 sm:hidden transition-colors ease-in duration-200 !bg-white !text-[var(--primary-color)] dark:!text-white dark:!bg-gray-700">
+<Tooltip placement="bottom" shadow trigger="hover" triggeredBy="#theme-toggle" class="z-40 transition-colors ease-in duration-200 !bg-white !text-[var(--primary-color)] dark:!text-white dark:!bg-gray-700">
     <div in:slide={{duration: 200}}>เปลี่ยนธีม</div>
 </Tooltip>
 
