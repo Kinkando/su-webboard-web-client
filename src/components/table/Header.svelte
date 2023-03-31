@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ButtonGroup, Dropdown, DropdownItem, Input, InputAddon } from "flowbite-svelte";
+	import { ButtonGroup, Chevron, Dropdown, DropdownItem, Input, InputAddon } from "flowbite-svelte";
 	import { createEventDispatcher } from "svelte";
 	import { slide } from "svelte/transition";
     export let limit: number;
@@ -22,8 +22,8 @@
 
 <div class="sm:flex sm:items-center sm:justify-between block sm:mb-4">
     <ButtonGroup class="w-full sm:w-fit" size="md">
-        <InputAddon class="py-2 ease-in duration-200 whitespace-nowrap">จำนวนที่แสดงต่อหน้า</InputAddon>
-        <div class="px-4 py-2 w-full sm:w-fit sm:max-w-[4rem] ease-in duration-200 border dark:border-gray-900 text-gray-600 bg-white dark:text-gray-400 dark:bg-gray-800 rounded-r-lg">{limit}</div>
+        <InputAddon class="py-2 ease-in duration-200 whitespace-nowrap">จำนวนรายการ</InputAddon>
+        <div class="px-4 py-2 w-full sm:min-w-[5.5rem] sm:max-w-[5.5rem] ease-in duration-200 border dark:border-gray-900 text-gray-600 bg-white dark:text-gray-400 dark:bg-gray-800 rounded-r-lg flex items-center justify-end cursor-pointer"><Chevron>{limit}</Chevron></div>
         <Dropdown class="w-full sm:w-fit py-2 rounded-md bg-gray-50 dark:bg-gray-900" transition={slide} bind:open>
             {#each entryList as entry}
                 <DropdownItem defaultClass="font-medium py-2 px-4 text-sm hover:bg-gray-200 dark:hover:bg-gray-600 {limit === entry ? 'bg-gray-200 dark:bg-gray-600' : ''}" on:click={() => click(entry)}>{entry}</DropdownItem>

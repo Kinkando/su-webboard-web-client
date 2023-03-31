@@ -1,14 +1,17 @@
 <script lang="ts">
-	import AdminHeader from '@components/shared/AdminHeader.svelte';
-	import DeleteModal from '@components/modal/DeleteModal.svelte';
+	import HTTP from '@commons/http';
+    import DeleteModal from '@components/modal/DeleteModal.svelte';
 	import FormModal from '@components/modal/FormModal.svelte';
+	import AdminHeader from '@components/shared/AdminHeader.svelte';
+	import LoadingSpinner from '@components/spinner/LoadingSpinner.svelte';
 	import Table from '@components/table/Table.svelte';
 	import type { Category } from '@models/category';
+	import { FormType, type Form } from '@models/form';
 	import type { ActionTable, DataTable } from "@models/table";
 	import { deleteCategories, getCategories, upsertCategory } from "@services/admin";
-	import { FormType, type Form } from '@models/form';
+	import { alert } from '@stores/alert';
 
-    let isLoading = true;
+    let isLoading = false;
     let searchText = "";
     let limit = 10;
     let offset = 0;
@@ -106,15 +109,28 @@
         }
     }
     const sumbitForm = async (event: CustomEvent<Form>) => {
-        isLoading = true
         const category: Category = {
             categoryID: Number(event.detail._id),
             categoryName: event.detail.schemas[0].value,
             categoryHexColor: event.detail.schemas[1].value,
         }
-        await upsertCategory(category)
-        await fetchCategories(offset, limit)
-        isLoading = false
+        isLoading = true;
+        const res = await upsertCategory(category)
+        if (res.error) {
+            isLoading = false;
+            alert({
+                type: 'error',
+                message: `${res.error?.error}`
+            })
+        } else {
+            await fetchCategories(offset, limit)
+            isLoading = false;
+            isOpenFormModal = false;
+            alert({
+                type: 'success',
+                message: res.status === HTTP.StatusCreated ? 'เพิ่มหมวดหมู่สำเร็จ' : `แก้ไขหมวดหมู่สำเร็จ`
+            })
+        }
     }
 
     let isOpenDeleteModal = false;
@@ -126,6 +142,10 @@
         await deleteCategories([Number(deleteItem._id)])
         data = data.filter(item => item._id !== deleteItem._id)
         total -= 1
+        alert({
+            type: 'success',
+            message: `ลบหมวดหมู่สำเร็จ`
+        })
         isLoading = false
     }
     const multiDeleteAction = async() => {
@@ -135,14 +155,20 @@
             data = data.filter(item => !selectedItems.map(item => item._id).includes(item._id))
             total -= selectedItems.length
             selectedItems = []
+            alert({
+                type: 'success',
+                message: `ลบหมวดหมู่สำเร็จ`
+            })
             isLoading = false
         }
     }
 </script>
 
+<LoadingSpinner bind:isLoading />
+
 <div class="rounded-lg shadow-md w-full h-full p-4 sm:p-6 overflow-hidden bg-white text-black dark:bg-gray-700 dark:text-white ease-in duration-200">
     <AdminHeader title="หมวดหมู่" buttonName="เพิ่มหมวดหมู่" bind:deleteItemsCount={selectedItems.length} on:add={addItemAction} on:delete={multiDeleteAction} />
-    <Table bind:limit bind:total {columns} bind:data bind:isLoading skeletonLoad multiSelect on:fetch={fetch} {actions} bind:selectedItems />
+    <Table bind:limit bind:total {columns} bind:data skeletonLoad multiSelect on:fetch={fetch} {actions} bind:selectedItems />
 </div>
 
 <FormModal bind:open={isOpenFormModal} bind:title bind:form on:submit={sumbitForm} />
