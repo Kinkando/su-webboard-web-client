@@ -2,10 +2,11 @@ import axios, { AxiosError } from 'axios'
 import type { AxiosRequestCustomConfig } from './api';
 import http from '@commons/http';
 import { TokenType } from '@models/auth';
-import { refreshToken as refreshJWT, revokeToken } from '@services/authen';
+import { refreshToken as refreshJWT } from '@services/authen';
 import * as LocalStorage from './localstorage';
 import * as Cookies from './cookies';
-import { Auth } from '@commons/state';
+import { alert } from '@stores/alert';
+import { goto } from '$app/navigation';
 
 const instance = axios.create({
 	timeout: 30000,
@@ -13,6 +14,13 @@ const instance = axios.create({
 		"Content-Type": "application/json",
 	},
 })
+
+const redirectURL = () => {
+    if (window.location.pathname.length > 1) {
+        return '?redirect=' + window.location.pathname
+    }
+    return ''
+}
 
 instance.interceptors.request.use(
     (config: any) => {
@@ -53,8 +61,11 @@ instance.interceptors.response.use(
                     } else {
                         LocalStorage.revokeToken()
                     }
-                    localStorage.setItem("state", Auth.SessionExpired)
-                    window.location.href=`/login`
+                    await goto(`/login` + redirectURL())
+                    alert({
+                        type: 'warning',
+                        message: 'Session ของคุณหมดอายุ, โปรดเข้าสู่ระบบใหม่อีกครั้ง!',
+                    })
                     return Promise.reject(error);
                 }
                 config._isRefreshing = true;
@@ -87,8 +98,11 @@ instance.interceptors.response.use(
                 } else {
                     LocalStorage.revokeToken()
                 }
-                localStorage.setItem("state", Auth.SessionExpired)
-                window.location.href=`/login`
+                await goto(`/login` + redirectURL())
+                alert({
+                    type: 'warning',
+                    message: 'Session ของคุณหมดอายุ, โปรดเข้าสู่ระบบใหม่อีกครั้ง!',
+                })
                 return Promise.reject(error)
             }
         }

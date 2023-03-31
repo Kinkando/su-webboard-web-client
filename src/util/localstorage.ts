@@ -6,27 +6,29 @@ export function getUser(): { userUUID: string, userType: string, isValid: boolea
     let userType = "";
     let sessionUUID = "";
     let isValid = false;
-    const accessToken = localStorage.getItem(TokenType.AccessToken)
-    if (accessToken) {
-        const decodeJWT = jwtDecode(accessToken) as AccessJWT
-        const now = new Date().getTime();
-        isValid = now <= decodeJWT.exp
-        userType = decodeJWT.userType
-        userUUID = decodeJWT.userUUID
-        sessionUUID = decodeJWT.sessionUUID
-    }
-    if (isValid) {
-        return { userUUID, userType, isValid, sessionUUID };
-    }
-    const refreshToken = localStorage.getItem(TokenType.RefreshToken)
-    if (refreshToken) {
-        const decodeJWT = jwtDecode(refreshToken) as RefreshJWT
-        const now = new Date().getTime() / 1000;
-        isValid = now <= decodeJWT.exp
-        userType = decodeJWT.userType
-        userUUID = decodeJWT.userUUID
-        // sessionUUID = decodeJWT.sessionUUID
-    }
+    try {
+        const accessToken = localStorage.getItem(TokenType.AccessToken)
+        if (accessToken) {
+            const decodeJWT = jwtDecode(accessToken) as AccessJWT
+            const now = new Date().getTime() / 1000;
+            isValid = now <= decodeJWT.exp;
+            userType = decodeJWT.userType
+            userUUID = decodeJWT.userUUID
+            sessionUUID = decodeJWT.sessionUUID
+        }
+        if (isValid) {
+            return { userUUID, userType, isValid, sessionUUID };
+        }
+        const refreshToken = localStorage.getItem(TokenType.RefreshToken)
+        if (refreshToken) {
+            const decodeJWT = jwtDecode(refreshToken) as RefreshJWT
+            const now = new Date().getTime() / 1000;
+            isValid = now <= decodeJWT.exp
+            userType = decodeJWT.userType
+            userUUID = decodeJWT.userUUID
+            // sessionUUID = decodeJWT.sessionUUID
+        }
+    } catch (error) { }
     return { userUUID, userType, isValid, sessionUUID }
 }
 
@@ -47,22 +49,24 @@ export function getSessionUUID(): string {
 
 export function getToken(): { accessToken: string|undefined, refreshToken: string|undefined } {
     const token: any = {};
-    const accessToken = localStorage.getItem(TokenType.AccessToken)
-    if (accessToken) {
-        const decodeJWT = jwtDecode(accessToken) as AccessJWT
-        const now = new Date().getTime() / 1000;
-        if (now <= decodeJWT.exp) {
-            token.accessToken = accessToken;
+    try {
+        const accessToken = localStorage.getItem(TokenType.AccessToken)
+        if (accessToken) {
+            const decodeJWT = jwtDecode(accessToken) as AccessJWT
+            const now = new Date().getTime() / 1000;
+            if (now <= decodeJWT.exp) {
+                token.accessToken = accessToken;
+            }
         }
-    }
-    const refreshToken = localStorage.getItem(TokenType.RefreshToken)
-    if (refreshToken) {
-        const decodeJWT = jwtDecode(refreshToken) as RefreshJWT
-        const now = new Date().getTime() / 1000;
-        if (now <= decodeJWT.exp) {
-            token.refreshToken = refreshToken;
+        const refreshToken = localStorage.getItem(TokenType.RefreshToken)
+        if (refreshToken) {
+            const decodeJWT = jwtDecode(refreshToken) as RefreshJWT
+            const now = new Date().getTime() / 1000;
+            if (now <= decodeJWT.exp) {
+                token.refreshToken = refreshToken;
+            }
         }
-    }
+    } catch (error) { }
     return token
 }
 

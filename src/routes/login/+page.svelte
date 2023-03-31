@@ -1,18 +1,17 @@
 <script lang="ts">
     import { Button, Card, Label, Input, Spinner } from 'flowbite-svelte';
-	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
-	import Alert from '@components/alert/Alert.svelte';
 	import CommonScreen from '@components/shared/CommonScreen.svelte';
 	import HTTP from '@commons/http';
-	import type { Alert as AlertModel } from '@models/alert';
-	import { Auth } from '@commons/state';
 	import { verifyToken } from '@services/authen';
 	import { deleteUserFirebase, signinFirebase, signInGoogle } from '@services/firebase';
+    import { alert } from "@stores/alert";
+    import notificationStore from '@stores/notification'
+    import userStore from '@stores/user'
 	import { getUserType, setToken } from '@util/localstorage';
-	import Error from '../+error.svelte';
-
-    let alert: AlertModel;
+	import { getUserProfile } from '@services/user';
+	import { getNotiList } from '@services/notification';
+	import { goto } from '$app/navigation';
 
     let email = "";
     let password = "";
@@ -20,26 +19,6 @@
     let isLoading = false;
 
     $: redirect = $page.url.searchParams.get('redirect')
-
-    onMount(async() => {
-        const state = localStorage.getItem("state")
-        switch(state) {
-            case Auth.SessionExpired:
-                alert = {
-                    color: 'yellow',
-                    message: 'Session ของคุณหมดอายุ, โปรดเข้าสู่ระบบใหม่อีกครั้ง!',
-                }
-                break
-
-            case Auth.LogoutSuccessfully:
-                alert = {
-                    color: 'green',
-                    message: 'ออกจากระบบสำเร็จ!',
-                }
-                break
-        }
-        localStorage.removeItem("state")
-    })
 
     const signin = async() => {
         if (!email.length || !password.length) { return }
@@ -49,10 +28,10 @@
         if (idToken) {
             await verify(idToken)
         } else {
-            alert = {
-                color: 'red',
+            alert({
+                type: 'error',
                 message: 'ชื่อผู้ใช้หรือรหัสผ่านผิดพลาด กรุณาลองใหม่อีกครั้ง!',
-            }
+            })
         }
         isLoading = false
     }
@@ -63,29 +42,37 @@
             if (res.data) {
                 setToken(res.data.accessToken, res.data.refreshToken)
                 const { userType } = getUserType()
-                window.location.href = redirect || (userType === 'adm' ? "/admin-portal" : "/")
-                alert = {
-                    color: 'green',
+                await navigate(userType)
+                alert({
+                    type: 'success',
                     message: 'เข้าสู่ระบบสำเร็จ!',
-                }
+                })
                 return "success"
             } else {
                 throw new Error(res as any)
             }
         } catch (error: any) {
             if (error?.response?.status === HTTP.StatusNotFound) {
-                alert = {
-                    color: 'red',
+                alert({
+                    type: 'error',
                     message: 'ขออภัย ไม่พบบัญชีนี้ในระบบ กรุณาลองใหม่อีกครั้ง!',
-                }
+                })
                 return "not found"
             }
-            alert = {
-                color: 'red',
+            alert({
+                type: 'error',
                 message: 'ชื่อผู้ใช้หรือรหัสผ่านผิดพลาด กรุณาลองใหม่อีกครั้ง!',
-            }
+            })
             return "error"
         }
+    }
+
+    const navigate = async(userType: string) => {
+        if (userType && userType !== 'adm') {
+            userStore.set(await getUserProfile())
+            notificationStore.set(await getNotiList())
+        }
+        goto(redirect || (userType === 'adm' ? "/admin-portal" : "/"))
     }
 
     const signInWithGoogle = async () => {
@@ -106,8 +93,6 @@
         }
     }
 </script>
-
-<Alert bind:alert />
 
 {#if isLoading}
     <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20">

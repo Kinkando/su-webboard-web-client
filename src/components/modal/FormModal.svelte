@@ -23,7 +23,9 @@
     const disabled = (() => editableForm.schemas.find(schema => schema.value === ""))()
 
 	const dispatch = createEventDispatcher<{[eventName: string]: Form}>();
-    const submitAction = () => { dispatch("submit", editableForm); open = false; }
+    const submitAction = () => {
+        dispatch("submit", editableForm);
+    }
 </script>
 
 {#if form?.schemas}

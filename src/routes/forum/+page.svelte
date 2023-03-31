@@ -3,10 +3,8 @@
 	import { onMount } from "svelte";
 	import { goto } from "$app/navigation";
 	import HTTP from "@commons/http";
-    import Alert from '@components/alert/Alert.svelte';
-	import NewPost from "@components/shared/NewPost.svelte";
+	import ForumEditor from "@components/shared/ForumEditor.svelte";
 	import LoadingSpinner from "@components/spinner/LoadingSpinner.svelte";
-	import type { Alert as AlertModel } from '@models/alert';
 	import type { Category } from "@models/category";
 	import type { ForumRequest } from "@models/forum";
 	import type { Attachment, FormSchema } from "@models/new-post";
@@ -14,8 +12,8 @@
 	import { getAllCategories } from "@services/category";
 	import { upsertForum } from "@services/forum";
 	import { getUserProfile } from "@services/user";
+    import { alert } from "@stores/alert";
 
-    let alert: AlertModel;
     let title: FormSchema = {value: "", label: "หัวข้อกระทู้", placeholder: "กรุณาใส่หัวข้อกระทู้..."}
     let description: FormSchema = {value: "", label: "รายละเอียด", placeholder: "กรุณาใส่รายละเอียด..."}
     let categories: Category[] = [];
@@ -35,10 +33,10 @@
         if (res.status === HTTP.StatusOK && res.data) {
             goto(`/forum/${res.data.forumUUID}`)
         } else {
-            alert = {
-                color: 'red',
+            alert({
+                type: 'error',
                 message: 'ขออภัย, ระบบเกิดความขัดข้อง กรุณาลองใหม่อีกครั้ง!',
-            }
+            })
         }
         isLoading = false;
     }
@@ -61,12 +59,10 @@
     </Breadcrumb>
 </div>
 
-<Alert bind:alert />
-
 <LoadingSpinner bind:isLoading />
 
 <div class="ease-in duration-200 bg-white dark:bg-gray-900 w-full rounded-md shadow-lg p-4 sm:p-6">
-    <NewPost
+    <ForumEditor
         anonymousPost
         bind:isAnonymous
         bind:user

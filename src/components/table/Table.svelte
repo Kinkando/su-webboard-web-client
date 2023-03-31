@@ -54,7 +54,7 @@
 <Header bind:limit on:search={event => searchText = event.detail.searchText} />
 
 <!-- TABLE ON TABLET+ -->
-<div class="hidden sm:block relative overflow-x-auto shadow-md drop-shadow-lg rounded-lg mb-4">
+<div class="swipe relative overflow-x-auto shadow-md drop-shadow-lg rounded-lg mb-4">
     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 ease-in duration-200">
         <thead class="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-900 dark:text-gray-400 ease-in duration-200">
             {#if multiSelect}
@@ -64,11 +64,11 @@
             {/if}
 
             {#each columns as column}
-                <th class="px-2 py-3">{column}</th>
+                <th class="px-2 py-3 whitespace-nowrap">{column}</th>
             {/each}
 
             {#if actions}
-                <th class="px-2 py-3">{actionLabel}</th>
+                <th class="px-2 py-3 whitespace-nowrap">{actionLabel}</th>
             {/if}
         </thead>
 
@@ -111,8 +111,8 @@
                             </td>
                         {/if}
 
-                        {#each item.values as value, index}
-                            <td class="px-2 py-4 break-all">{@html value}</td>
+                        {#each item.values as value}
+                            <td class="px-2 py-4 break-words">{@html value}</td>
                         {/each}
 
                         {#if actions}
@@ -139,7 +139,7 @@
 </div>
 
 <!-- TABLE ON MOBILE -->
-<div class="sm:hidden relative overflow-x-auto shadow-md drop-shadow-lg rounded-lg mb-4">
+<!-- <div class="sm:hidden relative overflow-x-auto shadow-md drop-shadow-lg rounded-lg mb-4">
     {#if skeletonLoad && isLoading}
         {#each Array(limit) as _}
             <div class="py-4 px-4 border dark:bg-gray-800 dark:border-gray-700 ease-in duration-200">
@@ -172,7 +172,6 @@
                         <span>{actionLabel}</span>
                         <div class="text-gray-500 border border-transparent break-words flex w-fit">
                             {#each actions as action, index}
-                                <!-- svelte-ignore a11y-click-events-have-key-events -->
                                 <span class="{index ? 'ml-2' : ''}" on:click={() => action.click(item)}>
                                     {@html action.html}
                                 </span>
@@ -183,7 +182,7 @@
             </div>
         {/each}
     {/if}
-</div>
+</div> -->
 
 {#if data.length === 0 && (skeletonLoad && !isLoading)}
     <div class="mt-10 mb-6">

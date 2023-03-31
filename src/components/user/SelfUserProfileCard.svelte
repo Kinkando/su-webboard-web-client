@@ -1,15 +1,13 @@
 <script lang="ts">
 	import { Label, Input, Button } from "flowbite-svelte";
 	import { onMount } from "svelte";
-    import Alert from '@components/alert/Alert.svelte';
 	import LoadingSpinner from '@components/spinner/LoadingSpinner.svelte';
-	import type { Alert as AlertModel } from '@models/alert';
 	import { StatusGroup, type User } from "@models/user";
 	import { changePassword } from '@services/firebase';
 	import { updateUserProfile } from "@services/user";
+    import { alert } from "@stores/alert";
 	import userStore from '@stores/user';
 	import { getUserType } from "@util/localstorage";
-	import HTTP from "@commons/http";
 
     export let user!: User;
 
@@ -49,7 +47,6 @@
             isShowPassword: false,
         },
     }
-    let alert: AlertModel;
 
     let image: File | undefined
 
@@ -71,10 +68,10 @@
         isLoading = true;
         const res = await updateUserProfile(draft.userDisplayName, statusGroup === StatusGroup.anonymous, image)
         if (res?.data) {
-            alert = {
-                color: 'green',
+            alert({
+                type: 'success',
                 message: 'อัพเดตข้อมูลส่วนตัวสำเร็จ',
-            }
+            })
 
             // update local
             image = undefined;
@@ -83,10 +80,10 @@
             userStore.set(user)
             mode = 'view'
         } else {
-            alert = {
-                color: 'red',
+            alert({
+                type: 'error',
                 message: 'เกิดข้อผิดพลาดบางอย่าง กรุณาลองใหม่อีกครั้ง',
-            }
+            })
         }
 
         isLoading = false;
@@ -99,10 +96,10 @@
             if (isSuccess) {
                 mode = 'view'
             }
-            alert = {
-                color: isSuccess ? 'green' : 'red',
+            alert({
+                type: isSuccess ? 'success' : 'error',
                 message: isSuccess ? 'เปลี่ยนรหัสผ่านสำเร็จ' : 'รหัสผ่านเดิมของคุณผิดพลาด กรุณาลองใหม่อีกครั้ง!',
-            }
+            })
             isLoading = false
         }
     }
@@ -144,8 +141,6 @@
         })
     }
 </script>
-
-<Alert bind:alert />
 
 <LoadingSpinner bind:isLoading />
 

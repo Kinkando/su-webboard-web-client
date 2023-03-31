@@ -1,36 +1,33 @@
 <script lang="ts">
 	import { onDestroy } from 'svelte';
-    import type { Socket } from "socket.io-client";
 	import ForumImage from "./ForumImage.svelte";
 	import ForumFooter from "./ForumFooter.svelte";
-    import Alert from '@components/alert/Alert.svelte';
 	import HTTP from "@commons/http";
 	import { Order } from "@commons/order";
 	import CategoryBadge from "@components/badge/CategoryBadge.svelte";
 	import CommentList from "@components/comment/CommentList.svelte";
     import EllipsisMenu from "@components/shared/EllipsisMenu.svelte";
 	import LoadingSpinner from "@components/spinner/LoadingSpinner.svelte";
-	import type { Alert as AlertModel } from '@models/alert';
 	import type { Category } from "@models/category";
 	import type { Comment } from '@models/comment';
     import type { ForumDetail, ForumRequest } from "@models/forum";
 	import type { Attachment, FormSchema } from "@models/new-post";
 	import { upsertComment } from "@services/comment";
 	import { deleteForum, favoriteForum, upsertForum } from "@services/forum";
+    import { alert } from "@stores/alert";
 	import { defined } from "@util/generic";
 	import { getUserUUID } from "@util/localstorage";
 	import { timeRange } from "@util/datetime";
+	import { goto } from '$app/navigation';
 
     export let forumDetail: ForumDetail;
     export let categories: Category[];
     export let replyForum = false;
     export let total = 0;
-    export let socket: Socket
 
     let isLoading = false;
     let orderBy: Order = Order.ASC;
     let newComment: (comment: Comment) => Promise<void>;
-    let alert: AlertModel;
 
     // Edit modal
     let title: FormSchema = {value: forumDetail.title, label: `หัวข้อกระทู้`, placeholder: `กรุณาใส่หัวข้อกระทู้...`}
@@ -81,10 +78,10 @@
             const res = await upsertForum(forum, files)
 
             if (res.status !== HTTP.StatusOK) {
-                alert = {
-                    color: 'red',
+                alert({
+                    type: 'error',
                     message: 'ขออภัย, ระบบเกิดความขัดข้อง กรุณาลองใหม่อีกครั้ง!',
-                }
+                })
             } else {
                 // loading edit data
                 forumDetail.updatedAt = new Date();
@@ -115,8 +112,8 @@
     const deleteForumAction = async() => {
         isLoading = true;
         await deleteForum(forumDetail?.forumUUID)
-        window.location.href = '/'
         isLoading = false;
+        await goto('/')
     }
 
     const reportForumAction = async(reason: string) => {
@@ -138,10 +135,10 @@
         isLoading = true;
         const res = await upsertComment(forumDetail.forumUUID, comment, files)
         if (res.status !== HTTP.StatusOK) {
-            alert = {
-                color: 'red',
+            alert({
+                type: 'error',
                 message: 'ขออภัย, ระบบเกิดความขัดข้อง กรุณาลองใหม่อีกครั้ง!',
-            }
+            })
         } else if (res?.data) {
             comment.commentUUID = res.data.commentUUID
             comment.commentImages = res.data.documents
@@ -166,8 +163,6 @@
     }, 1000)
     onDestroy(() => clearInterval(period))
 </script>
-
-<Alert bind:alert />
 
 <LoadingSpinner bind:isLoading />
 
@@ -235,4 +230,4 @@
     />
 </div>
 
-<CommentList bind:authorUUID={forumDetail.authorUUID} bind:forumUUID={forumDetail.forumUUID} bind:newComment bind:totalComments={total} bind:orderBy bind:socket />
+<CommentList bind:authorUUID={forumDetail.authorUUID} bind:forumUUID={forumDetail.forumUUID} bind:newComment bind:totalComments={total} bind:orderBy />

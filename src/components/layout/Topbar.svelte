@@ -1,16 +1,16 @@
 <script lang="ts">
-	import { revokeToken as revokeTokenSrv } from '@services/authen';
-	import { slide } from 'svelte/transition';
 	import { DarkMode, Indicator, Input, Popover, Tooltip } from "flowbite-svelte";
+    import { slide } from 'svelte/transition';
 	import { goto } from "$app/navigation";
+	import { page } from '$app/stores';
+	import { UserType } from "@models/auth";
     import type { Notification } from "@models/notification";
 	import type { User } from "@models/user";
-	import { UserType } from "@models/auth";
-	import userStore from '@stores/user';
+	import { revokeToken as revokeTokenSrv } from '@services/authen';
 	import notificationStore from '@stores/notification';
+    import { alert } from '@stores/alert';
+	import userStore from '@stores/user';
 	import { getToken, revokeToken } from '@util/localstorage';
-	import { Auth } from '@commons/state';
-	import { page } from '$app/stores';
 
     export let userType: string
 
@@ -29,8 +29,11 @@
             revokeTokenSrv(token.accessToken, token.refreshToken)
         }
         revokeToken();
-        localStorage.setItem("state", Auth.LogoutSuccessfully)
-        window.location.href = `/login`;
+        await goto('login')
+        alert({
+            type: 'success',
+            message: 'ออกจากระบบสำเร็จ!',
+        })
     }
     const search = async (event: KeyboardEvent) => {
         if (event.key === 'Enter') {

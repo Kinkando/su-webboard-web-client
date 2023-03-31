@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { fade, fly } from 'svelte/transition';
     import { page } from '$app/stores';
-	import { Auth } from '@commons/state';
 	import { revokeToken as revokeTokenSrv } from '@services/authen';
+    import { alert } from '@stores/alert';
 	import { getToken, revokeToken } from '@util/localstorage';
+	import { goto } from '$app/navigation';
 
     export let rootPath: string;
     export let sidebarItems: { prefixIcon: string, label: string, href: string }[]
@@ -16,8 +17,11 @@
             revokeTokenSrv(token.accessToken, token.refreshToken)
         }
         revokeToken();
-        localStorage.setItem("state", Auth.LogoutSuccessfully)
-        window.location.href = `/login`;
+        await goto('login')
+        alert({
+            type: 'success',
+            message: 'ออกจากระบบสำเร็จ!',
+        })
     }
     const hideSidebar = () => isSidebarExpand = false
 </script>

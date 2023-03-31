@@ -1,17 +1,20 @@
 <script lang="ts">
+	import HTTP from '@commons/http';
 	import ConfirmModal from '@components/modal/ConfirmModal.svelte';
 	import DeleteModal from '@components/modal/DeleteModal.svelte';
 	import FormModal from '@components/modal/FormModal.svelte';
 	import AdminHeader from '@components/shared/AdminHeader.svelte';
+	import LoadingSpinner from '@components/spinner/LoadingSpinner.svelte';
 	import Table from '@components/table/Table.svelte';
 	import { FormType, type Form } from '@models/form';
 	import type { ActionTable, DataTable } from "@models/table";
 	import type { User } from "@models/user";
 	import { getUsers, createUser, updateUser, deleteUsers, revokeUsers } from "@services/admin";
+	import { alert } from '@stores/alert';
 	import { timeRange } from '@util/datetime';
 
+    let isLoading = false;
     let searchText = "";
-    let isLoading = true;
     let limit = 10;
     let offset = 0;
     let total = 0;
@@ -150,7 +153,20 @@
                 userFullName: event.detail.schemas[0].value,
                 userEmail: event.detail.schemas[1].value,
             }
-            await createUser(user, 'tch')
+            const res = await createUser(user, 'tch')
+            if (res.error) {
+                alert({
+                    type: 'error',
+                    message: res.error.error,
+                })
+            } else {
+                await getTeachers(offset, limit)
+                isOpenFormModal = false
+                alert({
+                    type: 'success',
+                    message: 'เพิ่มข้อมูลอาจารย์สำเร็จ'
+                })
+            }
         } else {
             const user: User = {
                 userUUID: event.detail._id,
@@ -158,9 +174,21 @@
                 userFullName: event.detail.schemas[1].value,
                 userEmail: event.detail.schemas[2].value,
             }
-            await updateUser(user)
+            const res = await updateUser(user)
+            if (res.error) {
+                alert({
+                    type: 'error',
+                    message: res.error.error,
+                })
+            } else {
+                await getTeachers(offset, limit)
+                isOpenFormModal = false
+                alert({
+                    type: 'success',
+                    message: 'แก้ไขข้อมูลอาจารย์สำเร็จ'
+                })
+            }
         }
-        await getTeachers(offset, limit)
         isLoading = false
     }
 
@@ -173,6 +201,10 @@
         await deleteUsers([selectedItem._id])
         data = data.filter(item => item._id !== selectedItem._id)
         total -= 1
+        alert({
+            type: 'success',
+            message: `ลบข้อมูลอาจารย์สำเร็จ`
+        })
         isLoading = false
     }
     const multiDeleteAction = async() => {
@@ -182,6 +214,10 @@
             data = data.filter(item => !selectedItems.map(selectedItem => selectedItem._id).includes(item._id))
             total -= selectedItems.length
             selectedItems = [];
+            alert({
+                type: 'success',
+                message: `ลบข้อมูลอาจารย์สำเร็จ`
+            })
             isLoading = false
         }
     }
@@ -190,12 +226,18 @@
     const forceLogout = async() => {
         isOpenForceLogoutModal = false;
         await revokeUsers([selectedItem._id])
+        alert({
+            type: 'success',
+            message: `บังคับอาจารย์ออกจากระบบทุกอุปกรณ์สำเร็จ`
+        })
     }
 </script>
 
+<LoadingSpinner bind:isLoading />
+
 <div class="rounded-lg shadow-md w-full h-full p-4 sm:p-6 overflow-hidden bg-white text-black dark:bg-gray-700 dark:text-white ease-in duration-200">
     <AdminHeader title="อาจารย์" buttonName="เพิ่มอาจารย์" bind:deleteItemsCount={selectedItems.length} on:add={addItemAction} on:delete={multiDeleteAction} />
-    <Table bind:limit bind:total {columns} bind:data bind:isLoading skeletonLoad multiSelect on:fetch={fetchTeachers} {actions} bind:selectedItems />
+    <Table bind:limit bind:total {columns} bind:data skeletonLoad multiSelect on:fetch={fetchTeachers} {actions} bind:selectedItems />
 </div>
 
 <FormModal bind:open={isOpenFormModal} bind:title bind:form on:submit={sumbitForm} />
