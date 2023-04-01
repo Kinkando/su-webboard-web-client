@@ -273,7 +273,9 @@
         if (err.includes('studentID')) {
             return 'รหัสนักศึกษานี้มีอยู่ในระบบเรียบร้อยแล้ว'
         } else if (err.includes('email: ')) {
-            return 'อีเมลนี้มีอยู่ในระบบเรียบร้อยแล้ว'
+            return 'อีเมลนี้มีผู้อื่นใช้งานเรียบร้อยแล้ว'
+        } else if (err.includes('userEmail is invalid')) {
+            return 'รูปแบบของอีเมลไม่ถูกต้อง กรุณากรอกอีเมลใหม่อีกครั้ง'
         }
         return err
     }

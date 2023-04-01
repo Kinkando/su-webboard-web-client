@@ -24,7 +24,7 @@
             // Admin portal page
             case "/admin-portal": return adminPortalPrefix + "Home"
             case "/admin-portal/category": return adminPortalPrefix + "Manage Category"
-            case "/admin-portal/forum": return adminPortalPrefix + "Manage Forum"
+            case "/admin-portal/report": return adminPortalPrefix + "Manage Report"
             case "/admin-portal/student": return adminPortalPrefix + "Manage Student"
             case "/admin-portal/teacher": return adminPortalPrefix + "Manage Teacher"
 
@@ -46,6 +46,8 @@
             // Forum page
             case "/announcement/[announcementUUID]": return generalUserPrefix + "Announcement Forum"
             case "/forum/[forumUUID]": return generalUserPrefix + "Forum Detail"
+
+            default: return generalUserPrefix + "Page Not Found"
         }
     })()
     $: isUserSite = !$page.url.pathname?.startsWith("/admin-portal") && !["/login", "/forgot-password", "/reset-password"].includes($page.url.pathname!);

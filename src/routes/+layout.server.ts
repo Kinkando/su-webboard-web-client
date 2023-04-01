@@ -50,8 +50,12 @@ export const load: LayoutServerLoad = async ({ cookies, route }) => {
 // เพิ่มคลิกรูปเพื่อขยาย สำหรับหน้า update profile
 // Text Editor Component
 
+// เพิ่มหน้า Sign Up สำหรับนักศึกษา โดยสามารถ sign up ได้ผ่านเมลมหาวิทยาลัยเท่านั้น และหลังจาก verify จะให้กรอก
+// - รหัสนักศึกษา (โดยมี warning ว่า ไม่สามารถเปลี่ยนได้ด้วยตนเองในภายหลัง และต้องมีการ validate format เพิ่ม)
+// - userDisplayName
+// - userFullName
+// โดยที่ userFullName จะ prefill ให้จาก ชื่อใน gmail (googleUserProfile)
 // เพิ่มหน้า internal server error กรณีที่ call APIs return status 500
-// admin portal modal form validation
 // admin portal error not found page
 // admin portal internal server error page
 
@@ -65,12 +69,6 @@ export const load: LayoutServerLoad = async ({ cookies, route }) => {
 // - change theme
 // - set sorting comment (default comment #1-#10), can set by latest comment first
 // - ปักหมุด topbar ให้ไม่หุบเมื่อเลื่อนลง
-
-// เพิ่มหน้า Sign Up สำหรับนักศึกษา โดยสามารถ sign up ได้ผ่านเมลมหาวิทยาลัยเท่านั้น และหลังจาก verify จะให้กรอก
-// - รหัสนักศึกษา (โดยมี warning ว่า ไม่สามารถเปลี่ยนได้ด้วยตนเองในภายหลัง และต้องมีการ validate format เพิ่ม)
-// - userDisplayName
-// - userFullName
-// โดยที่ userFullName จะ prefill ให้จาก ชื่อใน gmail (googleUserProfile)
 
 // เมื่อลบ user
 // 1. ลบ file ที่เก็บใน cloud storage ของทุกกระทู้หรือคอมเมนต์ของ user คนนั้น
