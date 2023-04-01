@@ -30,8 +30,8 @@
     let newComment: (comment: Comment) => Promise<void>;
 
     // Edit modal
-    let title: FormSchema = {value: forumDetail.title, label: `หัวข้อกระทู้`, placeholder: `กรุณาใส่หัวข้อกระทู้...`}
-    let description: FormSchema = {value: forumDetail.description!, label: "รายละเอียด", placeholder: "กรุณาใส่รายละเอียด..."}
+    let title: FormSchema = {value: forumDetail.title, label: `หัวข้อกระทู้`, placeholder: `กรุณากรอกหัวข้อกระทู้...`}
+    let description: FormSchema = {value: forumDetail.description!, label: "รายละเอียด", placeholder: "กรุณากรอกรายละเอียด..."}
     let attachments: Attachment[] = [];
     let label = "แสดงความคิดเห็น"
 

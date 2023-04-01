@@ -110,7 +110,7 @@
                         id: 'userDisplayName',
                         type: "text",
                         label: "ชื่อที่แสดงบนหน้าเว็บ",
-                        placeholder: "กรุณาใส่ชื่อที่แสดงบนหน้าเว็บ",
+                        placeholder: "กรุณากรอกชื่อที่แสดงบนหน้าเว็บ",
                         value: item.values[1],
                         validations: [
                             Validator.notStartWithSpace,
@@ -121,7 +121,7 @@
                         id: 'userFullName',
                         type: "text",
                         label: "ชื่อ-นามสกุล",
-                        placeholder: "กรุณาใส่ชื่อ-นามสกุล",
+                        placeholder: "กรุณากรอกชื่อ-นามสกุล",
                         value: item.values[2],
                         validations: [
                             Validator.notStartWithSpace,
@@ -132,7 +132,7 @@
                         id: 'userEmail',
                         type: "text",
                         label: "อีเมล",
-                        placeholder: "กรุณาใส่อีเมล",
+                        placeholder: "กรุณากรอกอีเมล",
                         value: item.values[3],
                         validations: [ Validator.noSpace ]
                     },
@@ -146,7 +146,7 @@
                         id: 'userFullName',
                         type: "text",
                         label: "ชื่อ-นามสกุล",
-                        placeholder: "กรุณาใส่ชื่อ-นามสกุล",
+                        placeholder: "กรุณากรอกชื่อ-นามสกุล",
                         value: "",
                         validations: [
                             Validator.notStartWithSpace,
@@ -157,7 +157,7 @@
                         id: 'userEmail',
                         type: "text",
                         label: "อีเมล",
-                        placeholder: "กรุณาใส่อีเมล",
+                        placeholder: "กรุณากรอกอีเมล",
                         value: "",
                         validations: [ Validator.noSpace ]
                     },

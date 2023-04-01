@@ -33,7 +33,7 @@
         <Radio bind:group={reportGroup} value={report} class="w-fit my-1.5">{report}</Radio>
     {/each}
     {#if isOther}
-        <Textarea placeholder="กรุณาใส่รายละเอียด ..." bind:value={reportText} class="min-h-[6rem] placeholder-gray-300 !bg-gray-50 dark:!bg-gray-700 sm:mb-4 mb-2" />
+        <Textarea placeholder="กรุณากรอกรายละเอียด ..." bind:value={reportText} class="min-h-[6rem] placeholder-gray-300 !bg-gray-50 dark:!bg-gray-700 sm:mb-4 mb-2" />
     {/if}
     <Button color="red" class="mr-2" disabled={reportGroup.length === 0 || (reportText.length === 0 && isOther)} on:click={reportAction}>ส่งรายงาน</Button>
     <Button color="alternative" on:click={() => open = false}>ยกเลิก</Button>

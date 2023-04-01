@@ -91,6 +91,7 @@
                         id="title"
                         class="ease-in duration-200 placeholder-gray-300"
                         color={schema.error ? 'red' : 'base'}
+                        disabled={schema.disabled}
                         bind:value={editableForm.schemas[index].value}
                         placeholder={schema.placeholder}
                         required

@@ -92,14 +92,14 @@
                     id: 'categoryName',
                     type: "text",
                     label: "หมวดหมู่",
-                    placeholder: "กรุณาใส่หมวดหมู่",
+                    placeholder: "กรุณากรอกหมวดหมู่",
                     value: "",
                 },
                 {
                     id: 'categoryHexColor',
                     type: "color",
                     label: "สี",
-                    placeholder: "กรุณาใส่สี",
+                    placeholder: "กรุณากรอกสี",
                     value: "#000000",
                 },
             ]

@@ -9,8 +9,8 @@
 	import { upsertAnnouncement } from "@services/announcement";
     import { alert } from "@stores/alert";
 
-    let title: FormSchema = {value: "", label: "หัวข้อการประกาศ", placeholder: "กรุณาใส่หัวข้อสำหรับประกาศจากทางมหาวิทยาลัย..."}
-    let description: FormSchema = {value: "", label: "รายละเอียด", placeholder: "กรุณาใส่รายละเอียด..."}
+    let title: FormSchema = {value: "", label: "หัวข้อการประกาศ", placeholder: "กรุณากรอกหัวข้อสำหรับประกาศจากทางมหาวิทยาลัย..."}
+    let description: FormSchema = {value: "", label: "รายละเอียด", placeholder: "กรุณากรอกรายละเอียด..."}
     let attachments: Attachment[] = [];
     let submitName = "ยืนยัน"
     let isLoading = false;

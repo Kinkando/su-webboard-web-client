@@ -65,10 +65,11 @@ export const load: LayoutServerLoad = async ({ cookies, route }) => {
 
 // onMount twice
 
-// SETTING PAGE
+// SETTING PAGE (keep value on local storage)
 // - change theme
-// - set sorting comment (default comment #1-#10), can set by latest comment first
-// - ปักหมุด topbar ให้ไม่หุบเมื่อเลื่อนลง
+// - close notification popup
+// X set sorting comment (default comment #1-#10), can set by latest comment first
+// X ปักหมุด topbar ให้ไม่หุบเมื่อเลื่อนลง
 
 // เมื่อลบ user
 // 1. ลบ file ที่เก็บใน cloud storage ของทุกกระทู้หรือคอมเมนต์ของ user คนนั้น

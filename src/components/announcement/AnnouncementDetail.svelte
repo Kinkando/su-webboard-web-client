@@ -12,8 +12,8 @@
     export let announcementDetail: Announcement;
 
     // Edit modal
-    let title: FormSchema = {value: announcementDetail.title, label: `หัวข้อประกาศ`, placeholder: `กรุณาใส่หัวข้อประกาศ...`}
-    let description: FormSchema = {value: announcementDetail.description!, label: "รายละเอียด", placeholder: "กรุณาใส่รายละเอียด..."}
+    let title: FormSchema = {value: announcementDetail.title, label: `หัวข้อประกาศ`, placeholder: `กรุณากรอกหัวข้อประกาศ...`}
+    let description: FormSchema = {value: announcementDetail.description!, label: "รายละเอียด", placeholder: "กรุณากรอกรายละเอียด..."}
     let attachments: Attachment[] = [];
 
     function initImages() {

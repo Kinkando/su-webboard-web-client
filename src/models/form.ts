@@ -13,6 +13,7 @@ export interface Schema {
     maxlength?: number
     pattern?: RegExp
     validations?: ((req: string) => string)[]
+    disabled?: boolean
     error?: string
 }
 
