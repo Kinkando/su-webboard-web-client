@@ -17,7 +17,7 @@
     let submit = async() => {
         const files = attachments.map(attachment => attachment.file)
         const announcement: AnnouncementRequest = {
-            title: title.value,
+            title: title.value.trim(),
             description: description.value,
         }
         isLoading = true;

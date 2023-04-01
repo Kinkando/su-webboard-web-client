@@ -23,7 +23,7 @@
         const files = attachments.map(attachment => attachment.file)
         const categoryIDs = categories.filter(category => category.isActive).map(category => category.categoryID!)
         const forum: ForumRequest = {
-            title: title.value,
+            title: title.value.trim(),
             description: description.value,
             categoryIDs,
             isAnonymous,

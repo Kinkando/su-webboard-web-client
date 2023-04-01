@@ -75,7 +75,7 @@
 
             // update local
             image = undefined;
-            user.userDisplayName = draft.userDisplayName
+            user.userDisplayName = draft.userDisplayName.trim();
             user.userImageURL = draft.userImageURL;
             userStore.set(user)
             mode = 'view'

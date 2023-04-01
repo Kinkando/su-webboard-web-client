@@ -78,7 +78,7 @@
         let event: any;
         if (isForum) {
             event = {
-                title: editTitle?.value,
+                title: editTitle?.value.trim(),
                 description: editDescription?.value,
                 categories: editCategories,
                 attachments: editAttachments,
