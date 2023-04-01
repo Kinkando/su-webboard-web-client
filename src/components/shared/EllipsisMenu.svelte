@@ -104,6 +104,7 @@
     };
     const favoriteAction = () => {
         isFavorite = !isFavorite
+        element.click();
         dispatch('favorite', { isFavorite })
     }
 
@@ -212,7 +213,6 @@
 {/if}
 
 {#if removable}
-    <!-- content here -->
     <DeleteModal
         bind:open={openDeleteModal}
         deleteButtonName="ลบ{menuSuffixName}"

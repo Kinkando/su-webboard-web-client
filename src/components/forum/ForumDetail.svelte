@@ -120,11 +120,7 @@
         console.log(`รายงานกระทู้: ${forumDetail.forumUUID}: ${reason}`)
     }
 
-    const favoriteForumAction = async(isFavorite: boolean) => {
-        isLoading = true;
-        await favoriteForum(forumDetail.forumUUID, isFavorite)
-        isLoading = false;
-    }
+    const favoriteForumAction = async(isFavorite: boolean) => await favoriteForum(forumDetail.forumUUID, isFavorite)
 
     const commentForumAction = async(commentText: string, attachments: Attachment[]) => {
         const files = attachments.map(attachment => attachment.file)
