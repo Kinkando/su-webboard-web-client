@@ -6,7 +6,7 @@
 	import { mapErrorForm, type Form } from "@models/form";
     import { registerUser } from '@services/authen'
 	import { createUserFirebase, deleteUserFirebase } from "@services/firebase";
-	import { getNotiList } from "@services/notification";
+	import { getNotiList, getUnreadNotiCount } from "@services/notification";
 	import { getUserProfile } from "@services/user";
 	import { alert } from '@stores/alert';
     import notificationStore from '@stores/notification'
@@ -136,7 +136,8 @@
     const navigate = async(userType: string) => {
         if (userType && userType !== 'adm') {
             userStore.set(await getUserProfile())
-            notificationStore.set(await getNotiList())
+            const noti = await getNotiList(10, 0)
+            notificationStore.set({ notiList: noti.data, total: noti.total, unreadNotiCount: await getUnreadNotiCount() })
         }
         goto("/")
     }

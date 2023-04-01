@@ -9,9 +9,8 @@
 	import Topbar from "@components/layout/Topbar.svelte";
 	import LoadingSpinner from '@components/spinner/LoadingSpinner.svelte';
 	import AuthGuard from '@middleware/AuthGuard.svelte';
-	import { getNotiList } from "@services/notification";
+	import { getNotiList, getUnreadNotiCount } from "@services/notification";
 	import { getUserProfile } from "@services/user";
-	import { alerts } from '@stores/alert';
     import notificationStore from '@stores/notification'
     import userStore from '@stores/user'
 	import { getUserType } from "@util/localstorage";
@@ -65,7 +64,8 @@
         isLoading = false;
         if (userType && userType !== 'adm') {
             userStore.set(await getUserProfile())
-            notificationStore.set(await getNotiList())
+            const noti = await getNotiList(10, 0)
+            notificationStore.set({ notiList: noti.data, total: noti.total, unreadNotiCount: await getUnreadNotiCount() })
         }
     })
     beforeNavigate(() => isLoading = true)
