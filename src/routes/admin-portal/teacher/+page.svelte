@@ -11,6 +11,7 @@
 	import { getUsers, createUser, updateUser, deleteUsers, revokeUsers } from "@services/admin";
 	import { alert } from '@stores/alert';
 	import { timeRange } from '@util/datetime';
+    import * as Validator from '@util/validation';
 
     let isLoading = false;
     let searchText = "";
@@ -110,18 +111,27 @@
                         label: "ชื่อที่แสดง",
                         placeholder: "กรุณาใส่ชื่อที่แสดง",
                         value: item.values[1],
+                        validations: [
+                            Validator.notStartWithSpace,
+                            Validator.notMultiSpace,
+                        ]
                     },
                     {
                         type: "text",
                         label: "ชื่อ-นามสกุล",
                         placeholder: "กรุณาใส่ชื่อ-นามสกุล",
                         value: item.values[2],
+                        validations: [
+                            Validator.notStartWithSpace,
+                            Validator.notMultiSpace,
+                        ]
                     },
                     {
                         type: "text",
                         label: "อีเมล",
                         placeholder: "กรุณาใส่อีเมล",
                         value: item.values[3],
+                        validations: [ Validator.noSpace ]
                     },
                 ]
             }
@@ -134,12 +144,17 @@
                         label: "ชื่อ-นามสกุล",
                         placeholder: "กรุณาใส่ชื่อ-นามสกุล",
                         value: "",
+                        validations: [
+                            Validator.notStartWithSpace,
+                            Validator.notMultiSpace,
+                        ]
                     },
                     {
                         type: "text",
                         label: "อีเมล",
                         placeholder: "กรุณาใส่อีเมล",
                         value: "",
+                        validations: [ Validator.noSpace ]
                     },
                 ]
             }
@@ -149,14 +164,14 @@
         isLoading = true
         if (formType === FormType.create) {
             const user: User = {
-                userFullName: event.detail.schemas[0].value,
-                userEmail: event.detail.schemas[1].value,
+                userFullName: event.detail.schemas[0].value.trim(),
+                userEmail: event.detail.schemas[1].value.trim(),
             }
             const res = await createUser(user, 'tch')
             if (res.error) {
                 alert({
                     type: 'error',
-                    message: res.error.error,
+                    message: mapError(res.error.error),
                 })
             } else {
                 await getTeachers(offset, limit)
@@ -169,15 +184,15 @@
         } else {
             const user: User = {
                 userUUID: event.detail._id,
-                userDisplayName: event.detail.schemas[0].value,
-                userFullName: event.detail.schemas[1].value,
-                userEmail: event.detail.schemas[2].value,
+                userDisplayName: event.detail.schemas[0].value.trim(),
+                userFullName: event.detail.schemas[1].value.trim(),
+                userEmail: event.detail.schemas[2].value.trim(),
             }
             const res = await updateUser(user)
             if (res.error) {
                 alert({
                     type: 'error',
-                    message: res.error.error,
+                    message: mapError(res.error.error),
                 })
             } else {
                 await getTeachers(offset, limit)
@@ -229,6 +244,13 @@
             type: 'success',
             message: `บังคับอาจารย์ออกจากระบบทุกอุปกรณ์สำเร็จ`
         })
+    }
+
+    function mapError(err: string): string {
+        if (err.includes('email: ')) {
+            return 'อีเมลนี้มีอยู่ในระบบเรียบร้อยแล้ว'
+        }
+        return err
     }
 </script>
 

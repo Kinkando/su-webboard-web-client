@@ -111,8 +111,8 @@
     const sumbitForm = async (event: CustomEvent<Form>) => {
         const category: Category = {
             categoryID: Number(event.detail._id),
-            categoryName: event.detail.schemas[0].value,
-            categoryHexColor: event.detail.schemas[1].value,
+            categoryName: event.detail.schemas[0].value.trim(),
+            categoryHexColor: event.detail.schemas[1].value.trim(),
         }
         isLoading = true;
         const res = await upsertCategory(category)
