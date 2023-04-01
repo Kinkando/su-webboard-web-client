@@ -6,7 +6,7 @@
 	import LoadingSpinner from '@components/spinner/LoadingSpinner.svelte';
 	import Table from '@components/table/Table.svelte';
 	import type { Category } from '@models/category';
-	import { FormType, type Form } from '@models/form';
+	import { FormType, mapErrorForm, type Form } from '@models/form';
 	import type { ActionTable, DataTable } from "@models/table";
 	import { deleteCategories, getCategories, upsertCategory } from "@services/admin";
 	import { alert } from '@stores/alert';
@@ -165,16 +165,15 @@
         }
     }
 
-    const mapErrorForm = (id: string, error: string) => form.schemas.forEach((schema, index) => form.schemas[index].error = schema.id === id ? error : '')
     const mapErrorText = (err: string): string => {
         if (err.includes('categoryName')) {
-            mapErrorForm('categoryName', 'หมวดหมู่นี้มีอยู่ในระบบแล้ว')
+            form = mapErrorForm(form, {id: 'categoryName', text: 'หมวดหมู่นี้มีอยู่ในระบบแล้ว'})
             return 'หมวดหมู่นี้มีอยู่ในระบบแล้ว กรุณาลองใหม่อีกครั้ง'
         } else if (err.includes('categoryHexColor is invalid')) {
-            mapErrorForm('categoryHexColor', 'รูปแบบสีหมวดหมู่ไม่ถูกต้อง')
+            form = mapErrorForm(form, {id: 'categoryHexColor', text: 'รูปแบบสีหมวดหมู่ไม่ถูกต้อง'})
             return 'รูปแบบสีหมวดหมู่ไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง'
         } else if (err.includes('categoryHexColor')) {
-            mapErrorForm('categoryHexColor', 'สีหมวดหมู่นี้ถูกใช้งานแล้ว')
+            form = mapErrorForm(form, {id: 'categoryHexColor', text: 'สีหมวดหมู่นี้ถูกใช้งานแล้ว'})
             return 'สีหมวดหมู่นี้ถูกใช้งานแล้ว กรุณาลองใหม่อีกครั้ง'
         }
         return err

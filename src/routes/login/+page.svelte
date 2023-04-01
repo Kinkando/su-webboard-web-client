@@ -1,22 +1,25 @@
 <script lang="ts">
+	import RegisterCard from './../../components/partials/RegisterCard.svelte';
+	import type { User } from 'firebase/auth';
     import { Button, Card, Label, Input, Spinner } from 'flowbite-svelte';
 	import { page } from '$app/stores';
-	import CommonScreen from '@components/shared/CommonScreen.svelte';
+	import { goto } from '$app/navigation';
 	import HTTP from '@commons/http';
+	import CommonScreen from '@components/shared/CommonScreen.svelte';
 	import { verifyToken } from '@services/authen';
 	import { deleteUserFirebase, signinFirebase, signInGoogle } from '@services/firebase';
+	import { getNotiList } from '@services/notification';
+	import { getUserProfile } from '@services/user';
     import { alert } from "@stores/alert";
     import notificationStore from '@stores/notification'
     import userStore from '@stores/user'
 	import { getUserType, setToken } from '@util/localstorage';
-	import { getUserProfile } from '@services/user';
-	import { getNotiList } from '@services/notification';
-	import { goto } from '$app/navigation';
 
     let email = "";
     let password = "";
     let showPassword = false;
     let isLoading = false;
+    let isRegister = false;
 
     $: redirect = $page.url.searchParams.get('redirect')
 
@@ -36,7 +39,7 @@
         isLoading = false
     }
 
-    const verify = async (idToken: string) => {
+    const verify = async (idToken: string, isValidDomain?: boolean) => {
         try {
             const res = await verifyToken(idToken)
             if (res.data) {
@@ -53,10 +56,12 @@
             }
         } catch (error: any) {
             if (error?.response?.status === HTTP.StatusNotFound) {
-                alert({
-                    type: 'error',
-                    message: 'ขออภัย ไม่พบบัญชีนี้ในระบบ กรุณาลองใหม่อีกครั้ง!',
-                })
+                if (!isValidDomain) {
+                    alert({
+                        type: 'error',
+                        message: 'ขออภัย ไม่พบบัญชีนี้ในระบบ กรุณาลองใหม่อีกครั้ง!',
+                    })
+                }
                 return "not found"
             }
             alert({
@@ -75,19 +80,25 @@
         goto(redirect || (userType === 'adm' ? "/admin-portal" : "/"))
     }
 
+    let user: User;
     const signInWithGoogle = async () => {
-        const tempEmail = `${email}`
-        const tempPassword = `${password}`
-        const user = await signInGoogle()
-        if (user) {
+        // const tempEmail = `${email}`
+        // const tempPassword = `${password}`
+        const userFirebase = await signInGoogle()
+        if (userFirebase) {
+            const isValidDomain = userFirebase.email?.endsWith(import.meta.env.VITE_EMAIL_DOMAIN)
             isLoading = true;
-            email = user.email!
-            password = '****************************************************'
-            const res = await verify(await user.getIdToken())
+            // email = userFirebase.email!
+            // password = '****************************************************'
+            const res = await verify(await userFirebase.getIdToken(), isValidDomain)
             if (res === 'not found') {
-                email = tempEmail
-                password = tempPassword
-                deleteUserFirebase(user)
+                await deleteUserFirebase(userFirebase)
+                // email = tempEmail
+                // password = tempPassword
+                if (isValidDomain) {
+                    user = userFirebase
+                    isRegister = true;
+                }
             }
             isLoading = false
         }
@@ -98,6 +109,10 @@
     <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
         <Spinner color="green" size="16" />
     </div>
+{/if}
+
+{#if user}
+    <RegisterCard bind:user bind:open={isRegister} />
 {/if}
 
 <CommonScreen page="login">

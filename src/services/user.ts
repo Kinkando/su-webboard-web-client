@@ -17,7 +17,7 @@ export async function updateUserProfile(userDisplayName: string, isAnonymous: bo
     if (userImage) {
         formData.append("file", userImage)
     }
-    return await api<User>({
+    return await api({
         url: `${baseURL}/user/profile`,
         method: 'PATCH',
         data: formData,

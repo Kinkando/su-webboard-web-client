@@ -5,7 +5,7 @@
 	import AdminHeader from '@components/shared/AdminHeader.svelte';
 	import LoadingSpinner from '@components/spinner/LoadingSpinner.svelte';
 	import Table from '@components/table/Table.svelte';
-	import { FormType, type Form } from '@models/form';
+	import { FormType, mapErrorForm, type Form } from '@models/form';
 	import type { ActionTable, DataTable } from "@models/table";
 	import type { User } from "@models/user";
 	import { getUsers, createUser, updateUser, deleteUsers, revokeUsers } from "@services/admin";
@@ -276,16 +276,15 @@
         })
     }
 
-    const mapErrorForm = (id: string, error: string) => form.schemas.forEach((schema, index) => form.schemas[index].error = schema.id === id ? error : '')
     const mapErrorText = (err: string): string => {
         if (err.includes('studentID')) {
-            mapErrorForm('studentID', 'รหัสนักศึกษานี้มีอยู่ในระบบแล้ว')
+            form = mapErrorForm(form, {id: 'studentID', text: 'รหัสนักศึกษานี้มีอยู่ในระบบแล้ว'})
             return 'รหัสนักศึกษานี้มีอยู่ในระบบแล้ว กรุณาลองใหม่อีกครั้ง'
         } else if (err.includes('email: ')) {
-            mapErrorForm('userEmail', 'อีเมลนี้มีผู้อื่นใช้งานแล้ว')
+            form = mapErrorForm(form, {id: 'userEmail', text: 'อีเมลนี้มีผู้อื่นใช้งานแล้ว'})
             return 'อีเมลนี้มีผู้อื่นใช้งานแล้ว กรุณาลองใหม่อีกครั้ง'
         } else if (err.includes('userEmail is invalid')) {
-            mapErrorForm('userEmail', 'รูปแบบอีเมลไม่ถูกต้อง')
+            form = mapErrorForm(form, {id: 'userEmail', text: 'รูปแบบอีเมลไม่ถูกต้อง'})
             return 'รูปแบบอีเมลไม่ถูกต้อง กรุณากรอกอีเมลใหม่อีกครั้ง'
         }
         return err
