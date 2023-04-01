@@ -5,9 +5,11 @@
 
     export let user: User;
 
+    let open = false;
+
     const userSchema = [
         {
-            label: 'ชื่อที่ใช้แสดง',
+            label: 'ชื่อที่แสดงบนหน้าเว็บ',
             value: user.userDisplayName,
         },
         {
@@ -31,11 +33,13 @@
         user.isFollowing = !user.isFollowing
         user.isNoti = user.isFollowing
         followingUser(user.userUUID!, user.isFollowing)
+        open = false
     }
 
     const notification = () => {
         user.isNoti = !user.isNoti
         notificationUser(user.userUUID!, user.isNoti)
+        open = false
     }
 </script>
 
@@ -62,7 +66,7 @@
     <div class="flex justify-end">
         {#if user.isFollowing}
             <Button color="blue" gradient class="md:w-fit whitespace-nowrap"><Chevron><div class="whitespace-nowrap">กำลังติดตาม</div></Chevron></Button>
-            <Dropdown class="w-32">
+            <Dropdown class="w-32" bind:open>
                 <DropdownItem on:click={notification}>{ user.isNoti ? 'ปิดการแจ้งเตือน' : 'เปิดการแจ้งเตือน' }</DropdownItem>
                 <DropdownItem on:click={following}>เลิกติดตาม</DropdownItem>
             </Dropdown>

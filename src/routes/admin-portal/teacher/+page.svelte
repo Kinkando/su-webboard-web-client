@@ -1,17 +1,17 @@
 <script lang="ts">
-	import HTTP from '@commons/http';
 	import ConfirmModal from '@components/modal/ConfirmModal.svelte';
 	import DeleteModal from '@components/modal/DeleteModal.svelte';
 	import FormModal from '@components/modal/FormModal.svelte';
 	import AdminHeader from '@components/shared/AdminHeader.svelte';
 	import LoadingSpinner from '@components/spinner/LoadingSpinner.svelte';
 	import Table from '@components/table/Table.svelte';
-	import { FormType, type Form } from '@models/form';
+	import { FormType, mapErrorForm, type Form } from '@models/form';
 	import type { ActionTable, DataTable } from "@models/table";
 	import type { User } from "@models/user";
 	import { getUsers, createUser, updateUser, deleteUsers, revokeUsers } from "@services/admin";
 	import { alert } from '@stores/alert';
 	import { timeRange } from '@util/datetime';
+    import * as Validator from '@util/validation';
 
     let isLoading = false;
     let searchText = "";
@@ -21,7 +21,7 @@
     let teachers: User[] = [];
     const columns: string[] = [
         "รูปโปรไฟล์",
-        "ชื่อที่แสดง",
+        "ชื่อที่แสดงบนหน้าเว็บ",
         "ชื่อ-นามสกุล",
         "อีเมล",
         "เข้าสู่ระบบล่าสุด",
@@ -107,22 +107,34 @@
                 _id: item._id,
                 schemas: [
                     {
+                        id: 'userDisplayName',
                         type: "text",
-                        label: "ชื่อที่แสดง",
-                        placeholder: "กรุณาใส่ชื่อที่แสดง",
+                        label: "ชื่อที่แสดงบนหน้าเว็บ",
+                        placeholder: "กรุณากรอกชื่อที่แสดงบนหน้าเว็บ",
                         value: item.values[1],
+                        validations: [
+                            Validator.notStartWithSpace,
+                            Validator.notMultiSpace,
+                        ]
                     },
                     {
+                        id: 'userFullName',
                         type: "text",
                         label: "ชื่อ-นามสกุล",
-                        placeholder: "กรุณาใส่ชื่อ-นามสกุล",
+                        placeholder: "กรุณากรอกชื่อ-นามสกุล",
                         value: item.values[2],
+                        validations: [
+                            Validator.notStartWithSpace,
+                            Validator.notMultiSpace,
+                        ]
                     },
                     {
+                        id: 'userEmail',
                         type: "text",
                         label: "อีเมล",
-                        placeholder: "กรุณาใส่อีเมล",
+                        placeholder: "กรุณากรอกอีเมล",
                         value: item.values[3],
+                        validations: [ Validator.noSpace ]
                     },
                 ]
             }
@@ -131,16 +143,23 @@
             form = {
                 schemas: [
                     {
+                        id: 'userFullName',
                         type: "text",
                         label: "ชื่อ-นามสกุล",
-                        placeholder: "กรุณาใส่ชื่อ-นามสกุล",
+                        placeholder: "กรุณากรอกชื่อ-นามสกุล",
                         value: "",
+                        validations: [
+                            Validator.notStartWithSpace,
+                            Validator.notMultiSpace,
+                        ]
                     },
                     {
+                        id: 'userEmail',
                         type: "text",
                         label: "อีเมล",
-                        placeholder: "กรุณาใส่อีเมล",
+                        placeholder: "กรุณากรอกอีเมล",
                         value: "",
+                        validations: [ Validator.noSpace ]
                     },
                 ]
             }
@@ -150,42 +169,42 @@
         isLoading = true
         if (formType === FormType.create) {
             const user: User = {
-                userFullName: event.detail.schemas[0].value,
-                userEmail: event.detail.schemas[1].value,
+                userFullName: event.detail.schemas[0].value.trim(),
+                userEmail: event.detail.schemas[1].value.trim(),
             }
             const res = await createUser(user, 'tch')
             if (res.error) {
                 alert({
                     type: 'error',
-                    message: res.error.error,
+                    message: mapErrorText(res.error.error),
                 })
             } else {
                 await getTeachers(offset, limit)
                 isOpenFormModal = false
                 alert({
                     type: 'success',
-                    message: 'เพิ่มข้อมูลอาจารย์สำเร็จ'
+                    message: 'เพิ่มรายการสำเร็จ'
                 })
             }
         } else {
             const user: User = {
                 userUUID: event.detail._id,
-                userDisplayName: event.detail.schemas[0].value,
-                userFullName: event.detail.schemas[1].value,
-                userEmail: event.detail.schemas[2].value,
+                userDisplayName: event.detail.schemas[0].value.trim(),
+                userFullName: event.detail.schemas[1].value.trim(),
+                userEmail: event.detail.schemas[2].value.trim(),
             }
             const res = await updateUser(user)
             if (res.error) {
                 alert({
                     type: 'error',
-                    message: res.error.error,
+                    message: mapErrorText(res.error.error),
                 })
             } else {
                 await getTeachers(offset, limit)
                 isOpenFormModal = false
                 alert({
                     type: 'success',
-                    message: 'แก้ไขข้อมูลอาจารย์สำเร็จ'
+                    message: 'แก้ไขรายการสำเร็จ'
                 })
             }
         }
@@ -203,7 +222,7 @@
         total -= 1
         alert({
             type: 'success',
-            message: `ลบข้อมูลอาจารย์สำเร็จ`
+            message: `ลบรายการสำเร็จ`
         })
         isLoading = false
     }
@@ -216,7 +235,7 @@
             selectedItems = [];
             alert({
                 type: 'success',
-                message: `ลบข้อมูลอาจารย์สำเร็จ`
+                message: `ลบรายการสำเร็จ`
             })
             isLoading = false
         }
@@ -231,12 +250,23 @@
             message: `บังคับอาจารย์ออกจากระบบทุกอุปกรณ์สำเร็จ`
         })
     }
+
+    const mapErrorText = (err: string): string => {
+        if (err.includes('email: ')) {
+            form = mapErrorForm(form, {id: 'userEmail', text: 'อีเมลนี้มีผู้อื่นใช้งานแล้ว'})
+            return 'อีเมลนี้มีผู้อื่นใช้งานแล้ว กรุณาลองใหม่อีกครั้ง'
+        } else if (err.includes('userEmail is invalid')) {
+            form = mapErrorForm(form, {id: 'userEmail', text: 'รูปแบบอีเมลไม่ถูกต้อง'})
+            return 'รูปแบบอีเมลไม่ถูกต้อง กรุณากรอกอีเมลใหม่อีกครั้ง'
+        }
+        return err
+    }
 </script>
 
 <LoadingSpinner bind:isLoading />
 
 <div class="rounded-lg shadow-md w-full h-full p-4 sm:p-6 overflow-hidden bg-white text-black dark:bg-gray-700 dark:text-white ease-in duration-200">
-    <AdminHeader title="อาจารย์" buttonName="เพิ่มอาจารย์" bind:deleteItemsCount={selectedItems.length} on:add={addItemAction} on:delete={multiDeleteAction} />
+    <AdminHeader title="อาจารย์" bind:deleteItemsCount={selectedItems.length} on:add={addItemAction} on:delete={multiDeleteAction} />
     <Table bind:limit bind:total {columns} bind:data skeletonLoad multiSelect on:fetch={fetchTeachers} {actions} bind:selectedItems />
 </div>
 

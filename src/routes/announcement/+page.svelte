@@ -9,15 +9,15 @@
 	import { upsertAnnouncement } from "@services/announcement";
     import { alert } from "@stores/alert";
 
-    let title: FormSchema = {value: "", label: "หัวข้อการประกาศ", placeholder: "กรุณาใส่หัวข้อสำหรับประกาศจากทางมหาวิทยาลัย..."}
-    let description: FormSchema = {value: "", label: "รายละเอียด", placeholder: "กรุณาใส่รายละเอียด..."}
+    let title: FormSchema = {value: "", label: "หัวข้อการประกาศ", placeholder: "กรุณากรอกหัวข้อสำหรับประกาศจากทางมหาวิทยาลัย..."}
+    let description: FormSchema = {value: "", label: "รายละเอียด", placeholder: "กรุณากรอกรายละเอียด..."}
     let attachments: Attachment[] = [];
     let submitName = "ยืนยัน"
     let isLoading = false;
     let submit = async() => {
         const files = attachments.map(attachment => attachment.file)
         const announcement: AnnouncementRequest = {
-            title: title.value,
+            title: title.value.trim(),
             description: description.value,
         }
         isLoading = true;

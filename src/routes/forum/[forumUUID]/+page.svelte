@@ -47,7 +47,7 @@
     $: selfSessionUUID = getSessionUUID()
 
     function connectToSocket() {
-        const socket = io(import.meta.env.VITE_API_HOST)
+        const socket = io(`${import.meta.env.VITE_API_HOST}/forum`)
 
         socket.on('connect', () => socket.emit('join', { room: data.forumDetail.forumUUID, sessionUUID: selfSessionUUID }))
 

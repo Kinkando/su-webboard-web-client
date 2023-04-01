@@ -66,8 +66,8 @@
 
     const updateProfile = async () => {
         isLoading = true;
-        const res = await updateUserProfile(draft.userDisplayName, statusGroup === StatusGroup.anonymous, image)
-        if (res?.data) {
+        const res = await updateUserProfile(draft.userDisplayName.trim() || user.userDisplayName, statusGroup === StatusGroup.anonymous, image)
+        if (res.data) {
             alert({
                 type: 'success',
                 message: 'อัพเดตข้อมูลส่วนตัวสำเร็จ',
@@ -75,7 +75,7 @@
 
             // update local
             image = undefined;
-            user.userDisplayName = draft.userDisplayName
+            user.userDisplayName = draft.userDisplayName.trim() || user.userDisplayName;
             user.userImageURL = draft.userImageURL;
             userStore.set(user)
             mode = 'view'
@@ -116,8 +116,8 @@
 
     const inputs = [
         {
-            label: "ชื่อที่ใช้แสดง",
-            placeholder: "กรุณาใส่ชื่อที่ใช้แสดง",
+            label: "ชื่อที่แสดงบนหน้าเว็บ",
+            placeholder: "กรุณากรอกชื่อที่แสดงบนหน้าเว็บ",
             key: "userDisplayName",
         },
         {
@@ -216,7 +216,7 @@
                 color="green"
                 gradient
                 class="md:w-fit w-full whitespace-nowrap"
-                disabled={(draft.userDisplayName.length < 6 && mode === 'update-profile') || ((password.old.value.length < 6 || password.new.value.length < 6 || password.new.value !== password.confirm.value) && mode === 'change-password')}
+                disabled={(password.old.value.length < 6 || password.new.value.length < 6 || password.new.value !== password.confirm.value) && mode === 'change-password'}
                 type="submit"
                 on:click={mode === 'update-profile' ? updateProfile : changePass}
             >

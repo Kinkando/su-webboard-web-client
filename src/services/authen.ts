@@ -41,3 +41,12 @@ export async function revokeToken(accessToken?: string, refreshToken?: string) {
         })
     } catch (error) {}
 }
+
+export async function registerUser(userDisplayName: string, userFullName: string, studentID: string, idToken: string) {
+    return await axios.request<JWT>({
+        url: `${baseURL}/authen/user`,
+        method: 'POST',
+        headers: {'X-Api-Key': apiKey},
+        data: { userDisplayName, userFullName, studentID, idToken },
+    })
+}

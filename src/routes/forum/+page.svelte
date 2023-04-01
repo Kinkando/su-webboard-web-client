@@ -14,8 +14,8 @@
 	import { getUserProfile } from "@services/user";
     import { alert } from "@stores/alert";
 
-    let title: FormSchema = {value: "", label: "หัวข้อกระทู้", placeholder: "กรุณาใส่หัวข้อกระทู้..."}
-    let description: FormSchema = {value: "", label: "รายละเอียด", placeholder: "กรุณาใส่รายละเอียด..."}
+    let title: FormSchema = {value: "", label: "หัวข้อกระทู้", placeholder: "กรุณากรอกหัวข้อกระทู้..."}
+    let description: FormSchema = {value: "", label: "รายละเอียด", placeholder: "กรุณากรอกรายละเอียด..."}
     let categories: Category[] = [];
     let attachments: Attachment[] = [];
     let submitName = "สร้างกระทู้";
@@ -23,7 +23,7 @@
         const files = attachments.map(attachment => attachment.file)
         const categoryIDs = categories.filter(category => category.isActive).map(category => category.categoryID!)
         const forum: ForumRequest = {
-            title: title.value,
+            title: title.value.trim(),
             description: description.value,
             categoryIDs,
             isAnonymous,

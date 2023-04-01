@@ -6,7 +6,7 @@
 	import LoadingSpinner from '@components/spinner/LoadingSpinner.svelte';
 	import Table from '@components/table/Table.svelte';
 	import type { Category } from '@models/category';
-	import { FormType, type Form } from '@models/form';
+	import { FormType, mapErrorForm, type Form } from '@models/form';
 	import type { ActionTable, DataTable } from "@models/table";
 	import { deleteCategories, getCategories, upsertCategory } from "@services/admin";
 	import { alert } from '@stores/alert';
@@ -89,15 +89,17 @@
         form = {
             schemas: [
                 {
+                    id: 'categoryName',
                     type: "text",
                     label: "หมวดหมู่",
-                    placeholder: "กรุณาใส่หมวดหมู่",
+                    placeholder: "กรุณากรอกหมวดหมู่",
                     value: "",
                 },
                 {
+                    id: 'categoryHexColor',
                     type: "color",
                     label: "สี",
-                    placeholder: "กรุณาใส่สี",
+                    placeholder: "กรุณากรอกสี",
                     value: "#000000",
                 },
             ]
@@ -111,8 +113,8 @@
     const sumbitForm = async (event: CustomEvent<Form>) => {
         const category: Category = {
             categoryID: Number(event.detail._id),
-            categoryName: event.detail.schemas[0].value,
-            categoryHexColor: event.detail.schemas[1].value,
+            categoryName: event.detail.schemas[0].value.trim(),
+            categoryHexColor: event.detail.schemas[1].value.trim(),
         }
         isLoading = true;
         const res = await upsertCategory(category)
@@ -120,7 +122,7 @@
             isLoading = false;
             alert({
                 type: 'error',
-                message: `${res.error?.error}`
+                message: mapErrorText(res.error?.error),
             })
         } else {
             await fetchCategories(offset, limit)
@@ -128,7 +130,7 @@
             isOpenFormModal = false;
             alert({
                 type: 'success',
-                message: res.status === HTTP.StatusCreated ? 'เพิ่มหมวดหมู่สำเร็จ' : `แก้ไขหมวดหมู่สำเร็จ`
+                message: res.status === HTTP.StatusCreated ? 'เพิ่มรายการสำเร็จ' : `แก้ไขรายการสำเร็จ`
             })
         }
     }
@@ -144,7 +146,7 @@
         total -= 1
         alert({
             type: 'success',
-            message: `ลบหมวดหมู่สำเร็จ`
+            message: `ลบรายการสำเร็จ`
         })
         isLoading = false
     }
@@ -157,17 +159,31 @@
             selectedItems = []
             alert({
                 type: 'success',
-                message: `ลบหมวดหมู่สำเร็จ`
+                message: `ลบรายการสำเร็จ`
             })
             isLoading = false
         }
+    }
+
+    const mapErrorText = (err: string): string => {
+        if (err.includes('categoryName')) {
+            form = mapErrorForm(form, {id: 'categoryName', text: 'หมวดหมู่นี้มีอยู่ในระบบแล้ว'})
+            return 'หมวดหมู่นี้มีอยู่ในระบบแล้ว กรุณาลองใหม่อีกครั้ง'
+        } else if (err.includes('categoryHexColor is invalid')) {
+            form = mapErrorForm(form, {id: 'categoryHexColor', text: 'รูปแบบสีหมวดหมู่ไม่ถูกต้อง'})
+            return 'รูปแบบสีหมวดหมู่ไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง'
+        } else if (err.includes('categoryHexColor')) {
+            form = mapErrorForm(form, {id: 'categoryHexColor', text: 'สีหมวดหมู่นี้ถูกใช้งานแล้ว'})
+            return 'สีหมวดหมู่นี้ถูกใช้งานแล้ว กรุณาลองใหม่อีกครั้ง'
+        }
+        return err
     }
 </script>
 
 <LoadingSpinner bind:isLoading />
 
 <div class="rounded-lg shadow-md w-full h-full p-4 sm:p-6 overflow-hidden bg-white text-black dark:bg-gray-700 dark:text-white ease-in duration-200">
-    <AdminHeader title="หมวดหมู่" buttonName="เพิ่มหมวดหมู่" bind:deleteItemsCount={selectedItems.length} on:add={addItemAction} on:delete={multiDeleteAction} />
+    <AdminHeader title="หมวดหมู่" bind:deleteItemsCount={selectedItems.length} on:add={addItemAction} on:delete={multiDeleteAction} />
     <Table bind:limit bind:total {columns} bind:data skeletonLoad multiSelect on:fetch={fetch} {actions} bind:selectedItems />
 </div>
 
