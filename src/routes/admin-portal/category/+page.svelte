@@ -89,12 +89,14 @@
         form = {
             schemas: [
                 {
+                    id: 'categoryName',
                     type: "text",
                     label: "หมวดหมู่",
                     placeholder: "กรุณาใส่หมวดหมู่",
                     value: "",
                 },
                 {
+                    id: 'categoryHexColor',
                     type: "color",
                     label: "สี",
                     placeholder: "กรุณาใส่สี",
@@ -120,7 +122,7 @@
             isLoading = false;
             alert({
                 type: 'error',
-                message: `${res.error?.error}`
+                message: mapErrorText(res.error?.error),
             })
         } else {
             await fetchCategories(offset, limit)
@@ -161,6 +163,21 @@
             })
             isLoading = false
         }
+    }
+
+    const mapErrorForm = (id: string, error: string) => form.schemas.forEach((schema, index) => form.schemas[index].error = schema.id === id ? error : '')
+    const mapErrorText = (err: string): string => {
+        if (err.includes('categoryName')) {
+            mapErrorForm('categoryName', 'หมวดหมู่นี้มีอยู่ในระบบแล้ว')
+            return 'หมวดหมู่นี้มีอยู่ในระบบแล้ว กรุณาลองใหม่อีกครั้ง'
+        } else if (err.includes('categoryHexColor is invalid')) {
+            mapErrorForm('categoryHexColor', 'รูปแบบสีหมวดหมู่ไม่ถูกต้อง')
+            return 'รูปแบบสีหมวดหมู่ไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง'
+        } else if (err.includes('categoryHexColor')) {
+            mapErrorForm('categoryHexColor', 'สีหมวดหมู่นี้ถูกใช้งานแล้ว')
+            return 'สีหมวดหมู่นี้ถูกใช้งานแล้ว กรุณาลองใหม่อีกครั้ง'
+        }
+        return err
     }
 </script>
 

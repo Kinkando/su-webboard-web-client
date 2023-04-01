@@ -116,8 +116,8 @@
 
     const inputs = [
         {
-            label: "ชื่อที่ใช้แสดง",
-            placeholder: "กรุณาใส่ชื่อที่ใช้แสดง",
+            label: "ชื่อที่แสดงบนหน้าเว็บ",
+            placeholder: "กรุณาใส่ชื่อที่แสดงบนหน้าเว็บ",
             key: "userDisplayName",
         },
         {

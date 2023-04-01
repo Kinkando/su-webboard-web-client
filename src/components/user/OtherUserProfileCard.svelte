@@ -9,7 +9,7 @@
 
     const userSchema = [
         {
-            label: 'ชื่อที่ใช้แสดง',
+            label: 'ชื่อที่แสดงบนหน้าเว็บ',
             value: user.userDisplayName,
         },
         {

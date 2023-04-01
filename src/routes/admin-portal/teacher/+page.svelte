@@ -21,7 +21,7 @@
     let teachers: User[] = [];
     const columns: string[] = [
         "รูปโปรไฟล์",
-        "ชื่อที่แสดง",
+        "ชื่อที่แสดงบนหน้าเว็บ",
         "ชื่อ-นามสกุล",
         "อีเมล",
         "เข้าสู่ระบบล่าสุด",
@@ -107,9 +107,10 @@
                 _id: item._id,
                 schemas: [
                     {
+                        id: 'userDisplayName',
                         type: "text",
-                        label: "ชื่อที่แสดง",
-                        placeholder: "กรุณาใส่ชื่อที่แสดง",
+                        label: "ชื่อที่แสดงบนหน้าเว็บ",
+                        placeholder: "กรุณาใส่ชื่อที่แสดงบนหน้าเว็บ",
                         value: item.values[1],
                         validations: [
                             Validator.notStartWithSpace,
@@ -117,6 +118,7 @@
                         ]
                     },
                     {
+                        id: 'userFullName',
                         type: "text",
                         label: "ชื่อ-นามสกุล",
                         placeholder: "กรุณาใส่ชื่อ-นามสกุล",
@@ -127,6 +129,7 @@
                         ]
                     },
                     {
+                        id: 'userEmail',
                         type: "text",
                         label: "อีเมล",
                         placeholder: "กรุณาใส่อีเมล",
@@ -140,6 +143,7 @@
             form = {
                 schemas: [
                     {
+                        id: 'userFullName',
                         type: "text",
                         label: "ชื่อ-นามสกุล",
                         placeholder: "กรุณาใส่ชื่อ-นามสกุล",
@@ -150,6 +154,7 @@
                         ]
                     },
                     {
+                        id: 'userEmail',
                         type: "text",
                         label: "อีเมล",
                         placeholder: "กรุณาใส่อีเมล",
@@ -171,7 +176,7 @@
             if (res.error) {
                 alert({
                     type: 'error',
-                    message: mapError(res.error.error),
+                    message: mapErrorText(res.error.error),
                 })
             } else {
                 await getTeachers(offset, limit)
@@ -192,7 +197,7 @@
             if (res.error) {
                 alert({
                     type: 'error',
-                    message: mapError(res.error.error),
+                    message: mapErrorText(res.error.error),
                 })
             } else {
                 await getTeachers(offset, limit)
@@ -246,11 +251,14 @@
         })
     }
 
-    function mapError(err: string): string {
+    const mapErrorForm = (id: string, error: string) => form.schemas.forEach((schema, index) => form.schemas[index].error = schema.id === id ? error : '')
+    const mapErrorText = (err: string): string => {
         if (err.includes('email: ')) {
-            return 'อีเมลนี้มีผู้อื่นใช้งานเรียบร้อยแล้ว'
+            mapErrorForm('userEmail', 'อีเมลนี้มีผู้อื่นใช้งานแล้ว')
+            return 'อีเมลนี้มีผู้อื่นใช้งานแล้ว กรุณาลองใหม่อีกครั้ง'
         } else if (err.includes('userEmail is invalid')) {
-            return 'รูปแบบของอีเมลไม่ถูกต้อง กรุณากรอกอีเมลใหม่อีกครั้ง'
+            mapErrorForm('userEmail', 'รูปแบบอีเมลไม่ถูกต้อง')
+            return 'รูปแบบอีเมลไม่ถูกต้อง กรุณากรอกอีเมลใหม่อีกครั้ง'
         }
         return err
     }
