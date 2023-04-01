@@ -12,6 +12,7 @@
 	import { getUserUUID } from "@util/localstorage";
 	import { createEventDispatcher, onDestroy } from "svelte";
 	import { timeRange } from "@util/datetime";
+	import { page } from "$app/stores";
 
     export let label: string;
     export let comment: Comment;
@@ -128,11 +129,13 @@
         }
     }, 1000)
     onDestroy(() => clearInterval(period))
+
+    $: commentUUID = $page.url.searchParams.get('commentUUID')
 </script>
 
 <LoadingSpinner bind:isLoading />
 
-<div class="rounded-lg shadow-md w-full h-full p-4 sm:p-6 overflow-hidden bg-white text-black dark:bg-gray-700 dark:text-white ease-in duration-200">
+<div id="comment-{comment.commentUUID}" class="{commentUUID === comment.commentUUID ? 'border-blue-400 border' : ''} rounded-lg shadow-md w-full h-full p-4 sm:p-6 overflow-hidden bg-white text-black dark:bg-gray-700 dark:text-white ease-in duration-200">
     <div class="flex items-center mb-2">
         <div class="font-light text-lg text-gray-400 w-full">{label}</div>
         <EllipsisMenu

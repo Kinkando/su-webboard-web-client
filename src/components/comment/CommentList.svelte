@@ -2,6 +2,7 @@
     import { inview } from "svelte-inview";
 	import SyncLoader from 'svelte-loading-spinners/SyncLoader.svelte';
 	import { Button } from "flowbite-svelte";
+	import { page } from '$app/stores';
 	import CommentCard from "./CommentCard.svelte";
 	import { SocketEvent } from "@commons/socket-event";
 	import type { Comment } from "@models/comment";
@@ -56,6 +57,45 @@
         }
     }
 
+    let isFetch = true;
+    $: commentUUID = $page.url.searchParams.get('commentUUID')
+    $: if (commentUUID?.length && comments.length && isFetch) {
+        fetchUntilFound()
+    }
+    async function fetchUntilFound() {
+        isFetch = false
+        let isMore = true;
+        while(isMore) {
+            console.log(comments.length)
+            for(let i=0; i<comments.length; i++) {
+                const comment = comments[i]
+                if (comment.replyComments) {
+                    for(let j=0; j<comment.replyComments.length; j++) {
+                        const replyComment = comment.replyComments[j]
+                        if (replyComment.commentUUID === commentUUID) {
+                            comments[i].replyCursor = j+1
+                            setTimeout(() => scrollIntoView(), 100)
+                            return
+                        }
+                    }
+                }
+            }
+            console.log("before:", isFetch)
+            isMore = comments.length < totalComments
+            console.log("after:", isFetch)
+            offset += limit;
+            await fetchData()
+        }
+    }
+
+    function scrollIntoView() {
+        const el = document.querySelector(`#comment-${commentUUID}`);
+        if (!el) return;
+        // el.scrollIntoView({ behavior: 'smooth' });
+        let dims = el.getBoundingClientRect();
+        window.scrollTo({left: window.scrollX, top: dims.top - 70, behavior: 'smooth'});
+    }
+
     let isRefresh = false;
     $: orderBy && initialSort()
     async function initialSort() {
@@ -76,6 +116,9 @@
     const replyLimit = 5;
 
     async function fetchData() {
+        if (totalComments && comments.length >= totalComments) {
+            return
+        }
         const response = await getComments(forumUUID, offset, limit, orderBy)
         if (response?.data) {
             for(let comment of response.data) {
