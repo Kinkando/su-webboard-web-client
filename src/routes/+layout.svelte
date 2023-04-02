@@ -35,6 +35,7 @@
             case "/profile/[userUUID]": return generalUserPrefix + "Profile"
             case "/announcement": return generalUserPrefix + "New Announcement"
             case "/forum": return generalUserPrefix + "New Forum"
+            case "/setting": return generalUserPrefix + "Setting"
 
             // List page
             case "/category/[categoryID]": return generalUserPrefix + "Category List"
