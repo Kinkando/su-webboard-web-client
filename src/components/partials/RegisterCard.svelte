@@ -15,6 +15,7 @@
     import * as Pattern from '@util/pattern'
     import * as Validator from '@util/validation'
     import type { UserCredential } from 'firebase/auth'
+	import { initState } from "@util/init-state";
 
 	export let user: User;
     export let open: boolean = false;
@@ -134,12 +135,8 @@
     }
 
     const navigate = async(userType: string) => {
-        if (userType && userType !== 'adm') {
-            userStore.set(await getUserProfile())
-            const noti = await getNotiList(10, 0)
-            notificationStore.set({ notiList: noti.data, total: noti.total, unreadNotiCount: await getUnreadNotiCount() })
-        }
-        goto("/")
+        await initState(userType as any)
+        await goto("/")
     }
 
     const mapErrorText = (err: string): string => {

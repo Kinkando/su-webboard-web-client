@@ -14,6 +14,7 @@
     import notificationStore from '@stores/notification'
     import userStore from '@stores/user'
 	import { getUserType } from "@util/localstorage";
+	import { initState } from "@util/init-state";
 
     $: title = (() => {
         const adminPortalPrefix = "ADMIN PORTAL | "
@@ -63,11 +64,7 @@
     let isLoading = true;
     onMount(async() => {
         isLoading = false;
-        if (userType && userType !== 'adm') {
-            userStore.set(await getUserProfile())
-            const noti = await getNotiList(10, 0)
-            notificationStore.set({ notiList: noti.data, total: noti.total, unreadNotiCount: await getUnreadNotiCount() })
-        }
+        initState(userType as any)
     })
     beforeNavigate(() => isLoading = true)
     afterNavigate(() => isLoading = false)

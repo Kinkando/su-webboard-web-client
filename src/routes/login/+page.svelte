@@ -14,6 +14,7 @@
     import notificationStore from '@stores/notification'
     import userStore from '@stores/user'
 	import { getUserType, setToken } from '@util/localstorage';
+	import { initState } from '@util/init-state';
 
     let email = "";
     let password = "";
@@ -73,12 +74,8 @@
     }
 
     const navigate = async(userType: string) => {
-        if (userType && userType !== 'adm') {
-            userStore.set(await getUserProfile())
-            const noti = await getNotiList(10, 0)
-            notificationStore.set({ notiList: noti.data, total: noti.total, unreadNotiCount: await getUnreadNotiCount() })
-        }
-        goto(redirect || (userType === 'adm' ? "/admin-portal" : "/"))
+        await initState(userType as any)
+        await goto(redirect || (userType === 'adm' ? "/admin-portal" : "/"))
     }
 
     let user: User;
