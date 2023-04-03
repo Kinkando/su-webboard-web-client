@@ -26,7 +26,7 @@
                 event.preventDefault();
                 return;
             }
-            if ([elm.parentElement, elm].includes(ellipsisButton.children.item(0))) {
+            if ([elm.parentElement, elm].includes(ellipsisButton.children.item(0) as any)) {
                 event.preventDefault();
                 return;
             }
