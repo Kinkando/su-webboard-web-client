@@ -26,13 +26,17 @@
                 event.preventDefault();
                 return;
             }
+            if ([elm.parentElement, elm].includes(ellipsisButton.children.item(0))) {
+                event.preventDefault();
+                return;
+            }
         }
         await markAsRead()
         await goto(notification.notiLink)
     }
 
-    const markAsRead = async() => {
-        if (ellipsis) {
+    const markAsRead = async(isClose = false) => {
+        if (ellipsis && isClose) {
             ellipsisButton.click()
         }
         if (!notification.isRead) {
@@ -84,7 +88,7 @@
 {#if ellipsis}
     <Popover class="select-none text-sm w-fit transition-colors ease-in duration-200 py-2 shadow-none" defaultClass="p-0 w-fit" transition={slide} params={{duration: 200}} placement={ellipsisPlacement} trigger="click" triggeredBy="#notification-menu-{notification.notiUUID}">
         <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <li id="notification-item-1" class="cursor-pointer flex items-center gap-x-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700" on:click={markAsRead}>
+        <li id="notification-item-1" class="cursor-pointer flex items-center gap-x-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700" on:click={() => markAsRead(true)}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
                 <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
             </svg>
