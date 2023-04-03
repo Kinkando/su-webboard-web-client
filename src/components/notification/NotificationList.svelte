@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { Indicator } from "flowbite-svelte";
-	import type { Notification } from "@models/notification";
 	import NotificationCard from "./NotificationCard.svelte";
+	import SkeletonNotificationCard from "@components/skeleton-load/SkeletonNotificationCard.svelte";
+	import type { Notification } from "@models/notification";
 
     export let notification: Notification;
 </script>
@@ -17,10 +18,14 @@
 
 <div class="h-10 w-full" />
 <section class="relative min-w-[330px] max-w-sm">
-    {#if notification && notification.notiList?.length}
+    {#if !notification}
+        {#each Array(3) as _}
+            <SkeletonNotificationCard />
+        {/each}
+    {:else if notification && notification.notiList?.length}
          {#each notification.notiList.slice(0, Math.min(3, notification.notiList.length)) as _, index}
-             <hr class="border-gray-300 dark:border-gray-600">
-             <NotificationCard bind:notification={notification.notiList[index]} />
+            <hr class="border-gray-300 dark:border-gray-600">
+            <NotificationCard bind:notification={notification.notiList[index]} />
         {/each}
     {:else}
         <hr class="border-gray-300 dark:border-gray-600">
