@@ -32,7 +32,9 @@
     }
 
     const markAsRead = async() => {
-        ellipsisButton.click()
+        if (ellipsis) {
+            ellipsisButton.click()
+        }
         if (!notification.isRead) {
             await readNoti(notification.notiUUID)
             notification.isRead = true;
@@ -42,11 +44,13 @@
     }
 
     const removeNotification = async() => {
-        ellipsisButton.click()
-        await deleteNoti(notification.notiUUID)
-        $notificationSocket.emit('refresh', getUserUUID())
-        dispatch('delete', notification.notiUUID)
-        alert({type: 'success', message: 'ลบการแจ้งเตือนออกแล้ว'})
+        if (ellipsis) {
+            ellipsisButton.click()
+            await deleteNoti(notification.notiUUID)
+            $notificationSocket.emit('refresh', getUserUUID())
+            dispatch('delete', notification.notiUUID)
+            alert({type: 'success', message: 'ลบการแจ้งเตือนออกแล้ว'})
+        }
     }
 
     let ellipsisButton: HTMLDivElement;
