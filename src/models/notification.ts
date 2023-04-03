@@ -1,5 +1,5 @@
 export interface Notification {
-    unreadNotiCount?: number
+    unreadNotiCount: number
     notiList: NotificationItem[]
     total: number
 }

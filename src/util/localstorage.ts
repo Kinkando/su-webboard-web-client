@@ -80,7 +80,7 @@ export function revokeToken() {
     localStorage.removeItem(TokenType.RefreshToken);
 }
 
-export function isPushNotification(): boolean {
+export function isOpenPushNotification(): boolean {
     const pushNoti = localStorage.getItem('push-notification')
     return pushNoti === null || pushNoti === 'open'
 }

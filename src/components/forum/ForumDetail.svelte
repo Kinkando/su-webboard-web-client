@@ -203,7 +203,7 @@
     </div>
 
     {#if forumDetail.updatedAt}
-        <div class="mt-4 text-gray-500">แก้ไขล่าสุด: {updatedAt}</div>
+        <div class="mt-4 text-gray-500">แก้ไขล่าสุด: {updatedAt || timeRange(forumDetail.updatedAt)}</div>
     {/if}
 
     <ForumFooter

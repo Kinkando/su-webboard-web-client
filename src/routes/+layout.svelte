@@ -8,11 +8,8 @@
     import Alerts from '@components/alert/Alerts.svelte';
 	import Topbar from "@components/layout/Topbar.svelte";
 	import LoadingSpinner from '@components/spinner/LoadingSpinner.svelte';
+	import Toasts from "@components/toast/Toasts.svelte";
 	import AuthGuard from '@middleware/AuthGuard.svelte';
-	import { getNotiList, getUnreadNotiCount } from "@services/notification";
-	import { getUserProfile } from "@services/user";
-    import notificationStore from '@stores/notification'
-    import userStore from '@stores/user'
 	import { getUserType } from "@util/localstorage";
 	import { initState } from "@util/init-state";
 
@@ -76,7 +73,7 @@
 </svelte:head>
 
 <Alerts />
-
+<Toasts />
 <LoadingSpinner bind:isLoading />
 
 {#key $page.url.pathname}

@@ -75,7 +75,7 @@
 
     const navigate = async(userType: string) => {
         await initState(userType as any)
-        await goto(redirect || (userType === 'adm' ? "/admin-portal" : "/"))
+        await goto(redirect && !redirect.includes("login") ? redirect : (userType === 'adm' ? "/admin-portal" : "/"))
     }
 
     let user: User;

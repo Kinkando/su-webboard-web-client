@@ -66,36 +66,30 @@
         isFetch = false
         let isMore = true;
         while(isMore) {
-            console.log(comments.length)
             for(let i=0; i<comments.length; i++) {
                 const comment = comments[i]
+                if (comment.commentUUID === commentUUID) {
+                    scrollView = true;
+                    return;
+                }
                 if (comment.replyComments) {
                     for(let j=0; j<comment.replyComments.length; j++) {
                         const replyComment = comment.replyComments[j]
                         if (replyComment.commentUUID === commentUUID) {
                             comments[i].replyCursor = j+1
-                            setTimeout(() => scrollIntoView(), 100)
+                            scrollView = true;
                             return
                         }
                     }
                 }
             }
-            console.log("before:", isFetch)
             isMore = comments.length < totalComments
-            console.log("after:", isFetch)
             offset += limit;
             await fetchData()
         }
     }
 
-    function scrollIntoView() {
-        const el = document.querySelector(`#comment-${commentUUID}`);
-        if (!el) return;
-        // el.scrollIntoView({ behavior: 'smooth' });
-        let dims = el.getBoundingClientRect();
-        window.scrollTo({left: window.scrollX, top: dims.top - 70, behavior: 'smooth'});
-    }
-
+    let scrollView = false;
     let isRefresh = false;
     $: orderBy && initialSort()
     async function initialSort() {
@@ -252,6 +246,7 @@
             {authorUUID}
             {forumUUID}
             bind:comment
+            bind:scrollView
             label="ความคิดเห็นที่ {commentNo(commentIndex)}"
             on:create={event => createView(commentIndex, event.detail.comment)}
             on:delete={() => deleteView(commentIndex)}
@@ -264,6 +259,7 @@
                             replyCommentUUID={comment.commentUUID}
                             {forumUUID}
                             bind:comment={replyComment}
+                            bind:scrollView
                             label="ความคิดเห็นที่ {commentNo(commentIndex)}.{replyCommentNo(replyCommentIndex, comment.replyComments.length)}"
                             on:delete={() => deleteView(commentIndex, replyCommentIndex)}
                         />

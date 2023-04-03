@@ -19,6 +19,14 @@ export async function getNotiList(limit: number, offset: number): Promise<{ tota
     return res.data || { total: 0, data: [] }
 }
 
+export async function getNotiDetail(notiUUID: string): Promise<NotificationItem | undefined> {
+    const res = await api<NotificationItem>({
+        url: `${baseURL}/notification/${notiUUID}`,
+        method: "GET",
+    })
+    return res.data
+}
+
 export async function readNoti(notiUUID: string) {
     return await api({
         url: `${baseURL}/notification/${notiUUID}`,

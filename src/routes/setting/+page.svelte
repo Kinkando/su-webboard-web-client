@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { isPushNotification, setPushNotification } from "@util/localstorage";
+	import { isOpenPushNotification, setPushNotification } from "@util/localstorage";
 	import { Breadcrumb, BreadcrumbItem, DarkMode, Toggle } from "flowbite-svelte";
 
     $: isDarkTheme = (() => {
@@ -13,7 +13,7 @@
         }
     }
 
-    $: isOpenPushNoti = isPushNotification()
+    $: isOpenPushNoti = isOpenPushNotification()
     function togglePushNoti() {
         isOpenPushNoti = !isOpenPushNoti
         setPushNotification(isOpenPushNoti)

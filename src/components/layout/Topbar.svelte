@@ -1,6 +1,5 @@
 <script lang="ts">
-	import NotificationList from './../partials/NotificationList.svelte';
-	import { DarkMode, Indicator, Input, Popover, Tooltip } from "flowbite-svelte";
+    import { DarkMode, Indicator, Input, Popover, Tooltip } from "flowbite-svelte";
     import { slide } from 'svelte/transition';
 	import { goto } from "$app/navigation";
 	import { page } from '$app/stores';
@@ -12,6 +11,7 @@
 	import notificationStore from '@stores/notification';
 	import userStore from '@stores/user';
 	import { getToken, revokeToken } from '@util/localstorage';
+	import NotificationList from '@components/notification/NotificationList.svelte';
 
     export let userType: string
 

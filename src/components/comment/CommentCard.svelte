@@ -130,7 +130,17 @@
     }, 1000)
     onDestroy(() => clearInterval(period))
 
+    export let scrollView: boolean;
     $: commentUUID = $page.url.searchParams.get('commentUUID')
+    $: commentUUID === comment.commentUUID && scrollView && scrollIntoView()
+    function scrollIntoView() {
+        const el = document.querySelector(`#comment-${commentUUID}`);
+        if (!el) return;
+        // el.scrollIntoView({ behavior: 'smooth' });
+        let dims = el.getBoundingClientRect();
+        window.scrollTo({left: window.scrollX, top: dims.top - 70, behavior: 'smooth'});
+        scrollView = false;
+    }
 </script>
 
 <LoadingSpinner bind:isLoading />
@@ -162,7 +172,7 @@
     </div>
 
     {#if comment.updatedAt}
-        <div class="mt-4 text-gray-500">แก้ไขล่าสุด: {updatedAt}</div>
+        <div class="mt-4 text-gray-500">แก้ไขล่าสุด: {updatedAt || timeRange(comment.updatedAt)}</div>
     {/if}
 
     <ForumFooter
