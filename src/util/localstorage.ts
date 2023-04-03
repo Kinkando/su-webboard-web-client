@@ -76,5 +76,15 @@ export function setToken(accessToken: string, refreshToken: string) {
 }
 
 export function revokeToken() {
-    localStorage.clear();
+    localStorage.removeItem(TokenType.AccessToken);
+    localStorage.removeItem(TokenType.RefreshToken);
+}
+
+export function isOpenPushNotification(): boolean {
+    const pushNoti = localStorage.getItem('push-notification')
+    return pushNoti === null || pushNoti === 'open'
+}
+
+export function setPushNotification(isOpen: boolean) {
+    localStorage.setItem('push-notification', isOpen ? 'open' : 'close')
 }

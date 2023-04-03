@@ -1,40 +1,35 @@
-import type { Notification } from "@models/notification";
+import type { NotificationItem } from "../models/notification";
+import api from "../util/api";
 
-export async function getNotiList(): Promise<Notification> {
-    // mock
-    const username = "Kook Kai"
-    const userImageProfile = "https://ps.w.org/user-avatar-reloaded/assets/icon-128x128.png?rev=2540745"
-    const noti: Notification = {
-        unreadNotiCount: 2,
-        notiList: [
-            {
-                notiUUID: "xxx-xxx-xxx-xxx",
-                forumUUID: "xxx-xxx-xxx-xxx",
-                content: "คอมเมนต์บนกระทู้ของคุณ",
-                isRead: false,
-                createAt: new Date(),
-                userImageProfile,
-                username,
-            },
-            {
-                notiUUID: "yyy-yyy-yyy-yyy",
-                forumUUID: "yyy-yyy-yyy-yyy",
-                content: "ถูกใจคอมเมนต์ของคุณ",
-                isRead: false,
-                createAt: new Date(),
-                userImageProfile,
-                username,
-            },
-            {
-                notiUUID: "zzz-zzz-zzz-zzz",
-                forumUUID: "zzz-zzz-zzz-zzz",
-                content: "ตอบกลับคอมเมนต์ของคุณ",
-                isRead: true,
-                createAt: new Date(),
-                userImageProfile,
-                username,
-            },
-        ]
-    }
-    return noti
+const baseURL = import.meta.env.VITE_API_HOST
+
+export async function getUnreadNotiCount() {
+    const res = await api<{ count: number }>({
+        url: `${baseURL}/notification/count`,
+        method: "GET",
+    })
+    return res.data?.count || 0
+}
+
+export async function getNotiList(limit: number, offset: number): Promise<{ total: number, data: NotificationItem[] }> {
+    const res = await api<{ total: number, data: NotificationItem[] }>({
+        url: `${baseURL}/notification?limit${limit}&offset=${offset}`,
+        method: "GET",
+    })
+    return res.data || { total: 0, data: [] }
+}
+
+export async function getNotiDetail(notiUUID: string): Promise<NotificationItem | undefined> {
+    const res = await api<NotificationItem>({
+        url: `${baseURL}/notification/${notiUUID}`,
+        method: "GET",
+    })
+    return res.data
+}
+
+export async function readNoti(notiUUID: string) {
+    return await api({
+        url: `${baseURL}/notification/${notiUUID}`,
+        method: "PATCH",
+    })
 }

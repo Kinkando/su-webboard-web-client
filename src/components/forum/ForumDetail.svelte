@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onDestroy } from 'svelte';
+	import { goto } from '$app/navigation';
 	import ForumImage from "./ForumImage.svelte";
 	import ForumFooter from "./ForumFooter.svelte";
 	import HTTP from "@commons/http";
@@ -18,7 +19,6 @@
 	import { defined } from "@util/generic";
 	import { getUserUUID } from "@util/localstorage";
 	import { timeRange } from "@util/datetime";
-	import { goto } from '$app/navigation';
 
     export let forumDetail: ForumDetail;
     export let categories: Category[];
@@ -203,7 +203,7 @@
     </div>
 
     {#if forumDetail.updatedAt}
-        <div class="mt-4 text-gray-500">แก้ไขล่าสุด: {updatedAt}</div>
+        <div class="mt-4 text-gray-500">แก้ไขล่าสุด: {updatedAt || timeRange(forumDetail.updatedAt)}</div>
     {/if}
 
     <ForumFooter

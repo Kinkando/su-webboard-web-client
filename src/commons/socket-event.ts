@@ -5,4 +5,10 @@ export enum SocketEvent {
     CreateComment = 'createComment',
     UpdateComment = 'updateComment',
     DeleteComment = 'deleteComment',
+
+    // Notification
+    CreateNotification = 'createNotification',
+    UpdateNotification = 'updateNotification',
+    DeleteNotification = 'deleteNotification',
+    ReadNotification = 'readNotification',
 }

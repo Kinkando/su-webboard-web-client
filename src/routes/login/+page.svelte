@@ -8,12 +8,13 @@
 	import CommonScreen from '@components/shared/CommonScreen.svelte';
 	import { verifyToken } from '@services/authen';
 	import { deleteUserFirebase, signinFirebase, signInGoogle } from '@services/firebase';
-	import { getNotiList } from '@services/notification';
+	import { getNotiList, getUnreadNotiCount } from '@services/notification';
 	import { getUserProfile } from '@services/user';
     import { alert } from "@stores/alert";
     import notificationStore from '@stores/notification'
     import userStore from '@stores/user'
 	import { getUserType, setToken } from '@util/localstorage';
+	import { initState } from '@util/init-state';
 
     let email = "";
     let password = "";
@@ -73,11 +74,8 @@
     }
 
     const navigate = async(userType: string) => {
-        if (userType && userType !== 'adm') {
-            userStore.set(await getUserProfile())
-            notificationStore.set(await getNotiList())
-        }
-        goto(redirect || (userType === 'adm' ? "/admin-portal" : "/"))
+        await initState(userType as any)
+        await goto(redirect && !redirect.includes("login") ? redirect : (userType === 'adm' ? "/admin-portal" : "/"))
     }
 
     let user: User;

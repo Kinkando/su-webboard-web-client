@@ -2,6 +2,7 @@
     import { inview } from "svelte-inview";
 	import SyncLoader from 'svelte-loading-spinners/SyncLoader.svelte';
 	import { Button } from "flowbite-svelte";
+	import { page } from '$app/stores';
 	import CommentCard from "./CommentCard.svelte";
 	import { SocketEvent } from "@commons/socket-event";
 	import type { Comment } from "@models/comment";
@@ -56,6 +57,39 @@
         }
     }
 
+    let isFetch = true;
+    $: commentUUID = $page.url.searchParams.get('commentUUID')
+    $: if (commentUUID?.length && comments.length && isFetch) {
+        fetchUntilFound()
+    }
+    async function fetchUntilFound() {
+        isFetch = false
+        let isMore = true;
+        while(isMore) {
+            for(let i=0; i<comments.length; i++) {
+                const comment = comments[i]
+                if (comment.commentUUID === commentUUID) {
+                    scrollView = true;
+                    return;
+                }
+                if (comment.replyComments) {
+                    for(let j=0; j<comment.replyComments.length; j++) {
+                        const replyComment = comment.replyComments[j]
+                        if (replyComment.commentUUID === commentUUID) {
+                            comments[i].replyCursor = j+1
+                            scrollView = true;
+                            return
+                        }
+                    }
+                }
+            }
+            isMore = comments.length < totalComments
+            offset += limit;
+            await fetchData()
+        }
+    }
+
+    let scrollView = false;
     let isRefresh = false;
     $: orderBy && initialSort()
     async function initialSort() {
@@ -76,6 +110,9 @@
     const replyLimit = 5;
 
     async function fetchData() {
+        if (totalComments && comments.length >= totalComments) {
+            return
+        }
         const response = await getComments(forumUUID, offset, limit, orderBy)
         if (response?.data) {
             for(let comment of response.data) {
@@ -209,6 +246,7 @@
             {authorUUID}
             {forumUUID}
             bind:comment
+            bind:scrollView
             label="ความคิดเห็นที่ {commentNo(commentIndex)}"
             on:create={event => createView(commentIndex, event.detail.comment)}
             on:delete={() => deleteView(commentIndex)}
@@ -221,6 +259,7 @@
                             replyCommentUUID={comment.commentUUID}
                             {forumUUID}
                             bind:comment={replyComment}
+                            bind:scrollView
                             label="ความคิดเห็นที่ {commentNo(commentIndex)}.{replyCommentNo(replyCommentIndex, comment.replyComments.length)}"
                             on:delete={() => deleteView(commentIndex, replyCommentIndex)}
                         />

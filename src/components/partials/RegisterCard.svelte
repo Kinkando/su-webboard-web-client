@@ -6,7 +6,7 @@
 	import { mapErrorForm, type Form } from "@models/form";
     import { registerUser } from '@services/authen'
 	import { createUserFirebase, deleteUserFirebase } from "@services/firebase";
-	import { getNotiList } from "@services/notification";
+	import { getNotiList, getUnreadNotiCount } from "@services/notification";
 	import { getUserProfile } from "@services/user";
 	import { alert } from '@stores/alert';
     import notificationStore from '@stores/notification'
@@ -15,6 +15,7 @@
     import * as Pattern from '@util/pattern'
     import * as Validator from '@util/validation'
     import type { UserCredential } from 'firebase/auth'
+	import { initState } from "@util/init-state";
 
 	export let user: User;
     export let open: boolean = false;
@@ -134,11 +135,8 @@
     }
 
     const navigate = async(userType: string) => {
-        if (userType && userType !== 'adm') {
-            userStore.set(await getUserProfile())
-            notificationStore.set(await getNotiList())
-        }
-        goto("/")
+        await initState(userType as any)
+        await goto("/")
     }
 
     const mapErrorText = (err: string): string => {

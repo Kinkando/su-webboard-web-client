@@ -8,13 +8,10 @@
     import Alerts from '@components/alert/Alerts.svelte';
 	import Topbar from "@components/layout/Topbar.svelte";
 	import LoadingSpinner from '@components/spinner/LoadingSpinner.svelte';
+	import Toasts from "@components/toast/Toasts.svelte";
 	import AuthGuard from '@middleware/AuthGuard.svelte';
-	import { getNotiList } from "@services/notification";
-	import { getUserProfile } from "@services/user";
-	import { alerts } from '@stores/alert';
-    import notificationStore from '@stores/notification'
-    import userStore from '@stores/user'
 	import { getUserType } from "@util/localstorage";
+	import { initState } from "@util/init-state";
 
     $: title = (() => {
         const adminPortalPrefix = "ADMIN PORTAL | "
@@ -36,6 +33,7 @@
             case "/profile/[userUUID]": return generalUserPrefix + "Profile"
             case "/announcement": return generalUserPrefix + "New Announcement"
             case "/forum": return generalUserPrefix + "New Forum"
+            case "/setting": return generalUserPrefix + "Setting"
 
             // List page
             case "/category/[categoryID]": return generalUserPrefix + "Category List"
@@ -63,10 +61,7 @@
     let isLoading = true;
     onMount(async() => {
         isLoading = false;
-        if (userType && userType !== 'adm') {
-            userStore.set(await getUserProfile())
-            notificationStore.set(await getNotiList())
-        }
+        initState(userType as any)
     })
     beforeNavigate(() => isLoading = true)
     afterNavigate(() => isLoading = false)
@@ -78,7 +73,7 @@
 </svelte:head>
 
 <Alerts />
-
+<Toasts />
 <LoadingSpinner bind:isLoading />
 
 {#key $page.url.pathname}
