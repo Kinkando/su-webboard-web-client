@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { NotificationToast } from "@models/toast";
-	import NotificationPopup from "@components/notification/NotificationPopup.svelte";
+	import NotificationCard from "@components/notification/NotificationCard.svelte";
 	import { Toast } from "flowbite-svelte";
 	import { dismissToast } from "@stores/toast";
     export let toast: NotificationToast;
@@ -15,5 +15,5 @@
             </svg>
         </button>
     </div>
-    <NotificationPopup notification={toast.notification} on:read={() => dismissToast(toast.id)} />
+    <NotificationCard notification={toast.notification} on:read={() => dismissToast(toast.id)} />
 </Toast>

@@ -11,7 +11,7 @@
 	import type { ForumDetail as ForumDetailModel } from '@models/forum';
 	import { getAllCategories } from "@services/category";
 	import { getForumDetail } from "@services/forum";
-    import socket from '@stores/socket'
+    import socket from '@stores/forum_socket'
 	import { getSessionUUID } from "@util/localstorage";
 
     export let data: { forumDetail: ForumDetailModel, categories: Category[] }

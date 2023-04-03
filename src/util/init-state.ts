@@ -6,6 +6,7 @@ import notificationStore from '@stores/notification'
 import userStore from '@stores/user'
 import { SocketEvent } from '@commons/socket-event'
 import { pushNotification } from '@stores/toast'
+import notificationSocket from '@stores/notification_socket'
 
 export async function initState(userType: 'adm' | 'std' | 'tch') {
     if (userType && userType !== 'adm') {
@@ -14,6 +15,7 @@ export async function initState(userType: 'adm' | 'std' | 'tch') {
         notificationStore.set({ notiList: noti.data, total: noti.total, unreadNotiCount: await getUnreadNotiCount() })
 
         const socket = io(`${import.meta.env.VITE_API_HOST}/notification`)
+        notificationSocket.set(socket)
 
         socket.on('connect', () => socket.emit('join', { room: getUserUUID() }))
 
@@ -53,9 +55,9 @@ export async function initState(userType: 'adm' | 'std' | 'tch') {
 
         socket.on(SocketEvent.ReadNotification, async(notiUUID?: string) => {
             if (notiUUID) {
-                const notiDetail = await getNotiDetail(notiUUID)
+                // const notiDetail = await getNotiDetail(notiUUID)
                 const count = await getUnreadNotiCount()
-                if (notiDetail) {
+                // if (notiDetail) {
                     notificationStore.update(all => {
                         all.notiList.forEach((noti, index) => {
                             if (noti.notiUUID === notiUUID) {
@@ -69,7 +71,7 @@ export async function initState(userType: 'adm' | 'std' | 'tch') {
                         all.unreadNotiCount = count
                         return all
                     })
-                }
+                // }
             } else {
                 notificationStore.update(all => {
                     all.notiList = all.notiList.map(noti => {
@@ -85,18 +87,21 @@ export async function initState(userType: 'adm' | 'std' | 'tch') {
         socket.on(SocketEvent.DeleteNotification, async(notiUUID: string) => {
             const noti = await getNotiList(10, 0)
             const count = await getUnreadNotiCount()
-            notificationStore.update(all => {
-                // const length = all.notiList.length
-                all.notiList = all.notiList.filter(noti => {
-                    // if (noti.notiUUID === notiUUID && !noti.isRead) {
-                    //     all.unreadNotiCount--;
-                    // }
-                    return noti.notiUUID !== notiUUID
-                })
-                all.unreadNotiCount = count
-                all.total = noti.total
-                return all
-            })
+            notificationStore.set({ notiList: noti.data, total: noti.total, unreadNotiCount: count })
+            // const noti = await getNotiList(10, 0)
+            // const count = await getUnreadNotiCount()
+            // notificationStore.update(all => {
+            //     // const length = all.notiList.length
+            //     all.notiList = all.notiList.filter(noti => {
+            //         // if (noti.notiUUID === notiUUID && !noti.isRead) {
+            //         //     all.unreadNotiCount--;
+            //         // }
+            //         return noti.notiUUID !== notiUUID
+            //     })
+            //     all.unreadNotiCount = count
+            //     all.total = noti.total
+            //     return all
+            // })
         })
 
         socket.on(SocketEvent.RefreshNotification, async() => {
