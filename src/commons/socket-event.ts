@@ -11,4 +11,5 @@ export enum SocketEvent {
     UpdateNotification = 'updateNotification',
     DeleteNotification = 'deleteNotification',
     ReadNotification = 'readNotification',
+    RefreshNotification = 'refreshNotification',
 }

@@ -5,10 +5,10 @@
 	import { page } from '$app/stores';
 	import CommentCard from "./CommentCard.svelte";
 	import { SocketEvent } from "@commons/socket-event";
-	import type { Comment } from "@models/comment";
 	import { Order } from "@commons/order";
+	import type { Comment } from "@models/comment";
 	import { getComment, getComments } from "@services/comment";
-    import socket from '@stores/socket'
+    import socket from '@stores/forum_socket'
 	import { getSessionUUID } from "@util/localstorage";
 
     export let authorUUID: string;
@@ -17,6 +17,7 @@
     export let forumUUID: string;
     export const newComment = async (cm: Comment, replyCommentUUID?: string) => {
         if (totalComments !== comments.length && orderBy === Order.ASC) {
+            totalComments++;
             return;
         }
         const res = await getComment(forumUUID, cm.commentUUID)
