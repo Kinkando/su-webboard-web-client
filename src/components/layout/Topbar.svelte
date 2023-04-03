@@ -107,11 +107,13 @@
     </div>
 </Popover>
 
-<Popover defaultClass="" placement="bottom" class="{isAutoHide && isScrollDown ? 'hidden' : ''} shadow-md drop-shadow-md hide-scrollbar overflow-x-hidden z-30 max-w-full min-w-0 text-sm text-black dark:text-white" shadow triggeredBy="#{tooltips[4].id}" trigger="click">
-    <div in:slide class="hide-scrollbar overflow-x-hidden">
-        <NotificationList bind:notification />
-    </div>
-</Popover>
+{#if $page.route.id !== '/notification'}
+    <Popover defaultClass="" placement="bottom" class="{isAutoHide && isScrollDown ? 'hidden' : ''} shadow-md drop-shadow-md hide-scrollbar overflow-x-hidden z-30 max-w-full min-w-0 text-sm text-black dark:text-white" shadow triggeredBy="#{tooltips[4].id}" trigger="click">
+        <div in:slide class="hide-scrollbar overflow-x-hidden">
+            <NotificationList bind:notification />
+        </div>
+    </Popover>
+{/if}
 
 <Popover defaultClass="overflow-hidden py-2" placement="bottom" class="{isAutoHide && isScrollDown ? 'hidden' : ''} z-30 w-fit border text-sm text-black dark:text-white -px-3" shadow triggeredBy="#{tooltips[5].id}" trigger="click">
     <div in:slide>
@@ -201,7 +203,7 @@
         </a>
 
         <!-- NOTIFICATION ICON -->
-        <figure id="{tooltips[4].id}" class="rounded-full text-white hover:bg-white hover:text-[var(--primary-color)] dark:hover:bg-gray-700 dark:hover:text-white p-1 w-10 h-10 cursor-pointer -ml-1 relative transition-all ease-in duration-200">
+        <figure id="{tooltips[4].id}" class="rounded-full text-white hover:bg-white hover:text-[var(--primary-color)] dark:hover:bg-gray-700 dark:hover:text-white p-1 w-10 h-10 cursor-pointer -ml-1 relative transition-all ease-in duration-200 {$page.route.id === '/notification' ? '!bg-white !text-[var(--primary-color)] !dark:bg-gray-700 !dark:text-white' : ''}">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.4" stroke="currentColor" class="w-full h-full">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
             </svg>

@@ -41,6 +41,6 @@
     <div class="overflow-hidden">
         <div class="text-base text-ellipsis overflow-hidden whitespace-nowrap">{notification.notiUserDisplayName}</div>
         <div class="text-gray-400 text-ellipsis overflow-hidden line-clamp-2 text-sm">{notification.notiBody}</div>
-        <div class="font-light text-gray-400 text-ellipsis overflow-hidden whitespace-nowrap">{notiAt || timeRange(notification.notiAt)}</div>
+        <div class="font-medium text-blue-500 text-ellipsis overflow-hidden whitespace-nowrap">{notiAt || timeRange(notification.notiAt)}</div>
     </div>
 </div>

@@ -33,3 +33,17 @@ export async function readNoti(notiUUID: string) {
         method: "PATCH",
     })
 }
+
+export async function readAllNoti() {
+    return await api({
+        url: `${baseURL}/notification`,
+        method: "PATCH",
+    })
+}
+
+export async function deleteNoti(notiUUID: string) {
+    return await api({
+        url: `${baseURL}/notification/${notiUUID}`,
+        method: "DELETE",
+    })
+}

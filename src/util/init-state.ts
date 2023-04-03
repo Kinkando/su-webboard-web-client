@@ -51,21 +51,32 @@ export async function initState(userType: 'adm' | 'std' | 'tch') {
             }
         })
 
-        socket.on(SocketEvent.ReadNotification, async(notiUUID: string) => {
-            const notiDetail = await getNotiDetail(notiUUID)
-            const count = await getUnreadNotiCount()
-            if (notiDetail) {
-                notificationStore.update(all => {
-                    all.notiList.forEach((noti, index) => {
-                        if (noti.notiUUID === notiUUID) {
-                            if (!all.notiList[index].isRead) {
-                                // all.unreadNotiCount--;
-                                all.notiList[index].isRead = true;
-                                return;
+        socket.on(SocketEvent.ReadNotification, async(notiUUID?: string) => {
+            if (notiUUID) {
+                const notiDetail = await getNotiDetail(notiUUID)
+                const count = await getUnreadNotiCount()
+                if (notiDetail) {
+                    notificationStore.update(all => {
+                        all.notiList.forEach((noti, index) => {
+                            if (noti.notiUUID === notiUUID) {
+                                if (!all.notiList[index].isRead) {
+                                    // all.unreadNotiCount--;
+                                    all.notiList[index].isRead = true;
+                                    return;
+                                }
                             }
-                        }
+                        })
+                        all.unreadNotiCount = count
+                        return all
                     })
-                    all.unreadNotiCount = count
+                }
+            } else {
+                notificationStore.update(all => {
+                    all.notiList = all.notiList.map(noti => {
+                        noti.isRead = true;
+                        return noti
+                    })
+                    all.unreadNotiCount = 0
                     return all
                 })
             }
