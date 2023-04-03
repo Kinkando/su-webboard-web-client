@@ -30,7 +30,6 @@
     }
 </script>
 
-
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div class="flex items-start gap-x-3 py-2 overflow-x-hidden px-3 cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-500 relative {!notification?.isRead ? 'bg-gray-200 dark:bg-gray-700' : ''}" on:click={() => gotoLink(notification)}>
     <img src={notification.notiUserImageURL} alt="" class="rounded-full min-w-[3rem] max-w-[3rem] min-h-[3rem] max-h-[3rem]">

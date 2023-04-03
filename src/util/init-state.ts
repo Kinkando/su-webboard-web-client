@@ -98,5 +98,11 @@ export async function initState(userType: 'adm' | 'std' | 'tch') {
                 return all
             })
         })
+
+        socket.on(SocketEvent.RefreshNotification, async() => {
+            const noti = await getNotiList(10, 0)
+            const count = await getUnreadNotiCount()
+            notificationStore.set({ notiList: noti.data, total: noti.total, unreadNotiCount: count })
+        })
     }
 }
