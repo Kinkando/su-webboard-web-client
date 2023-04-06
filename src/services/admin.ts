@@ -1,5 +1,5 @@
 import type { Category } from "@models/category";
-import type { ForumReport } from "@models/forum";
+import type { Report, ReportDetail, ReportStatus } from "@models/report";
 import type { User } from "@models/user";
 import type { Cookies } from "@sveltejs/kit";
 import api from "@util/api";
@@ -82,16 +82,39 @@ export async function deleteCategories(categoryIDs: number[], cookies?: Cookies)
     })
 }
 
-export async function getForumReport(offset: number, limit: number) {
-    const total = 0;
-    const data: ForumReport[] = []
-    await sleep()
-    return { data, total }
+export async function getReports(search: string, offset: number, limit: number, sortBy: string, reportStatus?: ReportStatus, type?: 'forum' | 'comment') {
+    const res = await api<{ total: number, data: Report[] }>({
+        url: `${baseURL}/admin/report?offset=${offset}&limit=${limit}${search ? '&search='+search : ''}${queryParams('sortBy', sortBy)}${queryParams('reportStatus', reportStatus)}${queryParams('type', type)}`,
+        method: "GET",
+    })
+    return res.data
 }
 
-const sleep = async (time?: number) => {
-    if (!time) {
-        time = 500
+export async function getReportDetail(reportUUID: string) {
+    return await api<ReportDetail>({
+        url: `${baseURL}/admin/report/${reportUUID}`,
+        method: "GET",
+    })
+}
+
+export async function updateReportStatus(reportUUID: string, reportStatus: ReportStatus) {
+    return await api({
+        url: `${baseURL}/admin/report/${reportUUID}/${reportStatus}`,
+        method: "PATCH",
+    })
+}
+
+export async function deleteReport(reportUUIDs: string[]) {
+    return await api({
+        url: `${baseURL}/admin/report`,
+        method: "DELETE",
+        data: { reportUUIDs },
+    })
+}
+
+const queryParams = (key: string, value?: any): string => {
+    if (value) {
+        return `&${key}=${value}`
     }
-    return await new Promise(resolve => setTimeout(() => resolve(""), time))
+    return ""
 }

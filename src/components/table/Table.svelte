@@ -1,9 +1,10 @@
 <script lang="ts">
 	import Pagination from '@components/ui/Pagination.svelte';
 	import type { ActionTable, DataTable } from "@models/table";
-	import { Checkbox, Label } from 'flowbite-svelte';
+	import { Checkbox, Tooltip } from 'flowbite-svelte';
 	import { createEventDispatcher, onMount } from "svelte";
 	import Header from './Header.svelte';
+	import { slide } from 'svelte/transition';
 
     export let columns: string[];
     export let data: DataTable[];
@@ -51,6 +52,20 @@
     const columnNumber = columns.length + (actions ? 1 : 0) + (multiSelect ? 1 : 0)
 </script>
 
+{#if actions}
+    {#key data?.length}
+        {#each Array(data.length) as _, index}
+            {#each actions as action}
+                <Tooltip triggeredBy="#{action.id}-{index+1}" shadow trigger="hover" placement="bottom" class="z-30 transition-colors ease-in duration-200 !bg-white !text-[var(--primary-color)] dark:!text-white dark:!bg-gray-700">
+                    <div in:slide={{duration: 200}}>
+                        {action.tooltip}
+                    </div>
+                </Tooltip>
+            {/each}
+        {/each}
+    {/key}
+{/if}
+
 <Header bind:limit on:search={event => searchText = event.detail.searchText} />
 
 <!-- TABLE ON TABLET+ -->
@@ -79,25 +94,25 @@
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 ease-in duration-200">
                         {#if multiSelect}
                             <td class="w-8 pl-4 pr-2 py-5">
-                                <div class="h-4 bg-gray-300 rounded-md dark:bg-gray-600" />
+                                <div class="h-4 bg-gray-300 rounded-md dark:bg-gray-600 animate-pulse" />
                             </td>
                         {/if}
 
                         {#each Array(columns.length) as _, i}
                             <td class="px-2 py-5">
-                                <div class="h-4 bg-gray-300 rounded-md dark:bg-gray-600" />
+                                <div class="h-4 bg-gray-300 rounded-md dark:bg-gray-600 animate-pulse" />
                             </td>
                         {/each}
 
                         {#if actions}
                             <td class="px-2 py-5">
-                                <div class="h-4 bg-gray-300 rounded-md dark:bg-gray-600" />
+                                <div class="h-4 bg-gray-300 rounded-md dark:bg-gray-600 animate-pulse" />
                             </td>
                         {/if}
                     </tr>
                 {/each}
             {:else}
-                {#each data as item}
+                {#each data as item, itemIndex}
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 ease-in duration-200 w-fit">
                         {#if multiSelect}
                             <td class="pl-4 pr-2 py-4">
@@ -120,7 +135,7 @@
                                 <div class="flex">
                                     {#each actions as action, index}
                                         <!-- svelte-ignore a11y-click-events-have-key-events -->
-                                        <span class="{index ? 'ml-2' : ''}" on:click={() => action.click(item)}>
+                                        <span class="{index ? 'ml-2' : ''}" id="{action.id}-{itemIndex+1}" on:click={() => action.click(item)}>
                                             {@html action.html}
                                         </span>
                                     {/each}

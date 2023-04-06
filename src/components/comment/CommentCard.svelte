@@ -7,7 +7,7 @@
 	import type { Comment } from "@models/comment";
 	import type { Attachment } from "@models/new-post";
     import type { Document } from "@models/forum";
-	import { deleteComment, getComment, upsertComment } from "@services/comment";
+	import { deleteComment, getComment, reportComment, upsertComment } from "@services/comment";
     import { alert } from "@stores/alert";
 	import { getUserUUID } from "@util/localstorage";
 	import { createEventDispatcher, onDestroy } from "svelte";
@@ -75,7 +75,13 @@
     }
 
     const reportCommentAction = async(reason: string) => {
-        console.log(`รายงานความคิดเห็น: ${comment.commentUUID}: ${reason}`)
+        isLoading = true
+        await reportComment(comment.commentUUID, reason)
+        isLoading = false
+        alert({
+            type: 'success',
+            message: 'รายงานความคิดเห็นสำเร็จ, กรุณารอให้ผู้ดูแลตรวจสอบและอนุมัติคำขอ',
+        })
     }
 
     const deleteCommentAction = async() => {

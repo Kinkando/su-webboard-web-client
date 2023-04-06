@@ -14,7 +14,7 @@
     import type { ForumDetail, ForumRequest } from "@models/forum";
 	import type { Attachment, FormSchema } from "@models/new-post";
 	import { upsertComment } from "@services/comment";
-	import { deleteForum, favoriteForum, upsertForum } from "@services/forum";
+	import { deleteForum, favoriteForum, reportForum, upsertForum } from "@services/forum";
     import { alert } from "@stores/alert";
 	import { defined } from "@util/generic";
 	import { getUserUUID } from "@util/localstorage";
@@ -117,7 +117,13 @@
     }
 
     const reportForumAction = async(reason: string) => {
-        console.log(`รายงานกระทู้: ${forumDetail.forumUUID}: ${reason}`)
+        isLoading = true
+        await reportForum(forumDetail.forumUUID, reason)
+        isLoading = false
+        alert({
+            type: 'success',
+            message: 'รายงานกระทู้สำเร็จ, กรุณารอให้ผู้ดูแลตรวจสอบและอนุมัติคำขอ',
+        })
     }
 
     const favoriteForumAction = async(isFavorite: boolean) => await favoriteForum(forumDetail.forumUUID, isFavorite)
