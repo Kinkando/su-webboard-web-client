@@ -31,3 +31,12 @@ export interface ReportDetail {
     createdAt: Date
     updatedAt: Date
 }
+
+export interface ReportStatistic {
+    pending: number
+    resolved: number
+    rejected: number
+    closed: number
+    invalid: number
+    total: number
+}
