@@ -3,10 +3,18 @@
 	import AdminHeader from '@components/shared/AdminHeader.svelte';
 	import LoadingSpinner from '@components/spinner/LoadingSpinner.svelte';
 	import Table from '@components/table/Table.svelte';
-	import type { Report, ReportStatus } from '@models/report';
+	import { ReportStatus, type Report, type ReportDetail } from '@models/report';
 	import type { ActionTable, DataTable } from "@models/table";
-	import { deleteReport, getReports } from '@services/admin';
+	import { deleteReport, getReportDetail, getReports, updateReportStatus } from '@services/admin';
 	import { timeRange } from '@util/datetime';
+	import Modal from '@components/modal/Modal.svelte';
+	import { Button } from 'flowbite-svelte';
+	import HTTP from '@commons/http';
+	import { alert } from '@stores/alert';
+	import type { Document, ForumDetail as Forum } from '@models/forum';
+	import type { Comment } from '@models/comment';
+	import ForumDetail from '@components/forum/ForumDetail.svelte';
+	import CommentCard from '@components/comment/CommentCard.svelte';
 
     let type: 'forum' | 'comment' | undefined = undefined
     let reportStatus: ReportStatus | undefined = undefined
@@ -19,10 +27,8 @@
     let total = 0;
     let reports: Report[];
     const columns: string[] = [
-        // "ชื่อผู้ร้องเรียน",
-        // "ชื่อผู้ถูกร้องเรียน",
         "Report Code",
-        "ประเภท", // กระทู้ คอมเมนต์
+        "ประเภท",
         "เหตุผล",
         "สถานะ",
         "รหัสอ้างอิง",
@@ -38,9 +44,24 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 3.75H6A2.25 2.25 0 003.75 6v1.5M16.5 3.75H18A2.25 2.25 0 0120.25 6v1.5m0 9V18A2.25 2.25 0 0118 20.25h-1.5m-9 0H6A2.25 2.25 0 013.75 18v-1.5M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
             `,
-            click(item: DataTable) {
-                console.log("VIEW REPORT FORUM")
+            async click(item: DataTable) {
+                isLoading = true;
+                const res = await getReportDetail(item._id)
+                if (res.status === HTTP.StatusOK) {
+                    selectedReport = {
+                        type: item.values[1],
+                        modalTitle: item.values[1] === 'กระทู้' ? 'จัดการรายงานกระทู้' : 'จัดการรายงานความคิดเห็น',
+                        reportUUID: item._id,
+                        reportReason: item.values[2],
+                        reportDetail: res.data,
+                    }
+                    isOpenViewModal = true;
+                } else {
+                    alert({type: 'error', message: 'ขออภัย, ระบบเกิดความขัดข้อง กรุณาลองใหม่อีกครั้ง!'})
+                }
+                isLoading = false;
             },
+            hidden: (item: DataTable) => item.values[3] !== statusButtonHTML(ReportStatus.Pending)
         },
         {
             id: 'delete-report',
@@ -65,10 +86,10 @@
                     report.reportCode,
                     report.type!,
                     report.reportReason,
-                    report.reportStatus,
+                    statusButtonHTML(report.reportStatus),
                     report.refReportCode || '-',
                     timeRange(new Date(report.createdAt)),
-                    report.updatedAt ? timeRange(new Date(report.updatedAt)) : 'N/A',
+                    report.updatedAt ? timeRange(new Date(report.updatedAt)) : '-',
                 ],
             })
         })
@@ -78,15 +99,16 @@
     const fetch = async(event: CustomEvent<{ page: number, searchText: string }>) => {
         searchText = event.detail.searchText
         offset = (event.detail.page > 0 ? event.detail.page-1 : 0)*limit
-        await fetchData(searchText, offset, limit)
+        await fetchData(offset, limit)
     }
 
-    const fetchData = async(search: string, offset: number, limit: number) => {
-        const res = await getReports(search, offset, limit, sortBy, reportStatus, type)
+    const fetchData = async(offset: number, limit: number) => {
+        const res = await getReports(searchText, offset, limit, sortBy, reportStatus, type)
         reports = res?.data || []
         total = res?.total || 0
     }
 
+    let isOpenViewModal = false;
     let isOpenDeleteModal = false;
     let deleteItem: DataTable;
     let selectedItems: DataTable[] = []
@@ -116,6 +138,80 @@
             isLoading = false
         }
     }
+
+    const statusButtonHTML = (reportStatus: ReportStatus) => {
+        let buttonClass = ''
+        switch (reportStatus) {
+            case ReportStatus.Pending:
+                buttonClass = 'bg-blue-600'
+                break;
+
+            case ReportStatus.Resolved:
+                buttonClass = 'bg-green-500'
+                break;
+
+            case ReportStatus.Rejected:
+                buttonClass = 'bg-orange-400'
+                break;
+
+            case ReportStatus.Invalid:
+                buttonClass = 'bg-gray-500'
+                break;
+
+            case ReportStatus.Closed:
+                buttonClass = 'bg-red-500'
+                break;
+        }
+
+        return `
+            <div class="rounded-full w-fit px-2.5 py-1 text-white ${buttonClass}">
+                <span>${reportStatus}</span>
+            </div>
+        `
+    }
+
+    let selectedReport = {modalTitle: '', reportUUID: '', type: '', reportReason: '', reportDetail: {} as ReportDetail | undefined}
+    const updateReportStatusAction = async (reportStatus: ReportStatus) => {
+        isLoading = true;
+        const res = await updateReportStatus(selectedReport.reportUUID, reportStatus)
+        if (res.status === HTTP.StatusOK) {
+            await fetchData(offset, limit)
+            isOpenViewModal = false;
+            alert({ type: 'success', message: `${selectedReport.modalTitle}สำเร็จ` })
+        } else {
+            alert({ type: 'error', message: 'ขออภัย, ระบบเกิดความขัดข้อง กรุณาลองใหม่อีกครั้ง!' })
+        }
+        isLoading = false;
+    }
+
+    const forumDetail = (): Forum => {
+        const forumDetail: any = {
+            forumUUID: '',
+            title: selectedReport.reportDetail?.title || '',
+            description: selectedReport.reportDetail?.description || '',
+            forumImages: selectedReport.reportDetail?.imageURLs?.map(imageURL => { return {url: imageURL} as Document }) || [],
+            categories: selectedReport.reportDetail?.categories || [],
+            authorUUID: selectedReport.reportDetail?.userUUID || '',
+            authorName: selectedReport.reportDetail?.userDisplayName || '',
+            authorImageURL: selectedReport.reportDetail?.userImageURL || '',
+            createdAt: selectedReport.reportDetail?.createdAt!,
+            updatedAt: selectedReport.reportDetail?.updatedAt,
+        }
+        return forumDetail as Forum
+    }
+    const commentDetail = (): Comment => {
+        const comment: Comment = {
+            commentUUID: "",
+            commentText: selectedReport.reportDetail?.description || '',
+            commentImages: selectedReport.reportDetail?.imageURLs?.map(imageURL => { return {url: imageURL} as Document }) || [],
+            commenterUUID: selectedReport.reportDetail?.userUUID || '',
+            commenterName: selectedReport.reportDetail?.userDisplayName || '',
+            commenterImageURL: selectedReport.reportDetail?.userImageURL || '',
+            createdAt: selectedReport.reportDetail?.createdAt!,
+            updatedAt: selectedReport.reportDetail?.updatedAt,
+        }
+        return comment
+    }
 </script>
 
 <LoadingSpinner bind:isLoading />
@@ -124,6 +220,28 @@
     <AdminHeader title="รายงานกระทู้" bind:deleteItemsCount={selectedItems.length} addable={false} on:delete={multiDeleteAction} />
     <Table bind:limit bind:total {columns} bind:data skeletonLoad multiSelect on:fetch={fetch} {actions} bind:selectedItems />
 </div>
+
+<Modal bind:open={isOpenViewModal} bind:title={selectedReport.modalTitle} defaultClass="w-fit ease-in overflow-hidden">
+    <div class="w-full">
+        {#if selectedReport.type === 'กระทู้'}
+            <ForumDetail categories={[]} forumDetail={forumDetail()} isView />
+        {:else}
+            <CommentCard label="ความคิดเห็น" forumUUID="" authorUUID="" comment={commentDetail()} scrollView={false} isView />
+        {/if}
+    </div>
+
+    <div class="my-4">
+        <span class="font-bold">เหตุผลการร้องเรียน: </span>
+        <span class="text-red-500">{selectedReport.reportReason}</span>
+    </div>
+    <hr class="border-gray-200 dark:border-gray-600">
+
+    <div class="text-center flex flex-wrap gap-2 justify-end">
+        <Button color="red" on:click={() => isOpenViewModal = false}>ยกเลิก</Button>
+        <Button color="yellow" on:click={() => updateReportStatusAction(ReportStatus.Resolved)}>ปฏิเสธการร้องเรียน</Button>
+        <Button color="green" on:click={() => updateReportStatusAction(ReportStatus.Rejected)}>ยืนยันการร้องเรียน</Button>
+    </div>
+</Modal>
 
 <DeleteModal bind:open={isOpenDeleteModal} deleteButtonName="ยืนยัน" on:delete={deleteAction} >
     คุณยืนยันที่จะ<span class="text-red-500">ลบรายงาน {deleteItem?.values[0]} </span>หรือไม่?

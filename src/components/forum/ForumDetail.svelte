@@ -24,6 +24,7 @@
     export let categories: Category[];
     export let replyForum = false;
     export let total = 0;
+    export let isView = false;
 
     let isLoading = false;
     let orderBy: Order = Order.ASC;
@@ -173,29 +174,31 @@
         <div class="w-full text-xl font-bold">
             {forumDetail.title}
         </div>
-        <EllipsisMenu
-            ellipsisMenuID={forumDetail?.forumUUID}
-            type={'forum'}
-            menuSuffixName={"กระทู้"}
-            editable={forumDetail.authorUUID === userUUID}
-            reportable={forumDetail.authorUUID !== userUUID}
-            removable={forumDetail.authorUUID === userUUID}
-            favorite
-            isFavorite={forumDetail.isFavorite}
-            {title}
-            {description}
-            {categories}
-            {attachments}
-            on:edit={(event) => editForumAction(event.detail.title, event.detail.description, event.detail.categories, event.detail.attachments, event.detail.deleteImageUUIDs)}
-            on:report={(event) => reportForumAction(event.detail.reportText)}
-            on:delete={() => deleteForumAction()}
-            on:favorite={event => favoriteForumAction(event.detail.isFavorite)}
-        />
+        {#if !isView}
+            <EllipsisMenu
+                ellipsisMenuID={forumDetail?.forumUUID}
+                type={'forum'}
+                menuSuffixName={"กระทู้"}
+                editable={forumDetail.authorUUID === userUUID}
+                reportable={forumDetail.authorUUID !== userUUID}
+                removable={forumDetail.authorUUID === userUUID}
+                favorite
+                isFavorite={forumDetail.isFavorite}
+                {title}
+                {description}
+                {categories}
+                {attachments}
+                on:edit={(event) => editForumAction(event.detail.title, event.detail.description, event.detail.categories, event.detail.attachments, event.detail.deleteImageUUIDs)}
+                on:report={(event) => reportForumAction(event.detail.reportText)}
+                on:delete={() => deleteForumAction()}
+                on:favorite={event => favoriteForumAction(event.detail.isFavorite)}
+            />
+        {/if}
     </div>
     {#if forumDetail.categories?.length}
         <div class="flex flex-wrap items-center gap-1 mt-1">
             {#each forumDetail.categories as category}
-                <CategoryBadge categoryID={defined(category.categoryID)} categoryName={category.categoryName} categoryHexColor={category.categoryHexColor} />
+                <CategoryBadge bind:disabled={isView} categoryID={defined(category.categoryID)} categoryName={category.categoryName} categoryHexColor={category.categoryHexColor} />
             {/each}
         </div>
     {/if}
@@ -229,6 +232,7 @@
         bind:isSortingComment={isShowSortingComment}
         bind:orderBy
         on:comment={event => commentForumAction(event.detail.comment, event.detail.attachments)}
+        bind:isView
     />
 </div>
 

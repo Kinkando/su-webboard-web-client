@@ -54,13 +54,15 @@
 
 {#if actions}
     {#key data?.length}
-        {#each Array(data.length) as _, index}
+        {#each data as item, index}
             {#each actions as action}
-                <Tooltip triggeredBy="#{action.id}-{index+1}" shadow trigger="hover" placement="bottom" class="z-30 transition-colors ease-in duration-200 !bg-white !text-[var(--primary-color)] dark:!text-white dark:!bg-gray-700">
-                    <div in:slide={{duration: 200}}>
-                        {action.tooltip}
-                    </div>
-                </Tooltip>
+                {#if !action.hidden || !action.hidden(item)}
+                    <Tooltip triggeredBy="#{action.id}-{index+1}" shadow trigger="hover" placement="bottom" class="z-30 transition-colors ease-in duration-200 !bg-white !text-[var(--primary-color)] dark:!text-white dark:!bg-gray-700">
+                        <div in:slide={{duration: 200}}>
+                            {action.tooltip}
+                        </div>
+                    </Tooltip>
+                {/if}
             {/each}
         {/each}
     {/key}
@@ -134,10 +136,12 @@
                             <td class="px-2 py-4 w-fit">
                                 <div class="flex">
                                     {#each actions as action, index}
-                                        <!-- svelte-ignore a11y-click-events-have-key-events -->
-                                        <span class="{index ? 'ml-2' : ''}" id="{action.id}-{itemIndex+1}" on:click={() => action.click(item)}>
-                                            {@html action.html}
-                                        </span>
+                                        {#if !action.hidden || !action.hidden(item)}
+                                            <!-- svelte-ignore a11y-click-events-have-key-events -->
+                                            <span class="{index ? 'ml-2' : ''}" id="{action.id}-{itemIndex+1}" on:click={() => action.click(item)}>
+                                                {@html action.html}
+                                            </span>
+                                        {/if}
                                     {/each}
                                 </div>
                             </td>

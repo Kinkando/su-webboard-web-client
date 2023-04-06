@@ -8,4 +8,5 @@ export interface ActionTable {
     tooltip: string
     html: string
     click: (item: DataTable) => any
+    hidden?: (item: DataTable) => boolean
 }

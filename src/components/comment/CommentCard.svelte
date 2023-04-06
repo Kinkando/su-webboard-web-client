@@ -19,6 +19,7 @@
     export let forumUUID: string;
     export let authorUUID: string;
     export let replyCommentUUID: string = "";
+    export let isView = false;
 
     let isLoading = false;
     let attachments: Attachment[] = [];
@@ -154,20 +155,22 @@
 <div id="comment-{comment.commentUUID}" class="{commentUUID === comment.commentUUID ? 'border-blue-400 border' : ''} rounded-lg shadow-md w-full h-full p-4 sm:p-6 overflow-hidden bg-white text-black dark:bg-gray-700 dark:text-white ease-in duration-200">
     <div class="flex items-center mb-2">
         <div class="font-light text-lg text-gray-400 w-full">{label}</div>
-        <EllipsisMenu
-            ellipsisMenuID={comment.commentUUID}
-            menuSuffixName="ความคิดเห็น"
-            type="comment"
-            label={`แก้ไข${label}`}
-            comment={comment.commentText}
-            {attachments}
-            editable={comment.commenterUUID === userUUID}
-            reportable={comment.commenterUUID !== userUUID}
-            removable={comment.commenterUUID === userUUID || authorUUID === userUUID}
-            on:edit={(event) => editCommentAction(event.detail.comment, event.detail.attachments, event.detail.deleteImageUUIDs)}
-            on:report={(event) => reportCommentAction(event.detail.reportText)}
-            on:delete={() => deleteCommentAction()}
-        />
+        {#if !isView}
+            <EllipsisMenu
+                ellipsisMenuID={comment.commentUUID}
+                menuSuffixName="ความคิดเห็น"
+                type="comment"
+                label={`แก้ไข${label}`}
+                comment={comment.commentText}
+                {attachments}
+                editable={comment.commenterUUID === userUUID}
+                reportable={comment.commenterUUID !== userUUID}
+                removable={comment.commenterUUID === userUUID || authorUUID === userUUID}
+                on:edit={(event) => editCommentAction(event.detail.comment, event.detail.attachments, event.detail.deleteImageUUIDs)}
+                on:report={(event) => reportCommentAction(event.detail.reportText)}
+                on:delete={() => deleteCommentAction()}
+            />
+        {/if}
     </div>
 
     <div class="text-lg min-h-[6rem]">
@@ -194,6 +197,7 @@
         label={`ตอบกลับ${label}`}
         bind:createdAt
         on:comment={event => createCommentAction(event.detail.comment, event.detail.attachments)}
+        bind:isView
     />
 </div>
 

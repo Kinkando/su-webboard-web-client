@@ -28,7 +28,7 @@
         </a>
         {#if user.userDisplayName !== user.userFullName}
             <a href="/profile/{user.userUUID}" class="overflow-hidden">
-                <div class="text-gray-500 text-sm overflow-hidden text-ellipsis w-fit max-w-full whitespace-nowrap hover:underline">{user.userFullName}</div>
+                <div class="text-gray-500 text-sm overflow-hidden text-ellipsis w-fit max-w-full cursor-pointer whitespace-nowrap hover:underline">{user.userFullName}</div>
             </a>
         {/if}
     </div>
