@@ -54,15 +54,20 @@
 
     const columnNumber = columns.length + (actions ? 1 : 0) + (multiSelect ? 1 : 0)
 
-    const sortByAction = (toSortBy: string, toOrderBy: string) => {
-        if (sortBy === toSortBy && orderBy === toOrderBy) {
-            sortBy = ''
-            orderBy = ''
-        } else {
+    const sortByAction = (toSortBy: string, toOrderBy: 'DESC' | 'ASC' | 'TOGGLE') => {
+        if (toOrderBy === 'TOGGLE') {
+            if (sortBy !== toSortBy) {
+                sortBy = toSortBy
+                orderBy = 'ASC'
+            } else {
+                orderBy = orderBy === 'ASC' ? 'DESC' : 'ASC'
+            }
+            dispatch('sort', {sortBy, orderBy})
+        } else if (sortBy !== toSortBy || orderBy !== toOrderBy) {
             sortBy = toSortBy
             orderBy = toOrderBy
+            dispatch('sort', {sortBy, orderBy})
         }
-        dispatch('sort', {sortBy, orderBy})
     }
 </script>
 
@@ -98,7 +103,8 @@
                 <th class="px-2 py-3 whitespace-nowrap">
                     {#if sortable}
                         <div class="flex items-center gap-x-2">
-                            <span>{column}</span>
+                            <!-- svelte-ignore a11y-click-events-have-key-events -->
+                            <span class="cursor-pointer select-none" on:click={() => sortByAction(column, 'TOGGLE')}>{column}</span>
                             <div class="flex items-center">
                                 <!-- svelte-ignore a11y-click-events-have-key-events -->
                                 <svg

@@ -11,9 +11,4 @@ export enum Field {
     Title = 'title',
     Category = 'categoryName',
     AuthorName = 'authorName',
-
-    // Report
-    UpdatedAt = 'updatedAt',
-    Type = 'type',
-    Reason = 'reason'
 }
