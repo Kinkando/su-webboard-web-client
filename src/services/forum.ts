@@ -95,7 +95,7 @@ export async function getForumDetail(forumUUID: string, cookies?: Cookies) {
 }
 
 export async function reportForum(forumUUID: string, reportReason: string) {
-    await api({
+    return await api({
         url: `${baseURL}/forum/report/${forumUUID}`,
         method: "POST",
         data: { reportReason }
