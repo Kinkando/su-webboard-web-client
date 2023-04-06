@@ -4,10 +4,16 @@ export enum Order {
 }
 
 export enum Field {
+    // Search Forum
     CreatedAt = 'createdAt',
     Popular = 'likeCount',
     Ranking = 'ranking',
     Title = 'title',
     Category = 'categoryName',
     AuthorName = 'authorName',
+
+    // Report
+    UpdatedAt = 'updatedAt',
+    Type = 'type',
+    Reason = 'reason'
 }

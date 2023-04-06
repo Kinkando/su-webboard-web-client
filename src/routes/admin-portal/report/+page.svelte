@@ -1,20 +1,21 @@
 <script lang="ts">
-	import DeleteModal from '@components/modal/DeleteModal.svelte';
+	import { Button, Tooltip } from 'flowbite-svelte';
+	import { slide } from 'svelte/transition';
+	import HTTP from '@commons/http';
 	import AdminHeader from '@components/shared/AdminHeader.svelte';
+	import DeleteModal from '@components/modal/DeleteModal.svelte';
+	import ForumDetail from '@components/forum/ForumDetail.svelte';
+	import CommentCard from '@components/comment/CommentCard.svelte';
 	import LoadingSpinner from '@components/spinner/LoadingSpinner.svelte';
+	import Modal from '@components/modal/Modal.svelte';
 	import Table from '@components/table/Table.svelte';
 	import { ReportStatus, type Report, type ReportDetail } from '@models/report';
 	import type { ActionTable, DataTable } from "@models/table";
-	import { deleteReport, getReportDetail, getReports, updateReportStatus } from '@services/admin';
-	import { timeRange } from '@util/datetime';
-	import Modal from '@components/modal/Modal.svelte';
-	import { Button } from 'flowbite-svelte';
-	import HTTP from '@commons/http';
-	import { alert } from '@stores/alert';
 	import type { Document, ForumDetail as Forum } from '@models/forum';
 	import type { Comment } from '@models/comment';
-	import ForumDetail from '@components/forum/ForumDetail.svelte';
-	import CommentCard from '@components/comment/CommentCard.svelte';
+	import { deleteReport, getReportDetail, getReports, updateReportStatus } from '@services/admin';
+	import { alert } from '@stores/alert';
+	import { timeFormat } from '@util/datetime';
 
     let type: 'forum' | 'comment' | undefined = undefined
     let reportStatus: ReportStatus | undefined = undefined
@@ -32,7 +33,7 @@
         "เหตุผล",
         "สถานะ",
         "รหัสอ้างอิง",
-        "วันที่ส่งเรื่อง",
+        "วันที่แจ้ง",
         "วันที่แก้ไข",
     ]
     const actions: ActionTable[] = [
@@ -61,7 +62,7 @@
                 }
                 isLoading = false;
             },
-            hidden: (item: DataTable) => item.values[3] !== statusButtonHTML(ReportStatus.Pending)
+            hidden: (item: DataTable, index: number) => item.values[3] !== statusButtonHTML(ReportStatus.Pending, index)
         },
         {
             id: 'delete-report',
@@ -79,17 +80,17 @@
     ]
     $: data = (() => {
         const dataTable: DataTable[] = [];
-        reports?.forEach(report => {
+        reports?.forEach((report, index) => {
             dataTable.push({
                 "_id": report.reportUUID!,
                 values: [
                     report.reportCode,
                     report.type!,
                     report.reportReason,
-                    statusButtonHTML(report.reportStatus),
+                    statusButtonHTML(report.reportStatus, index),
                     report.refReportCode || '-',
-                    timeRange(new Date(report.createdAt)),
-                    report.updatedAt ? timeRange(new Date(report.updatedAt)) : '-',
+                    timeFormat(new Date(report.createdAt)),
+                    report.updatedAt ? timeFormat(new Date(report.updatedAt)) : '-',
                 ],
             })
         })
@@ -139,7 +140,7 @@
         }
     }
 
-    const statusButtonHTML = (reportStatus: ReportStatus) => {
+    const statusButtonHTML = (reportStatus: ReportStatus, index: number) => {
         let buttonClass = ''
         switch (reportStatus) {
             case ReportStatus.Pending:
@@ -164,7 +165,7 @@
         }
 
         return `
-            <div class="rounded-full w-fit px-2.5 py-1 text-white ${buttonClass}">
+            <div id="report-status-button-${index}" class="rounded-full w-fit px-2.5 py-1 text-white ${buttonClass}">
                 <span>${reportStatus}</span>
             </div>
         `
@@ -212,13 +213,62 @@
         }
         return comment
     }
+
+    const reportStatusTooltip = (id: string): string => {
+        const reportStatus = document.getElementById(id)!.children[0].innerHTML as ReportStatus
+        switch (reportStatus) {
+            case ReportStatus.Pending: return `กำลังรอการอนุมัติ`
+            case ReportStatus.Resolved: return `ยืนยันการร้องเรียน`
+            case ReportStatus.Rejected: return `ปฏิเสธการร้องเรียน`
+            case ReportStatus.Invalid: return `คำร้องเรียนไม่ถูกต้อง`
+            case ReportStatus.Closed: return `คำร้องเรียนถูกปิดโดยคำร้องเรียนอื่นที่เกี่ยวข้อง`
+        }
+    }
+
+    let isFetching = false;
+    let sortByColumn = 'วันที่แจ้ง'
+    let orderBy = sortBy.substring(sortBy.indexOf("@")+1)
+
+    const updateSortOption = async () => {
+        sortBy = `${mapSortBy()}@${orderBy}`
+        isFetching = true
+        await fetchData(offset, limit)
+        isFetching = false
+    }
+
+    const mapSortBy = () => {
+        switch (sortByColumn) {
+            case 'Report Code': return "reportCode"
+            case 'ประเภท': return "type"
+            case 'เหตุผล': return "reportReason"
+            case 'สถานะ': return "reportStatus"
+            case 'รหัสอ้างอิง': return "refReportCode"
+            case 'วันที่แจ้ง': return "createdAt"
+            case 'วันที่แก้ไข': return "updatedAt"
+        }
+    }
 </script>
 
 <LoadingSpinner bind:isLoading />
 
 <div class="rounded-lg shadow-md w-full h-full p-4 sm:p-6 overflow-hidden bg-white text-black dark:bg-gray-700 dark:text-white ease-in duration-200">
     <AdminHeader title="รายงานกระทู้" bind:deleteItemsCount={selectedItems.length} addable={false} on:delete={multiDeleteAction} />
-    <Table bind:limit bind:total {columns} bind:data skeletonLoad multiSelect on:fetch={fetch} {actions} bind:selectedItems />
+    <Table
+        bind:limit
+        bind:total
+        {columns}
+        bind:data
+        skeletonLoad
+        multiSelect
+        {actions}
+        bind:selectedItems
+        sortable
+        bind:sortBy={sortByColumn}
+        bind:orderBy
+        bind:isLoading={isFetching}
+        on:sort={updateSortOption}
+        on:fetch={fetch}
+    />
 </div>
 
 <Modal bind:open={isOpenViewModal} bind:title={selectedReport.modalTitle} defaultClass="w-fit ease-in overflow-hidden">
@@ -247,3 +297,14 @@
     คุณยืนยันที่จะ<span class="text-red-500">ลบรายงาน {deleteItem?.values[0]} </span>หรือไม่?
     <div>หมายเหตุ: หลังจากลบรายงานแล้ว จะส่งผลให้รายงานอื่นที่เกี่ยวข้องกับกระทู้หรือความคิดเห็นดังกล่าว เปลี่ยนเป็นสถานะ Closed</div>
 </DeleteModal>
+
+{#key data}
+    {#each data as _, index}
+        #report-status-button-{index} <br>
+        <Tooltip triggeredBy="#report-status-button-{index}" shadow trigger="hover" placement="top" class="z-30 transition-colors ease-in duration-200 !bg-white !text-[var(--primary-color)] dark:!text-white dark:!bg-gray-700">
+            <div in:slide={{duration: 200}}>
+                {reportStatusTooltip(`report-status-button-${index}`)}
+            </div>
+        </Tooltip>
+    {/each}
+{/key}

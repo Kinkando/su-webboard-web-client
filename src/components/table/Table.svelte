@@ -13,8 +13,11 @@
     export let skeletonLoad = false;
     export let multiSelect = false;
     export let isLoading = true;
+    export let sortable = false;
     export let selectedItems: DataTable[] = [];
     export let actions: ActionTable[]|undefined = undefined;
+    export let sortBy = "";
+    export let orderBy = "";
 
     let actionLabel = "Action";
 
@@ -50,13 +53,24 @@
     }
 
     const columnNumber = columns.length + (actions ? 1 : 0) + (multiSelect ? 1 : 0)
+
+    const sortByAction = (toSortBy: string, toOrderBy: string) => {
+        if (sortBy === toSortBy && orderBy === toOrderBy) {
+            sortBy = ''
+            orderBy = ''
+        } else {
+            sortBy = toSortBy
+            orderBy = toOrderBy
+        }
+        dispatch('sort')
+    }
 </script>
 
 {#if actions}
     {#key data?.length}
         {#each data as item, index}
             {#each actions as action}
-                {#if !action.hidden || !action.hidden(item)}
+                {#if !action.hidden || !action.hidden(item, index)}
                     <Tooltip triggeredBy="#{action.id}-{index+1}" shadow trigger="hover" placement="bottom" class="z-30 transition-colors ease-in duration-200 !bg-white !text-[var(--primary-color)] dark:!text-white dark:!bg-gray-700">
                         <div in:slide={{duration: 200}}>
                             {action.tooltip}
@@ -81,7 +95,39 @@
             {/if}
 
             {#each columns as column}
-                <th class="px-2 py-3 whitespace-nowrap">{column}</th>
+                <th class="px-2 py-3 whitespace-nowrap">
+                    {#if sortable}
+                        <div class="flex items-center gap-x-2">
+                            <span>{column}</span>
+                            <div class="flex items-center">
+                                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                                <svg
+                                    preserveAspectRatio="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                    class="!w-fit ease-in duration-200 transition-colors fill-current h-5 -mr-1 cursor-pointer {sortBy === column && orderBy.toUpperCase() === 'ASC' ? '' : 'text-gray-400 dark:text-gray-600'}"
+                                    on:click={() => sortByAction(column, 'ASC')}
+                                >
+                                    <path fill-rule="evenodd" d="M10 18a.75.75 0 01-.75-.75V4.66L7.3 6.76a.75.75 0 11-1.1-1.02l3.25-3.5a.75.75 0 011.1 0l3.25 3.5a.75.75 0 01-1.1 1.02l-1.95-2.1v12.59A.75.75 0 0110 18z" clip-rule="evenodd" />
+                                </svg>
+                                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                                <svg
+                                    preserveAspectRatio="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                    class="!w-fit ease-in duration-200 transition-colors fill-current h-5 -ml-1 cursor-pointer {sortBy === column && orderBy.toUpperCase() === 'DESC' ? '' : 'text-gray-400 dark:text-gray-600'}"
+                                    on:click={() => sortByAction(column, 'DESC')}
+                                >
+                                    <path fill-rule="evenodd" d="M10 2a.75.75 0 01.75.75v12.59l1.95-2.1a.75.75 0 111.1 1.02l-3.25 3.5a.75.75 0 01-1.1 0l-3.25-3.5a.75.75 0 111.1-1.02l1.95 2.1V2.75A.75.75 0 0110 2z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                        </div>
+                    {:else}
+                        {column}
+                    {/if}
+                </th>
             {/each}
 
             {#if actions}
@@ -136,7 +182,7 @@
                             <td class="px-2 py-4 w-fit">
                                 <div class="flex">
                                     {#each actions as action, index}
-                                        {#if !action.hidden || !action.hidden(item)}
+                                        {#if !action.hidden || !action.hidden(item, itemIndex)}
                                             <!-- svelte-ignore a11y-click-events-have-key-events -->
                                             <span class="{index ? 'ml-2' : ''}" id="{action.id}-{itemIndex+1}" on:click={() => action.click(item)}>
                                                 {@html action.html}
