@@ -6,11 +6,10 @@ import api from "@util/api";
 
 const baseURL = import.meta.env.VITE_API_HOST
 
-export async function getUsers(userType: string, search: string, offset: number, limit: number, cookies?: Cookies) {
+export async function getUsers(userType: string, search: string, offset: number, limit: number, sortBy?: string) {
     const res = await api<{ total: number, data: User[] }>({
-        url: `${baseURL}/admin/user?offset=${offset}&limit=${limit}&userType=${userType}${search ? '&search='+search : ''}`,
+        url: `${baseURL}/admin/user?offset=${offset}&limit=${limit}&userType=${userType}${search ? '&search='+search : ''}${queryParams('sortBy', sortBy)}`,
         method: "GET",
-        cookies,
     })
     return res.data
 }
@@ -55,11 +54,10 @@ export async function revokeUsers(userUUIDs: string[], cookies?: Cookies) {
     })
 }
 
-export async function getCategories(search: string, offset: number, limit: number, cookies?: Cookies) {
+export async function getCategories(search: string, offset: number, limit: number, sortBy?: string) {
     const res = await api<{ total: number, data: Category[] }>({
-        url: `${baseURL}/admin/category?offset=${offset}&limit=${limit}${search ? '&search='+search : ''}`,
+        url: `${baseURL}/admin/category?offset=${offset}&limit=${limit}${search ? '&search='+search : ''}${queryParams('sortBy', sortBy)}`,
         method: "GET",
-        cookies,
     })
     return res.data
 }

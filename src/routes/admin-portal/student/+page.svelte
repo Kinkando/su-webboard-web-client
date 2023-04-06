@@ -10,7 +10,7 @@
 	import type { User } from "@models/user";
 	import { getUsers, createUser, updateUser, deleteUsers, revokeUsers } from "@services/admin";
 	import { alert } from '@stores/alert';
-	import { timeRange } from '@util/datetime';
+	import { timeFormat } from '@util/datetime';
     import * as Pattern from '@util/pattern';
     import * as Validator from '@util/validation';
 
@@ -82,7 +82,7 @@
                     student.userDisplayName!,
                     student.userFullName,
                     student.userEmail,
-                    student.lastLogin ? timeRange(student.lastLogin) : 'ยังไม่เคยเข้าสู่ระบบ'
+                    student.lastLogin ? timeFormat(student.lastLogin) : 'ยังไม่เคยเข้าสู่ระบบ'
                 ],
             })
         })
@@ -95,7 +95,7 @@
         await getStudents(offset, limit)
     }
     const getStudents = async(offset: number, limit: number) => {
-        const res = await getUsers('std', searchText, offset, limit)
+        const res = await getUsers('std', searchText, offset, limit, sortBy)
         students = res?.data || []
         total = res?.total || 0
     }
@@ -295,13 +295,49 @@
         }
         return err
     }
+
+    let sortBy = "studentID@ASC"
+    let isFetching = false;
+    const updateSortOption = async (event: CustomEvent<{ sortBy: string, orderBy: string }>) => {
+        if (event.detail.sortBy === 'รูปโปรไฟล์') {
+            return;
+        }
+        sortBy = `${mapSortBy(event.detail.sortBy)}@${event.detail.orderBy}`
+        isFetching = true
+        await getStudents(offset, limit)
+        isFetching = false
+    }
+    const mapSortBy = (sortBy: string) => {
+        switch (sortBy) {
+            case 'รหัสนักศึกษา': return "studentID"
+            case 'ชื่อที่แสดงบนหน้าเว็บ': return "userDisplayName"
+            case 'ชื่อ-นามสกุล': return "userFullName"
+            case 'อีเมล': return "userEmail"
+            case 'เข้าสู่ระบบล่าสุด': return "lastLogin"
+        }
+    }
 </script>
 
 <LoadingSpinner bind:isLoading />
 
 <div class="rounded-lg shadow-md w-full h-full p-4 sm:p-6 overflow-hidden bg-white text-black dark:bg-gray-700 dark:text-white ease-in duration-200">
     <AdminHeader title="นักศึกษา" bind:deleteItemsCount={selectedItems.length} on:add={addItemAction} on:delete={multiDeleteAction} />
-    <Table bind:limit bind:total {columns} bind:data skeletonLoad multiSelect on:fetch={fetchStudents} {actions} bind:selectedItems />
+    <Table
+        bind:limit
+        bind:total
+        {columns}
+        bind:data
+        skeletonLoad
+        multiSelect
+        {actions}
+        bind:selectedItems
+        sortable
+        sortBy="รหัสนักศึกษา"
+        orderBy={sortBy.substring(sortBy.indexOf("@")+1)}
+        bind:isLoading={isFetching}
+        on:fetch={fetchStudents}
+        on:sort={updateSortOption}
+    />
 </div>
 
 <FormModal bind:open={isOpenFormModal} bind:title bind:form on:submit={sumbitForm} />

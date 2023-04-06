@@ -14,21 +14,9 @@ export async function getAllCategories(cookies?: Cookies) {
 }
 
 export async function getCategoryByID(categoryID: number): Promise<Category|undefined> {
-    const categories = await getAllCategoryDetails()
-    return categories.find(category => category.categoryID === categoryID)
-}
-
-export async function getAllCategoryDetails(): Promise<CategoryDetail[]> {
-    // mock up
-    const categories = await getAllCategories()
-    const categoriesDetail = categories?.map(category => {
-        return {
-            categoryID: category.categoryID,
-            categoryName: category.categoryName,
-            categoryHexColor: category.categoryHexColor,
-            forumCount: Math.floor(Math.random() * 1000),
-            lastActive: new Date(),
-        } as CategoryDetail
-    }) || []
-    return categoriesDetail
+    const res = await api<Category>({
+        url: `${baseURL}/category/${categoryID}`,
+        method: "GET",
+    })
+    return res.data
 }

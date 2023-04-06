@@ -31,7 +31,7 @@
     }
 
     onMount(() => fetch())
-    const dispatch = createEventDispatcher<{ [event: string]: { page: number, searchText: string } }>()
+    const dispatch = createEventDispatcher<{ [event: string]: { page: number, searchText: string } | { sortBy: string, orderBy: string } }>()
     const fetch = () => {
         isLoading = true;
         dispatch("fetch", { page: currentPage, searchText })
@@ -62,7 +62,7 @@
             sortBy = toSortBy
             orderBy = toOrderBy
         }
-        dispatch('sort')
+        dispatch('sort', {sortBy, orderBy})
     }
 </script>
 

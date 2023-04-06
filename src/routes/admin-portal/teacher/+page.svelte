@@ -10,7 +10,7 @@
 	import type { User } from "@models/user";
 	import { getUsers, createUser, updateUser, deleteUsers, revokeUsers } from "@services/admin";
 	import { alert } from '@stores/alert';
-	import { timeRange } from '@util/datetime';
+	import { timeFormat } from '@util/datetime';
     import * as Validator from '@util/validation';
 
     let isLoading = false;
@@ -79,7 +79,7 @@
                     teacher.userDisplayName!,
                     teacher.userFullName,
                     teacher.userEmail,
-                    teacher.lastLogin ? timeRange(teacher.lastLogin) : 'ยังไม่เคยเข้าสู่ระบบ'
+                    teacher.lastLogin ? timeFormat(teacher.lastLogin) : 'ยังไม่เคยเข้าสู่ระบบ'
                 ],
             })
         })
@@ -92,7 +92,7 @@
         await getTeachers(offset, limit)
     }
     const getTeachers = async(offset: number, limit: number) => {
-        const res = await getUsers('tch', searchText, offset, limit)
+        const res = await getUsers('tch', searchText, offset, limit, sortBy)
         teachers = res?.data || []
         total = res?.total || 0
     }
@@ -267,13 +267,48 @@
         }
         return err
     }
+
+    let sortBy = "userDisplayName@ASC"
+    let isFetching = false;
+    const updateSortOption = async (event: CustomEvent<{ sortBy: string, orderBy: string }>) => {
+        if (event.detail.sortBy === 'รูปโปรไฟล์') {
+            return;
+        }
+        sortBy = `${mapSortBy(event.detail.sortBy)}@${event.detail.orderBy}`
+        isFetching = true
+        await getTeachers(offset, limit)
+        isFetching = false
+    }
+    const mapSortBy = (sortBy: string) => {
+        switch (sortBy) {
+            case 'ชื่อที่แสดงบนหน้าเว็บ': return "userDisplayName"
+            case 'ชื่อ-นามสกุล': return "userFullName"
+            case 'อีเมล': return "userEmail"
+            case 'เข้าสู่ระบบล่าสุด': return "lastLogin"
+        }
+    }
 </script>
 
 <LoadingSpinner bind:isLoading />
 
 <div class="rounded-lg shadow-md w-full h-full p-4 sm:p-6 overflow-hidden bg-white text-black dark:bg-gray-700 dark:text-white ease-in duration-200">
     <AdminHeader title="อาจารย์" bind:deleteItemsCount={selectedItems.length} on:add={addItemAction} on:delete={multiDeleteAction} />
-    <Table bind:limit bind:total {columns} bind:data skeletonLoad multiSelect on:fetch={fetchTeachers} {actions} bind:selectedItems />
+    <Table
+        bind:limit
+        bind:total
+        {columns}
+        bind:data
+        skeletonLoad
+        multiSelect
+        {actions}
+        bind:selectedItems
+        sortable
+        sortBy="ชื่อที่แสดงบนหน้าเว็บ"
+        orderBy={sortBy.substring(sortBy.indexOf("@")+1)}
+        bind:isLoading={isFetching}
+        on:fetch={fetchTeachers}
+        on:sort={updateSortOption}
+    />
 </div>
 
 <FormModal bind:open={isOpenFormModal} bind:title bind:form on:submit={sumbitForm} />

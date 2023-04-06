@@ -226,18 +226,15 @@
     }
 
     let isFetching = false;
-    let sortByColumn = 'วันที่แจ้ง'
-    let orderBy = sortBy.substring(sortBy.indexOf("@")+1)
-
-    const updateSortOption = async () => {
-        sortBy = `${mapSortBy()}@${orderBy}`
+    const updateSortOption = async (event: CustomEvent<{ sortBy: string, orderBy: string }>) => {
+        sortBy = `${mapSortBy(event.detail.sortBy)}@${event.detail.orderBy}`
         isFetching = true
         await fetchData(offset, limit)
         isFetching = false
     }
 
-    const mapSortBy = () => {
-        switch (sortByColumn) {
+    const mapSortBy = (sortBy: string) => {
+        switch (sortBy) {
             case 'Report Code': return "reportCode"
             case 'ประเภท': return "type"
             case 'เหตุผล': return "reportReason"
@@ -263,8 +260,8 @@
         {actions}
         bind:selectedItems
         sortable
-        bind:sortBy={sortByColumn}
-        bind:orderBy
+        sortBy="วันที่แจ้ง"
+        orderBy={sortBy.substring(sortBy.indexOf("@")+1)}
         bind:isLoading={isFetching}
         on:sort={updateSortOption}
         on:fetch={fetch}
@@ -300,7 +297,6 @@
 
 {#key data}
     {#each data as _, index}
-        #report-status-button-{index} <br>
         <Tooltip triggeredBy="#report-status-button-{index}" shadow trigger="hover" placement="top" class="z-30 transition-colors ease-in duration-200 !bg-white !text-[var(--primary-color)] dark:!text-white dark:!bg-gray-700">
             <div in:slide={{duration: 200}}>
                 {reportStatusTooltip(`report-status-button-${index}`)}

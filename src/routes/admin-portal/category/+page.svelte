@@ -18,6 +18,7 @@
     let total = 0;
     let categories: Category[] = []
     const columns: string[] = [
+        "รหัสหมวดหมู่",
         "หมวดหมู่",
         "สี",
     ]
@@ -57,6 +58,7 @@
             dataTable.push({
                 "_id": category.categoryID!.toString(),
                 values: [
+                    category.categoryID!.toString(),
                     category.categoryName,
                     `<div class="flex items-center">
                         <div class="w-4 h-4 mb-0.5" style="background-color: ${category.categoryHexColor}"></div>
@@ -74,7 +76,7 @@
         await fetchCategories(offset, limit)
     }
     const fetchCategories = async(offset: number, limit: number) => {
-        const res = await getCategories(searchText, offset, limit)
+        const res = await getCategories(searchText, offset, limit, sortBy)
         categories = res?.data || []
         total = res?.total || 0
     }
@@ -110,7 +112,7 @@
         }
         if(item) {
             form._id = item._id
-            form.schemas[0].value = item.values[0]
+            form.schemas[0].value = item.values[1]
             form.schemas[1].value = categories?.find(category => category?.categoryID?.toString() === item._id)?.categoryHexColor!
         }
     }
@@ -182,13 +184,44 @@
         }
         return err
     }
+
+    let sortBy = "categoryID@ASC"
+    let isFetching = false;
+    const updateSortOption = async (event: CustomEvent<{ sortBy: string, orderBy: string }>) => {
+        sortBy = `${mapSortBy(event.detail.sortBy)}@${event.detail.orderBy}`
+        isFetching = true
+        await fetchCategories(offset, limit)
+        isFetching = false
+    }
+    const mapSortBy = (sortBy: string) => {
+        switch (sortBy) {
+            case 'รหัสหมวดหมู่': return "categoryID"
+            case 'หมวดหมู่': return "categoryName"
+            case 'สี': return "categoryHexColor"
+        }
+    }
 </script>
 
 <LoadingSpinner bind:isLoading />
 
 <div class="rounded-lg shadow-md w-full h-full p-4 sm:p-6 overflow-hidden bg-white text-black dark:bg-gray-700 dark:text-white ease-in duration-200">
     <AdminHeader title="หมวดหมู่" bind:deleteItemsCount={selectedItems.length} on:add={addItemAction} on:delete={multiDeleteAction} />
-    <Table bind:limit bind:total {columns} bind:data skeletonLoad multiSelect on:fetch={fetch} {actions} bind:selectedItems />
+    <Table
+        bind:limit
+        bind:total
+        {columns}
+        bind:data
+        skeletonLoad
+        multiSelect
+        {actions}
+        bind:selectedItems
+        sortable
+        sortBy="รหัสหมวดหมู่"
+        orderBy={sortBy.substring(sortBy.indexOf("@")+1)}
+        bind:isLoading={isFetching}
+        on:fetch={fetch}
+        on:sort={updateSortOption}
+    />
 </div>
 
 <FormModal bind:open={isOpenFormModal} bind:title bind:form on:submit={sumbitForm} />
