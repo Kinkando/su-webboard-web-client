@@ -10,6 +10,7 @@
 	import LoadingSpinner from '@components/spinner/LoadingSpinner.svelte';
     import type { Home } from '@models/home';
 	import { getHomeData } from '@services/forum';
+	import { isAutoSlideCategory } from '@util/localstorage';
 
     const sectionHeaders = [
         {
@@ -73,7 +74,7 @@
     }
     $: carouselButtonName = "ดูเพิ่มเติม"
     const auto = () => {
-        if (!isExpandCarousel) {
+        if (!isExpandCarousel && isAutoSlide) {
             setCarouselIndex(1)
         }
     }
@@ -84,6 +85,7 @@
     let minimumCardWidth = 325;
     let minimumCategoryCardWidth = 200;
 
+    $: isAutoSlide = isAutoSlideCategory()
     $: colAmount = Math.round(innerWidth/minimumCardWidth);
     $: carouselAmount = Math.round((innerWidth-64)/minimumCategoryCardWidth);
 </script>

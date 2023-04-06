@@ -88,3 +88,21 @@ export function isOpenPushNotification(): boolean {
 export function setPushNotification(isOpen: boolean) {
     localStorage.setItem('push-notification', isOpen ? 'open' : 'close')
 }
+
+export function isPinTopbar(): boolean {
+    const pushNoti = localStorage.getItem('pin-topbar')
+    return pushNoti === null || pushNoti === 'pin'
+}
+
+export function setPinTopbar(isPin: boolean) {
+    localStorage.setItem('pin-topbar', isPin ? 'pin' : 'unpin')
+}
+
+export function isAutoSlideCategory(): boolean {
+    const pushNoti = localStorage.getItem('auto-slide-category')
+    return pushNoti === null || pushNoti === 'auto'
+}
+
+export function setAutoSlideCategory(isAutoSlideCategory: boolean) {
+    localStorage.setItem('auto-slide-category', isAutoSlideCategory ? 'auto' : 'static')
+}

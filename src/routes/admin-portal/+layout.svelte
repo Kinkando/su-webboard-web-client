@@ -56,7 +56,7 @@
 
     <nav class="h-16 flex items-center px-4 max-[1000.1px]:hidden bg-gray-200 dark:bg-gray-800 ease-in duration-200">
         <Breadcrumb aria-label="SU Webboard">
-            <BreadcrumbItem href="/" home>หน้าแรก</BreadcrumbItem>
+            <BreadcrumbItem href="{rootPath}" home>หน้าแรก</BreadcrumbItem>
             {#if currentRoute.toString().lastIndexOf("/") > 0}
                 <BreadcrumbItem>{ sidebarItems.find(item => currentRoute === item.href)?.label }</BreadcrumbItem>
             {/if}
