@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { isOpenPushNotification, setPushNotification } from "@util/localstorage";
+	import { isOpenPushNotification, setPinTopbar, setPushNotification, isPinTopbar, isAutoSlideCategory, setAutoSlideCategory } from "@util/localstorage";
 	import { Breadcrumb, BreadcrumbItem, DarkMode, Toggle } from "flowbite-svelte";
 
     $: isDarkTheme = (() => {
@@ -17,6 +17,18 @@
     function togglePushNoti() {
         isOpenPushNoti = !isOpenPushNoti
         setPushNotification(isOpenPushNoti)
+    }
+
+    $: isFixedTopbar = isPinTopbar()
+    function togglePinTopbar() {
+        isFixedTopbar = !isFixedTopbar
+        setPinTopbar(isFixedTopbar)
+    }
+
+    $: isAutoSlide = isAutoSlideCategory()
+    function toggleAutoSlide() {
+        isAutoSlide = !isAutoSlide
+        setAutoSlideCategory(isAutoSlide)
     }
 </script>
 
@@ -61,8 +73,40 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9.143 17.082a24.248 24.248 0 003.844.148m-3.844-.148a23.856 23.856 0 01-5.455-1.31 8.964 8.964 0 002.3-5.542m3.155 6.852a3 3 0 005.667 1.97m1.965-2.277L21 21m-4.225-4.225a23.81 23.81 0 003.536-1.003A8.967 8.967 0 0118 9.75V9A6 6 0 006.53 6.53m10.245 10.245L6.53 6.53M3 3l3.53 3.53" />
                 </svg>
             {/if}
-            <div class="mx-2 whitespace-nowrap overflow-hidden text-ellipsis">เปิด/ปิดการแจ้งเตือนแบบพุช</div>
+            <div class="mx-2 whitespace-nowrap overflow-hidden text-ellipsis">การแจ้งเตือนแบบพุช</div>
         </div>
         <Toggle class="cursor-pointer" color="green" on:click={togglePushNoti} checked={isOpenPushNoti}></Toggle>
+    </div>
+
+    <div class="flex items-center justify-between mt-4">
+        <div class="flex items-center text-black dark:text-white overflow-hidden">
+            {#if isFixedTopbar}
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-pin-angle" viewBox="0 0 16 16">
+                    <path d="M9.828.722a.5.5 0 0 1 .354.146l4.95 4.95a.5.5 0 0 1 0 .707c-.48.48-1.072.588-1.503.588-.177 0-.335-.018-.46-.039l-3.134 3.134a5.927 5.927 0 0 1 .16 1.013c.046.702-.032 1.687-.72 2.375a.5.5 0 0 1-.707 0l-2.829-2.828-3.182 3.182c-.195.195-1.219.902-1.414.707-.195-.195.512-1.22.707-1.414l3.182-3.182-2.828-2.829a.5.5 0 0 1 0-.707c.688-.688 1.673-.767 2.375-.72a5.922 5.922 0 0 1 1.013.16l3.134-3.133a2.772 2.772 0 0 1-.04-.461c0-.43.108-1.022.589-1.503a.5.5 0 0 1 .353-.146zm.122 2.112v-.002.002zm0-.002v.002a.5.5 0 0 1-.122.51L6.293 6.878a.5.5 0 0 1-.511.12H5.78l-.014-.004a4.507 4.507 0 0 0-.288-.076 4.922 4.922 0 0 0-.765-.116c-.422-.028-.836.008-1.175.15l5.51 5.509c.141-.34.177-.753.149-1.175a4.924 4.924 0 0 0-.192-1.054l-.004-.013v-.001a.5.5 0 0 1 .12-.512l3.536-3.535a.5.5 0 0 1 .532-.115l.096.022c.087.017.208.034.344.034.114 0 .23-.011.343-.04L9.927 2.028c-.029.113-.04.23-.04.343a1.779 1.779 0 0 0 .062.46z"/>
+                </svg>
+            {:else}
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-pin-angle" viewBox="0 0 16 16">
+                    <path d="M9.828.722a.5.5 0 0 1 .354.146l4.95 4.95a.5.5 0 0 1 0 .707c-.48.48-1.072.588-1.503.588-.177 0-.335-.018-.46-.039l-3.134 3.134a5.927 5.927 0 0 1 .16 1.013c.046.702-.032 1.687-.72 2.375a.5.5 0 0 1-.707 0l-2.829-2.828-3.182 3.182c-.195.195-1.219.902-1.414.707-.195-.195.512-1.22.707-1.414l3.182-3.182-2.828-2.829a.5.5 0 0 1 0-.707c.688-.688 1.673-.767 2.375-.72a5.922 5.922 0 0 1 1.013.16l3.134-3.133a2.772 2.772 0 0 1-.04-.461c0-.43.108-1.022.589-1.503a.5.5 0 0 1 .353-.146zm.122 2.112v-.002.002zm0-.002v.002a.5.5 0 0 1-.122.51L6.293 6.878a.5.5 0 0 1-.511.12H5.78l-.014-.004a4.507 4.507 0 0 0-.288-.076 4.922 4.922 0 0 0-.765-.116c-.422-.028-.836.008-1.175.15l5.51 5.509c.141-.34.177-.753.149-1.175a4.924 4.924 0 0 0-.192-1.054l-.004-.013v-.001a.5.5 0 0 1 .12-.512l3.536-3.535a.5.5 0 0 1 .532-.115l.096.022c.087.017.208.034.344.034.114 0 .23-.011.343-.04L9.927 2.028c-.029.113-.04.23-.04.343a1.779 1.779 0 0 0 .062.46z"/>
+                </svg>
+            {/if}
+            <div class="mx-2 whitespace-nowrap overflow-hidden text-ellipsis">ตรึงแถบเครื่องมือด้านบน</div>
+        </div>
+        <Toggle class="cursor-pointer" color="green" on:click={togglePinTopbar} checked={isFixedTopbar}></Toggle>
+    </div>
+
+    <div class="flex items-center justify-between mt-4">
+        <div class="flex items-center text-black dark:text-white overflow-hidden">
+            {#if isAutoSlide}
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-arrow-left-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M1 11.5a.5.5 0 0 0 .5.5h11.793l-3.147 3.146a.5.5 0 0 0 .708.708l4-4a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 11H1.5a.5.5 0 0 0-.5.5zm14-7a.5.5 0 0 1-.5.5H2.707l3.147 3.146a.5.5 0 1 1-.708.708l-4-4a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H14.5a.5.5 0 0 1 .5.5z"/>
+                </svg>
+            {:else}
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-arrow-left-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M1 11.5a.5.5 0 0 0 .5.5h11.793l-3.147 3.146a.5.5 0 0 0 .708.708l4-4a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 11H1.5a.5.5 0 0 0-.5.5zm14-7a.5.5 0 0 1-.5.5H2.707l3.147 3.146a.5.5 0 1 1-.708.708l-4-4a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H14.5a.5.5 0 0 1 .5.5z"/>
+                </svg>
+            {/if}
+            <div class="mx-2 whitespace-nowrap overflow-hidden text-ellipsis">การเลื่อนหมวดหมู่อัตโนมัติในหน้าหลัก</div>
+        </div>
+        <Toggle class="cursor-pointer" color="green" on:click={toggleAutoSlide} checked={isAutoSlide}></Toggle>
     </div>
 </div>

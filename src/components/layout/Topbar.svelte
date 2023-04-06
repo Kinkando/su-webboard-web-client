@@ -9,7 +9,7 @@
     import { alert } from '@stores/alert';
 	import notificationStore from '@stores/notification';
 	import userStore from '@stores/user';
-	import { getToken, revokeToken } from '@util/localstorage';
+	import { getToken, isPinTopbar, revokeToken } from '@util/localstorage';
 	import NotificationList from '@components/notification/NotificationList.svelte';
 
     export let userType: string
@@ -67,7 +67,7 @@
         },
     ]
 
-    const isAutoHide = false;
+    $: isAutoHide = !isPinTopbar()
     let previousY = 0;
     let scrollY = 0;
     $: isScrollDown = scrollY > previousY;
