@@ -24,6 +24,7 @@
     export let replyTrigger = false;
     export let createdAt: string;
     export let orderBy: Order = Order.ASC;
+    export let isView: boolean;
 
     let open = false;
     let comment = "";
@@ -53,12 +54,12 @@
 </script>
 
 <div class="flex items-center justify-between mt-3 -mb-3">
-    {#if likeCount !== undefined}
+    {#if likeCount !== undefined && !isView}
         <div class="flex items-center font-bold">
             <LikeBadge bind:likeCount bind:uuid bind:isLike toggle bind:type />
         </div>
     {/if}
-    {#if commentCount !== undefined}
+    {#if commentCount !== undefined && !isView}
         <div class="flex items-center font-bold">
             <CommentBadge bind:commentCount click on:click={() => openReplyModal = true} />
         </div>
@@ -68,7 +69,7 @@
 <hr class="mt-6 mb-3 dark:border-gray-500">
 <div class="flex justify-between items-center">
     <div class="flex items-center overflow-hidden">
-        {#if !isAnonymous}
+        {#if !isAnonymous && !isView}
             <a href="/profile/{userUUID}">
                 <img src={userImageURL} alt="" class="ease-in duration-200 min-w-[4rem] max-w-[4rem] min-h-[4rem] max-h-[4rem] rounded-full cursor-pointer hover:brightness-75">
             </a>
@@ -76,9 +77,9 @@
             <img src={userImageURL} alt="" class="ease-in duration-200 min-w-[4rem] max-w-[4rem] min-h-[4rem] max-h-[4rem] rounded-full">
         {/if}
         <div class="ml-3 space-y-1 overflow-hidden mr-4">
-            {#if !isAnonymous}
+            {#if !isAnonymous && !isView}
                 <a href="/profile/{userUUID}" class="overflow-hidden w-fit max-w-full">
-                    <div class="font-bold overflow-hidden text-ellipsis whitespace-nowrap hover:underline">{userDisplayName}</div>
+                    <div class="font-bold overflow-hidden text-ellipsis whitespace-nowrap cursor-pointer hover:underline">{userDisplayName}</div>
                 </a>
             {:else}
                 <div class="font-bold overflow-hidden text-ellipsis whitespace-nowrap">{userDisplayName}</div>
@@ -86,7 +87,7 @@
             <div class="font-light text-sm overflow-hidden text-ellipsis whitespace-nowrap">{createdAt}</div>
         </div>
     </div>
-    {#if commentCount !== undefined}
+    {#if commentCount !== undefined && !isView}
         <div class="flex flex-col space-y-2 items-end">
             <!-- svelte-ignore a11y-click-events-have-key-events -->
             <div class="select-none underline text-[var(--primary-color)] dark:text-[var(--primary-color-75)] cursor-pointer break-words" on:click={() => openReplyModal = true}>{replyText}</div>
@@ -117,12 +118,14 @@
     {/if}
 </div>
 
-<Modal bind:open={openReplyModal}>
-    <CommentReply
-        bind:label
-        bind:comment
-        bind:attachments
-        cancel={() => openReplyModal = false}
-        submit={commentPost}
-    />
-</Modal>
+{#if !isView}
+    <Modal bind:open={openReplyModal}>
+        <CommentReply
+            bind:label
+            bind:comment
+            bind:attachments
+            cancel={() => openReplyModal = false}
+            submit={commentPost}
+        />
+    </Modal>
+{/if}

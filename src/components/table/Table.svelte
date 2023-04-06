@@ -1,9 +1,10 @@
 <script lang="ts">
 	import Pagination from '@components/ui/Pagination.svelte';
 	import type { ActionTable, DataTable } from "@models/table";
-	import { Checkbox, Label } from 'flowbite-svelte';
+	import { Checkbox, Tooltip } from 'flowbite-svelte';
 	import { createEventDispatcher, onMount } from "svelte";
 	import Header from './Header.svelte';
+	import { slide } from 'svelte/transition';
 
     export let columns: string[];
     export let data: DataTable[];
@@ -12,8 +13,11 @@
     export let skeletonLoad = false;
     export let multiSelect = false;
     export let isLoading = true;
+    export let sortable = false;
     export let selectedItems: DataTable[] = [];
     export let actions: ActionTable[]|undefined = undefined;
+    export let sortBy = "";
+    export let orderBy = "";
 
     let actionLabel = "Action";
 
@@ -27,7 +31,7 @@
     }
 
     onMount(() => fetch())
-    const dispatch = createEventDispatcher<{ [event: string]: { page: number, searchText: string } }>()
+    const dispatch = createEventDispatcher<{ [event: string]: { page: number, searchText: string } | { sortBy: string, orderBy: string } }>()
     const fetch = () => {
         isLoading = true;
         dispatch("fetch", { page: currentPage, searchText })
@@ -49,7 +53,39 @@
     }
 
     const columnNumber = columns.length + (actions ? 1 : 0) + (multiSelect ? 1 : 0)
+
+    const sortByAction = (toSortBy: string, toOrderBy: 'DESC' | 'ASC' | 'TOGGLE') => {
+        if (toOrderBy === 'TOGGLE') {
+            if (sortBy !== toSortBy) {
+                sortBy = toSortBy
+                orderBy = 'ASC'
+            } else {
+                orderBy = orderBy === 'ASC' ? 'DESC' : 'ASC'
+            }
+            dispatch('sort', {sortBy, orderBy})
+        } else if (sortBy !== toSortBy || orderBy !== toOrderBy) {
+            sortBy = toSortBy
+            orderBy = toOrderBy
+            dispatch('sort', {sortBy, orderBy})
+        }
+    }
 </script>
+
+{#if actions}
+    {#key data?.length}
+        {#each data as item, index}
+            {#each actions as action}
+                {#if !action.hidden || !action.hidden(item, index)}
+                    <Tooltip triggeredBy="#{action.id}-{index+1}" shadow trigger="hover" placement="bottom" class="z-30 transition-colors ease-in duration-200 !bg-white !text-[var(--primary-color)] dark:!text-white dark:!bg-gray-700">
+                        <div in:slide={{duration: 200}}>
+                            {action.tooltip}
+                        </div>
+                    </Tooltip>
+                {/if}
+            {/each}
+        {/each}
+    {/key}
+{/if}
 
 <Header bind:limit on:search={event => searchText = event.detail.searchText} />
 
@@ -64,7 +100,40 @@
             {/if}
 
             {#each columns as column}
-                <th class="px-2 py-3 whitespace-nowrap">{column}</th>
+                <th class="px-2 py-3 whitespace-nowrap">
+                    {#if sortable}
+                        <div class="flex items-center gap-x-2">
+                            <!-- svelte-ignore a11y-click-events-have-key-events -->
+                            <span class="cursor-pointer select-none" on:click={() => sortByAction(column, 'TOGGLE')}>{column}</span>
+                            <div class="flex items-center">
+                                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                                <svg
+                                    preserveAspectRatio="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                    class="!w-fit ease-in duration-200 transition-colors fill-current h-5 -mr-1 cursor-pointer {sortBy === column && orderBy.toUpperCase() === 'ASC' ? '' : 'text-gray-400 dark:text-gray-600'}"
+                                    on:click={() => sortByAction(column, 'ASC')}
+                                >
+                                    <path fill-rule="evenodd" d="M10 18a.75.75 0 01-.75-.75V4.66L7.3 6.76a.75.75 0 11-1.1-1.02l3.25-3.5a.75.75 0 011.1 0l3.25 3.5a.75.75 0 01-1.1 1.02l-1.95-2.1v12.59A.75.75 0 0110 18z" clip-rule="evenodd" />
+                                </svg>
+                                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                                <svg
+                                    preserveAspectRatio="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                    class="!w-fit ease-in duration-200 transition-colors fill-current h-5 -ml-1 cursor-pointer {sortBy === column && orderBy.toUpperCase() === 'DESC' ? '' : 'text-gray-400 dark:text-gray-600'}"
+                                    on:click={() => sortByAction(column, 'DESC')}
+                                >
+                                    <path fill-rule="evenodd" d="M10 2a.75.75 0 01.75.75v12.59l1.95-2.1a.75.75 0 111.1 1.02l-3.25 3.5a.75.75 0 01-1.1 0l-3.25-3.5a.75.75 0 111.1-1.02l1.95 2.1V2.75A.75.75 0 0110 2z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                        </div>
+                    {:else}
+                        {column}
+                    {/if}
+                </th>
             {/each}
 
             {#if actions}
@@ -79,25 +148,25 @@
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 ease-in duration-200">
                         {#if multiSelect}
                             <td class="w-8 pl-4 pr-2 py-5">
-                                <div class="h-4 bg-gray-300 rounded-md dark:bg-gray-600" />
+                                <div class="h-4 bg-gray-300 rounded-md dark:bg-gray-600 animate-pulse" />
                             </td>
                         {/if}
 
                         {#each Array(columns.length) as _, i}
                             <td class="px-2 py-5">
-                                <div class="h-4 bg-gray-300 rounded-md dark:bg-gray-600" />
+                                <div class="h-4 bg-gray-300 rounded-md dark:bg-gray-600 animate-pulse" />
                             </td>
                         {/each}
 
                         {#if actions}
                             <td class="px-2 py-5">
-                                <div class="h-4 bg-gray-300 rounded-md dark:bg-gray-600" />
+                                <div class="h-4 bg-gray-300 rounded-md dark:bg-gray-600 animate-pulse" />
                             </td>
                         {/if}
                     </tr>
                 {/each}
             {:else}
-                {#each data as item}
+                {#each data as item, itemIndex}
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 ease-in duration-200 w-fit">
                         {#if multiSelect}
                             <td class="pl-4 pr-2 py-4">
@@ -119,10 +188,12 @@
                             <td class="px-2 py-4 w-fit">
                                 <div class="flex">
                                     {#each actions as action, index}
-                                        <!-- svelte-ignore a11y-click-events-have-key-events -->
-                                        <span class="{index ? 'ml-2' : ''}" on:click={() => action.click(item)}>
-                                            {@html action.html}
-                                        </span>
+                                        {#if !action.hidden || !action.hidden(item, itemIndex)}
+                                            <!-- svelte-ignore a11y-click-events-have-key-events -->
+                                            <span class="{index ? 'ml-2' : ''}" id="{action.id}-{itemIndex+1}" on:click={() => action.click(item)}>
+                                                {@html action.html}
+                                            </span>
+                                        {/if}
                                     {/each}
                                 </div>
                             </td>

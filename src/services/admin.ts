@@ -1,16 +1,15 @@
 import type { Category } from "@models/category";
-import type { ForumReport } from "@models/forum";
+import type { Report, ReportDetail, ReportStatus } from "@models/report";
 import type { User } from "@models/user";
 import type { Cookies } from "@sveltejs/kit";
 import api from "@util/api";
 
 const baseURL = import.meta.env.VITE_API_HOST
 
-export async function getUsers(userType: string, search: string, offset: number, limit: number, cookies?: Cookies) {
+export async function getUsers(userType: string, search: string, offset: number, limit: number, sortBy?: string) {
     const res = await api<{ total: number, data: User[] }>({
-        url: `${baseURL}/admin/user?offset=${offset}&limit=${limit}&userType=${userType}${search ? '&search='+search : ''}`,
+        url: `${baseURL}/admin/user?offset=${offset}&limit=${limit}&userType=${userType}${search ? '&search='+search : ''}${queryParams('sortBy', sortBy)}`,
         method: "GET",
-        cookies,
     })
     return res.data
 }
@@ -55,11 +54,10 @@ export async function revokeUsers(userUUIDs: string[], cookies?: Cookies) {
     })
 }
 
-export async function getCategories(search: string, offset: number, limit: number, cookies?: Cookies) {
+export async function getCategories(search: string, offset: number, limit: number, sortBy?: string) {
     const res = await api<{ total: number, data: Category[] }>({
-        url: `${baseURL}/admin/category?offset=${offset}&limit=${limit}${search ? '&search='+search : ''}`,
+        url: `${baseURL}/admin/category?offset=${offset}&limit=${limit}${search ? '&search='+search : ''}${queryParams('sortBy', sortBy)}`,
         method: "GET",
-        cookies,
     })
     return res.data
 }
@@ -82,16 +80,39 @@ export async function deleteCategories(categoryIDs: number[], cookies?: Cookies)
     })
 }
 
-export async function getForumReport(offset: number, limit: number) {
-    const total = 0;
-    const data: ForumReport[] = []
-    await sleep()
-    return { data, total }
+export async function getReports(search: string, offset: number, limit: number, sortBy: string, filter?: {reportStatus: string, type: string}) {
+    const res = await api<{ total: number, data: Report[] }>({
+        url: `${baseURL}/admin/report?offset=${offset}&limit=${limit}${search ? '&search='+search : ''}${queryParams('sortBy', sortBy)}${queryParams('reportStatus', filter?.reportStatus)}${queryParams('type', filter?.type)}`,
+        method: "GET",
+    })
+    return res.data
 }
 
-const sleep = async (time?: number) => {
-    if (!time) {
-        time = 500
+export async function getReportDetail(reportUUID: string) {
+    return await api<ReportDetail>({
+        url: `${baseURL}/admin/report/${reportUUID}`,
+        method: "GET",
+    })
+}
+
+export async function updateReportStatus(reportUUID: string, reportStatus: ReportStatus) {
+    return await api({
+        url: `${baseURL}/admin/report/${reportUUID}/${reportStatus}`,
+        method: "PATCH",
+    })
+}
+
+export async function deleteReport(reportUUIDs: string[]) {
+    return await api({
+        url: `${baseURL}/admin/report`,
+        method: "DELETE",
+        data: { reportUUIDs },
+    })
+}
+
+const queryParams = (key: string, value?: any): string => {
+    if (value?.length > 0) {
+        return `&${key}=${value}`
     }
-    return await new Promise(resolve => setTimeout(() => resolve(""), time))
+    return ""
 }

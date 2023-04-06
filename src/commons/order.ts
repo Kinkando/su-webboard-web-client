@@ -4,6 +4,7 @@ export enum Order {
 }
 
 export enum Field {
+    // Search Forum
     CreatedAt = 'createdAt',
     Popular = 'likeCount',
     Ranking = 'ranking',

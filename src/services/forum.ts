@@ -93,3 +93,11 @@ export async function getForumDetail(forumUUID: string, cookies?: Cookies) {
     })
     return res.data
 }
+
+export async function reportForum(forumUUID: string, reportReason: string) {
+    await api({
+        url: `${baseURL}/forum/report/${forumUUID}`,
+        method: "POST",
+        data: { reportReason }
+    })
+}

@@ -63,3 +63,11 @@ export async function likeComment(commentUUID: string, isLike: boolean) {
         data: { commentUUID, isLike },
     })
 }
+
+export async function reportComment(commentUUID: string, reportReason: string) {
+    await api({
+        url: `${baseURL}/comment/report/${commentUUID}`,
+        method: "POST",
+        data: { reportReason }
+    })
+}

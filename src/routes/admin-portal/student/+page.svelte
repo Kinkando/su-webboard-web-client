@@ -10,7 +10,7 @@
 	import type { User } from "@models/user";
 	import { getUsers, createUser, updateUser, deleteUsers, revokeUsers } from "@services/admin";
 	import { alert } from '@stores/alert';
-	import { timeRange } from '@util/datetime';
+	import { timeFormat } from '@util/datetime';
     import * as Pattern from '@util/pattern';
     import * as Validator from '@util/validation';
 
@@ -30,6 +30,8 @@
     ]
     const actions: ActionTable[] = [
         {
+            id: 'edit-student',
+            tooltip: 'แก้ไขรายการ',
             html: `
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 cursor-pointer rounded-full p-1 bg-[var(--primary-color)] text-white hover:scale-110 ease-in duration-200">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
@@ -43,6 +45,8 @@
             },
         },
         {
+            id: 'delete-student',
+            tooltip: 'ลบรายการ',
             html: `
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 cursor-pointer rounded-full p-1 bg-[#e15e3f] text-white hover:scale-110 ease-in duration-200">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
@@ -54,6 +58,8 @@
             },
         },
         {
+            id: 'force-logout-student',
+            tooltip: 'บังคับออกจากระบบ',
             html: `
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 cursor-pointer rounded-full p-1 bg-purple-400 text-white hover:scale-110 ease-in duration-200">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
@@ -76,7 +82,7 @@
                     student.userDisplayName!,
                     student.userFullName,
                     student.userEmail,
-                    student.lastLogin ? timeRange(student.lastLogin) : 'ยังไม่เคยเข้าสู่ระบบ'
+                    student.lastLogin ? timeFormat(student.lastLogin) : 'ยังไม่เคยเข้าสู่ระบบ'
                 ],
             })
         })
@@ -89,7 +95,7 @@
         await getStudents(offset, limit)
     }
     const getStudents = async(offset: number, limit: number) => {
-        const res = await getUsers('std', searchText, offset, limit)
+        const res = await getUsers('std', searchText, offset, limit, sortBy)
         students = res?.data || []
         total = res?.total || 0
     }
@@ -289,18 +295,59 @@
         }
         return err
     }
+
+    let sortBy = "studentID@ASC"
+    let isFetching = false;
+    const updateSortOption = async (event: CustomEvent<{ sortBy: string, orderBy: string }>) => {
+        if (event.detail.sortBy === 'รูปโปรไฟล์') {
+            return;
+        }
+        sortBy = `${mapSortBy(event.detail.sortBy)}@${event.detail.orderBy}`
+        isFetching = true
+        await getStudents(offset, limit)
+        isFetching = false
+    }
+    const mapSortBy = (sortBy: string) => {
+        switch (sortBy) {
+            case 'รหัสนักศึกษา': return "studentID"
+            case 'ชื่อที่แสดงบนหน้าเว็บ': return "userDisplayName"
+            case 'ชื่อ-นามสกุล': return "userFullName"
+            case 'อีเมล': return "userEmail"
+            case 'เข้าสู่ระบบล่าสุด': return "lastLogin"
+        }
+    }
 </script>
 
 <LoadingSpinner bind:isLoading />
 
 <div class="rounded-lg shadow-md w-full h-full p-4 sm:p-6 overflow-hidden bg-white text-black dark:bg-gray-700 dark:text-white ease-in duration-200">
     <AdminHeader title="นักศึกษา" bind:deleteItemsCount={selectedItems.length} on:add={addItemAction} on:delete={multiDeleteAction} />
-    <Table bind:limit bind:total {columns} bind:data skeletonLoad multiSelect on:fetch={fetchStudents} {actions} bind:selectedItems />
+    <Table
+        bind:limit
+        bind:total
+        {columns}
+        bind:data
+        skeletonLoad
+        multiSelect
+        {actions}
+        bind:selectedItems
+        sortable
+        sortBy="รหัสนักศึกษา"
+        orderBy={sortBy.substring(sortBy.indexOf("@")+1)}
+        bind:isLoading={isFetching}
+        on:fetch={fetchStudents}
+        on:sort={updateSortOption}
+    />
 </div>
 
 <FormModal bind:open={isOpenFormModal} bind:title bind:form on:submit={sumbitForm} />
 <DeleteModal bind:open={isOpenDeleteModal} deleteButtonName="ยืนยัน" on:delete={deleteAction}>
     คุณยืนยันที่จะ<span class="text-red-500">ลบข้อมูลนักศึกษา {selectedItem?.values[1]} </span>หรือไม่?
+    <div>หมายเหตุ: ข้อมูลที่เกี่ยวข้องกับนักศึกษาจะถูกลบทั้งหมด ดังนี้</div>
+    <div>1. ข้อมูลส่วนตัวของนักศึกษา</div>
+    <div>2. กระทู้ และความคิดเห็นทั้งหมดที่ถูกสร้างโดยนักศึกษา</div>
+    <div>3. การแจ้งเตือนที่เกี่ยวข้องทั้งหมด</div>
+    <div>4. ยอดการกดถูกใจกระทู้ และความคิดเห็น รวมถึงยอดผู้ชมของประกาศ</div>
 </DeleteModal>
 <ConfirmModal bind:open={isOpenForceLogoutModal} on:confirm={forceLogout} icon="logout">
     คุณยืนยันที่จะ<span class="text-red-500">บังคับนักศึกษา {selectedItem?.values[1]} ออกจากระบบ</span>หรือไม่?

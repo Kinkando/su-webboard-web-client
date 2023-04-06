@@ -43,20 +43,7 @@ export interface ForumDetail {
     isFavorite?: boolean
 }
 
-export interface ForumReport {
-    reportUUID: string
-    reporterUUID: string
-    reporterName: string
-    plaintiffUUID: string
-    plaintiffName: string
-    description: string
-}
-
 export interface Document {
     url: string
     uuid: string
 }
-
-// Create Comment
-// case 'comment forum': send only forumUUID
-// case 'reply comment': send forumUUID and commentUUID to reference by replyCommentUUID
