@@ -119,12 +119,12 @@
 
     const reportForumAction = async(reason: string) => {
         isLoading = true
-        await reportForum(forumDetail.forumUUID, reason)
-        isLoading = false
+        const res = await reportForum(forumDetail.forumUUID, reason)
         alert({
-            type: 'success',
-            message: 'รายงานกระทู้สำเร็จ, กรุณารอให้ผู้ดูแลตรวจสอบและอนุมัติคำขอ',
+            type: res.status === HTTP.StatusOK ? 'success' : 'error',
+            message: res.status === HTTP.StatusOK ? 'รายงานกระทู้สำเร็จ, กรุณารอให้ผู้ดูแลตรวจสอบและอนุมัติคำขอ' : 'ขออภัย, ระบบเกิดความขัดข้อง กรุณาลองใหม่อีกครั้ง',
         })
+        isLoading = false
     }
 
     const favoriteForumAction = async(isFavorite: boolean) => await favoriteForum(forumDetail.forumUUID, isFavorite)

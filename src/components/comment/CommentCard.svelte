@@ -77,12 +77,12 @@
 
     const reportCommentAction = async(reason: string) => {
         isLoading = true
-        await reportComment(comment.commentUUID, reason)
-        isLoading = false
+        const res = await reportComment(comment.commentUUID, reason)
         alert({
-            type: 'success',
-            message: 'รายงานความคิดเห็นสำเร็จ, กรุณารอให้ผู้ดูแลตรวจสอบและอนุมัติคำขอ',
+            type: res.status === HTTP.StatusOK ? 'success' : 'error',
+            message: res.status === HTTP.StatusOK ? 'รายงานความคิดเห็นสำเร็จ, กรุณารอให้ผู้ดูแลตรวจสอบและอนุมัติคำขอ' : 'ขออภัย, ระบบเกิดความขัดข้อง กรุณาลองใหม่อีกครั้ง',
         })
+        isLoading = false
     }
 
     const deleteCommentAction = async() => {
