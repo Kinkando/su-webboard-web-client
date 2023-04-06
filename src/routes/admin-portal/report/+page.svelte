@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button, Tooltip } from 'flowbite-svelte';
+	import { Button, Checkbox, Chevron, Dropdown, Helper, Radio, Tooltip } from 'flowbite-svelte';
 	import { slide } from 'svelte/transition';
 	import HTTP from '@commons/http';
 	import AdminHeader from '@components/shared/AdminHeader.svelte';
@@ -17,8 +17,6 @@
 	import { alert } from '@stores/alert';
 	import { timeFormat } from '@util/datetime';
 
-    let type: 'forum' | 'comment' | undefined = undefined
-    let reportStatus: ReportStatus | undefined = undefined
     let sortBy = 'createdAt@DESC'
 
     let isLoading = false;
@@ -104,7 +102,7 @@
     }
 
     const fetchData = async(offset: number, limit: number) => {
-        const res = await getReports(searchText, offset, limit, sortBy, reportStatus, type)
+        const res = await getReports(searchText, offset, limit, sortBy, filterOption)
         reports = res?.data || []
         total = res?.total || 0
     }
@@ -166,7 +164,7 @@
 
         return `
             <div id="report-status-button-${index}" class="rounded-full w-fit px-2.5 py-1 text-white ${buttonClass}">
-                <span>${reportStatus}</span>
+                <span class="uppercase">${reportStatus}</span>
             </div>
         `
     }
@@ -225,12 +223,11 @@
         }
     }
 
-    let isFetching = false;
+    // SORT OPTION
+    let isFetching = true;
     const updateSortOption = async (event: CustomEvent<{ sortBy: string, orderBy: string }>) => {
         sortBy = `${mapSortBy(event.detail.sortBy)}@${event.detail.orderBy}`
-        isFetching = true
-        await fetchData(offset, limit)
-        isFetching = false
+        await reload()
     }
 
     const mapSortBy = (sortBy: string) => {
@@ -244,12 +241,98 @@
             case 'วันที่แก้ไข': return "updatedAt"
         }
     }
+
+    // FILTER OPTION
+    let isOpenFilterOption = false;
+    let filterOption: any = {reportStatus: [], type: []}
+    let tempFilterOption: any = {reportStatus: [], type: []}
+    const filterOptions = [
+        {
+            key: 'type',
+            title: 'ประเภท',
+            items: [
+                {
+                    name: 'กระทู้',
+                    value: 'forum',
+                },
+                {
+                    name: 'ความคิดเห็น',
+                    value: 'comment',
+                }
+            ]
+        },
+        {
+            key: 'reportStatus',
+            title: 'สถานะ',
+            items: [
+                {
+                    name: ReportStatus.Pending.toUpperCase(),
+                    value: ReportStatus.Pending.toUpperCase(),
+                },
+                {
+                    name: ReportStatus.Resolved.toUpperCase(),
+                    value: ReportStatus.Resolved.toUpperCase(),
+                },
+                {
+                    name: ReportStatus.Rejected.toUpperCase(),
+                    value: ReportStatus.Rejected.toUpperCase(),
+                },
+                {
+                    name: ReportStatus.Invalid.toUpperCase(),
+                    value: ReportStatus.Invalid.toUpperCase(),
+                },
+                {
+                    name: ReportStatus.Closed.toUpperCase(),
+                    value: ReportStatus.Closed.toUpperCase(),
+                }
+            ]
+        },
+    ]
+
+    let isFirstTime = true;
+    $: filterOption && reload()
+    const reload = async () => {
+        if (!isFirstTime) {
+            isFetching = true
+            await fetchData(offset, limit)
+            isFetching = false
+        }
+        if (isFetching) {
+            isFirstTime = false
+        }
+    }
+    $: if(tempFilterOption.reportStatus !== undefined || tempFilterOption.type !== undefined) {
+        if (tempFilterOption.reportStatus.length !== filterOption.reportStatus.length) {
+            filterOption.reportStatus = [...tempFilterOption.reportStatus].map(item => item.toLowerCase())
+        }
+        if (tempFilterOption.type.length !== filterOption.type.length) {
+            filterOption.type = [...tempFilterOption.type]
+        }
+    }
 </script>
 
 <LoadingSpinner bind:isLoading />
 
 <div class="rounded-lg shadow-md w-full h-full p-4 sm:p-6 overflow-hidden bg-white text-black dark:bg-gray-700 dark:text-white ease-in duration-200">
     <AdminHeader title="รายงานกระทู้" bind:deleteItemsCount={selectedItems.length} addable={false} on:delete={multiDeleteAction} />
+
+    <Button size="lg" color="alternative" class="mb-4 w-fit whitespace-nowrap focus:!border-transparent focus:!ring-0 !bg-transparent !outline-transparent !border-transparent !p-0 !text-[var(--primary-color)] dark:!text-[var(--primary-color-75)]">
+        <Chevron><div class="whitespace-nowrap">กรองการค้นหา</div></Chevron>
+    </Button>
+    <Dropdown class="py-2 rounded-md bg-gray-50 dark:bg-gray-900 drop-shadow-md shadow-md min-w-[170px]" transition={slide} bind:open={isOpenFilterOption}>
+        {#each filterOptions as filter, index}
+            {#if index}
+                <hr class="border-gray-300 dark:border-gray-600 my-2">
+            {/if}
+            <Helper><div class="px-2 text-sm mb-1 underline">{filter.title}</div></Helper>
+            {#each filter.items as item}
+                <Checkbox name="sortBy" bind:group={tempFilterOption[filter.key]} value={item.value} class="ease-in duration-150 flex flex-start cursor-pointer p-2 hover:bg-gray-100 dark:hover:bg-gray-600">
+                    {item.name}
+                </Checkbox>
+            {/each}
+        {/each}
+    </Dropdown>
+
     <Table
         bind:limit
         bind:total
@@ -285,8 +368,8 @@
 
     <div class="text-center flex flex-wrap gap-2 justify-end">
         <Button color="red" on:click={() => isOpenViewModal = false}>ยกเลิก</Button>
-        <Button color="yellow" on:click={() => updateReportStatusAction(ReportStatus.Resolved)}>ปฏิเสธการร้องเรียน</Button>
-        <Button color="green" on:click={() => updateReportStatusAction(ReportStatus.Rejected)}>ยืนยันการร้องเรียน</Button>
+        <Button color="yellow" on:click={() => updateReportStatusAction(ReportStatus.Rejected)}>ปฏิเสธการร้องเรียน</Button>
+        <Button color="green" on:click={() => updateReportStatusAction(ReportStatus.Resolved)}>ยืนยันการร้องเรียน</Button>
     </div>
 </Modal>
 

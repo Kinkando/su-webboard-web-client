@@ -80,9 +80,9 @@ export async function deleteCategories(categoryIDs: number[], cookies?: Cookies)
     })
 }
 
-export async function getReports(search: string, offset: number, limit: number, sortBy: string, reportStatus?: ReportStatus, type?: 'forum' | 'comment') {
+export async function getReports(search: string, offset: number, limit: number, sortBy: string, filter?: {reportStatus: string, type: string}) {
     const res = await api<{ total: number, data: Report[] }>({
-        url: `${baseURL}/admin/report?offset=${offset}&limit=${limit}${search ? '&search='+search : ''}${queryParams('sortBy', sortBy)}${queryParams('reportStatus', reportStatus)}${queryParams('type', type)}`,
+        url: `${baseURL}/admin/report?offset=${offset}&limit=${limit}${search ? '&search='+search : ''}${queryParams('sortBy', sortBy)}${queryParams('reportStatus', filter?.reportStatus)}${queryParams('type', filter?.type)}`,
         method: "GET",
     })
     return res.data
@@ -111,7 +111,7 @@ export async function deleteReport(reportUUIDs: string[]) {
 }
 
 const queryParams = (key: string, value?: any): string => {
-    if (value) {
+    if (value?.length > 0) {
         return `&${key}=${value}`
     }
     return ""
