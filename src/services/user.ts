@@ -1,11 +1,9 @@
 import type { User } from "@models/user";
 import api from "@util/api";
 
-const baseURL = import.meta.env.VITE_API_HOST
-
 export async function getUserProfile(userUUID?: string) {
     const response = await api<User>({
-        url: `${baseURL}/user/profile${userUUID ? `?userUUID=${userUUID}` : ''}`,
+        url: `/user/profile${userUUID ? `?userUUID=${userUUID}` : ''}`,
         method: 'GET',
     })
     return response.data!
@@ -18,7 +16,7 @@ export async function updateUserProfile(userDisplayName: string, isAnonymous: bo
         formData.append("file", userImage)
     }
     return await api({
-        url: `${baseURL}/user/profile`,
+        url: `/user/profile`,
         method: 'PATCH',
         data: formData,
         headers: {
@@ -29,7 +27,7 @@ export async function updateUserProfile(userDisplayName: string, isAnonymous: bo
 
 export async function followingUser(userUUID: string, isFollowing: boolean) {
     return await api<User>({
-        url: `${baseURL}/user/following`,
+        url: `/user/following`,
         method: 'PATCH',
         data: { userUUID, isFollowing }
     })
@@ -37,7 +35,7 @@ export async function followingUser(userUUID: string, isFollowing: boolean) {
 
 export async function notificationUser(userUUID: string, isNoti: boolean) {
     return await api<User>({
-        url: `${baseURL}/user/notification`,
+        url: `/user/notification`,
         method: 'PATCH',
         data: { userUUID, isNoti }
     })
@@ -45,7 +43,7 @@ export async function notificationUser(userUUID: string, isNoti: boolean) {
 
 export async function getFollowUsers(userUUID: string, type: 'following' | 'follower', offset: number, limit: number) {
     const res = await api<{total: number, data: User[]}>({
-        url: `${baseURL}/user/${type}?userUUID=${userUUID}&offset=${offset}&limit=${limit}`,
+        url: `/user/${type}?userUUID=${userUUID}&offset=${offset}&limit=${limit}`,
         method: 'GET',
     })
     return res.data
@@ -53,7 +51,7 @@ export async function getFollowUsers(userUUID: string, type: 'following' | 'foll
 
 export async function searchUsers(search: string, offset: number, limit: number) {
     const res = await api<{total: number, data: User[]}>({
-        url: `${baseURL}/user?search=${search}&offset=${offset}&limit=${limit}`,
+        url: `/user?search=${search}&offset=${offset}&limit=${limit}`,
         method: 'GET',
     })
     return res.data

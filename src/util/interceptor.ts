@@ -8,7 +8,10 @@ import * as Cookies from './cookies';
 import { alert } from '@stores/alert';
 import { goto } from '$app/navigation';
 
+const baseURL = import.meta.env.VITE_API_HOST
+
 const instance = axios.create({
+    baseURL,
 	timeout: 30000,
 	headers: {
 		"Content-Type": "application/json",

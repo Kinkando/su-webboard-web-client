@@ -3,11 +3,9 @@ import type { Announcement, AnnouncementRequest } from "@models/announcement"
 import api from "@util/api"
 import type { Cookies } from "@sveltejs/kit"
 
-const baseURL = import.meta.env.VITE_API_HOST
-
 export async function getAnnouncements(offset: number, limit: number, userUUID?: string) {
     const res = await api<{ total: number, data: Announcement[] }>({
-        url: `${baseURL}/announcement?limit${limit}&offset=${offset}${userUUID ? `&userUUID=${userUUID}` : ''}`,
+        url: `/announcement?limit${limit}&offset=${offset}${userUUID ? `&userUUID=${userUUID}` : ''}`,
         method: "GET",
     })
     return res.data || { total: 0, data: [] as Announcement[] }
@@ -15,7 +13,7 @@ export async function getAnnouncements(offset: number, limit: number, userUUID?:
 
 export async function getAnnouncementDetail(announcementUUID: string, cookies?: Cookies) {
     const res = await api<Announcement>({
-        url: `${baseURL}/announcement/${announcementUUID}`,
+        url: `/announcement/${announcementUUID}`,
         method: "GET",
         cookies,
     })
@@ -31,7 +29,7 @@ export async function upsertAnnouncement(announcement: AnnouncementRequest, file
         }
     }
     return await api<{ announcementUUID: string, documents: Document[] }>({
-        url: `${baseURL}/announcement`,
+        url: `/announcement`,
         method: "PUT",
         data: formData,
         headers: {
@@ -42,7 +40,7 @@ export async function upsertAnnouncement(announcement: AnnouncementRequest, file
 
 export async function deleteAnnouncement(announcementUUID: string) {
     return await api({
-        url: `${baseURL}/announcement`,
+        url: `/announcement`,
         method: "DELETE",
         data: { announcementUUID },
     })

@@ -4,11 +4,9 @@ import type { Home } from "@models/home";
 import type { Cookies } from "@sveltejs/kit";
 import api from "@util/api";
 
-const baseURL = import.meta.env.VITE_API_HOST
-
 export async function getHomeData(): Promise<Home> {
     const res = await api<Home>({
-        url: `${baseURL}/home`,
+        url: `/home`,
         method: "GET",
     })
     return res.data!
@@ -23,7 +21,7 @@ export async function upsertForum(forum: ForumRequest, files: File[]) {
         }
     }
     return await api<{ forumUUID: string, documents: Document[] }>({
-        url: `${baseURL}/forum`,
+        url: `/forum`,
         method: "PUT",
         data: formData,
         headers: {
@@ -34,7 +32,7 @@ export async function upsertForum(forum: ForumRequest, files: File[]) {
 
 export async function deleteForum(forumUUID: string) {
     return await api({
-        url: `${baseURL}/forum`,
+        url: `/forum`,
         method: "DELETE",
         data: { forumUUID },
     })
@@ -42,7 +40,7 @@ export async function deleteForum(forumUUID: string) {
 
 export async function likeForum(forumUUID: string, isLike: boolean) {
     return await api({
-        url: `${baseURL}/forum/like`,
+        url: `/forum/like`,
         method: "PATCH",
         data: { forumUUID, isLike },
     })
@@ -50,7 +48,7 @@ export async function likeForum(forumUUID: string, isLike: boolean) {
 
 export async function favoriteForum(forumUUID: string, isFavorite: boolean) {
     return await api({
-        url: `${baseURL}/forum/favorite`,
+        url: `/forum/favorite`,
         method: "PATCH",
         data: { forumUUID, isFavorite },
     })
@@ -79,7 +77,7 @@ export async function searchForum(search: string, sortBy: string, offset: number
 async function _getForumList(offset: number, limit: number, sortBy: string, query?: { categoryID?: number, search?: string, userUUID?: string, favoriteUserUUID?: string }) {
     const queryString = `${query?.categoryID ? `&categoryID=${query.categoryID}` : ''}${query?.search ? `&search=${query.search}` : ''}${query?.userUUID ? `&userUUID=${query.userUUID}` : ''}${query?.favoriteUserUUID ? `&favoriteUserUUID=${query.favoriteUserUUID}` : ''}`
     const res = await api<{ total: number, data: Forum[] }>({
-        url: `${baseURL}/forum?limit=${limit}&offset=${offset}&sortBy=${sortBy}${queryString}`,
+        url: `/forum?limit=${limit}&offset=${offset}&sortBy=${sortBy}${queryString}`,
         method: "GET",
     })
     return res.data || { total: 0, data: [] as Forum[] }
@@ -87,7 +85,7 @@ async function _getForumList(offset: number, limit: number, sortBy: string, quer
 
 export async function getForumDetail(forumUUID: string, cookies?: Cookies) {
     const res = await api<ForumDetail>({
-        url: `${baseURL}/forum/${forumUUID}`,
+        url: `/forum/${forumUUID}`,
         method: "GET",
         cookies,
     })
@@ -96,7 +94,7 @@ export async function getForumDetail(forumUUID: string, cookies?: Cookies) {
 
 export async function reportForum(forumUUID: string, reportReason: string) {
     return await api({
-        url: `${baseURL}/forum/report/${forumUUID}`,
+        url: `/forum/report/${forumUUID}`,
         method: "POST",
         data: { reportReason }
     })
