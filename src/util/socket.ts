@@ -7,8 +7,40 @@ import userStore from '@stores/user'
 import { SocketEvent } from '@commons/socket-event'
 import { pushNotification } from '@stores/toast'
 import notificationSocket from '@stores/notification_socket'
+import type { User } from '@stores/admin_socket'
+import adminSocket from '@stores/admin_socket'
 
-export async function initState(userType: 'adm' | 'std' | 'tch') {
+export async function initAdminSocket() {
+    const socket = io(`${import.meta.env.VITE_API_HOST}/admin`)
+    socket.on('connect', () => socket.on(SocketEvent.AdminConnect, (users: User[]) => adminSocket.set(users.map(user => {
+        user.socketIDs = [(user as any).socketID]
+        return user
+    }))))
+
+    socket.on(SocketEvent.UserConnect, (data: {user: User, socketID: string}) => adminSocket.update(all => {
+        const findIndex = all.findIndex(u => u.userUUID === data.user.userUUID)
+        if (findIndex !== -1) {
+            all[findIndex].socketIDs.push(data.socketID)
+            return all
+        }
+        const newUser = {...data.user}
+        newUser.socketIDs = [data.socketID]
+        return [...all, newUser]
+    }))
+
+    socket.on(SocketEvent.UserDisconnect, (socketID: string) => adminSocket.update(all => {
+        const findIndex = all.findIndex(user => user.socketIDs.includes(socketID))
+        if (findIndex !== -1) {
+            if (all[findIndex].socketIDs?.length === 1) {
+                return all.filter((_, index) => index !== findIndex) || []
+            }
+            all[findIndex].socketIDs = all[findIndex].socketIDs.filter(id => socketID !== id)
+        }
+        return all
+    }))
+}
+
+export async function initNotificationSocket(userType: 'adm' | 'std' | 'tch') {
     if (userType && userType !== 'adm') {
         userStore.set(await getUserProfile())
         const noti = await getNotiList(10, 0)

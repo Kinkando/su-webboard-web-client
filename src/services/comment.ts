@@ -3,11 +3,9 @@ import type { Comment } from "@models/comment";
 import type { Document } from "@models/forum";
 import api from "@util/api";
 
-const baseURL = import.meta.env.VITE_API_HOST
-
 export async function getComment(forumUUID: string, commentUUID: string) {
     const res = await api<Comment>({
-        url: `${baseURL}/comment/${forumUUID}/${commentUUID}`,
+        url: `/comment/${forumUUID}/${commentUUID}`,
         method: "GET",
     })
     return res.data
@@ -15,7 +13,7 @@ export async function getComment(forumUUID: string, commentUUID: string) {
 
 export async function getComments(forumUUID: string, offset: number, limit: number, orderBy: Order) {
     const res = await api<{ total: number, data: Comment[]}>({
-        url: `${baseURL}/comment/${forumUUID}?limit${limit}&offset=${offset}&sortBy=createdAt@${orderBy}`,
+        url: `/comment/${forumUUID}?limit${limit}&offset=${offset}&sortBy=createdAt@${orderBy}`,
         method: "GET",
     })
     return res.data
@@ -39,7 +37,7 @@ export async function upsertComment(forumUUID: string, comment: Comment, files: 
         }
     }
     return await api<{ commentUUID: string, documents: Document[] }>({
-        url: `${baseURL}/comment`,
+        url: `/comment`,
         method: "PUT",
         data: formData,
         headers: {
@@ -50,7 +48,7 @@ export async function upsertComment(forumUUID: string, comment: Comment, files: 
 
 export async function deleteComment(commentUUID: string) {
     return await api({
-        url: `${baseURL}/comment`,
+        url: `/comment`,
         method: "DELETE",
         data: { commentUUID },
     })
@@ -58,7 +56,7 @@ export async function deleteComment(commentUUID: string) {
 
 export async function likeComment(commentUUID: string, isLike: boolean) {
     return await api({
-        url: `${baseURL}/comment/like`,
+        url: `/comment/like`,
         method: "PATCH",
         data: { commentUUID, isLike },
     })
@@ -66,7 +64,7 @@ export async function likeComment(commentUUID: string, isLike: boolean) {
 
 export async function reportComment(commentUUID: string, reportReason: string) {
     return await api({
-        url: `${baseURL}/comment/report/${commentUUID}`,
+        url: `/comment/report/${commentUUID}`,
         method: "POST",
         data: { reportReason }
     })

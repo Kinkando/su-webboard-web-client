@@ -1,21 +1,16 @@
 <script lang="ts">
-    import type { User } from "firebase/auth";
+    import type { User, UserCredential } from "firebase/auth";
 	import { goto } from "$app/navigation";
 	import FormModal from "@components/modal/FormModal.svelte";
 	import LoadingSpinner from "@components/spinner/LoadingSpinner.svelte";
 	import { mapErrorForm, type Form } from "@models/form";
     import { registerUser } from '@services/authen'
 	import { createUserFirebase, deleteUserFirebase } from "@services/firebase";
-	import { getNotiList, getUnreadNotiCount } from "@services/notification";
-	import { getUserProfile } from "@services/user";
 	import { alert } from '@stores/alert';
-    import notificationStore from '@stores/notification'
-	import userStore from '@stores/user';
 	import { getUserType, setToken } from "@util/localstorage";
     import * as Pattern from '@util/pattern'
+	import { initNotificationSocket } from "@util/socket";
     import * as Validator from '@util/validation'
-    import type { UserCredential } from 'firebase/auth'
-	import { initState } from "@util/init-state";
 
 	export let user: User;
     export let open: boolean = false;
@@ -135,7 +130,7 @@
     }
 
     const navigate = async(userType: string) => {
-        await initState(userType as any)
+        await initNotificationSocket(userType as any)
         await goto("/")
     }
 

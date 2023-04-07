@@ -12,4 +12,9 @@ export enum SocketEvent {
     DeleteNotification = 'deleteNotification',
     ReadNotification = 'readNotification',
     RefreshNotification = 'refreshNotification',
+
+    // Admin
+    UserConnect = 'userConnected',
+    UserDisconnect = 'userDisconnected',
+    AdminConnect = 'adminConnected'
 }

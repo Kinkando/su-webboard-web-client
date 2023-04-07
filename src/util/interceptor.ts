@@ -8,7 +8,10 @@ import * as Cookies from './cookies';
 import { alert } from '@stores/alert';
 import { goto } from '$app/navigation';
 
+const baseURL = import.meta.env.VITE_API_HOST
+
 const instance = axios.create({
+    baseURL,
 	timeout: 30000,
 	headers: {
 		"Content-Type": "application/json",
@@ -64,7 +67,7 @@ instance.interceptors.response.use(
                     await goto(`/login` + redirectURL())
                     alert({
                         type: 'warning',
-                        message: 'Session ของคุณหมดอายุ, โปรดเข้าสู่ระบบใหม่อีกครั้ง!',
+                        message: 'Session ของคุณหมดอายุ, กรุณาเข้าสู่ระบบใหม่อีกครั้ง!',
                     })
                     return Promise.reject(error);
                 }
@@ -101,7 +104,7 @@ instance.interceptors.response.use(
                 await goto(`/login` + redirectURL())
                 alert({
                     type: 'warning',
-                    message: 'Session ของคุณหมดอายุ, โปรดเข้าสู่ระบบใหม่อีกครั้ง!',
+                    message: 'Session ของคุณหมดอายุ, กรุณาเข้าสู่ระบบใหม่อีกครั้ง!',
                 })
                 return Promise.reject(error)
             }

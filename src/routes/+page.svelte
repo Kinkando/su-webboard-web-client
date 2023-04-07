@@ -7,8 +7,8 @@
 	import SkeletonAnnouncementCard from '@components/skeleton-load/SkeletonAnnouncementCard.svelte';
 	import SkeletonCategoryCard from '@components/skeleton-load/SkeletonCategoryCard.svelte';
 	import SkeletonPopularCard from '@components/skeleton-load/SkeletonPopularCard.svelte';
-	import LoadingSpinner from '@components/spinner/LoadingSpinner.svelte';
-    import type { Home } from '@models/home';
+	import type { CategoryDetail } from '@models/category';
+    import type { HomeUser } from '@models/home';
 	import { getHomeData } from '@services/forum';
 	import { isAutoSlideCategory } from '@util/localstorage';
 
@@ -42,12 +42,8 @@
         },
     ];
 
-    let home: Home;
-    let isLoading = true;
-    onMount(async() => {
-        isLoading = false;
-        home = await getHomeData()
-    })
+    let home!: HomeUser;
+    onMount(async() => home = await getHomeData())
 
     let carouselIndex = 0;
     let carouselDirection = "";
@@ -57,14 +53,12 @@
             carouselIndex = home?.categories?.length-1
         }
         carouselDirection = increment > 0 ? "right" : "left";
-        clearInterval(autoSlide);
-        autoSlide = setInterval(auto, 3000);
     }
     $: carouselItems = () => {
+        const categories: CategoryDetail[] = [];
         if (isExpandCarousel) {
-            return home?.categories
+            return home?.categories || categories
         }
-        const categories = [];
         let index = carouselIndex;
         while(categories.length != Math.min(home?.categories?.length, carouselAmount)) {
             categories.push(home?.categories[index])
@@ -74,7 +68,7 @@
     }
     $: carouselButtonName = "ดูเพิ่มเติม"
     const auto = () => {
-        if (!isExpandCarousel && isAutoSlide) {
+        if (!isExpandCarousel && isAutoSlide && home?.categories?.length) {
             setCarouselIndex(1)
         }
     }
@@ -92,64 +86,60 @@
 
 <svelte:window bind:innerWidth />
 
-{#if isLoading}
-    <LoadingSpinner bind:isLoading />
-{:else}
-    <!-- Announcement -->
-    <HomeSectionHeader {...sectionHeaders[0]} />
-    <div class="flex w-full gap-x-2 mb-10">
-        {#if home}
-            {#each home?.announcements?.slice(0, Math.min(home?.announcements.length, colAmount)) as announcement}
-                <AnnouncementCard {announcement} />
-            {/each}
-        {:else}
-            {#each Array(colAmount) as _}
-                <SkeletonAnnouncementCard />
-            {/each}
-        {/if}
+<!-- Announcement -->
+<HomeSectionHeader {...sectionHeaders[0]} />
+<div class="flex w-full gap-x-2 mb-10">
+    {#if home}
+        {#each home?.announcements?.slice(0, Math.min(home?.announcements.length, colAmount)) as announcement}
+            <AnnouncementCard {announcement} />
+        {/each}
+    {:else}
+        {#each Array(colAmount) as _}
+            <SkeletonAnnouncementCard />
+        {/each}
+    {/if}
+</div>
+
+<!-- Popular Topics -->
+<HomeSectionHeader {...sectionHeaders[1]} />
+<div class="flex w-full gap-x-2 mb-10">
+    {#if home}
+        {#each home?.popularTopics?.slice(0, Math.min(home?.popularTopics.length, colAmount)) as popularTopic}
+            <PopularCard {popularTopic} />
+        {/each}
+    {:else}
+        {#each Array(colAmount) as _}
+            <SkeletonPopularCard />
+        {/each}
+    {/if}
+</div>
+
+<!-- Categories -->
+<HomeSectionHeader {...sectionHeaders[2]} bind:buttonName={carouselButtonName} />
+<div class="{isExpandCarousel ? 'grid' : 'flex items-center'} gap-2 w-full mb-10 overflow-x-hidden" style="grid-template-columns: repeat(auto-fill, minmax({minimumCategoryCardWidth}px, 1fr))">
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <div class="bg-gray-400 hover:bg-gray-500 transition-bg ease-in duration-200 rounded-full p-1 shadow-lg cursor-pointer z-10 opacity-50 {isExpandCarousel ? 'hidden': ''}" on:click={() => setCarouselIndex(-1)}>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+        </svg>
     </div>
 
-    <!-- Popular Topics -->
-    <HomeSectionHeader {...sectionHeaders[1]} />
-    <div class="flex w-full gap-x-2 mb-10">
-        {#if home}
-            {#each home?.popularTopics?.slice(0, Math.min(home?.popularTopics.length, colAmount)) as popularTopic}
-                <PopularCard {popularTopic} />
-            {/each}
-        {:else}
-            {#each Array(colAmount) as _}
-                <SkeletonPopularCard />
-            {/each}
-        {/if}
+    {#if home}
+        {#each carouselItems() as category}
+            {#key category}
+                <CategoryCard bind:direction={carouselDirection} {category} />
+            {/key}
+        {/each}
+    {:else}
+        {#each Array(carouselAmount) as _}
+            <SkeletonCategoryCard />
+        {/each}
+    {/if}
+
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <div class="bg-gray-400 hover:bg-gray-500 transition-bg ease-in duration-200 rounded-full p-1 shadow-lg cursor-pointer z-10 opacity-50 {isExpandCarousel ? 'hidden': ''}" on:click={() => setCarouselIndex(1)}>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+        </svg>
     </div>
-
-    <!-- Categories -->
-    <HomeSectionHeader {...sectionHeaders[2]} bind:buttonName={carouselButtonName} />
-    <div class="{isExpandCarousel ? 'grid' : 'flex items-center'} gap-2 w-full mb-10 overflow-x-hidden" style="grid-template-columns: repeat(auto-fill, minmax({minimumCategoryCardWidth}px, 1fr))">
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <div class="bg-gray-400 hover:bg-gray-500 transition-bg ease-in duration-200 rounded-full p-1 shadow-lg cursor-pointer z-10 opacity-50 {isExpandCarousel ? 'hidden': ''}" on:click={() => setCarouselIndex(-1)}>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-            </svg>
-        </div>
-
-        {#if home}
-            {#each carouselItems() as category}
-                {#key category}
-                    <CategoryCard bind:direction={carouselDirection} {category} />
-                {/key}
-            {/each}
-        {:else}
-            {#each Array(carouselAmount) as _}
-                <SkeletonCategoryCard />
-            {/each}
-        {/if}
-
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <div class="bg-gray-400 hover:bg-gray-500 transition-bg ease-in duration-200 rounded-full p-1 shadow-lg cursor-pointer z-10 opacity-50 {isExpandCarousel ? 'hidden': ''}" on:click={() => setCarouselIndex(1)}>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-            </svg>
-        </div>
-    </div>
-{/if}
+</div>

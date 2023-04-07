@@ -375,7 +375,6 @@
 
 <DeleteModal bind:open={isOpenDeleteModal} deleteButtonName="ยืนยัน" on:delete={deleteAction} >
     คุณยืนยันที่จะ<span class="text-red-500">ลบรายงาน {deleteItem?.values[0]} </span>หรือไม่?
-    <div>หมายเหตุ: หลังจากลบรายงานแล้ว จะส่งผลให้รายงานอื่นที่เกี่ยวข้องกับกระทู้หรือความคิดเห็นดังกล่าว เปลี่ยนเป็นสถานะ Closed</div>
 </DeleteModal>
 
 {#key data}
