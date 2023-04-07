@@ -20,18 +20,19 @@ export async function initAdminSocket() {
     socket.on(SocketEvent.UserConnect, (data: {user: User, socketID: string}) => adminSocket.update(all => {
         const findIndex = all.findIndex(u => u.userUUID === data.user.userUUID)
         if (findIndex !== -1) {
-            all[findIndex].socketIDs = [...all[findIndex].socketIDs, data.socketID]
+            all[findIndex].socketIDs.push(data.socketID)
             return all
         }
-        data.user.socketIDs = [data.socketID]
-        return [...all, data.user]
+        const newUser = {...data.user}
+        newUser.socketIDs = [data.socketID]
+        return [...all, newUser]
     }))
 
     socket.on(SocketEvent.UserDisconnect, (socketID: string) => adminSocket.update(all => {
         const findIndex = all.findIndex(user => user.socketIDs.includes(socketID))
-        if (findIndex) {
-            if (all[findIndex].socketIDs.length === 1) {
-                return all.filter((_, index) => index !== findIndex)
+        if (findIndex !== -1) {
+            if (all[findIndex].socketIDs?.length === 1) {
+                return all.filter((_, index) => index !== findIndex) || []
             }
             all[findIndex].socketIDs = all[findIndex].socketIDs.filter(id => socketID !== id)
         }

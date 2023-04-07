@@ -264,16 +264,18 @@
             <div class="p-2 sm:p-4">ผู้ใช้งานที่กำลังออนไลน์</div>
         </div>
         <div class="p-2 sm:p-4 flex flex-col gap-2">
-            {#each $adminSocket as user}
-                <div class="flex items-center gap-2">
-                    <img src="{user.userImageURL}" alt="" class="min-w-[3rem] max-w-[3rem] rounded-full">
-                    <div class="flex flex-col">
-                        <div class="">{user.userDisplayName}</div>
-                        {#if user.userDisplayName !== user.userFullName}
-                            <div class="text-gray-500 text-sm overflow-hidden text-ellipsis w-fit max-w-full whitespace-nowrap">{user.userFullName}</div>
-                        {/if}
+            {#if $adminSocket.length > 0}
+                {#each $adminSocket as user}
+                    <div class="flex items-center gap-2">
+                        <img src="{user.userImageURL}" alt="" class="min-w-[3rem] max-w-[3rem] rounded-full">
+                        <div class="flex flex-col">
+                            <div class="">{user.userDisplayName}</div>
+                            {#if user.userDisplayName !== user.userFullName}
+                                <div class="text-gray-500 text-sm overflow-hidden text-ellipsis w-fit max-w-full whitespace-nowrap">{user.userFullName}</div>
+                            {/if}
+                        </div>
                     </div>
-                </div>
+                {/each}
             {:else}
                 <div class="text-center m-auto">
                     <svg xmlns="http://www.w3.org/2000/svg" width="58" height="58" fill="currentColor" class="bi bi-person-slash m-auto mb-4" viewBox="0 0 16 16">
@@ -281,7 +283,7 @@
                     </svg>
                     ไม่มีผู้ใช้งานที่กำลังออนไลน์อยู่ในขณะนี้
                 </div>
-            {/each}
+            {/if}
         </div>
     </div>
 {/if}
