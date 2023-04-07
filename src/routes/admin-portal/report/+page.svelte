@@ -34,7 +34,7 @@
         "วันที่แจ้ง",
         "วันที่แก้ไข",
     ]
-    const actions: ActionTable[] = [
+    let actions: ActionTable[] = [
         {
             id: 'update-report-status',
             tooltip: 'อัพเดตสถานะ',
@@ -60,7 +60,13 @@
                 }
                 isLoading = false;
             },
-            hidden: (item: DataTable, index: number) => item.values[3] !== statusButtonHTML(ReportStatus.Pending, index)
+            hidden: (item: DataTable, index: number) => {
+                if (reports) {
+                    const report = reports.find(report => report.reportUUID === item._id)
+                    return report?.reportStatus !== ReportStatus.Pending
+                }
+                return item.values[3] !== statusButtonHTML(ReportStatus.Pending, index)
+            }
         },
         {
             id: 'delete-report',
@@ -340,7 +346,7 @@
         bind:data
         skeletonLoad
         multiSelect
-        {actions}
+        bind:actions
         bind:selectedItems
         sortable
         sortBy="วันที่แจ้ง"
@@ -352,19 +358,18 @@
 </div>
 
 <Modal bind:open={isOpenViewModal} bind:title={selectedReport.modalTitle} defaultClass="w-fit ease-in overflow-hidden">
-    <div class="w-full">
+    <div class="mb-4">
+        <span class="font-bold">เหตุผลการร้องเรียน: </span>
+        <span class="text-red-500">{selectedReport.reportReason}</span>
+    </div>
+
+    <div class="w-full {selectedReport.type === 'กระทู้' ? 'max-w-5xl' : 'max-w-4xl'}">
         {#if selectedReport.type === 'กระทู้'}
             <ForumDetail categories={[]} forumDetail={forumDetail()} isView />
         {:else}
             <CommentCard label="ความคิดเห็น" forumUUID="" authorUUID="" comment={commentDetail()} scrollView={false} isView />
         {/if}
     </div>
-
-    <div class="my-4">
-        <span class="font-bold">เหตุผลการร้องเรียน: </span>
-        <span class="text-red-500">{selectedReport.reportReason}</span>
-    </div>
-    <hr class="border-gray-200 dark:border-gray-600">
 
     <div class="text-center flex flex-wrap gap-2 justify-end">
         <Button color="red" on:click={() => isOpenViewModal = false}>ยกเลิก</Button>

@@ -39,9 +39,9 @@
         }
         for (let i=0; i<editableForm.schemas.length; i++) {
             const schema = editableForm.schemas[i]
-            if (schema.minlength && schema.value.length < schema.minlength) {
-                error = `กรอกข้อมูลไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง`
-                form.schemas[i].error = error
+            if (schema.minLength && schema.value.length < schema.minLength) {
+                error = 'กรอกข้อมูลไม่ถูกต้อง กรณาลองใหม่อีกครั้ง'
+                form.schemas[i].error = `${schema.label} ต้องมีความยาวอย่างน้อย ${schema.minLength} ตัวอักษร`
             } else {
                 form.schemas[i].error = ''
             }
@@ -66,8 +66,8 @@
             if (schema.pattern) {
                 schema.value = validateFormPattern(schema.value, schema.pattern)
             }
-            if (schema.maxlength) {
-                schema.value = maxLength(schema.value, schema.maxlength)
+            if (schema.maxLength) {
+                schema.value = maxLength(schema.value, schema.maxLength)
             }
         }
     }

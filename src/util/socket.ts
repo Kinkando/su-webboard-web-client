@@ -12,10 +12,20 @@ import adminSocket from '@stores/admin_socket'
 
 export async function initAdminSocket() {
     const socket = io(`${import.meta.env.VITE_API_HOST}/admin`)
-    socket.on('connect', () => socket.on(SocketEvent.AdminConnect, (users: User[]) => adminSocket.set(users.map(user => {
-        user.socketIDs = [(user as any).socketID]
-        return user
-    }))))
+    socket.on('connect', () => socket.on(SocketEvent.AdminConnect, (users: User[]) => {
+        const uniqueUser: User[] = [];
+        users.forEach(user => {
+            const findIndex = uniqueUser.findIndex(u => u.userUUID === user.userUUID)
+            if (findIndex !== -1) {
+                uniqueUser[findIndex].socketIDs.push((user as any).socketID)
+            } else {
+                const newUser = {...user}
+                newUser.socketIDs = [(user as any).socketID]
+                uniqueUser.push(newUser)
+            }
+        })
+        adminSocket.set(uniqueUser)
+    }))
 
     socket.on(SocketEvent.UserConnect, (data: {user: User, socketID: string}) => adminSocket.update(all => {
         const findIndex = all.findIndex(u => u.userUUID === data.user.userUUID)

@@ -26,8 +26,8 @@
                 placeholder: "กรุณากรอกรหัสนักศึกษา",
                 value: "",
                 pattern: Pattern.number,
-                minlength: 8,
-                maxlength: 9,
+                minLength: 8,
+                maxLength: 9,
             },
             {
                 id: 'userDisplayName',
@@ -38,7 +38,9 @@
                 validations: [
                     Validator.notStartWithSpace,
                     Validator.notMultiSpace,
-                ]
+                ],
+                minLength: 3,
+                maxLength: 50,
             },
             {
                 id: 'userFullName',
@@ -49,7 +51,9 @@
                 validations: [
                     Validator.notStartWithSpace,
                     Validator.notMultiSpace,
-                ]
+                ],
+                minLength: 3,
+                maxLength: 50,
             },
             {
                 id: 'userEmail',
@@ -58,7 +62,8 @@
                 placeholder: "กรุณากรอกอีเมล",
                 value: user.email!,
                 disabled: true,
-                validations: [ Validator.noSpace ]
+                validations: [ Validator.noSpace ],
+                maxLength: 100,
             },
             {
                 id: 'password',
@@ -66,7 +71,7 @@
                 label: "รหัสผ่าน",
                 placeholder: "กรุณากรอกรหัสผ่าน",
                 value: '',
-                minlength: 6,
+                minLength: 6,
             },
             {
                 id: 'confirmPassword',
@@ -74,7 +79,7 @@
                 label: "ยืนยันรหัสผ่าน",
                 placeholder: "กรุณากรอกรหัสผ่านอีกครั้ง",
                 value: '',
-                minlength: 6,
+                minLength: 6,
             },
         ]
     }

@@ -122,8 +122,8 @@
                         placeholder: "กรุณากรอกรหัสนักศึกษา",
                         value: item.values[1],
                         pattern: Pattern.number,
-                        minlength: 8,
-                        maxlength: 9,
+                        minLength: 8,
+                        maxLength: 9,
                     },
                     {
                         id: 'userDisplayName',
@@ -134,7 +134,9 @@
                         validations: [
                             Validator.notStartWithSpace,
                             Validator.notMultiSpace,
-                        ]
+                        ],
+                        minLength: 3,
+                        maxLength: 50,
                     },
                     {
                         id: 'userFullName',
@@ -145,7 +147,9 @@
                         validations: [
                             Validator.notStartWithSpace,
                             Validator.notMultiSpace,
-                        ]
+                        ],
+                        minLength: 3,
+                        maxLength: 50,
                     },
                     {
                         id: 'userEmail',
@@ -153,7 +157,8 @@
                         label: "อีเมล",
                         placeholder: "กรุณากรอกอีเมล",
                         value: item.values[4],
-                        validations: [ Validator.noSpace ]
+                        validations: [ Validator.noSpace ],
+                        maxLength: 100,
                     },
                 ]
             }
@@ -168,8 +173,8 @@
                         placeholder: "กรุณากรอกรหัสนักศึกษา",
                         value: "",
                         pattern: Pattern.number,
-                        minlength: 8,
-                        maxlength: 9,
+                        minLength: 8,
+                        maxLength: 9,
                     },
                     {
                         id: 'userFullName',
@@ -180,7 +185,9 @@
                         validations: [
                             Validator.notStartWithSpace,
                             Validator.notMultiSpace,
-                        ]
+                        ],
+                        minLength: 3,
+                        maxLength: 50,
                     },
                     {
                         id: 'userEmail',
@@ -188,7 +195,8 @@
                         label: "อีเมล",
                         placeholder: "กรุณากรอกอีเมล",
                         value: "",
-                        validations: [ Validator.noSpace ]
+                        validations: [ Validator.noSpace ],
+                        maxLength: 100,
                     },
                 ]
             }

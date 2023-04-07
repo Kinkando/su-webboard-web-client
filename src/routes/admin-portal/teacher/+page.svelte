@@ -121,7 +121,9 @@
                         validations: [
                             Validator.notStartWithSpace,
                             Validator.notMultiSpace,
-                        ]
+                        ],
+                        minLength: 3,
+                        maxLength: 50,
                     },
                     {
                         id: 'userFullName',
@@ -132,7 +134,9 @@
                         validations: [
                             Validator.notStartWithSpace,
                             Validator.notMultiSpace,
-                        ]
+                        ],
+                        minLength: 3,
+                        maxLength: 50,
                     },
                     {
                         id: 'userEmail',
@@ -140,7 +144,8 @@
                         label: "อีเมล",
                         placeholder: "กรุณากรอกอีเมล",
                         value: item.values[3],
-                        validations: [ Validator.noSpace ]
+                        validations: [ Validator.noSpace ],
+                        maxLength: 100,
                     },
                 ]
             }
@@ -157,7 +162,9 @@
                         validations: [
                             Validator.notStartWithSpace,
                             Validator.notMultiSpace,
-                        ]
+                        ],
+                        minLength: 3,
+                        maxLength: 50,
                     },
                     {
                         id: 'userEmail',
@@ -165,7 +172,8 @@
                         label: "อีเมล",
                         placeholder: "กรุณากรอกอีเมล",
                         value: "",
-                        validations: [ Validator.noSpace ]
+                        validations: [ Validator.noSpace ],
+                        maxLength: 100,
                     },
                 ]
             }

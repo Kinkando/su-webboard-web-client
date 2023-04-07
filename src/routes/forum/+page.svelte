@@ -14,8 +14,8 @@
 	import { getUserProfile } from "@services/user";
     import { alert } from "@stores/alert";
 
-    let title: FormSchema = {value: "", label: "หัวข้อกระทู้", placeholder: "กรุณากรอกหัวข้อกระทู้..."}
-    let description: FormSchema = {value: "", label: "รายละเอียด", placeholder: "กรุณากรอกรายละเอียด..."}
+    let title: FormSchema = {value: "", label: "หัวข้อกระทู้", placeholder: "กรุณากรอกหัวข้อกระทู้...", maxLength: 100}
+    let description: FormSchema = {value: "", label: "รายละเอียด", placeholder: "กรุณากรอกรายละเอียด...", maxLength: 10000}
     let categories: Category[] = [];
     let attachments: Attachment[] = [];
     let submitName = "สร้างกระทู้";
@@ -61,7 +61,7 @@
 
 <LoadingSpinner bind:isLoading />
 
-<div class="ease-in duration-200 bg-white dark:bg-gray-900 w-full rounded-md shadow-lg p-4 sm:p-6">
+<div class="ease-in duration-200 bg-white dark:bg-gray-900 w-full rounded-md shadow-lg p-4 sm:p-6 max-w-5xl m-auto">
     <ForumEditor
         anonymousPost
         bind:isAnonymous

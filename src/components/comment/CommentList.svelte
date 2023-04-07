@@ -242,7 +242,7 @@
 </script>
 
 {#each comments as comment, commentIndex}
-    <div class="mt-4">
+    <div class="mt-4 max-w-4xl m-auto">
         <CommentCard
             {authorUUID}
             {forumUUID}
