@@ -1,10 +1,12 @@
 import type { JWT } from "@models/auth";
 import axios from "axios";
 
+const baseURL = import.meta.env.VITE_API_HOST
 const apiKey = import.meta.env.VITE_API_KEY
 
 export async function verifyToken(idToken: string) {
     return await axios.request<JWT>({
+        baseURL,
         url: `/authen/token/verify`,
         method: 'POST',
         headers: {'X-Api-Key': apiKey},
@@ -14,6 +16,7 @@ export async function verifyToken(idToken: string) {
 
 export async function verifyGoogle(accessToken: string) {
     const response = await axios.request<JWT>({
+        baseURL,
         url: `/authen/token/google`,
         method: 'POST',
         headers: {'X-Api-Key': apiKey},
@@ -24,6 +27,7 @@ export async function verifyGoogle(accessToken: string) {
 
 export async function refreshToken(refreshToken: string) {
     const response = await axios.request<JWT>({
+        baseURL,
         url: `/authen/token/refresh`,
         method: 'POST',
         data: { refreshToken },
@@ -34,6 +38,7 @@ export async function refreshToken(refreshToken: string) {
 export async function revokeToken(accessToken?: string, refreshToken?: string) {
     try {
         await axios.request({
+            baseURL,
             url: `/authen/token/revoke`,
             method: 'POST',
             data: { accessToken, refreshToken },
@@ -43,6 +48,7 @@ export async function revokeToken(accessToken?: string, refreshToken?: string) {
 
 export async function registerUser(userDisplayName: string, userFullName: string, studentID: string, idToken: string) {
     return await axios.request<JWT>({
+        baseURL,
         url: `/authen/user`,
         method: 'POST',
         headers: {'X-Api-Key': apiKey},
