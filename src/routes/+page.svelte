@@ -8,7 +8,7 @@
 	import SkeletonCategoryCard from '@components/skeleton-load/SkeletonCategoryCard.svelte';
 	import SkeletonPopularCard from '@components/skeleton-load/SkeletonPopularCard.svelte';
 	import LoadingSpinner from '@components/spinner/LoadingSpinner.svelte';
-    import type { Home } from '@models/home';
+    import type { HomeUser } from '@models/home';
 	import { getHomeData } from '@services/forum';
 	import { isAutoSlideCategory } from '@util/localstorage';
 
@@ -42,7 +42,7 @@
         },
     ];
 
-    let home: Home;
+    let home: HomeUser;
     let isLoading = true;
     onMount(async() => {
         isLoading = false;

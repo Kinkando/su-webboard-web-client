@@ -11,4 +11,6 @@ export interface CategoryDetail {
     categoryHexColor: string
     lastActive: Date
     forumCount: number
+    ranking: number
+    total: number
 }

@@ -8,11 +8,7 @@
 	import CommonScreen from '@components/shared/CommonScreen.svelte';
 	import { verifyToken } from '@services/authen';
 	import { deleteUserFirebase, signinFirebase, signInGoogle } from '@services/firebase';
-	import { getNotiList, getUnreadNotiCount } from '@services/notification';
-	import { getUserProfile } from '@services/user';
     import { alert } from "@stores/alert";
-    import notificationStore from '@stores/notification'
-    import userStore from '@stores/user'
 	import { getUserType, setToken } from '@util/localstorage';
 	import { initState } from '@util/init-state';
 

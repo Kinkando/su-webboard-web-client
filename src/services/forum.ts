@@ -1,11 +1,11 @@
 import { Field, Order } from "@commons/order";
 import type { Forum, ForumDetail, ForumRequest, Document } from "@models/forum";
-import type { Home } from "@models/home";
+import type { HomeUser } from "@models/home";
 import type { Cookies } from "@sveltejs/kit";
 import api from "@util/api";
 
-export async function getHomeData(): Promise<Home> {
-    const res = await api<Home>({
+export async function getHomeData(): Promise<HomeUser> {
+    const res = await api<HomeUser>({
         url: `/home`,
         method: "GET",
     })

@@ -1,4 +1,5 @@
 import type { Category } from "@models/category";
+import type { HomeAdmin } from "@models/home";
 import type { Report, ReportDetail, ReportStatistic, ReportStatus } from "@models/report";
 import type { User } from "@models/user";
 import type { Cookies } from "@sveltejs/kit";
@@ -109,7 +110,7 @@ export async function deleteReport(reportUUIDs: string[]) {
 }
 
 export async function getHomeAdminData() {
-    const res = await api<{reportStatus: ReportStatistic}>({
+    const res = await api<HomeAdmin>({
         url: '/admin/home',
         method: "GET",
     })
