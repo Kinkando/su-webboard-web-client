@@ -2,8 +2,9 @@
 	import { Button } from "flowbite-svelte";
 </script>
 
-<img src="/images/404-not-found.avif" alt="" class="m-auto w-96">
+<!-- <img src="/images/404-not-found.avif" alt="" class="m-auto w-96"> -->
 <div class="text-center text-black dark:text-white space-y-3 mt-6">
+    <div class="error mx-auto text-[#5a5c69] dark:text-gray-400 text-[7rem] relative leading-none w-[12.5rem]" data-text="404">404</div>
     <span class="uppercase font-bold text-xl">ไม่พบหน้าที่คุณต้องการ</span>
     <div>ขออภัย, ไม่พบหน้าที่คุณกำลังมองหาอยู่</div>
     <Button type="button" gradient color="pink" class="mr-2" on:click={() => history.back()}>

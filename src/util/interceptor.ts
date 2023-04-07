@@ -67,7 +67,7 @@ instance.interceptors.response.use(
                     await goto(`/login` + redirectURL())
                     alert({
                         type: 'warning',
-                        message: 'Session ของคุณหมดอายุ, โปรดเข้าสู่ระบบใหม่อีกครั้ง!',
+                        message: 'Session ของคุณหมดอายุ, กรุณาเข้าสู่ระบบใหม่อีกครั้ง!',
                     })
                     return Promise.reject(error);
                 }
@@ -104,7 +104,7 @@ instance.interceptors.response.use(
                 await goto(`/login` + redirectURL())
                 alert({
                     type: 'warning',
-                    message: 'Session ของคุณหมดอายุ, โปรดเข้าสู่ระบบใหม่อีกครั้ง!',
+                    message: 'Session ของคุณหมดอายุ, กรุณาเข้าสู่ระบบใหม่อีกครั้ง!',
                 })
                 return Promise.reject(error)
             }

@@ -2,36 +2,44 @@
 	import { getHomeAdminData } from "@services/admin";
 	import { onMount } from "svelte";
     import Chart from 'chart.js/auto';
+	import LoadingSpinner from "@components/spinner/LoadingSpinner.svelte";
+	import type { HomeAdmin } from "@models/home";
 	import { timeRange } from '@util/datetime';
+	import { initAdminSocket } from "@util/socket";
+    import adminSocket from "@stores/admin_socket";
 
     let doughnutChartElm!: HTMLCanvasElement;
     let lineChartElm!: HTMLCanvasElement;
 
     let isLoading = true
 
+    let homeAdmin!: HomeAdmin
     let doughnutChart!: Chart<"doughnut", number[], string>
     let lineChart!: Chart<"line", number[], string>
 
     onMount(async() => {
+        isLoading = true;
+
+        initAdminSocket()
+
         doughnutChart = initViewDoughnutChart()
         lineChart = initViewLineChart()
 
-        isLoading = true;
-        const resp = await getHomeAdminData()
+        homeAdmin = await getHomeAdminData()
         isLoading = false;
 
-        reportCards[0].total = resp.reportStatus.pending
-        reportCards[1].total = resp.reportStatus.resolved
-        reportCards[2].total = resp.reportStatus.rejected
-        reportCards[3].total = resp.reportStatus.closed
-        reportCards[4].total = resp.reportStatus.invalid
+        reportCards[0].total = homeAdmin.reportStatus.pending
+        reportCards[1].total = homeAdmin.reportStatus.resolved
+        reportCards[2].total = homeAdmin.reportStatus.rejected
+        reportCards[3].total = homeAdmin.reportStatus.closed
+        reportCards[4].total = homeAdmin.reportStatus.invalid
 
         doughnutChart.data.datasets[0].data = [
-            resp.reportStatus.pending,
-            resp.reportStatus.resolved,
-            resp.reportStatus.rejected,
-            resp.reportStatus.closed,
-            resp.reportStatus.invalid,
+            homeAdmin.reportStatus.pending,
+            homeAdmin.reportStatus.resolved,
+            homeAdmin.reportStatus.rejected,
+            homeAdmin.reportStatus.closed,
+            homeAdmin.reportStatus.invalid,
         ]
         doughnutChart.data.datasets[0].backgroundColor = ['#0064F2', '#0E9F6E', '#FF8A4C', '#F05252', '#6B7280']
         doughnutChart.data.labels = ['Pending', 'Resolved', 'Rejected', 'Closed', 'Invalid']
@@ -40,9 +48,9 @@
         lineChart.data.datasets[0].backgroundColor = []
         lineChart.data.datasets[0].data = []
         lineChart.data.labels = []
-        for (const date of Object.keys(resp.forums).reverse()) {
+        for (const date of Object.keys(homeAdmin.forums).reverse()) {
             (lineChart.data.datasets[0].backgroundColor as string[]).push(dateColor(new Date(date)))
-            lineChart.data.datasets[0].data.push(resp.forums[date])
+            lineChart.data.datasets[0].data.push(homeAdmin.forums[date])
             lineChart.data.labels.push(timeRange(new Date(date)))
         }
         lineChart.update()
@@ -193,46 +201,55 @@
     }
 
     $: innerWidth = 0;
+    $: reportCardMinWidth = 224;
 </script>
 
 <svelte:window bind:innerWidth on:resize={updateViewResize} />
 
-<div class="flex flex-wrap gap-4 mb-4">
-    {#each reportCards as reportCard}
-        <div class="ease-in duration-200 rounded-md shadow-lg flex overflow-hidden min-w-[14rem] w-fit hover:brightness-75">
-            <div class="{reportCard.class} min-w-[6rem] max-w-[6rem] w-full rounded-l-lg">
-                <div class="relative top-1/2 -translate-y-1/2 flex justify-center text-white">
-                    {@html reportCard.icon}
+<LoadingSpinner bind:isLoading />
+
+<!-- REPORT STATUS CARD -->
+<div class="w-full mb-4 bg-white dark:bg-gray-700 overflow-hidden rounded-lg shadow-md relative ease-in duration-200 {isLoading ? 'opacity-0' : ''}">
+    <div class="p-2 sm:p-4 bg-gray-300 dark:bg-gray-900 ease-in duration-200 !text-black dark:!text-white">
+        <span class="">สรุปจำนวนแยกตามสถานะของการร้องเรียน</span>
+    </div>
+    <div class=" p-2 sm:p-4 2xl:flex grid gap-2 sm:gap-4 {isLoading ? 'opacity-0' : ''}" style="{innerWidth <= 1536 ? `grid-template-columns: repeat(auto-fill, minmax(${reportCardMinWidth}px, 1fr))` : ''}">
+        {#each reportCards as reportCard}
+            <div class="ease-in duration-200 rounded-md flex shadow-lg overflow-hidden w-full hover:brightness-75">
+                <div class="{reportCard.class} min-w-[6rem] max-w-[6rem] w-full rounded-l-lg">
+                    <div class="relative top-1/2 -translate-y-1/2 flex justify-center text-white">
+                        {@html reportCard.icon}
+                    </div>
+                </div>
+                <div class="ease-in duration-200 text-center w-full bg-gray-200 dark:bg-gray-800">
+                    <div class="ease-in duration-200 text-black dark:text-gray-200 whitespace-nowrap text-ellipsis overflow-hidden p-2 sm:p-4">{reportCard.label}</div>
+                    <hr class="ease-in duration-200 border-gray-300 dark:border-gray-600">
+                    {#if isLoading}
+                        <div class="w-1/3 h-6 mx-auto `my`-2 sm:my-4 bg-gray-300 rounded-full dark:bg-gray-600" />
+                    {:else}
+                        <div class="ease-in duration-200 text-black dark:text-gray-200 whitespace-nowrap text-ellipsis overflow-hidden p-2 sm:p-4">{reportCard.total}</div>
+                    {/if}
                 </div>
             </div>
-            <div class="ease-in duration-200 text-center w-full bg-white dark:bg-gray-700">
-                <div class="ease-in duration-200 text-black dark:text-gray-200 whitespace-nowrap text-ellipsis overflow-hidden p-2 sm:p-4">{reportCard.label}</div>
-                <hr class="ease-in duration-200 border-gray-200 dark:border-gray-600">
-                {#if isLoading}
-                    <div class="w-1/3 h-6 mx-auto `my`-2 sm:my-4 bg-gray-300 rounded-full dark:bg-gray-600" />
-                {:else}
-                    <div class="ease-in duration-200 text-black dark:text-gray-200 whitespace-nowrap text-ellipsis overflow-hidden p-2 sm:p-4">{reportCard.total}</div>
-                {/if}
-            </div>
-        </div>
-    {/each}
+        {/each}
+    </div>
 </div>
 
-<!-- max-[500px]:flex -->
-<div class="md:flex md:gap-4">
-    <div class="w-full max-w-full text-black dark:text-white bg-gray-200 dark:bg-gray-700 overflow-hidden rounded-lg shadow-md relative hover:brightness-75 ease-in duration-200">
-        <div class="bg-gray-300 dark:bg-gray-900 transition-colors ease-in duration-200">
+<!-- STATISTIC CHART -->
+<div class="md:flex md:gap-4 {isLoading ? 'opacity-0' : ''}">
+    <div class="w-full max-w-full text-black dark:text-white bg-white dark:bg-gray-700 overflow-hidden rounded-lg shadow-md relative hover:brightness-75 ease-in duration-200">
+        <div class="bg-gray-300 dark:bg-gray-900 transition-colors ease-in duration-200 !text-black dark:!text-white">
             <div class="p-2 sm:p-4">
                 ยอดผู้สร้างกระทู้ 7 วันย้อนหลัง
             </div>
         </div>
-        <div class=" overflow-x-auto">
-            <canvas bind:this={lineChartElm} id="line-chart" class="!w-full !min-h-[250px] !max-h-[272px] !min-w-[450px]"></canvas>
+        <div class="overflow-x-auto p-2 sm:p-4">
+            <canvas bind:this={lineChartElm} id="line-chart" class="!w-full !min-h-[360px] !max-h-[360px] !min-w-[500px] sm:!min-w-full"></canvas>
         </div>
     </div>
 
-    <div class="md:min-w-[18rem] md:mt-0 mt-4 md:w-fit w-full text-black dark:text-white bg-gray-200 dark:bg-gray-700 rounded-lg shadow-md flex flex-col cursor-pointer overflow-hidden relative hover:brightness-75 ease-in duration-200">
-        <div class="p-2 sm:p-4 bg-gray-300 dark:bg-gray-900 ease-in duration-200">
+    <div class="md:min-w-[24rem] md:mt-0 mt-4 md:w-fit w-full text-black dark:text-white bg-white dark:bg-gray-700 rounded-lg shadow-md flex flex-col cursor-pointer overflow-hidden relative hover:brightness-75 ease-in duration-200">
+        <div class="p-2 sm:p-4 bg-gray-300 dark:bg-gray-900 ease-in duration-200 !text-black dark:!text-white">
             <span class="">สรุปสถานะของการร้องเรียน</span>
         </div>
         <div class="w-72 relative px-6 py-4 m-auto">
@@ -240,3 +257,31 @@
         </div>
     </div>
 </div>
+
+{#if !isLoading}
+    <div class="mt-4 w-full max-w-full text-black dark:text-white bg-white dark:bg-gray-700 overflow-hidden rounded-lg shadow-md relative hover:brightness-75 ease-in duration-200">
+        <div class="bg-gray-300 dark:bg-gray-900 transition-colors ease-in duration-200 !text-black dark:!text-white">
+            <div class="p-2 sm:p-4">ผู้ใช้งานที่กำลังออนไลน์</div>
+        </div>
+        <div class="p-2 sm:p-4 flex flex-col gap-2">
+            {#each $adminSocket as user}
+                <div class="flex items-center gap-2">
+                    <img src="{user.userImageURL}" alt="" class="min-w-[3rem] max-w-[3rem] rounded-full">
+                    <div class="flex flex-col">
+                        <div class="">{user.userDisplayName}</div>
+                        {#if user.userDisplayName !== user.userFullName}
+                            <div class="text-gray-500 text-sm overflow-hidden text-ellipsis w-fit max-w-full whitespace-nowrap">{user.userFullName}</div>
+                        {/if}
+                    </div>
+                </div>
+            {:else}
+                <div class="text-center m-auto">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="58" height="58" fill="currentColor" class="bi bi-person-slash m-auto mb-4" viewBox="0 0 16 16">
+                        <path d="M13.879 10.414a2.501 2.501 0 0 0-3.465 3.465l3.465-3.465Zm.707.707-3.465 3.465a2.501 2.501 0 0 0 3.465-3.465Zm-4.56-1.096a3.5 3.5 0 1 1 4.949 4.95 3.5 3.5 0 0 1-4.95-4.95ZM11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm.256 7a4.474 4.474 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10c.26 0 .507.009.74.025.226-.341.496-.65.804-.918C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4s1 1 1 1h5.256Z"/>
+                    </svg>
+                    ไม่มีผู้ใช้งานที่กำลังออนไลน์อยู่ในขณะนี้
+                </div>
+            {/each}
+        </div>
+    </div>
+{/if}

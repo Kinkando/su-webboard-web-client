@@ -66,9 +66,13 @@
 
     {#key currentRoute}
         <section class="px-4 pb-4 max-[1000.1px]:pt-4 min-h-[calc(100vh-64px*2)] bg-gray-200 dark:bg-gray-800 transition-colors ease-in duration-200">
-            <div in:fly={{y: -20, duration: 250, delay: 100}}>
+            {#if currentRoute !== rootPath}
+                <div in:fly={{y: -20, duration: 250, delay: 100}}>
+                    <slot />
+                </div>
+            {:else}
                 <slot />
-            </div>
+            {/if}
         </section>
     {/key}
 

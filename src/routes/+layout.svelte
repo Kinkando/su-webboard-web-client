@@ -11,7 +11,7 @@
 	import Toasts from "@components/toast/Toasts.svelte";
 	import AuthGuard from '@middleware/AuthGuard.svelte';
 	import { getUserType } from "@util/localstorage";
-	import { initState } from "@util/init-state";
+	import { initNotificationSocket } from "@util/socket";
 
     $: title = (() => {
         const adminPortalPrefix = "ADMIN PORTAL | "
@@ -62,7 +62,7 @@
     let isLoading = true;
     onMount(async() => {
         isLoading = false;
-        initState(userType as any)
+        initNotificationSocket(userType as any)
     })
     beforeNavigate(() => isLoading = true)
     afterNavigate(() => isLoading = false)

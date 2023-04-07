@@ -10,7 +10,7 @@
 	import { deleteUserFirebase, signinFirebase, signInGoogle } from '@services/firebase';
     import { alert } from "@stores/alert";
 	import { getUserType, setToken } from '@util/localstorage';
-	import { initState } from '@util/init-state';
+	import { initNotificationSocket } from '@util/socket';
 
     let email = "";
     let password = "";
@@ -70,7 +70,7 @@
     }
 
     const navigate = async(userType: string) => {
-        await initState(userType as any)
+        await initNotificationSocket(userType as any)
         await goto(redirect && !redirect.includes("login") ? redirect : (userType === 'adm' ? "/admin-portal" : "/"))
     }
 
