@@ -8,6 +8,7 @@ export interface User {
     userFullName: string
     userImageURL: string
     studentID?: string
+    loginAt: Date
 }
 
 export default writable<User[]>()

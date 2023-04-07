@@ -7,6 +7,7 @@
 	import { timeRange } from '@util/datetime';
 	import { initAdminSocket } from "@util/socket";
     import adminSocket from "@stores/admin_socket";
+	import UserOnlineCard from "@components/user/UserOnlineCard.svelte";
 
     let doughnutChartElm!: HTMLCanvasElement;
     let lineChartElm!: HTMLCanvasElement;
@@ -259,22 +260,14 @@
 </div>
 
 {#if !isLoading}
-    <div class="mt-4 w-full max-w-full text-black dark:text-white bg-white dark:bg-gray-700 overflow-hidden rounded-lg shadow-md relative hover:brightness-75 ease-in duration-200">
+    <div class="mt-4 w-full max-w-full text-black dark:text-white bg-white dark:bg-gray-700 overflow-hidden rounded-lg shadow-md relative ease-in duration-200">
         <div class="bg-gray-300 dark:bg-gray-900 transition-colors ease-in duration-200 !text-black dark:!text-white">
             <div class="p-2 sm:p-4">ผู้ใช้งานที่กำลังออนไลน์</div>
         </div>
-        <div class="p-2 sm:p-4 flex flex-col gap-2">
+        <div class="p-2 sm:p-4 flex gap-2 sm:gap-4 flex-wrap">
             {#if $adminSocket.length > 0}
                 {#each $adminSocket as user}
-                    <div class="flex items-center gap-2">
-                        <img src="{user.userImageURL}" alt="" class="min-w-[3rem] max-w-[3rem] rounded-full">
-                        <div class="flex flex-col">
-                            <div class="">{user.userDisplayName}</div>
-                            {#if user.userDisplayName !== user.userFullName}
-                                <div class="text-gray-500 text-sm overflow-hidden text-ellipsis w-fit max-w-full whitespace-nowrap">{user.userFullName}</div>
-                            {/if}
-                        </div>
-                    </div>
+                    <UserOnlineCard bind:user />
                 {/each}
             {:else}
                 <div class="text-center m-auto">
