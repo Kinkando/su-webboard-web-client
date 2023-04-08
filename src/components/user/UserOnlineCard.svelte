@@ -10,7 +10,7 @@
     onDestroy(() => clearInterval(period))
 </script>
 
-<div class="flex flex-col rounded-md max-w-[8rem] overflow-hidden">
+<div class="flex flex-col rounded-md max-w-[8rem] min-w-[8rem] overflow-hidden">
     <img src="{user.userImageURL}" alt="" class="min-w-[4rem] max-w-[4rem] min-h-[4rem] max-h-[4rem] rounded-full m-auto">
     {#if user.userType === 'tch'}
         <div class="flex items-center gap-x-1 m-auto overflow-hidden w-full justify-center">
