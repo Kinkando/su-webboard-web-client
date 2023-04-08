@@ -13,6 +13,7 @@
 	import { createEventDispatcher, onDestroy } from "svelte";
 	import { timeRange } from "@util/datetime";
 	import { page } from "$app/stores";
+	import { browser } from "$app/environment";
 
     export let label: string;
     export let comment: Comment;
@@ -138,21 +139,25 @@
     onDestroy(() => clearInterval(period))
 
     export let scrollView: boolean;
-    $: commentUUID = $page.url.searchParams.get('commentUUID')
-    $: commentUUID === comment.commentUUID && scrollView && scrollIntoView()
+    export let activeCommentUUID: string | null = null;
+    $: activeCommentUUID === comment.commentUUID && scrollView && scrollIntoView()
     function scrollIntoView() {
-        const el = document.querySelector(`#comment-${commentUUID}`);
-        if (!el) return;
-        // el.scrollIntoView({ behavior: 'smooth' });
-        let dims = el.getBoundingClientRect();
-        window.scrollTo({left: window.scrollX, top: dims.top - 70, behavior: 'smooth'});
-        scrollView = false;
+        const pull = setInterval(() => {
+            if (browser) {
+                clearInterval(pull)
+                const el = document.querySelector(`#comment-${activeCommentUUID}`);
+                if (!el) return;
+                let dims = el.getBoundingClientRect();
+                window.scrollTo({left: window.scrollX, top: dims.top - 70, behavior: 'smooth'});
+                scrollView = false;
+            }
+        }, 100)
     }
 </script>
 
 <LoadingSpinner bind:isLoading />
 
-<div id="comment-{comment.commentUUID}" class="{commentUUID === comment.commentUUID ? 'border-blue-400 border' : ''} rounded-lg shadow-md w-full h-full p-4 sm:p-6 overflow-hidden bg-white text-black dark:bg-gray-700 dark:text-white ease-in duration-200">
+<div id="comment-{comment.commentUUID}" class="{activeCommentUUID === comment.commentUUID ? 'border-blue-400 border' : ''} rounded-lg shadow-md w-full h-full p-4 sm:p-6 overflow-hidden bg-white text-black dark:bg-gray-700 dark:text-white ease-in duration-200">
     <div class="flex items-center mb-2">
         <div class="font-light text-lg text-gray-400 w-full">{label}</div>
         {#if !isView}

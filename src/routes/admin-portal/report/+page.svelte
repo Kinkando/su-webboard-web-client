@@ -121,8 +121,7 @@
         isLoading = true
         isOpenDeleteModal = false
         await deleteReport([deleteItem._id])
-        data = data.filter(item => item._id !== deleteItem._id)
-        total -= 1
+        await fetchData(offset, limit)
         alert({
             type: 'success',
             message: `ลบรายการสำเร็จ`
@@ -133,8 +132,7 @@
         if (selectedItems.length) {
             isLoading = true
             await deleteReport(selectedItems.map(item => item._id))
-            data = data.filter(item => !selectedItems.map(item => item._id).includes(item._id))
-            total -= selectedItems.length
+            await fetchData(offset, limit)
             selectedItems = []
             alert({
                 type: 'success',

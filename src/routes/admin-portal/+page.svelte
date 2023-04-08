@@ -249,7 +249,7 @@
         </div>
     </div>
 
-    <div class="md:min-w-[24rem] md:mt-0 mt-4 md:w-fit w-full text-black dark:text-white bg-white dark:bg-gray-700 rounded-lg shadow-md flex flex-col cursor-pointer overflow-hidden relative hover:brightness-75 ease-in duration-200">
+    <div class="md:min-w-[24rem] md:mt-0 mt-4 md:w-fit w-full text-black dark:text-white bg-white dark:bg-gray-700 rounded-lg shadow-md flex flex-col overflow-hidden relative hover:brightness-75 ease-in duration-200">
         <div class="p-2 sm:p-4 bg-gray-300 dark:bg-gray-900 ease-in duration-200 !text-black dark:!text-white">
             <span class="">สรุปสถานะของการร้องเรียน</span>
         </div>

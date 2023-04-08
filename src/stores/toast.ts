@@ -26,7 +26,7 @@ export const pushNotification = (toast: NotificationToast) => {
             }, 100)
         })
         toasts.update((all) => [toast, ...all]);
-        setTimeout(() => dismissToast(id), toast.timeout || 2000)
+        setTimeout(() => dismissToast(id), toast.timeout || 3000)
     })
 }
 

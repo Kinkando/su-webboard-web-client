@@ -10,6 +10,7 @@
 	import { getNotiList, readAllNoti } from "@services/notification";
 	import notificationSocket from '@stores/notification_socket';
 	import { getUserUUID } from "@util/localstorage";
+    import notificationStore from "@stores/notification"
 
     let limit = 10;
     let total = 0;
@@ -34,6 +35,15 @@
         },
     ]
 
+    let unreadNotiCount = 0;
+    notificationStore.subscribe(async(notiStore) => {
+        const fetchTotal = notiStore?.unreadNotiCount > unreadNotiCount ? notifications?.length + 10 : (notifications?.length || 0)
+        const res = await getNotiList(Math.max(fetchTotal, 10), 0, activeTab)
+        total = res?.total || 0
+        notifications = res?.data || []
+        unreadNotiCount = notiStore?.unreadNotiCount || 0
+    })
+
     const markAsReadAll = async () => {
         element.click(); // close ellipsis notification
         await readAllNoti()
@@ -51,7 +61,7 @@
 
     const fetchData = async() => {
         const res = await getNotiList(limit, notifications.length, activeTab)
-        total = res.total || 0
+        total = res?.total || 0
 
         const temp: NotificationItem[] = []
         const notiUUIDs = notifications.map(noti => noti.notiUUID)
