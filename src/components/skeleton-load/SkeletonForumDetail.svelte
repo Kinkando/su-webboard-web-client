@@ -2,7 +2,7 @@
     export let forumDetail = false;
 </script>
 
-<div class="select-none ease-in duration-200 bg-gray-50 dark:bg-gray-700 text-black dark:text-gray-400 rounded-md border border-gray-200 dark:border-gray-700 shadow-md drop-shadow-md flex flex-col w-full h-full overflow-hidden">
+<div class="select-none ease-in duration-200 bg-gray-50 dark:bg-gray-700 text-black dark:text-gray-400 rounded-md border border-gray-200 dark:border-gray-700 shadow-md drop-shadow-md flex flex-col w-full h-full overflow-hidden max-w-5xl m-auto">
     <div class="animate-pulse w-full h-full p-4 sm:p-6">
         <!-- Header: Forum Title -->
         <div class="flex gap-x-4">
