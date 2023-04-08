@@ -26,6 +26,12 @@
             href: "/popular"
         },
         {
+            icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`,
+            title: "กระทู้ล่าสุด",
+            description: "รายการของกระทู้ทั้งหมด",
+            href: "/search"
+        },
+        {
             icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z" /><path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6z" /></svg>`,
             title: "หมวดหมู่การพูดคุย",
             description: "รายการหมวดหมู่ที่มีการพูดคุยกัน",
@@ -114,8 +120,22 @@
     {/if}
 </div>
 
+<!-- Latest Topics -->
+<HomeSectionHeader {...sectionHeaders[2]} />
+<div class="flex w-full gap-x-2 mb-10">
+    {#if home}
+        {#each home?.latestTopics?.slice(0, Math.min(home?.latestTopics.length, colAmount)) as popularTopic}
+            <PopularCard {popularTopic} />
+        {/each}
+    {:else}
+        {#each Array(colAmount) as _}
+            <SkeletonPopularCard />
+        {/each}
+    {/if}
+</div>
+
 <!-- Categories -->
-<HomeSectionHeader {...sectionHeaders[2]} bind:buttonName={carouselButtonName} />
+<HomeSectionHeader {...sectionHeaders[3]} bind:buttonName={carouselButtonName} />
 <div class="{isExpandCarousel ? 'grid' : 'flex items-center'} gap-2 w-full mb-10 overflow-x-hidden" style="grid-template-columns: repeat(auto-fill, minmax({minimumCategoryCardWidth}px, 1fr))">
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <div class="bg-gray-400 hover:bg-gray-500 transition-bg ease-in duration-200 rounded-full p-1 shadow-lg cursor-pointer z-10 opacity-50 {isExpandCarousel ? 'hidden': ''}" on:click={() => setCarouselIndex(-1)}>

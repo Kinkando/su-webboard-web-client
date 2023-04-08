@@ -6,6 +6,7 @@ import type { ReportStatistic } from "./report";
 export interface HomeUser {
     announcements: Announcement[]
     popularTopics: Forum[]
+    latestTopics: Forum[]
     categories: CategoryDetail[]
 }
 
