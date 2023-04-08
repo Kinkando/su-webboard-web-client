@@ -4,7 +4,7 @@
     import Chart from 'chart.js/auto';
 	import LoadingSpinner from "@components/spinner/LoadingSpinner.svelte";
 	import type { HomeAdmin } from "@models/home";
-	import { timeRange } from '@util/datetime';
+	import { timeRangeDate } from '@util/datetime';
 	import { initAdminSocket } from "@util/socket";
     import adminSocket from "@stores/admin_socket";
 	import UserOnlineCard from "@components/user/UserOnlineCard.svelte";
@@ -56,7 +56,7 @@
             for (const date of Object.keys(homeAdmin.forums).reverse()) {
                 (lineChart.data.datasets[0].backgroundColor as string[]).push(dateColor(new Date(date)))
                 lineChart.data.datasets[0].data.push(homeAdmin.forums[date])
-                lineChart.data.labels.push(timeRange(new Date(date)))
+                lineChart.data.labels.push(timeRangeDate(new Date(date)))
             }
         }
         lineChart.update()
@@ -137,7 +137,7 @@
     const dateLabel = (date: Date, decreaseDate: number) => {
         const newDate = new Date(date)
         newDate.setDate(newDate.getDate() - decreaseDate)
-        return {date: timeRange(newDate), color: dateColor(newDate)}
+        return {date: timeRangeDate(newDate), color: dateColor(newDate)}
     }
 
     const dateColor = (date: Date) => {

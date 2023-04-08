@@ -16,6 +16,12 @@ export function timeRange(dateTime: Date, withoutSuffix = false) {
     return dayjs(dateTime).fromNow(withoutSuffix)
 }
 
+export function timeRangeDate(dateTime: Date) {
+    const isoDate = new Date().toISOString()
+    const now = new Date(isoDate.substring(0, isoDate.indexOf('T')))
+    return dayjs(dateTime).from(now)
+}
+
 export function timeFormat(dateTime: Date) {
     return new Date(dateTime).toLocaleString('th', {
         year: 'numeric',

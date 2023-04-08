@@ -34,8 +34,8 @@
     let editAttachments: Attachment[];
 
     // Edit comment
-    export let label: string | undefined = undefined;
-    export let comment: string | undefined = undefined;
+    export let label: string = "";
+    export let comment: string = ""
     let editComment: string;
 
     const setOpenEditModal = (isOpen: boolean) => {
@@ -189,7 +189,7 @@
     </Modal>
 {/if}
 
-{#if label && comment}
+{#if label}
     <Modal bind:open={openEditCommentModal}>
         <CommentReply
             bind:label
