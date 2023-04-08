@@ -23,12 +23,14 @@
             }
             return attachment
         }))
+        fileInput.value = ''
     }
     const removeImage = (index: number) => {
         if (attachments[index].uuid) {
             deleteImageUUIDs.push(attachments[index].uuid!)
         }
         attachments = attachments.filter((_, idx) => index !== idx)
+        fileInput.value = ''
     }
 
     $: isDisabled = !comment && !attachments.length
