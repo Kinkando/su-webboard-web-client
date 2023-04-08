@@ -1,6 +1,7 @@
 <script lang="ts">
 	import CommonScreen from '@components/shared/CommonScreen.svelte';
 	import { sendResetPassword } from '@services/firebase';
+	import { alert } from '@stores/alert';
     import { Button, Card, Label, Input } from 'flowbite-svelte';
 
     let email = ""
@@ -8,6 +9,7 @@
 
     const forgotPassword = () => {
         countdown = 60;
+        alert({ type:'success', message: `กรุณาเช็คกล่องจดหมายในอีเมลของท่าน เพื่อทำการเปลี่ยนแปลงรหัสผ่าน` })
         const countdownResetPassword = setInterval(() => {
             countdown--;
             if (countdown === 0) {

@@ -2,10 +2,7 @@
 	import { isOpenPushNotification, setPinTopbar, setPushNotification, isPinTopbar, isAutoSlideCategory, setAutoSlideCategory } from "@util/localstorage";
 	import { Breadcrumb, BreadcrumbItem, DarkMode, Toggle } from "flowbite-svelte";
 
-    $: isDarkTheme = (() => {
-        const theme = localStorage.getItem('color-theme')
-        return theme !== null && theme === 'dark'
-    })()
+    $: isDarkTheme = (() => localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches))()
     function toggleTheme() {
         const toggle = document.getElementById('theme-toggle')
         if (toggle) {
