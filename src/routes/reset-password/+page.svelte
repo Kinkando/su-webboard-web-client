@@ -2,7 +2,9 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import CommonScreen from '@components/shared/CommonScreen.svelte';
+	import LoadingSpinner from '@components/spinner/LoadingSpinner.svelte';
 	import { resetPassword } from '@services/firebase';
+	import { alert } from '@stores/alert';
     import { Button, Card, Label, Input } from 'flowbite-svelte';
 
     export let data: { email: string };
@@ -11,16 +13,27 @@
 
     $: oobCode = $page.url.searchParams.get('oobCode')!
 
+    let isLoading = false;
     const resetPass = async () => {
         if (password.length && password === confirmPassword) {
-            await resetPassword(oobCode, password)
-            goto('/login')
+            try {
+                isLoading = true;
+                await resetPassword(oobCode, password)
+                await goto('/login')
+                alert({type: 'success', message: 'เปลี่ยนรหัสผ่านสำเร็จ'})
+            } catch (error) {
+                alert({type: 'error', message: 'เกิดข้อผิดพลาดบางอย่าง กรุณาลองใหม่อีกครั้ง'})
+            } finally {
+                isLoading = false;
+            }
         }
     }
 
     let isShowPassword = false
     let isShowConfirmPassword = false
 </script>
+
+<LoadingSpinner bind:isLoading />
 
 <CommonScreen page="reset-password">
     <Card class="m-auto border-none">
