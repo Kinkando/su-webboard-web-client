@@ -5,14 +5,15 @@ import 'dayjs/locale/th'
 dayjs.extend(relativeTime)
 dayjs.locale('th')
 
-export function timeRange(dateTime: Date) {
+export function timeRange(dateTime: Date, withoutSuffix = false) {
+    const suffix = withoutSuffix ? '' : 'ที่แล้ว'
     const second = dayjs(new Date()).diff(dateTime, 'second')
     if (second < 60 && second > 2) {
-        return `${second} วินาทีที่แล้ว`
+        return `${second} วินาที${suffix}`
     } else if (second<=2) {
-        return `ไม่กี่วินาทีที่แล้ว`
+        return `ไม่กี่วินาที${suffix}`
     }
-    return dayjs(dateTime).fromNow()
+    return dayjs(dateTime).fromNow(withoutSuffix)
 }
 
 export function timeFormat(dateTime: Date) {

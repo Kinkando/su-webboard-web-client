@@ -1,10 +1,10 @@
 <script lang="ts">
+	import notificationSocket from '@stores/notification_socket';
     import { DarkMode, Indicator, Input, Popover, Tooltip } from "flowbite-svelte";
     import { slide } from 'svelte/transition';
 	import { goto } from "$app/navigation";
 	import { page } from '$app/stores';
 	import { UserType } from "@models/auth";
-	import type { User } from "@models/user";
 	import { revokeToken as revokeTokenSrv } from '@services/authen';
     import { alert } from '@stores/alert';
 	import notificationStore from '@stores/notification';
@@ -24,6 +24,9 @@
             revokeTokenSrv(token.accessToken, token.refreshToken)
         }
         revokeToken();
+        if ($notificationSocket) {
+            $notificationSocket.disconnect()
+        }
         await goto('login')
         alert({
             type: 'success',

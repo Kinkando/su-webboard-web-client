@@ -15,6 +15,7 @@ export enum SocketEvent {
 
     // Admin
     UserConnect = 'userConnected',
+    UserUpdate = 'userUpdated',
     UserDisconnect = 'userDisconnected',
     AdminConnect = 'adminConnected'
 }

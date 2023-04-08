@@ -5,13 +5,13 @@
 
     export let user: User;
 
-    let loginTimeText = timeRange(user.loginAt)
-    const period = setInterval(() => loginTimeText = timeRange(user.loginAt), 1000)
+    let loginTimeText = timeRange(user.loginAt, true)
+    const period = setInterval(() => loginTimeText = timeRange(user.loginAt, true), 1000)
     onDestroy(() => clearInterval(period))
 </script>
 
 <div class="flex flex-col rounded-md max-w-[8rem] overflow-hidden">
-    <img src="{user.userImageURL}" alt="" class="min-w-[4rem] max-w-[4rem] rounded-full m-auto">
+    <img src="{user.userImageURL}" alt="" class="min-w-[4rem] max-w-[4rem] min-h-[4rem] max-h-[4rem] rounded-full m-auto">
     {#if user.userType === 'tch'}
         <div class="flex items-center gap-x-1 m-auto overflow-hidden w-full justify-center">
             <div class="overflow-hidden whitespace-nowrap text-ellipsis text-center">{user.userDisplayName}</div>
