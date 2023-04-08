@@ -210,7 +210,7 @@
             </svg>
 
             {#if $notificationStore?.unreadNotiCount}
-                <Indicator color="red" size="md" placement="top-right" class="right-1.5 top-1.5 p-2">
+                <Indicator color="red" size="md" placement="top-right" class="right-1.5 top-1.5 {$notificationStore.unreadNotiCount < 10 ? 'p-2' : 'p-2.5'}">
                     <span class="text-white text-xs">{$notificationStore?.unreadNotiCount}</span>
                 </Indicator>
             {/if}
