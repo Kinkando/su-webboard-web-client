@@ -66,8 +66,8 @@
     <div class="flex justify-end">
         {#if user.isFollowing}
             <Button color="blue" gradient class="md:w-fit whitespace-nowrap"><Chevron><div class="whitespace-nowrap">กำลังติดตาม</div></Chevron></Button>
-            <Dropdown class="w-32" bind:open>
-                <DropdownItem on:click={notification}>{ user.isNoti ? 'ปิดการแจ้งเตือน' : 'เปิดการแจ้งเตือน' }</DropdownItem>
+            <Dropdown class="overflow-hidden my-2 w-36" bind:open>
+                <DropdownItem on:click={notification}>{ user.isNoti ? 'ปิดการแจ้งเตือน\nการสร้างกระทู้ใหม่' : 'เปิดการแจ้งเตือน\nการสร้างกระทู้ใหม่' }</DropdownItem>
                 <DropdownItem on:click={following}>เลิกติดตาม</DropdownItem>
             </Dropdown>
         {:else}
