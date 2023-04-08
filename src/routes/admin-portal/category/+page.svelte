@@ -151,8 +151,7 @@
         isLoading = true
         isOpenDeleteModal = false
         await deleteCategories([Number(deleteItem._id)])
-        data = data.filter(item => item._id !== deleteItem._id)
-        total -= 1
+        await fetchCategories(offset, limit)
         alert({
             type: 'success',
             message: `ลบรายการสำเร็จ`
@@ -163,8 +162,7 @@
         if (selectedItems.length) {
             isLoading = true
             await deleteCategories(selectedItems.map(item => Number(item._id)))
-            data = data.filter(item => !selectedItems.map(item => item._id).includes(item._id))
-            total -= selectedItems.length
+            await fetchCategories(offset, limit)
             selectedItems = []
             alert({
                 type: 'success',

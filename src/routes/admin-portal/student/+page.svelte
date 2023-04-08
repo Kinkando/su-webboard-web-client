@@ -257,8 +257,7 @@
         isLoading = true
         isOpenDeleteModal = false;
         await deleteUsers([selectedItem._id])
-        data = data.filter(item => item._id !== selectedItem._id)
-        total -= 1
+        await getStudents(offset, limit)
         alert({
             type: 'success',
             message: `ลบรายการสำเร็จ`
@@ -269,8 +268,7 @@
         if (selectedItems.length) {
             isLoading = true
             await deleteUsers(selectedItems.map(item => item._id))
-            data = data.filter(item => !selectedItems.map(item => item._id).includes(item._id))
-            total -= selectedItems.length
+            await getStudents(offset, limit)
             selectedItems = [];
             alert({
                 type: 'success',
