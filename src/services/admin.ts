@@ -111,7 +111,7 @@ export async function deleteReport(reportUUIDs: string[]) {
 
 export async function getHomeAdminData() {
     const res = await api<HomeAdmin>({
-        url: '/admin/home',
+        url: `/admin/home?fromDate=${new Date()}`,
         method: "GET",
     })
     return res.data!

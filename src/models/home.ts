@@ -11,7 +11,7 @@ export interface HomeUser {
 
 export interface HomeAdmin {
     reportStatus: ReportStatistic
-    categories: CategoryDetail[]
+    // categories: CategoryDetail[]
     forums: ForumCreated
 }
 

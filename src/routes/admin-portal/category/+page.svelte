@@ -100,6 +100,7 @@
                     label: "หมวดหมู่",
                     placeholder: "กรุณากรอกหมวดหมู่",
                     value: "",
+                    maxLength: 20,
                 },
                 {
                     id: 'categoryHexColor',
@@ -107,6 +108,8 @@
                     label: "สี",
                     placeholder: "กรุณากรอกสี",
                     value: "#000000",
+                    minLength: 4,
+                    maxLength: 7,
                 },
             ]
         }

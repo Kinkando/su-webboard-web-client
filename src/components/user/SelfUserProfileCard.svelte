@@ -66,6 +66,16 @@
 
     const updateProfile = async () => {
         isLoading = true;
+        const length = draft.userDisplayName.trim().length;
+        if (length < 3 || length > 50) {
+            alert({
+                type: 'error',
+                message: `ชื่อที่แสดงบนหน้าเว็บ ต้องมีความยาว${length < 3 ? 'อย่างน้อย 3' : 'ไม่เกิน 50'} ตัวอักษร`,
+            })
+            isLoading = false;
+            return
+        }
+
         const res = await updateUserProfile(draft.userDisplayName.trim() || user.userDisplayName, statusGroup === StatusGroup.anonymous, image)
         if (res.data) {
             alert({

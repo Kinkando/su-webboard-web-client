@@ -176,7 +176,7 @@
 </Popover>
 
 {#if title && description}
-    <Modal bind:open={openEditForumModal} defaultClass="w-full" title="แก้ไข{menuSuffixName}">
+    <Modal bind:open={openEditForumModal} defaultClass="w-full max-w-5xl m-auto" title="แก้ไข{menuSuffixName}">
         <ForumEditor
             bind:title={editTitle}
             bind:description={editDescription}

@@ -51,7 +51,7 @@
         if (ellipsis) {
             ellipsisButton.click()
             await deleteNoti(notification.notiUUID)
-            $notificationSocket.emit('refresh', getUserUUID())
+            // $notificationSocket.emit('refresh', getUserUUID())
             dispatch('delete', notification.notiUUID)
             alert({type: 'success', message: 'ลบการแจ้งเตือนออกแล้ว'})
         }

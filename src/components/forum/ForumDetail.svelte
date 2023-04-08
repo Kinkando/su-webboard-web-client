@@ -31,8 +31,8 @@
     let newComment: (comment: Comment) => Promise<void>;
 
     // Edit modal
-    let title: FormSchema = {value: forumDetail.title, label: `หัวข้อกระทู้`, placeholder: `กรุณากรอกหัวข้อกระทู้...`}
-    let description: FormSchema = {value: forumDetail.description!, label: "รายละเอียด", placeholder: "กรุณากรอกรายละเอียด..."}
+    let title: FormSchema = {value: forumDetail.title, label: `หัวข้อกระทู้`, placeholder: `กรุณากรอกหัวข้อกระทู้...`, maxLength: 100}
+    let description: FormSchema = {value: forumDetail.description!, label: "รายละเอียด", placeholder: "กรุณากรอกรายละเอียด...", maxLength: 10000}
     let attachments: Attachment[] = [];
     let label = "แสดงความคิดเห็น"
 
@@ -169,7 +169,7 @@
 
 <LoadingSpinner bind:isLoading />
 
-<div class="rounded-lg shadow-md w-full h-full p-4 sm:p-6 overflow-hidden bg-white text-black dark:bg-gray-700 dark:text-white ease-in duration-200">
+<div class="rounded-lg shadow-md w-full h-full p-4 sm:p-6 overflow-hidden bg-white text-black dark:bg-gray-700 dark:text-white ease-in duration-200 max-w-5xl m-auto">
     <div class="flex">
         <div class="w-full text-xl font-bold">
             {forumDetail.title}
@@ -205,7 +205,7 @@
 
     <hr class="my-3 dark:border-gray-500">
     <div class="font-medium min-h-[12rem]">
-        {@html forumDetail.description.replaceAll('\n', '<br>')}
+        <span class="break-words">{@html forumDetail.description.replaceAll('\n', '<br>')}</span>
         {#if imageURLs.length}
             <ForumImage bind:imageURLs />
         {/if}

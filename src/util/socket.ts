@@ -7,15 +7,26 @@ import userStore from '@stores/user'
 import { SocketEvent } from '@commons/socket-event'
 import { pushNotification } from '@stores/toast'
 import notificationSocket from '@stores/notification_socket'
+import type { User as UserProfile } from '@models/user'
 import type { User } from '@stores/admin_socket'
 import adminSocket from '@stores/admin_socket'
 
 export async function initAdminSocket() {
     const socket = io(`${import.meta.env.VITE_API_HOST}/admin`)
-    socket.on('connect', () => socket.on(SocketEvent.AdminConnect, (users: User[]) => adminSocket.set(users.map(user => {
-        user.socketIDs = [(user as any).socketID]
-        return user
-    }))))
+    socket.on('connect', () => socket.on(SocketEvent.AdminConnect, (users: User[]) => {
+        const uniqueUser: User[] = [];
+        users.forEach(user => {
+            const findIndex = uniqueUser.findIndex(u => u.userUUID === user.userUUID)
+            if (findIndex !== -1) {
+                uniqueUser[findIndex].socketIDs.push((user as any).socketID)
+            } else {
+                const newUser = {...user}
+                newUser.socketIDs = [(user as any).socketID]
+                uniqueUser.push(newUser)
+            }
+        })
+        adminSocket.set(uniqueUser)
+    }))
 
     socket.on(SocketEvent.UserConnect, (data: {user: User, socketID: string}) => adminSocket.update(all => {
         const findIndex = all.findIndex(u => u.userUUID === data.user.userUUID)
@@ -28,13 +39,36 @@ export async function initAdminSocket() {
         return [...all, newUser]
     }))
 
-    socket.on(SocketEvent.UserDisconnect, (socketID: string) => adminSocket.update(all => {
-        const findIndex = all.findIndex(user => user.socketIDs.includes(socketID))
-        if (findIndex !== -1) {
-            if (all[findIndex].socketIDs?.length === 1) {
-                return all.filter((_, index) => index !== findIndex) || []
+    socket.on(SocketEvent.UserUpdate, (userProfile: UserProfile) => adminSocket.update(all => {
+        all.forEach((user, index) => {
+            if (user.userUUID === userProfile.userUUID!) {
+                all[index].userDisplayName = userProfile.userDisplayName!
+                all[index].userFullName = userProfile.userFullName!
+                all[index].userImageURL = userProfile.userImageURL!
+                if (all[index].userType === 'std') {
+                    all[index].studentID = userProfile.studentID!
+                }
             }
-            all[findIndex].socketIDs = all[findIndex].socketIDs.filter(id => socketID !== id)
+        })
+        return all
+    }))
+
+    socket.on(SocketEvent.UserDisconnect, (data: {socketID?: string, userUUID?: string}) => adminSocket.update(all => {
+        const findIndex = all.findIndex(user => {
+            if (data.socketID) {
+                return user.socketIDs.includes(data.socketID)
+            }
+            return user.userUUID === data.userUUID
+        })
+        if (findIndex !== -1) {
+            if (data.socketID) {
+                if (all[findIndex].socketIDs?.length === 1) {
+                    return all.filter((_, index) => index !== findIndex) || []
+                }
+                all[findIndex].socketIDs = all[findIndex].socketIDs.filter(id => data.socketID !== id)
+            } else {
+                all = all.filter(user => user.userUUID !== data.userUUID)
+            }
         }
         return all
     }))

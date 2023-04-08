@@ -9,8 +9,8 @@ export interface Schema {
     label: string
     placeholder: string
     value: string
-    minlength?: number
-    maxlength?: number
+    minLength?: number
+    maxLength?: number
     pattern?: RegExp
     validations?: ((req: string) => string)[]
     disabled?: boolean

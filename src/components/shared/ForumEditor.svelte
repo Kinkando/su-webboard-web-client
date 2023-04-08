@@ -6,6 +6,7 @@
 	import { StatusGroup, type User } from '@models/user';
     import { alert } from "@stores/alert";
 	import { defined } from '@util/generic';
+	import { maxLength } from '@util/validation';
 
     export let title: FormSchema;
     export let description: FormSchema;
@@ -32,12 +33,14 @@
             }
             return attachment
         }))
+        fileInput.value = ''
     }
     const removeImage = (index: number) => {
         if (attachments[index].uuid) {
             deleteImageUUIDs.push(attachments[index].uuid!)
         }
-        attachments = attachments.filter((_, idx) => index !== idx)
+        attachments = attachments.filter((_, idx) => index !== idx);
+        fileInput.value = ''
     }
 
     const postModes = [
@@ -74,6 +77,14 @@
                 }
             }
         }
+    }
+
+    $: if(title) {
+        title.value = maxLength(title.value, title.maxLength)
+    }
+
+    $: if(description) {
+        description.value = maxLength(description.value, description.maxLength)
     }
 </script>
 

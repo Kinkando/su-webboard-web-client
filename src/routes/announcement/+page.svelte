@@ -9,8 +9,8 @@
 	import { upsertAnnouncement } from "@services/announcement";
     import { alert } from "@stores/alert";
 
-    let title: FormSchema = {value: "", label: "หัวข้อการประกาศ", placeholder: "กรุณากรอกหัวข้อสำหรับประกาศจากทางมหาวิทยาลัย..."}
-    let description: FormSchema = {value: "", label: "รายละเอียด", placeholder: "กรุณากรอกรายละเอียด..."}
+    let title: FormSchema = {value: "", label: "หัวข้อการประกาศ", placeholder: "กรุณากรอกหัวข้อสำหรับประกาศจากทางมหาวิทยาลัย...", maxLength: 100}
+    let description: FormSchema = {value: "", label: "รายละเอียด", placeholder: "กรุณากรอกรายละเอียด...", maxLength: 10000}
     let attachments: Attachment[] = [];
     let submitName = "ยืนยัน"
     let isLoading = false;
@@ -44,7 +44,7 @@
     </Breadcrumb>
 </div>
 
-<div class="ease-in duration-200 bg-white dark:bg-gray-900 w-full rounded-md shadow-lg p-4 sm:p-6">
+<div class="ease-in duration-200 bg-white dark:bg-gray-900 w-full rounded-md shadow-lg p-4 sm:p-6 max-w-5xl m-auto">
     <ForumEditor
         bind:title
         bind:description

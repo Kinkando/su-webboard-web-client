@@ -1,10 +1,10 @@
 <script lang="ts">
+	import notificationSocket from '@stores/notification_socket';
     import { DarkMode, Indicator, Input, Popover, Tooltip } from "flowbite-svelte";
     import { slide } from 'svelte/transition';
 	import { goto } from "$app/navigation";
 	import { page } from '$app/stores';
 	import { UserType } from "@models/auth";
-	import type { User } from "@models/user";
 	import { revokeToken as revokeTokenSrv } from '@services/authen';
     import { alert } from '@stores/alert';
 	import notificationStore from '@stores/notification';
@@ -14,9 +14,6 @@
 
     export let userType: string
 
-    let user!: User;
-
-    $: if($userStore) { user = $userStore }
     let searchText = $page.url.searchParams.get('keyword')?.trim() || ''
 
     const defaultImageURL = "https://cdn-icons-png.flaticon.com/512/149/149071.png"
@@ -27,6 +24,9 @@
             revokeTokenSrv(token.accessToken, token.refreshToken)
         }
         revokeToken();
+        if ($notificationSocket) {
+            $notificationSocket.disconnect()
+        }
         await goto('login')
         alert({
             type: 'success',
@@ -63,9 +63,13 @@
         },
         {
             id: "profile",
-            text: "ผู้ใช้",
+            text: $userStore?.userDisplayName || "ผู้ใช้",
         },
     ]
+
+    $: if($userStore?.userDisplayName) {
+        tooltips[5].text = $userStore.userDisplayName
+    }
 
     $: isAutoHide = !isPinTopbar()
     let previousY = 0;
@@ -114,7 +118,7 @@
 
 <Popover defaultClass="overflow-hidden py-2" placement="bottom" class="{isAutoHide && isScrollDown ? 'hidden' : ''} z-30 w-fit border text-sm text-black dark:text-white -px-3" shadow triggeredBy="#{tooltips[5].id}" trigger="click">
     <div in:slide>
-        <a class="flex items-center gap-x-3 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 px-3 py-2" href="/profile/{user.userUUID}">
+        <a class="flex items-center gap-x-3 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 px-3 py-2" href="/profile/{$userStore?.userUUID}">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
             </svg>
@@ -217,7 +221,7 @@
             <img
                 alt=""
                 class="rounded-full w-10 h-10"
-                src="{user?.userImageURL || defaultImageURL}"
+                src="{$userStore?.userImageURL || defaultImageURL}"
             />
         </figure>
     </nav>

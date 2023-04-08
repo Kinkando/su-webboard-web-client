@@ -12,8 +12,8 @@
     export let announcementDetail: Announcement;
 
     // Edit modal
-    let title: FormSchema = {value: announcementDetail.title, label: `หัวข้อประกาศ`, placeholder: `กรุณากรอกหัวข้อประกาศ...`}
-    let description: FormSchema = {value: announcementDetail.description!, label: "รายละเอียด", placeholder: "กรุณากรอกรายละเอียด..."}
+    let title: FormSchema = {value: announcementDetail.title, label: `หัวข้อประกาศ`, placeholder: `กรุณากรอกหัวข้อประกาศ...`, maxLength: 100}
+    let description: FormSchema = {value: announcementDetail.description!, label: "รายละเอียด", placeholder: "กรุณากรอกรายละเอียด...", maxLength: 10000}
     let attachments: Attachment[] = [];
 
     function initImages() {
@@ -74,7 +74,7 @@
     $: userUUID = getUserUUID()
 </script>
 
-<div class="rounded-lg shadow-md w-full h-full p-4 sm:p-6 overflow-hidden bg-white text-black dark:bg-gray-700 dark:text-white ease-in duration-200">
+<div class="rounded-lg shadow-md w-full h-full p-4 sm:p-6 overflow-hidden bg-white text-black dark:bg-gray-700 dark:text-white ease-in duration-200 max-w-5xl m-auto">
     <div class="flex">
         <div class="w-full text-xl font-bold">
             {announcementDetail.title}
