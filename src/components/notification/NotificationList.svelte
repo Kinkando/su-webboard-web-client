@@ -10,8 +10,8 @@
 <header class="fixed z-30 h-10 w-full bg-white dark:bg-gray-900 shadow-sm text-center text-lg flex items-center justify-center gap-x-1 rounded-t-md py-1">
     <span>การแจ้งเตือน</span>
     {#if notification?.unreadNotiCount}
-        <Indicator color="red" size="lg">
-            <span class="text-white text-xs">{notification?.unreadNotiCount}</span>
+        <Indicator color="red" size="lg" class="relative {notification.unreadNotiCount < 10 ? 'p-2' : 'p-2.5'}">
+            <span class="text-white text-xs {notification.unreadNotiCount < 10 ? '' : 'absolute left-[2px]'}">{notification?.unreadNotiCount}</span>
         </Indicator>
     {/if}
 </header>
