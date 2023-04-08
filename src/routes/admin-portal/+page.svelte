@@ -30,11 +30,11 @@
         isLoading = false;
 
         if (homeAdmin.reportStatus) {
-            reportCards[0].total = homeAdmin.reportStatus.pending
-            reportCards[1].total = homeAdmin.reportStatus.resolved
-            reportCards[2].total = homeAdmin.reportStatus.rejected
-            reportCards[3].total = homeAdmin.reportStatus.closed
-            reportCards[4].total = homeAdmin.reportStatus.invalid
+            reportCards[0].total = homeAdmin.reportStatus.pending || 0
+            reportCards[1].total = homeAdmin.reportStatus.resolved || 0
+            reportCards[2].total = homeAdmin.reportStatus.rejected || 0
+            reportCards[3].total = homeAdmin.reportStatus.closed || 0
+            reportCards[4].total = homeAdmin.reportStatus.invalid || 0
 
             doughnutChart.data.datasets[0].data = [
                 homeAdmin.reportStatus.pending,
@@ -233,7 +233,7 @@
                     {#if isLoading}
                         <div class="w-1/3 h-6 mx-auto `my`-2 sm:my-4 bg-gray-300 rounded-full dark:bg-gray-600" />
                     {:else}
-                        <div class="ease-in duration-200 text-black dark:text-gray-200 whitespace-nowrap text-ellipsis overflow-hidden p-2 sm:p-4">{reportCard.total}</div>
+                        <div class="ease-in duration-200 text-black dark:text-gray-200 whitespace-nowrap text-ellipsis overflow-hidden p-2 sm:p-4">{reportCard.total || 0}</div>
                     {/if}
                 </div>
             </div>
