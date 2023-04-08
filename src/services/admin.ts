@@ -54,6 +54,7 @@ export async function revokeUsers(userUUIDs: string[], cookies?: Cookies) {
 }
 
 export async function getCategories(search: string, offset: number, limit: number, sortBy?: string) {
+    search = search.replaceAll("#", "")
     const res = await api<{ total: number, data: Category[] }>({
         url: `/admin/category?offset=${offset}&limit=${limit}${search ? '&search='+search : ''}${queryParams('sortBy', sortBy)}`,
         method: "GET",
@@ -111,7 +112,7 @@ export async function deleteReport(reportUUIDs: string[]) {
 
 export async function getHomeAdminData() {
     const res = await api<HomeAdmin>({
-        url: `/admin/home?fromDate=${new Date()}`,
+        url: `/admin/home`,
         method: "GET",
     })
     return res.data!

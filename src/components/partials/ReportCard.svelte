@@ -17,9 +17,13 @@
     let reportGroup = ""
 
     let reportText = "";
+    let limitText = 120;
     const dispatch = createEventDispatcher()
     function reportAction() {
         dispatch('report', isOther ? reportText : reportGroup)
+    }
+    $: if (reportText.length > limitText) {
+        reportText = reportText.substring(0, 120)
     }
 </script>
 
@@ -30,10 +34,11 @@
     <h3 class="text-lg font-bold text-gray-500 dark:text-gray-400">คุณต้องการรายงาน{suffixName}นี้หรือไม่?</h3>
     <div class="mt-1 mb-5">คุณสามารถส่งรายงานสิ่งที่ดูไม่เหมาะสมได้ตลอดเวลา และเราจะไม่แจ้งให้ผู้ใดทราบว่าใครเป็นผู้รายงาน</div>
     {#each reportGroups as report}
-        <Radio bind:group={reportGroup} value={report} class="w-fit my-1.5">{report}</Radio>
+        <Radio bind:group={reportGroup} value={report} class="w-fit my-1.5 text-left">{report}</Radio>
     {/each}
     {#if isOther}
-        <Textarea placeholder="กรุณากรอกรายละเอียด ..." bind:value={reportText} class="min-h-[6rem] placeholder-gray-300 !bg-gray-50 dark:!bg-gray-700 sm:mb-4 mb-2" />
+        <Textarea placeholder="กรุณากรอกรายละเอียด ..." bind:value={reportText} class="min-h-[6rem] max-h-[12rem] placeholder-gray-300 !bg-gray-50 dark:!bg-gray-700" />
+        <div class="mb-2 sm:mb-4 text-sm text-right">{reportText.length}/{limitText}</div>
     {/if}
     <Button color="red" class="mr-2" disabled={reportGroup.length === 0 || (reportText.length === 0 && isOther)} on:click={reportAction}>ส่งรายงาน</Button>
     <Button color="alternative" on:click={() => open = false}>ยกเลิก</Button>

@@ -12,7 +12,6 @@
 	import { getUserUUID } from "@util/localstorage";
 	import { createEventDispatcher, onDestroy } from "svelte";
 	import { timeRange } from "@util/datetime";
-	import { page } from "$app/stores";
 	import { browser } from "$app/environment";
 
     export let label: string;
