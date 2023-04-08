@@ -29,19 +29,21 @@
         homeAdmin = await getHomeAdminData()
         isLoading = false;
 
-        reportCards[0].total = homeAdmin.reportStatus.pending
-        reportCards[1].total = homeAdmin.reportStatus.resolved
-        reportCards[2].total = homeAdmin.reportStatus.rejected
-        reportCards[3].total = homeAdmin.reportStatus.closed
-        reportCards[4].total = homeAdmin.reportStatus.invalid
+        if (homeAdmin.reportStatus) {
+            reportCards[0].total = homeAdmin.reportStatus.pending
+            reportCards[1].total = homeAdmin.reportStatus.resolved
+            reportCards[2].total = homeAdmin.reportStatus.rejected
+            reportCards[3].total = homeAdmin.reportStatus.closed
+            reportCards[4].total = homeAdmin.reportStatus.invalid
 
-        doughnutChart.data.datasets[0].data = [
-            homeAdmin.reportStatus.pending,
-            homeAdmin.reportStatus.resolved,
-            homeAdmin.reportStatus.rejected,
-            homeAdmin.reportStatus.closed,
-            homeAdmin.reportStatus.invalid,
-        ]
+            doughnutChart.data.datasets[0].data = [
+                homeAdmin.reportStatus.pending,
+                homeAdmin.reportStatus.resolved,
+                homeAdmin.reportStatus.rejected,
+                homeAdmin.reportStatus.closed,
+                homeAdmin.reportStatus.invalid,
+            ]
+        }
         doughnutChart.data.datasets[0].backgroundColor = ['#0064F2', '#0E9F6E', '#FF8A4C', '#F05252', '#6B7280']
         doughnutChart.data.labels = ['Pending', 'Resolved', 'Rejected', 'Closed', 'Invalid']
         doughnutChart.update()
@@ -49,10 +51,13 @@
         lineChart.data.datasets[0].backgroundColor = []
         lineChart.data.datasets[0].data = []
         lineChart.data.labels = []
-        for (const date of Object.keys(homeAdmin.forums).reverse()) {
-            (lineChart.data.datasets[0].backgroundColor as string[]).push(dateColor(new Date(date)))
-            lineChart.data.datasets[0].data.push(homeAdmin.forums[date])
-            lineChart.data.labels.push(timeRange(new Date(date)))
+
+        if (homeAdmin.forums) {
+            for (const date of Object.keys(homeAdmin.forums).reverse()) {
+                (lineChart.data.datasets[0].backgroundColor as string[]).push(dateColor(new Date(date)))
+                lineChart.data.datasets[0].data.push(homeAdmin.forums[date])
+                lineChart.data.labels.push(timeRange(new Date(date)))
+            }
         }
         lineChart.update()
     })
@@ -66,7 +71,7 @@
                 datasets: [
                     {
                         // label: 'My First Dataset',
-                        data: [1],
+                        data: [0, 0, 0, 0, 0],
                         backgroundColor: ['#0064F2', '#0E9F6E', '#FF8A4C', '#F05252', '#6B7280'],
                         // hoverOffset: 4,
                         borderWidth: 0
@@ -253,9 +258,15 @@
         <div class="p-2 sm:p-4 bg-gray-300 dark:bg-gray-900 ease-in duration-200 !text-black dark:!text-white">
             <span class="">สรุปสถานะของการร้องเรียน</span>
         </div>
-        <div class="w-72 relative px-6 py-4 m-auto">
+        <div class="w-72 relative px-6 py-4 m-auto {homeAdmin?.reportStatus ? '' : 'hidden'}">
             <canvas bind:this={doughnutChartElm} id="doughnut-chart"></canvas>
         </div>
+        {#if !homeAdmin?.reportStatus}
+            <div class="my-2 m-auto">
+                <img src="/images/empty.png" alt="" class="m-auto w-48">
+                <div class="text-center mt-4 text-black dark:text-white">ไม่พบข้อมูล</div>
+            </div>
+        {/if}
     </div>
 </div>
 
