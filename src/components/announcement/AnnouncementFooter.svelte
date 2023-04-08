@@ -1,12 +1,8 @@
 <script lang="ts">
-	import { timeRange } from '@util/datetime';
-
     export let userUUID: string
     export let userDisplayName: string;
     export let userImageURL: string;
-    export let createdAt: Date;
-
-    $: time = (() => timeRange(createdAt))()
+    export let createdAt: string;
 </script>
 
 <hr class="mt-6 mb-3 dark:border-gray-500">
@@ -19,7 +15,7 @@
             <a href="/profile/{userUUID}" class="overflow-hidden w-fit max-w-full">
                 <div class="font-bold overflow-hidden text-ellipsis whitespace-nowrap hover:underline">{userDisplayName}</div>
             </a>
-            <div class="font-light text-sm overflow-hidden text-ellipsis whitespace-nowrap">{time}</div>
+            <div class="font-light text-sm overflow-hidden text-ellipsis whitespace-nowrap">{createdAt}</div>
         </div>
     </div>
 </div>

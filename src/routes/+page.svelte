@@ -98,6 +98,11 @@
     {#if home}
         {#each home?.announcements?.slice(0, Math.min(home?.announcements.length, colAmount)) as announcement}
             <AnnouncementCard {announcement} />
+        {:else}
+            <div class="my-2 m-auto">
+                <img src="/images/empty.png" alt="" class="m-auto w-48">
+                <div class="text-center mt-4 text-black dark:text-white">ไม่พบข้อมูล</div>
+            </div>
         {/each}
     {:else}
         {#each Array(colAmount) as _}
@@ -112,6 +117,11 @@
     {#if home}
         {#each home?.popularTopics?.slice(0, Math.min(home?.popularTopics.length, colAmount)) as popularTopic}
             <PopularCard {popularTopic} />
+        {:else}
+            <div class="my-2 m-auto">
+                <img src="/images/empty.png" alt="" class="m-auto w-48">
+                <div class="text-center mt-4 text-black dark:text-white">ไม่พบข้อมูล</div>
+            </div>
         {/each}
     {:else}
         {#each Array(colAmount) as _}
@@ -126,6 +136,11 @@
     {#if home}
         {#each home?.latestTopics?.slice(0, Math.min(home?.latestTopics.length, colAmount)) as popularTopic}
             <PopularCard {popularTopic} />
+        {:else}
+            <div class="my-2 m-auto">
+                <img src="/images/empty.png" alt="" class="m-auto w-48">
+                <div class="text-center mt-4 text-black dark:text-white">ไม่พบข้อมูล</div>
+            </div>
         {/each}
     {:else}
         {#each Array(colAmount) as _}
@@ -149,6 +164,11 @@
             {#key category}
                 <CategoryCard bind:direction={carouselDirection} {category} />
             {/key}
+        {:else}
+            <div class="my-2 m-auto">
+                <img src="/images/empty.png" alt="" class="m-auto w-48">
+                <div class="text-center mt-4 text-black dark:text-white">ไม่พบข้อมูล</div>
+            </div>
         {/each}
     {:else}
         {#each Array(carouselAmount) as _}
