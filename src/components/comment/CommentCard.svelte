@@ -13,6 +13,7 @@
 	import { createEventDispatcher, onDestroy } from "svelte";
 	import { timeRange } from "@util/datetime";
 	import { page } from "$app/stores";
+	import { browser } from "$app/environment";
 
     export let label: string;
     export let comment: Comment;
@@ -139,14 +140,18 @@
 
     export let scrollView: boolean;
     $: commentUUID = $page.url.searchParams.get('commentUUID')
-    $: commentUUID === comment.commentUUID && scrollView && scrollIntoView()
+    $: commentUUID === comment.commentUUID && scrollIntoView()
     function scrollIntoView() {
-        const el = document.querySelector(`#comment-${commentUUID}`);
-        if (!el) return;
-        // el.scrollIntoView({ behavior: 'smooth' });
-        let dims = el.getBoundingClientRect();
-        window.scrollTo({left: window.scrollX, top: dims.top - 70, behavior: 'smooth'});
-        scrollView = false;
+        const pull = setInterval(() => {
+            if (browser) {
+                clearInterval(pull)
+                const el = document.querySelector(`#comment-${commentUUID}`);
+                if (!el) return;
+                let dims = el.getBoundingClientRect();
+                window.scrollTo({left: window.scrollX, top: dims.top - 70, behavior: 'smooth'});
+                scrollView = false;
+            }
+        }, 100)
     }
 </script>
 

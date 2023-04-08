@@ -10,6 +10,7 @@
 	import { getComment, getComments } from "@services/comment";
     import socket from '@stores/forum_socket'
 	import { getSessionUUID } from "@util/localstorage";
+	import { browser } from "$app/environment";
 
     export let authorUUID: string;
     export let orderBy: Order;
@@ -58,13 +59,16 @@
         }
     }
 
-    let isFetch = true;
     $: commentUUID = $page.url.searchParams.get('commentUUID')
-    $: if (commentUUID?.length && comments.length && isFetch) {
-        fetchUntilFound()
+    $: if (commentUUID) {
+        const pull = setInterval(() => {
+            if (browser) {
+                clearInterval(pull)
+                fetchUntilFound()
+            }
+        }, 100)
     }
     async function fetchUntilFound() {
-        isFetch = false
         let isMore = true;
         while(isMore) {
             for(let i=0; i<comments.length; i++) {
