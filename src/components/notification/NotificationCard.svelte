@@ -19,6 +19,10 @@
     const period = setInterval(() => notiAt = timeRange(notification.notiAt), 1000)
     onDestroy(() => clearInterval(period))
 
+    $: if (notification) {
+        notiAt = timeRange(notification.notiAt)
+    }
+
     const dispatch = createEventDispatcher()
     const gotoLink = async (event: MouseEvent & { currentTarget: EventTarget & HTMLDivElement }) => {
         if (ellipsis) {

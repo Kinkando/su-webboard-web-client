@@ -59,28 +59,31 @@
         }
     }
 
-    $: commentUUID = $page.url.searchParams.get('commentUUID')
-    $: if (commentUUID) {
-        const pull = setInterval(() => {
+    let isFirstTime = true
+    $: activeCommentUUID = $page.url.searchParams.get('commentUUID')
+    $: if (activeCommentUUID) {
+        const pull = setInterval(async () => {
             if (browser) {
                 clearInterval(pull)
-                fetchUntilFound()
+                await fetchUntilFound()
+                isFirstTime = false;
             }
         }, 100)
     }
     async function fetchUntilFound() {
         let isMore = true;
-        while(isMore) {
+        let count = 0;
+        while(isMore || isFirstTime) {
             for(let i=0; i<comments.length; i++) {
                 const comment = comments[i]
-                if (comment.commentUUID === commentUUID) {
+                if (comment.commentUUID === activeCommentUUID) {
                     scrollView = true;
                     return;
                 }
                 if (comment.replyComments) {
                     for(let j=0; j<comment.replyComments.length; j++) {
                         const replyComment = comment.replyComments[j]
-                        if (replyComment.commentUUID === commentUUID) {
+                        if (replyComment.commentUUID === activeCommentUUID) {
                             comments[i].replyCursor = j+1
                             scrollView = true;
                             return
@@ -91,6 +94,8 @@
             isMore = comments.length < totalComments
             offset += limit;
             await fetchData()
+            isFirstTime = count == 0
+            count++;
         }
     }
 
@@ -250,6 +255,7 @@
         <CommentCard
             {authorUUID}
             {forumUUID}
+            bind:activeCommentUUID
             bind:comment
             bind:scrollView
             label="ความคิดเห็นที่ {commentNo(commentIndex)}"
@@ -263,6 +269,7 @@
                             {authorUUID}
                             replyCommentUUID={comment.commentUUID}
                             {forumUUID}
+                            bind:activeCommentUUID
                             bind:comment={replyComment}
                             bind:scrollView
                             label="ความคิดเห็นที่ {commentNo(commentIndex)}.{replyCommentNo(replyCommentIndex, comment.replyComments.length)}"

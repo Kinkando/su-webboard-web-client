@@ -11,7 +11,7 @@ export async function getUnreadNotiCount() {
 
 export async function getNotiList(limit: number, offset: number, isRead?: 'all' | 'unread' | 'read'): Promise<{ total: number, data: NotificationItem[] }> {
     const res = await api<{ total: number, data: NotificationItem[] }>({
-        url: `/notification?limit${limit}&offset=${offset}&isRead=${isRead ?? 'all'}`,
+        url: `/notification?limit=${limit}&offset=${offset}&isRead=${isRead ?? 'all'}`,
         method: "GET",
     })
     return res.data || { total: 0, data: [] }
