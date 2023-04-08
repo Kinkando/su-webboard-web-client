@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/stores';
     import { Indicator, Popover } from "flowbite-svelte";
 	import { createEventDispatcher, onDestroy } from "svelte";
     import { slide } from 'svelte/transition';
@@ -32,7 +33,12 @@
             }
         }
         await markAsRead()
-        await goto(notification.notiLink)
+
+        if ($page.url.pathname+$page.url.search === notification.notiLink) {
+            window.location.reload()
+        } else {
+            await goto(notification.notiLink)
+        }
     }
 
     const markAsRead = async(isClose = false) => {
