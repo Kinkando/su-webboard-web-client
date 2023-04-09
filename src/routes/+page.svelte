@@ -60,7 +60,6 @@
         }
         carouselDirection = increment > 0 ? "right" : "left";
         clearInterval(autoSlide);
-        // clearInterval(autoSlide);
         autoSlide = setInterval(auto, 3000);
     }
     $: carouselItems = () => {
@@ -79,6 +78,7 @@
     const auto = () => {
         if (!isExpandCarousel && isAutoSlide && home?.categories?.length) {
             setCarouselIndex(1)
+            // setCarouselIndex(1)
         }
     }
     let autoSlide = setInterval(auto, 3000)
