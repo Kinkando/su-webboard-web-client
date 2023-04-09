@@ -60,6 +60,7 @@
         }
         carouselDirection = increment > 0 ? "right" : "left";
         clearInterval(autoSlide);
+        // clearInterval(autoSlide);
         autoSlide = setInterval(auto, 3000);
     }
     $: carouselItems = () => {
