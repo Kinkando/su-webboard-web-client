@@ -43,9 +43,16 @@
                 homeAdmin.reportStatus.closed,
                 homeAdmin.reportStatus.invalid,
             ]
+            // doughnutChart.data.datasets[0].data = [
+            //     `${(homeAdmin.reportStatus.pending / homeAdmin.reportStatus.total) * 100}%`,
+            //     `${(homeAdmin.reportStatus.resolved / homeAdmin.reportStatus.total) * 100}%`,
+            //     `${(homeAdmin.reportStatus.rejected / homeAdmin.reportStatus.total) * 100}%`,
+            //     `${(homeAdmin.reportStatus.closed / homeAdmin.reportStatus.total) * 100}%`,
+            //     `${(homeAdmin.reportStatus.invalid / homeAdmin.reportStatus.total) * 100}%`,
+            // ]
         }
         doughnutChart.data.datasets[0].backgroundColor = ['#0064F2', '#0E9F6E', '#FF8A4C', '#F05252', '#6B7280']
-        doughnutChart.data.labels = ['Pending', 'Resolved', 'Rejected', 'Closed', 'Invalid']
+        doughnutChart.data.labels = ['PENDING', 'RESOLVED', 'REJECTED', 'CLOSED', 'INVALID']
         doughnutChart.update()
 
         lineChart.data.datasets[0].backgroundColor = []
@@ -67,7 +74,7 @@
         const chart = new Chart(doughnutChartElm, {
             type: 'doughnut',
             data: {
-                labels: ['Pending', 'Resolved', 'Rejected', 'Closed', 'Invalid'],
+                labels: ['PENDING', 'RESOLVED', 'REJECTED', 'CLOSED', 'INVALID'],
                 datasets: [
                     {
                         // label: 'My First Dataset',
@@ -217,7 +224,7 @@
 <!-- REPORT STATUS CARD -->
 <div class="w-full mb-4 bg-white dark:bg-gray-700 overflow-hidden rounded-lg shadow-md relative ease-in duration-200 {isLoading ? 'opacity-0' : ''}">
     <div class="p-2 sm:p-4 bg-gray-300 dark:bg-gray-900 ease-in duration-200 !text-black dark:!text-white">
-        <span class="">สรุปจำนวนแยกตามสถานะของการร้องเรียน</span>
+        <span class="">สรุปจำนวนรายงานกระทู้/ความคิดเห็นแยกตามสถานะ</span>
     </div>
     <div class=" p-2 sm:p-4 2xl:flex grid gap-2 sm:gap-4 {isLoading ? 'opacity-0' : ''}" style="{innerWidth <= 1536 ? `grid-template-columns: repeat(auto-fill, minmax(${reportCardMinWidth}px, 1fr))` : ''}">
         {#each reportCards as reportCard}
@@ -228,7 +235,7 @@
                     </div>
                 </div>
                 <div class="ease-in duration-200 text-center w-full bg-gray-200 dark:bg-gray-800">
-                    <div class="ease-in duration-200 text-black dark:text-gray-200 whitespace-nowrap text-ellipsis overflow-hidden p-2 sm:p-4">{reportCard.label}</div>
+                    <div class="ease-in duration-200 text-black dark:text-gray-200 whitespace-nowrap text-ellipsis overflow-hidden p-2 sm:p-4 uppercase">{reportCard.label}</div>
                     <hr class="ease-in duration-200 border-gray-300 dark:border-gray-600">
                     {#if isLoading}
                         <div class="w-1/3 h-6 mx-auto `my`-2 sm:my-4 bg-gray-300 rounded-full dark:bg-gray-600" />
@@ -246,7 +253,7 @@
     <div class="w-full max-w-full text-black dark:text-white bg-white dark:bg-gray-700 overflow-hidden rounded-lg shadow-md relative hover:brightness-75 ease-in duration-200">
         <div class="bg-gray-300 dark:bg-gray-900 transition-colors ease-in duration-200 !text-black dark:!text-white">
             <div class="p-2 sm:p-4">
-                ยอดการสร้างกระทู้ย้อนหลัง 7 วัน
+                สรุปจำนวนการตั้งกระทู้ย้อนหลัง 7 วัน
             </div>
         </div>
         <div class="overflow-x-auto p-2 sm:p-4">
@@ -256,7 +263,7 @@
 
     <div class="md:min-w-[24rem] md:mt-0 mt-4 md:w-fit w-full text-black dark:text-white bg-white dark:bg-gray-700 rounded-lg shadow-md flex flex-col overflow-hidden relative hover:brightness-75 ease-in duration-200">
         <div class="p-2 sm:p-4 bg-gray-300 dark:bg-gray-900 ease-in duration-200 !text-black dark:!text-white">
-            <span class="">สรุปสถานะของการร้องเรียน</span>
+            <span class="">สรุปสถานะของการรายงานกระทู้/ความคิดเห็น</span>
         </div>
         <div class="w-72 relative px-6 py-4 m-auto {homeAdmin?.reportStatus ? '' : 'hidden'}">
             <canvas bind:this={doughnutChartElm} id="doughnut-chart"></canvas>

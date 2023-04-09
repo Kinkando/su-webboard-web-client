@@ -19,7 +19,7 @@
 
         switch ($page.route.id!) {
             // Admin portal page
-            case "/admin-portal": return adminPortalPrefix + "Home"
+            case "/admin-portal": return adminPortalPrefix + "Dashboard"
             case "/admin-portal/category": return adminPortalPrefix + "Manage Category"
             case "/admin-portal/report": return adminPortalPrefix + "Manage Report"
             case "/admin-portal/student": return adminPortalPrefix + "Manage Student"

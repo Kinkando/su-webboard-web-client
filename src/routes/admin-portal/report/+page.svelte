@@ -318,7 +318,7 @@
 <LoadingSpinner bind:isLoading />
 
 <div class="rounded-lg shadow-md w-full h-full p-4 sm:p-6 overflow-hidden bg-white text-black dark:bg-gray-700 dark:text-white ease-in duration-200">
-    <AdminHeader title="รายงานกระทู้" bind:deleteItemsCount={selectedItems.length} addable={false} on:delete={multiDeleteAction} />
+    <AdminHeader title="รายงานกระทู้/ความคิดเห็น" bind:deleteItemsCount={selectedItems.length} addable={false} on:delete={multiDeleteAction} />
 
     <Button size="lg" color="alternative" class="mb-4 w-fit whitespace-nowrap focus:!border-transparent focus:!ring-0 !bg-transparent !outline-transparent !border-transparent !p-0 !text-[var(--primary-color)] dark:!text-[var(--primary-color-75)]">
         <Chevron><div class="whitespace-nowrap">กรองการค้นหา</div></Chevron>
