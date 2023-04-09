@@ -59,6 +59,7 @@
             carouselIndex = home?.categories?.length-1
         }
         carouselDirection = increment > 0 ? "right" : "left";
+        // carouselDirection = increment > 0 ? "right" : "left";
         clearInterval(autoSlide);
         autoSlide = setInterval(auto, 3000);
     }
@@ -78,7 +79,6 @@
     const auto = () => {
         if (!isExpandCarousel && isAutoSlide && home?.categories?.length) {
             setCarouselIndex(1)
-            // setCarouselIndex(1)
         }
     }
     let autoSlide = setInterval(auto, 3000)

@@ -50,15 +50,6 @@ export const load: LayoutServerLoad = async ({ cookies, route }) => {
 // เพิ่มคลิกรูปเพื่อขยาย สำหรับหน้า update profile
 // Text Editor Component
 
-// เพิ่มหน้า Sign Up สำหรับนักศึกษา โดยสามารถ sign up ได้ผ่านเมลมหาวิทยาลัยเท่านั้น และหลังจาก verify จะให้กรอก
-// - รหัสนักศึกษา (โดยมี warning ว่า ไม่สามารถเปลี่ยนได้ด้วยตนเองในภายหลัง และต้องมีการ validate format เพิ่ม)
-// - userDisplayName
-// - userFullName
-// โดยที่ userFullName จะ prefill ให้จาก ชื่อใน gmail (googleUserProfile)
-// เพิ่มหน้า internal server error กรณีที่ call APIs return status 500
-// admin portal error not found page
-// admin portal internal server error page
-
 // change profile image with providing avatar from backend
 // เพิ่ม Notification List Page
 // report view on admin page
