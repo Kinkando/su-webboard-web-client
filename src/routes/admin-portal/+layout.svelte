@@ -9,8 +9,8 @@
     let isSidebarExpand = false;
     let sidebarItems = [
         {
-            prefixIcon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>`,
-            label: 'หน้าแรก',
+            prefixIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-speedometer2" viewBox="0 0 16 16"><path d="M8 4a.5.5 0 0 1 .5.5V6a.5.5 0 0 1-1 0V4.5A.5.5 0 0 1 8 4zM3.732 5.732a.5.5 0 0 1 .707 0l.915.914a.5.5 0 1 1-.708.708l-.914-.915a.5.5 0 0 1 0-.707zM2 10a.5.5 0 0 1 .5-.5h1.586a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 10zm9.5 0a.5.5 0 0 1 .5-.5h1.5a.5.5 0 0 1 0 1H12a.5.5 0 0 1-.5-.5zm.754-4.246a.389.389 0 0 0-.527-.02L7.547 9.31a.91.91 0 1 0 1.302 1.258l3.434-4.297a.389.389 0 0 0-.029-.518z"/><path fill-rule="evenodd" d="M0 10a8 8 0 1 1 15.547 2.661c-.442 1.253-1.845 1.602-2.932 1.25C11.309 13.488 9.475 13 8 13c-1.474 0-3.31.488-4.615.911-1.087.352-2.49.003-2.932-1.25A7.988 7.988 0 0 1 0 10zm8-7a7 7 0 0 0-6.603 9.329c.203.575.923.876 1.68.63C4.397 12.533 6.358 12 8 12s3.604.532 4.923.96c.757.245 1.477-.056 1.68-.631A7 7 0 0 0 8 3z"/></svg>`,
+            label: 'แดชบอร์ด',
             href: `${rootPath}`,
         },
         {
@@ -50,17 +50,19 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
             </svg>
         </span>
-        <span class="ml-2">{ sidebarItems.find(item => currentRoute === item.href)?.label }</span>
+        <!-- <span class="ml-2">{ sidebarItems.find(item => currentRoute === item.href)?.label }</span> -->
+        <span class="ml-2">SU WEBBOARD</span>
         <DarkMode id="theme-toggle" btnClass="ml-auto scale-110 text-yellow-400 dark:text-yellow-300 hover:bg-gray-300 dark:hover:bg-gray-700 rounded-full p-2 transition-all ease-in duration-200" />
     </header>
 
     <nav class="h-16 flex items-center px-4 max-[1000.1px]:hidden bg-gray-200 dark:bg-gray-800 ease-in duration-200">
-        <Breadcrumb aria-label="SU Webboard">
-            <BreadcrumbItem href="{rootPath}" home>หน้าแรก</BreadcrumbItem>
+        <div class="text-black dark:text-white font-bold text-2xl">ผู้ดูแลระบบ</div>
+        <!-- <Breadcrumb aria-label="SU Webboard">
+            <BreadcrumbItem href="{rootPath}" home>แดชบอร์ด</BreadcrumbItem>
             {#if currentRoute.toString().lastIndexOf("/") > 0}
                 <BreadcrumbItem>{ sidebarItems.find(item => currentRoute === item.href)?.label }</BreadcrumbItem>
             {/if}
-        </Breadcrumb>
+        </Breadcrumb> -->
         <DarkMode id="theme-toggle" btnClass="ml-auto scale-110 text-yellow-400 dark:text-yellow-300 hover:bg-gray-300 dark:hover:bg-gray-700 rounded-full p-2 transition-all ease-in duration-200" />
     </nav>
 

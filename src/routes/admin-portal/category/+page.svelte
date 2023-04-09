@@ -228,5 +228,5 @@
 <FormModal bind:open={isOpenFormModal} bind:title bind:form on:submit={sumbitForm} />
 <DeleteModal bind:open={isOpenDeleteModal} deleteButtonName="ยืนยัน" on:delete={deleteAction} >
     คุณยืนยันที่จะ<span class="text-red-500">ลบหมวดหมู่{deleteItem?.values[0]}</span>หรือไม่?
-    <div>หมายเหตุ: หลังจากลบหมวดหมู่แล้ว จะส่งผลให้กระทู้ที่มีเพียงหมวดหมู่เดียวถูกลบตามไปด้วย</div>
+    <div class="text-red-500 mt-2">หมายเหตุ: หลังจากลบหมวดหมู่แล้ว จะส่งผลให้กระทู้ที่มีเพียงหมวดหมู่เดียวถูกลบตามไปด้วย</div>
 </DeleteModal>

@@ -320,11 +320,11 @@
 <FormModal bind:open={isOpenFormModal} bind:title bind:form on:submit={sumbitForm} />
 <DeleteModal bind:open={isOpenDeleteModal} deleteButtonName="ยืนยัน" on:delete={deleteAction} >
     คุณยืนยันที่จะ<span class="text-red-500">ลบข้อมูลอาจารย์ {selectedItem?.values[1]} </span>หรือไม่?
-    <div>หมายเหตุ: ข้อมูลที่เกี่ยวข้องกับอาจารย์ท่านนี้จะถูกลบทั้งหมด ดังนี้</div>
-    <div>1. ข้อมูลส่วนตัวของอาจารย์</div>
-    <div>2. กระทู้ ความคิดเห็น และประกาศที่ถูกสร้างโดยอาจารย์ท่านนี้</div>
-    <div>3. การแจ้งเตือนที่เกี่ยวข้องทั้งหมด</div>
-    <div>4. ยอดการกดถูกใจกระทู้ และความคิดเห็น รวมถึงยอดผู้ชมของประกาศ</div>
+    <div class="text-red-500 mt-2">หมายเหตุ: ข้อมูลที่เกี่ยวข้องกับอาจารย์ท่านนี้จะถูกลบทั้งหมด ดังนี้</div>
+    <div class="text-red-500 text-left">1. ข้อมูลส่วนตัวของอาจารย์</div>
+    <div class="text-red-500 text-left">2. กระทู้ ความคิดเห็น และประกาศที่ถูกสร้างโดยอาจารย์ท่านนี้</div>
+    <div class="text-red-500 text-left">3. การแจ้งเตือนที่เกี่ยวข้องทั้งหมด</div>
+    <div class="text-red-500 text-left">4. ยอดการกดถูกใจกระทู้ และความคิดเห็น รวมถึงยอดผู้ชมของประกาศ</div>
 </DeleteModal>
 <ConfirmModal bind:open={isOpenForceLogoutModal} on:confirm={forceLogout} icon="logout">
     คุณยืนยันที่จะ<span class="text-red-500">บังคับอาจารย์ {selectedItem?.values[1]} ออกจากระบบ</span>หรือไม่?
