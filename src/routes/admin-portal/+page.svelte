@@ -246,7 +246,7 @@
     <div class="w-full max-w-full text-black dark:text-white bg-white dark:bg-gray-700 overflow-hidden rounded-lg shadow-md relative hover:brightness-75 ease-in duration-200">
         <div class="bg-gray-300 dark:bg-gray-900 transition-colors ease-in duration-200 !text-black dark:!text-white">
             <div class="p-2 sm:p-4">
-                ยอดผู้สร้างกระทู้ 7 วันย้อนหลัง
+                ยอดการสร้างกระทู้ย้อนหลัง 7 วัน
             </div>
         </div>
         <div class="overflow-x-auto p-2 sm:p-4">
