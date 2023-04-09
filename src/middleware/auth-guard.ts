@@ -9,11 +9,11 @@ export function authGuard(routeID: string, userType: string, isValidToken: boole
         return ""
     }
 
-    if (commonRoutes.includes(routeID) && isValidToken && userType) {
+    if (commonRoutes.includes(routeID) && userType) {
         return userType === UserType.ADMIN ? adminRootPath : "/"
     }
 
-    if ((!userType || !isValidToken) && !commonRoutes.includes(routeID)) {
+    if (!userType && !commonRoutes.includes(routeID)) {
         return `/login`
     }
 
