@@ -244,7 +244,7 @@
 </div>
 
 <!-- STATISTIC CHART -->
-<div class="md:flex md:flex-col md:gap-4 {isLoading ? 'opacity-0' : ''}">
+<div class="flex flex-col 2xl:flex-row gap-4 {isLoading ? 'opacity-0' : ''}">
     <div class="w-full max-w-full text-black dark:text-white bg-white dark:bg-gray-700 overflow-hidden rounded-lg shadow-md relative hover:brightness-75 ease-in duration-200">
         <div class="bg-gray-300 dark:bg-gray-900 transition-colors ease-in duration-200 !text-black dark:!text-white">
             <div class="p-2 sm:p-4">
