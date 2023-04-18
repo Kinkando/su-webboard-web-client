@@ -8,14 +8,15 @@
 	import { initAdminSocket } from "@util/socket";
     import adminSocket from "@stores/admin_socket";
 	import UserOnlineCard from "@components/user/UserOnlineCard.svelte";
+	import { Label, Select } from "flowbite-svelte";
 
-    let doughnutChartElm!: HTMLCanvasElement;
+    let barChartElm!: HTMLCanvasElement;
     let lineChartElm!: HTMLCanvasElement;
 
     let isLoading = true
 
     let homeAdmin!: HomeAdmin
-    let doughnutChart!: Chart<"doughnut", number[], string>
+    let barChart!: Chart<"bar", number[], string>
     let lineChart!: Chart<"line", number[], string>
 
     onMount(async() => {
@@ -23,10 +24,12 @@
 
         initAdminSocket()
 
-        doughnutChart = initViewDoughnutChart()
+        barChart = initViewBarChart()
         lineChart = initViewLineChart()
+    })
 
-        homeAdmin = await getHomeAdminData()
+    const updateChart = async (date?: string) => {
+        homeAdmin = await getHomeAdminData(date)
         isLoading = false;
 
         if (homeAdmin.reportStatus) {
@@ -35,49 +38,41 @@
             reportCards[2].total = homeAdmin.reportStatus.rejected || 0
             reportCards[3].total = homeAdmin.reportStatus.closed || 0
             reportCards[4].total = homeAdmin.reportStatus.invalid || 0
-
-            doughnutChart.data.datasets[0].data = [
-                homeAdmin.reportStatus.pending,
-                homeAdmin.reportStatus.resolved,
-                homeAdmin.reportStatus.rejected,
-                homeAdmin.reportStatus.closed,
-                homeAdmin.reportStatus.invalid,
-            ]
-            // doughnutChart.data.datasets[0].data = [
-            //     `${(homeAdmin.reportStatus.pending / homeAdmin.reportStatus.total) * 100}%`,
-            //     `${(homeAdmin.reportStatus.resolved / homeAdmin.reportStatus.total) * 100}%`,
-            //     `${(homeAdmin.reportStatus.rejected / homeAdmin.reportStatus.total) * 100}%`,
-            //     `${(homeAdmin.reportStatus.closed / homeAdmin.reportStatus.total) * 100}%`,
-            //     `${(homeAdmin.reportStatus.invalid / homeAdmin.reportStatus.total) * 100}%`,
-            // ]
         }
-        doughnutChart.data.datasets[0].backgroundColor = ['#0064F2', '#0E9F6E', '#FF8A4C', '#F05252', '#6B7280']
-        doughnutChart.data.labels = ['PENDING', 'RESOLVED', 'REJECTED', 'CLOSED', 'INVALID']
-        doughnutChart.update()
 
-        lineChart.data.datasets[0].backgroundColor = []
-        lineChart.data.datasets[0].data = []
-        lineChart.data.labels = []
+        if (homeAdmin.categories) {
+            barChart.data.labels = []
+            barChart.data.datasets[0].data = []
+            barChart.data.datasets[0].backgroundColor = []
+            for (const category of homeAdmin.categories) {
+                barChart.data.labels.push(category.categoryName)
+                barChart.data.datasets[0].data.push(category.forumCount);
+                (barChart.data.datasets[0].backgroundColor as string[]).push(category.categoryHexColor)
+            }
+            barChart.update()
+        }
 
         if (homeAdmin.forums) {
+            lineChart.data.datasets[0].backgroundColor = []
+            lineChart.data.datasets[0].data = []
+            lineChart.data.labels = []
             for (const date of Object.keys(homeAdmin.forums).reverse()) {
                 (lineChart.data.datasets[0].backgroundColor as string[]).push(dateColor(new Date(date)))
                 lineChart.data.datasets[0].data.push(homeAdmin.forums[date])
                 lineChart.data.labels.push(timeRangeDate(new Date(date)))
             }
+            lineChart.update()
         }
-        lineChart.update()
-    })
+    }
 
-    const initViewDoughnutChart = () => {
-        // const ctx = doughnutChart.getContext('2d');
-        const chart = new Chart(doughnutChartElm, {
-            type: 'doughnut',
+    const initViewBarChart = () => {
+        return new Chart(barChartElm, {
+            type: 'bar',
             data: {
                 labels: ['PENDING', 'RESOLVED', 'REJECTED', 'CLOSED', 'INVALID'],
                 datasets: [
                     {
-                        // label: 'My First Dataset',
+                        label: 'จำนวนการตั้งกระทู้',
                         data: [0, 0, 0, 0, 0],
                         backgroundColor: ['#0064F2', '#0E9F6E', '#FF8A4C', '#F05252', '#6B7280'],
                         // hoverOffset: 4,
@@ -85,33 +80,7 @@
                     }
                 ]
             },
-            options: {
-                // borderRadius: '30',
-                responsive: true,
-                cutout: '80%',
-                spacing: 0,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        display: true,
-                        labels: {
-                            usePointStyle: true,
-                            // useBorderRadius: true,
-                            // borderRadius: 20,
-                            padding: 10,
-                            font: {
-                                size: 12
-                            }
-                        }
-                    },
-                    title: {
-                        // display: true,
-                        // text: 'My Personal Portfolio'
-                    }
-                },
-            },
         });
-        return chart
     }
 
     const initViewLineChart = () => {
@@ -208,6 +177,32 @@
         },
     ]
 
+    const dateValue = (retrospectDate: number): string => {
+        const date = new Date()
+        date.setDate(date.getDate() - retrospectDate)
+        return date.toISOString()
+    }
+
+    const dateName = (retrospectDate: number): string => {
+        const date = new Date()
+        date.setDate(date.getDate() - retrospectDate)
+        return date.toLocaleString('th', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+        })
+    }
+
+    const lineChartDateList = [
+        { value: dateValue(0), name: `${dateName(7)} ถึง ${dateName(0)}` },
+        { value: dateValue(7), name: `${dateName(14)} ถึง ${dateName(7)}` },
+        { value: dateValue(14), name: `${dateName(21)} ถึง ${dateName(14)}` },
+        // { value: dateValue(21), name: `${dateName(28)} ถึง ${dateName(21)}` },
+    ]
+    let lineChartDateSelected = lineChartDateList[0].value
+
+    $: lineChartDateSelected && updateChart(lineChartDateSelected)
+
     const updateViewResize = () => {
         lineChart.options.responsive = innerWidth >= 500
         lineChart.update()
@@ -249,31 +244,33 @@
 </div>
 
 <!-- STATISTIC CHART -->
-<div class="md:flex md:gap-4 {isLoading ? 'opacity-0' : ''}">
+<div class="md:flex md:flex-col md:gap-4 {isLoading ? 'opacity-0' : ''}">
     <div class="w-full max-w-full text-black dark:text-white bg-white dark:bg-gray-700 overflow-hidden rounded-lg shadow-md relative hover:brightness-75 ease-in duration-200">
         <div class="bg-gray-300 dark:bg-gray-900 transition-colors ease-in duration-200 !text-black dark:!text-white">
             <div class="p-2 sm:p-4">
-                สรุปจำนวนการตั้งกระทู้ย้อนหลัง 7 วัน
+                สรุปจำนวนการตั้งกระทู้
             </div>
         </div>
+
         <div class="overflow-x-auto p-2 sm:p-4">
             <canvas bind:this={lineChartElm} id="line-chart" class="!w-full !min-h-[360px] !max-h-[360px] !min-w-[500px] sm:!min-w-full"></canvas>
         </div>
+
+        <div class="p-2 max-w-[20rem] ml-auto flex items-center gap-2 m-auto">
+            <Label defaultClass="whitespace-nowrap">ช่วงเวลา</Label>
+            <Select items={lineChartDateList} bind:value={lineChartDateSelected} />
+        </div>
     </div>
 
-    <div class="md:min-w-[24rem] md:mt-0 mt-4 md:w-fit w-full text-black dark:text-white bg-white dark:bg-gray-700 rounded-lg shadow-md flex flex-col overflow-hidden relative hover:brightness-75 ease-in duration-200">
-        <div class="p-2 sm:p-4 bg-gray-300 dark:bg-gray-900 ease-in duration-200 !text-black dark:!text-white">
-            <span class="">สรุปสถานะของการรายงานกระทู้/ความคิดเห็น</span>
-        </div>
-        <div class="w-72 relative px-6 py-4 m-auto {homeAdmin?.reportStatus ? '' : 'hidden'}">
-            <canvas bind:this={doughnutChartElm} id="doughnut-chart"></canvas>
-        </div>
-        {#if !homeAdmin?.reportStatus}
-            <div class="my-2 m-auto">
-                <img src="/images/empty.png" alt="" class="m-auto w-48">
-                <div class="text-center mt-4 text-black dark:text-white">ไม่พบข้อมูล</div>
+    <div class="w-full max-w-full text-black dark:text-white bg-white dark:bg-gray-700 overflow-hidden rounded-lg shadow-md relative hover:brightness-75 ease-in duration-200">
+        <div class="bg-gray-300 dark:bg-gray-900 transition-colors ease-in duration-200 !text-black dark:!text-white">
+            <div class="p-2 sm:p-4">
+                สรุปจำนวนการตั้งกระทู้ทั้งหมดแยกตามหมวดหมู่
             </div>
-        {/if}
+        </div>
+        <div class="overflow-x-auto p-2 sm:p-4">
+            <canvas bind:this={barChartElm} id="line-chart" class="!w-full !min-h-[360px] !max-h-[360px] !min-w-[500px] sm:!min-w-full"></canvas>
+        </div>
     </div>
 </div>
 
