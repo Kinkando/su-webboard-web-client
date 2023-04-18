@@ -110,9 +110,9 @@ export async function deleteReport(reportUUIDs: string[]) {
     })
 }
 
-export async function getHomeAdminData() {
+export async function getHomeAdminData(date?: string) {
     const res = await api<HomeAdmin>({
-        url: `/admin/home`,
+        url: `/admin/home${date ? `?fromDate=${date}` : ''}`,
         method: "GET",
     })
     return res.data!
