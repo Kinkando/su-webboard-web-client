@@ -280,7 +280,7 @@
             <div class="p-2 sm:p-4">ผู้ใช้งานที่กำลังออนไลน์</div>
         </div>
         <div class="p-2 sm:p-4 flex gap-2 sm:gap-4 flex-wrap">
-            {#if $adminSocket.length > 0}
+            {#if $adminSocket?.length > 0}
                 {#each $adminSocket as user}
                     <UserOnlineCard bind:user />
                 {/each}
