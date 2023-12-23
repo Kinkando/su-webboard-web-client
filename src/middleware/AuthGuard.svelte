@@ -12,7 +12,8 @@
     onMount(async () => {
         const redirectURL = authGuard(routeID, userType, isValidToken)
         if (redirectURL) {
-            await goto(redirectURL, { replaceState: true, state: [] })
+            location.href = redirectURL;
+            // await goto(redirectURL, { replaceState: true, state: [] })
             history.replaceState(history.state, '', redirectURL)
         }
         status = true
