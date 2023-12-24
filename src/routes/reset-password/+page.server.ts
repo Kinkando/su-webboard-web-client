@@ -1,15 +1,17 @@
-import { error } from "@sveltejs/kit";
+import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { getEmail } from "@services/firebase";
-import HTTP from "@commons/http";
+import { HttpStatusCode } from "axios";
 
 export const load: PageServerLoad = async ({ url }) => {
-    const oobCode = url.searchParams.get('oobCode')!
-    const email = await getEmail(oobCode)
-    if (!email) {
-        throw error(HTTP.StatusInternalServerError, "request is invalid")
-        // redirect(304, '/login')
-        // return new Response('Redirect', {status: 303, headers: { Location: '/login' }})
+    try {
+        const oobCode = url.searchParams.get('oobCode')!
+        const email = await getEmail(oobCode)
+        if (!email) {
+            throw Error("invalid code")
+        }
+        return { email }
+    } catch (error) {
+        throw redirect(HttpStatusCode.Found, '/login')
     }
-    return { email }
 }
