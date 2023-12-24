@@ -5,6 +5,7 @@
     import { alert } from '@stores/alert';
 	import { getToken, revokeToken } from '@util/localstorage';
 	import { goto } from '$app/navigation';
+	import { onMount } from 'svelte';
 
     export let rootPath: string;
     export let sidebarItems: { prefixIcon: string, label: string, href: string }[]
@@ -12,15 +13,18 @@
 
     $: currentRoute = $page.route.id!;
     const signout = async () => {
-        const token = getToken()
-        if (token) {
-            revokeTokenSrv(token.accessToken, token.refreshToken)
-        }
-        revokeToken();
-        await goto('login')
-        alert({
-            type: 'success',
-            message: 'ออกจากระบบสำเร็จ!',
+        onMount(() => {
+            const token = getToken()
+            if (token) {
+                revokeTokenSrv(token.accessToken, token.refreshToken)
+            }
+            revokeToken();
+            // await goto('login');
+            location.href = "/login";
+            alert({
+                type: 'success',
+                message: 'ออกจากระบบสำเร็จ!',
+            })
         })
     }
     const hideSidebar = () => isSidebarExpand = false

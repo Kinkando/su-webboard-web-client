@@ -11,6 +11,7 @@
 	import userStore from '@stores/user';
 	import { getToken, isPinTopbar, revokeToken } from '@util/localstorage';
 	import NotificationList from '@components/notification/NotificationList.svelte';
+	import { onMount } from 'svelte';
 
     export let userType: string
 
@@ -19,18 +20,21 @@
     const defaultImageURL = "https://cdn-icons-png.flaticon.com/512/149/149071.png"
 
     const signout = async () => {
-        const token = getToken()
-        if (token) {
-            revokeTokenSrv(token.accessToken, token.refreshToken)
-        }
-        revokeToken();
-        if ($notificationSocket) {
-            $notificationSocket.disconnect()
-        }
-        await goto('login')
-        alert({
-            type: 'success',
-            message: 'ออกจากระบบสำเร็จ!',
+        onMount(() => {
+            const token = getToken()
+            if (token) {
+                revokeTokenSrv(token.accessToken, token.refreshToken)
+            }
+            revokeToken();
+            if ($notificationSocket) {
+                $notificationSocket.disconnect()
+            }
+            // await goto('login')
+            location.href = "/login";
+            alert({
+                type: 'success',
+                message: 'ออกจากระบบสำเร็จ!',
+            })
         })
     }
     const search = async (event: KeyboardEvent) => {
