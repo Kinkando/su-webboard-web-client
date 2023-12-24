@@ -27,9 +27,9 @@
         if ($notificationSocket) {
             $notificationSocket.disconnect()
         }
-        if (location) {
+        try {
             location.href = "/login";
-        } else {
+        } catch (error) {
             await goto('/login');
         }
         alert({

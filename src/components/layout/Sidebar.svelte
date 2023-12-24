@@ -17,9 +17,9 @@
             revokeTokenSrv(token.accessToken, token.refreshToken)
         }
         revokeToken();
-        if (location) {
+        try {
             location.href = "/login";
-        } else {
+        } catch (error) {
             await goto('/login');
         }
         alert({
