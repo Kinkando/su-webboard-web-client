@@ -27,11 +27,7 @@
         if ($notificationSocket) {
             $notificationSocket.disconnect()
         }
-        try {
-            location.href = "/login";
-        } catch (error) {
-            await goto('/login');
-        }
+        await goto('/login');
         alert({
             type: 'success',
             message: 'ออกจากระบบสำเร็จ!',
